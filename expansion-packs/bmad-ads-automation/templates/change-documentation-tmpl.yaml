@@ -1,0 +1,110 @@
+# Change Documentation Template
+# This template is used for documenting implementation results
+
+change_documentation:
+  requirement_id: "REQ-{id}"
+  title: "{title}"
+  implementation_date: "{date}"
+  implementation_time: "{duration}"
+  
+  # Branches Created
+  branches_created:
+    - repository: "irisx-algo"
+      branch: "feature/{req-id}-{title}"
+      status: "created"
+    - repository: "ms-loadapis-ril-final"
+      branch: "feature/{req-id}-{title}"
+      status: "created"
+    - repository: "irisx-config"
+      branch: "feature/{req-id}-{title}"
+      status: "created"
+  
+  # Files Modified
+  files_modified:
+    java:
+      - file: ""
+        lines_added: 0
+        lines_modified: 0
+        lines_deleted: 0
+        changes: []
+    python:
+      - file: ""
+        lines_added: 0
+        lines_modified: 0
+        lines_deleted: 0
+        changes: []
+    configuration:
+      - file: ""
+        lines_added: 0
+        lines_modified: 0
+        lines_deleted: 0
+        changes: []
+  
+  # New Files Created
+  new_files_created:
+    java:
+      - file: ""
+        lines: 0
+        purpose: ""
+    python:
+      - file: ""
+        lines: 0
+        purpose: ""
+    configuration:
+      - file: ""
+        lines: 0
+        purpose: ""
+  
+  # Git Commits
+  git_commits:
+    - repository: ""
+      commit_hash: ""
+      message: ""
+      files_changed: []
+  
+  # Validation Results
+  validation_results:
+    unit_tests:
+      passed: 0
+      failed: 0
+      skipped: 0
+    integration_tests:
+      passed: 0
+      failed: 0
+      skipped: 0
+    validation_modules:
+      passed: 0
+      failed: 0
+      skipped: 0
+    schema_validation:
+      status: "passed"
+      issues: []
+  
+  # Performance Metrics
+  performance_metrics:
+    implementation_time: ""
+    validation_time: ""
+    total_time: ""
+    target_met: true
+  
+  # Quality Metrics
+  quality_metrics:
+    code_coverage: ""
+    validation_coverage: ""
+    documentation_coverage: ""
+    pattern_compliance: ""
+  
+  # Next Steps
+  next_steps:
+    - step: ""
+      description: ""
+      owner: ""
+      due_date: ""
+  
+  # Review Instructions
+  review_instructions:
+    - instruction: ""
+      details: ""
+  
+  # Notes
+  notes: []

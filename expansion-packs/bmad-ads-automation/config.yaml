@@ -1,0 +1,22 @@
+# BMAD ADS Automation Extension Pack Configuration
+name: bmad-ads-automation
+version: 1.0.0
+description: "Automated Development System for multi-repository development workflows"
+author: "BMAD Team"
+license: "MIT"
+
+# Repository paths for the three interconnected repositories
+repositories:
+  irisx-algo: "/Users/viratbansal/IdeaProjects/irisx-algo"
+  ms-loadapis-ril-final: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+  irisx-config: "/Users/viratbansal/IdeaProjects/irisx-config"
+
+# Target completion time in hours
+target_completion_time: 2
+
+# Success metrics
+success_metrics:
+  development_velocity: "2 hours per requirement"
+  accuracy: "95%+ success rate"
+  coverage: "80% of typical business requirements"
+  quality: "Maintain existing code quality standards"

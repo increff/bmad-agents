@@ -1,10 +1,10 @@
-import js from '@eslint/js';
-import eslintConfigPrettier from 'eslint-config-prettier/flat';
-import nodePlugin from 'eslint-plugin-n';
-import unicorn from 'eslint-plugin-unicorn';
-import yml from 'eslint-plugin-yml';
+const js = require('@eslint/js');
+const eslintConfigPrettier = require('eslint-config-prettier/flat');
+const nodePlugin = require('eslint-plugin-n');
+const unicorn = require('eslint-plugin-unicorn');
+const yml = require('eslint-plugin-yml');
 
-export default [
+module.exports = [
   // Global ignores for files/folders that should not be linted
   {
     ignores: ['dist/**', 'coverage/**', '**/*.min.js'],
@@ -17,10 +17,10 @@ export default [
   ...nodePlugin.configs['flat/mixed-esm-and-cjs'],
 
   // Unicorn rules (modern best practices)
-  unicorn.configs.recommended,
+  ...(unicorn.configs?.recommended || []),
 
   // YAML linting
-  ...yml.configs['flat/recommended'],
+  ...(yml.configs?.['flat/recommended'] || []),
 
   // Place Prettier last to disable conflicting stylistic rules
   eslintConfigPrettier,

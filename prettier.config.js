@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   $schema: 'https://json.schemastore.org/prettierrc',
   printWidth: 100,
   tabWidth: 2,

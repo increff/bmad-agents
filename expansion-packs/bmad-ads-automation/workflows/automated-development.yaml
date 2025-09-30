@@ -1,0 +1,103 @@
+# BMAD ADS Automation Workflow
+# Complete automated development workflow for multi-repository development
+
+workflow:
+  id: automated-development
+  name: BMAD ADS Automated Development
+  description: "Complete automated development workflow for implementing requirements across three interconnected repositories"
+  type: brownfield
+  project_types:
+    - multi-repository-development
+    - automated-workflow
+    - pattern-based-development
+    - brownfield-enhancement
+
+  sequence:
+    - step: requirement_analysis
+      agent: ads-orchestrator
+      action: analyze requirement document and create implementation plan
+      creates: implementation plan with repository mapping
+      notes: "Parse requirement document and identify affected repositories and modules"
+
+    - step: repository_crawling_stage1
+      agent: ads-orchestrator
+      action: crawl all three repositories to understand current state
+      creates: repository state map with patterns and templates
+      notes: "Comprehensive crawling of irisx-algo, ms-loadapis-ril-final, and irisx-config"
+
+    - step: pattern_analysis
+      agent: ads-orchestrator
+      action: analyze crawled data to identify patterns and enhance requirements
+      creates: pattern classification and enhanced requirements
+      notes: "Classify patterns into structural, code, data, configuration, and validation categories"
+
+    - step: dependency_analysis
+      agent: ads-orchestrator
+      action: analyze shared dependencies and impact assessment
+      creates: dependency analysis and modification recommendations
+      notes: "Identify shared classes, constants, and utilities that need careful handling"
+
+    - step: story_creation
+      agent: sm
+      action: create implementation story using draft command
+      creates: detailed user story with acceptance criteria
+      notes: "Use SM agent with *draft command and create-next-story.md task"
+
+    - step: branch_creation
+      agent: ads-orchestrator
+      action: create feature branches in all affected repositories
+      creates: feature branches with consistent naming
+      notes: "Create branches with naming convention: feature/{req-id}-{title}"
+
+    - step: repository_crawling_stage2
+      agent: ads-orchestrator
+      action: crawl specific modules before implementation
+      creates: implementation patterns and templates to follow
+      notes: "Pre-implementation crawling to ensure accuracy"
+
+    - step: implementation
+      agent: dev
+      action: implement changes using develop-story command
+      creates: modified source files with new functionality
+      notes: "Use Dev agent with *develop-story command and strict story file updates"
+
+    - step: repository_crawling_stage3
+      agent: ads-orchestrator
+      action: crawl validation patterns after implementation
+      creates: validation patterns and test structures to follow
+      notes: "Post-implementation crawling for validation"
+
+    - step: validation
+      agent: qa
+      action: validate implementation using review-qa and run-tests
+      creates: validation reports and test results
+      notes: "Use QA agent with *review-qa and *run-tests commands"
+
+    - step: documentation
+      agent: ads-orchestrator
+      action: update requirement document with implementation results
+      creates: updated documentation with complete implementation details
+      notes: "Update original requirement document with results"
+
+  success_criteria:
+    - All three repositories have feature branches created
+    - All required code changes implemented following existing patterns
+    - All validation tests pass
+    - Configuration files updated consistently
+    - Documentation updated with complete implementation details
+    - Implementation completed within 2-hour target
+
+  error_handling:
+    - Repository access issues: Handle gracefully with fallback options
+    - Branch conflicts: Resolve existing branch conflicts
+    - Validation failures: Address with appropriate fixes
+    - Pattern conflicts: Resolve between requirements and existing patterns
+    - Dependency issues: Handle shared class modification impacts
+
+  notes:
+    - This workflow implements the complete BMAD ADS Automation system
+    - Follows BMAD agent specialization rules strictly
+    - Performs actual git operations and repository modifications
+    - Uses multi-stage repository crawling for accuracy
+    - Implements pattern-based requirement enhancement
+    - Maintains consistency across all three repositories

@@ -1,0 +1,303 @@
+# ADS Orchestrator Configuration Template
+
+## Main Configuration Template
+
+# ADS Orchestrator Configuration
+version: "1.0"
+
+# Repository Configuration
+repositories:
+  irisx-algo:
+    path: "/Users/viratbansal/IdeaProjects/irisx-algo"
+    type: "java"
+    branch: "caas-release"
+    access: "git"
+  
+  ms-loadapis-ril-final:
+    path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+    type: "python"
+    branch: "caas-release"
+    access: "git"
+  
+  irisx-config:
+    path: "/Users/viratbansal/IdeaProjects/irisx-config"
+    type: "config"
+    branch: "caas-release"
+    access: "git"
+
+# Pattern Configuration
+patterns:
+  java:
+    module_path: "src/main/java/com/increff/irisx/module"
+    template_path: "templates/java"
+    naming_convention: "camelCase"
+  
+  python:
+    module_path: "loadapi"
+    template_path: "templates/python"
+    naming_convention: "snake_case"
+  
+  config:
+    template_path: "template"
+    sql_path: "view-creation"
+    naming_convention: "snake_case"
+
+# Environment Configuration
+environments:
+  development:
+    repositories:
+      irisx-algo:
+        path: "/dev/irisx-algo"
+      ms-loadapis-ril-final:
+        path: "/dev/ms-loadapis-ril-final"
+      irisx-config:
+        path: "/dev/irisx-config"
+  
+  staging:
+    repositories:
+      irisx-algo:
+        path: "/staging/irisx-algo"
+      ms-loadapis-ril-final:
+        path: "/staging/ms-loadapis-ril-final"
+      irisx-config:
+        path: "/staging/irisx-config"
+
+# User Preferences
+preferences:
+  default_environment: "development"
+  auto_confirm: false
+  progress_display: true
+  error_recovery: "interactive"
+
+## Pattern Configuration Template
+
+# Custom Pattern Definitions
+patterns:
+  allocation_module:
+    java_template: "AllocationModule.java.template"
+    python_template: "LoadApi.py.template"
+    config_template: "module_template.tsv"
+    validation_rules:
+      - "must_extend_AbstractAllocationModule"
+      - "must_have_Component_annotation"
+      - "must_follow_naming_convention"
+  
+  data_class:
+    java_template: "DataClass.java.template"
+    validation_rules:
+      - "must_have_getters_and_setters"
+      - "must_follow_naming_convention"
+      - "must_implement_serializable"
+  
+  load_api:
+    python_template: "LoadApi.py.template"
+    validation_rules:
+      - "must_extend_LoadApi"
+      - "must_define_header"
+      - "must_follow_naming_convention"
+
+## Environment Configuration Template
+yaml
+# Environment-Specific Configuration
+environments:
+  development:
+    repositories:
+      irisx-algo:
+        path: "/dev/irisx-algo"
+        branch: "caas-release"
+      ms-loadapis-ril-final:
+        path: "/dev/ms-loadapis-ril-final"
+        branch: "caas-release"
+      irisx-config:
+        path: "/dev/irisx-config"
+        branch: "caas-release"
+  
+  staging:
+    repositories:
+      irisx-algo:
+        path: "/staging/irisx-algo"
+        branch: "caas-release"
+      ms-loadapis-ril-final:
+        path: "/staging/ms-loadapis-ril-final"
+        branch: "caas-release"
+      irisx-config:
+        path: "/staging/irisx-config"
+        branch: "caas-release"
+  
+  production:
+    repositories:
+      irisx-algo:
+        path: "/prod/irisx-algo"
+        branch: "caas-release"
+      ms-loadapis-ril-final:
+        path: "/prod/ms-loadapis-ril-final"
+        branch: "caas-release"
+      irisx-config:
+        path: "/prod/irisx-config"
+        branch: "caas-release"
+
+## User Preferences Template
+yaml
+# User Preferences Configuration
+preferences:
+  # Default environment to use
+  default_environment: "development"
+  
+  # Auto-confirm operations (true/false)
+  auto_confirm: false
+  
+  # Display progress indicators (true/false)
+  progress_display: true
+  
+  # Error recovery mode (interactive/automatic/manual)
+  error_recovery: "interactive"
+  
+  # Logging level (debug/info/warn/error)
+  log_level: "info"
+  
+  # Maximum operation timeout in minutes
+  operation_timeout: 60
+  
+  # Backup configuration before operations (true/false)
+  auto_backup: true
+  
+  # Notification preferences
+  notifications:
+    email: false
+    desktop: true
+    sound: false
+
+## Configuration Schema Template
+yaml
+# Configuration Schema Definition
+schema:
+  repositories:
+    type: "object"
+    required: ["path", "type", "branch", "access"]
+    properties:
+      path:
+        type: "string"
+        pattern: "^/.+"
+        description: "Absolute path to repository"
+      type:
+        type: "string"
+        enum: ["java", "python", "config"]
+        description: "Repository type"
+      branch:
+        type: "string"
+        default: "main"
+        description: "Default branch name"
+      access:
+        type: "string"
+        enum: ["git", "local"]
+        description: "Access method"
+  
+  patterns:
+    type: "object"
+    required: ["template_path", "naming_convention"]
+    properties:
+      template_path:
+        type: "string"
+        description: "Path to template files"
+      naming_convention:
+        type: "string"
+        enum: ["camelCase", "snake_case", "kebab-case"]
+        description: "Naming convention for generated code"
+  
+  environments:
+    type: "object"
+    properties:
+      repositories:
+        type: "object"
+        description: "Environment-specific repository overrides"
+  
+  preferences:
+    type: "object"
+    properties:
+      default_environment:
+        type: "string"
+        description: "Default environment to use"
+      auto_confirm:
+        type: "boolean"
+        description: "Auto-confirm operations"
+      progress_display:
+        type: "boolean"
+        description: "Display progress indicators"
+      error_recovery:
+        type: "string"
+        enum: ["interactive", "automatic", "manual"]
+        description: "Error recovery mode"
+
+## Configuration Examples
+
+### Minimal Configuration
+yaml
+version: "1.0"
+repositories:
+  irisx-algo:
+    path: "/path/to/irisx-algo"
+    type: "java"
+preferences:
+  default_environment: "development"
+
+### Full Configuration
+yaml
+version: "1.0"
+repositories:
+  irisx-algo:
+    path: "/Users/viratbansal/IdeaProjects/irisx-algo"
+    type: "java"
+    branch: "main"
+    access: "git"
+  ms-loadapis-ril-final:
+    path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+    type: "python"
+    branch: "main"
+    access: "git"
+  irisx-config:
+    path: "/Users/viratbansal/IdeaProjects/irisx-config"
+    type: "config"
+    branch: "main"
+    access: "git"
+patterns:
+  java:
+    module_path: "src/main/java/com/increff/irisx/module"
+    template_path: "templates/java"
+    naming_convention: "camelCase"
+  python:
+    module_path: "loadapi"
+    template_path: "templates/python"
+    naming_convention: "snake_case"
+  config:
+    template_path: "template"
+    sql_path: "view-creation"
+    naming_convention: "snake_case"
+environments:
+  development:
+    repositories:
+      irisx-algo:
+        path: "/dev/irisx-algo"
+      ms-loadapis-ril-final:
+        path: "/dev/ms-loadapis-ril-final"
+      irisx-config:
+        path: "/dev/irisx-config"
+  staging:
+    repositories:
+      irisx-algo:
+        path: "/staging/irisx-algo"
+      ms-loadapis-ril-final:
+        path: "/staging/ms-loadapis-ril-final"
+      irisx-config:
+        path: "/staging/irisx-config"
+preferences:
+  default_environment: "development"
+  auto_confirm: false
+  progress_display: true
+  error_recovery: "interactive"
+  log_level: "info"
+  operation_timeout: 60
+  auto_backup: true
+  notifications:
+    email: false
+    desktop: true
+    sound: false

@@ -1,0 +1,304 @@
+# Error Recovery Template
+
+## Error Message Templates
+
+### Repository Access Errors
+
+repository_access_denied:
+  title: "Repository Access Denied"
+  icon: "❌"
+  context: "Attempting to access repository"
+  cause: "Insufficient permissions or authentication failure"
+  impact: "Cannot proceed with repository operations"
+  suggested_actions:
+    - "Verify you have read/write permissions to the repository"
+    - "Check if the repository requires authentication"
+    - "Ensure you're using the correct repository URL"
+    - "Contact repository administrator if needed"
+  recovery_options:
+    retry: "Retry with different credentials"
+    skip: "Skip this repository and continue"
+    abort: "Abort operation"
+    help: "Get help with repository access"
+  documentation:
+    - "Repository Access Guide"
+    - "Authentication Setup"
+    - "Permission Management"
+
+### Configuration Errors
+invalid_configuration:
+  title: "Invalid Configuration"
+  icon: "❌"
+  context: "Loading configuration file"
+  cause: "Invalid YAML syntax or missing required fields"
+  impact: "Cannot load system configuration"
+  suggested_actions:
+    - "Check YAML syntax in configuration file"
+    - "Validate indentation and structure"
+    - "Use configuration template as reference"
+    - "Verify all required fields are present"
+  recovery_options:
+    retry: "Retry with corrected configuration"
+    skip: "Use default configuration"
+    abort: "Abort operation"
+    help: "Get help with configuration"
+  documentation:
+    - "Configuration Guide"
+    - "YAML Syntax Reference"
+    - "Configuration Templates"
+
+### Implementation Errors
+code_generation_failed:
+  title: "Code Generation Failed"
+  icon: "❌"
+  context: "Generating code from templates"
+  cause: "Template not found or invalid template syntax"
+  impact: "Cannot generate required code files"
+  suggested_actions:
+    - "Check if template exists for this module type"
+    - "Verify template path in configuration"
+    - "Create custom template if needed"
+    - "Validate template syntax and variables"
+  recovery_options:
+    retry: "Retry with different template"
+    skip: "Skip code generation"
+    abort: "Abort operation"
+    help: "Get help with templates"
+  documentation:
+    - "Template Guide"
+    - "Template Syntax Reference"
+    - "Custom Template Creation"
+
+### Validation Errors
+validation_failed:
+  title: "Validation Failed"
+  icon: "❌"
+  context: "Validating implementation"
+  cause: "Generated code does not meet validation requirements"
+  impact: "Implementation may not work correctly"
+  suggested_actions:
+    - "Review validation error details"
+    - "Check generated code against requirements"
+    - "Verify template and pattern configuration"
+    - "Run validation tests manually"
+  recovery_options:
+    retry: "Retry with corrected configuration"
+    skip: "Skip validation"
+    abort: "Abort operation"
+    help: "Get help with validation"
+  documentation:
+    - "Validation Guide"
+    - "Code Standards"
+    - "Testing Requirements"
+
+### System Errors
+system_error:
+  title: "System Error"
+  icon: "❌"
+  context: "System operation"
+  cause: "Unexpected system failure or resource limitation"
+  impact: "Operation cannot continue"
+  suggested_actions:
+    - "Check system resources (disk space, memory)"
+    - "Verify system permissions and access"
+    - "Check for system updates or maintenance"
+    - "Contact system administrator if needed"
+  recovery_options:
+    retry: "Retry operation"
+    skip: "Skip this operation"
+    abort: "Abort operation"
+    help: "Get help with system issues"
+  documentation:
+    - "System Requirements"
+    - "Troubleshooting Guide"
+    - "System Administration"
+
+## Error Recovery Actions
+
+### Automatic Recovery
+automatic_recovery:
+  repository_access_denied:
+    - "Try alternative authentication method"
+    - "Use cached credentials if available"
+    - "Fall back to local repository access"
+  
+  invalid_configuration:
+    - "Use default configuration values"
+    - "Load from backup configuration"
+    - "Generate new configuration from template"
+  
+  code_generation_failed:
+    - "Use alternative template"
+    - "Generate basic code structure"
+    - "Skip non-critical code generation"
+  
+  validation_failed:
+    - "Retry with relaxed validation rules"
+    - "Use alternative validation approach"
+    - "Skip non-critical validations"
+  
+  system_error:
+    - "Retry with reduced resource usage"
+    - "Use alternative system approach"
+    - "Fall back to basic functionality"
+
+### User-Guided Recovery
+user_guided_recovery:
+  repository_access_denied:
+    steps:
+      - "Check repository URL and credentials"
+      - "Verify network connectivity"
+      - "Test repository access manually"
+      - "Update configuration if needed"
+  
+  invalid_configuration:
+    steps:
+      - "Review configuration file syntax"
+      - "Check required fields and values"
+      - "Validate against schema"
+      - "Update configuration file"
+  
+  code_generation_failed:
+    steps:
+      - "Check template file existence"
+      - "Validate template syntax"
+      - "Verify template variables"
+      - "Update template or configuration"
+  
+  validation_failed:
+    steps:
+      - "Review validation error details"
+      - "Check generated code"
+      - "Verify validation rules"
+      - "Update code or validation rules"
+  
+  system_error:
+    steps:
+      - "Check system resources"
+      - "Verify system permissions"
+      - "Check system logs"
+      - "Contact system administrator"
+
+## Error History Template
+error_history:
+  format: "timestamp, error_type, context, resolution, duration"
+  retention: "30_days"
+  fields:
+    timestamp: "ISO 8601 format"
+    error_type: "Categorized error type"
+    context: "Operation context when error occurred"
+    resolution: "How error was resolved"
+    duration: "Time taken to resolve error"
+    user_action: "User action taken"
+    system_action: "System action taken"
+
+## Error Analytics Template
+error_analytics:
+  metrics:
+    error_frequency: "Count of errors by type and time period"
+    resolution_time: "Average time to resolve errors"
+    success_rate: "Percentage of successful error resolutions"
+    user_satisfaction: "User feedback on error handling"
+  
+  reports:
+    daily: "Daily error summary report"
+    weekly: "Weekly error trend analysis"
+    monthly: "Monthly error pattern analysis"
+  
+  alerts:
+    high_error_rate: "Alert when error rate exceeds threshold"
+    resolution_timeout: "Alert when resolution takes too long"
+    user_complaints: "Alert when user satisfaction drops"
+
+## Error Documentation Template
+error_documentation:
+  structure:
+    error_type: "Categorized error type"
+    description: "Clear description of the error"
+    causes: "List of possible causes"
+    symptoms: "How to identify the error"
+    resolution: "Step-by-step resolution guide"
+    prevention: "How to prevent the error"
+    examples: "Real-world examples"
+  
+  categories:
+    repository_errors: "Repository access and operation errors"
+    configuration_errors: "Configuration file and setup errors"
+    implementation_errors: "Code generation and implementation errors"
+    validation_errors: "Validation and testing errors"
+    system_errors: "System and resource errors"
+  
+  maintenance:
+    update_frequency: "Monthly"
+    review_process: "Quarterly review and update"
+    user_feedback: "Continuous user feedback integration"
+
+## Error Recovery Examples
+
+### Example 1: Repository Access Denied
+
+error_example_1:
+  title: "Repository Access Denied"
+  icon: "❌"
+  context: "Attempting to create feature branch in irisx-algo"
+  cause: "Insufficient permissions for branch creation"
+  impact: "Cannot proceed with implementation"
+  suggested_actions:
+    - "Verify you have write permissions to the repository"
+    - "Check if the repository requires authentication"
+    - "Ensure you're using the correct repository URL"
+  recovery_options:
+    - "[R] Retry with different credentials"
+    - "[S] Skip this repository and continue"
+    - "[A] Abort operation"
+    - "[H] Get help with repository access"
+
+Documentation:
+- Repository Access Guide: https://docs.example.com/repo-access
+- Authentication Setup: https://docs.example.com/auth-setup
+- Permission Management: https://docs.example.com/permissions
+
+### Example 2: Invalid Configuration
+❌ Error: Invalid Configuration
+=============================
+File: config/repositories.Context: Loading repository configuration
+Cause: Invalid YAML syntax at line 15
+Impact: Cannot load system configuration
+
+Suggested Actions:
+1. Check YAML syntax in configuration file
+2. Validate indentation and structure
+3. Use configuration template as reference
+
+Recovery Options:
+[R] Retry with corrected configuration
+[S] Use default configuration
+[A] Abort operation
+[H] Get help with configuration
+
+Documentation:
+- Configuration Guide: https://docs.example.com/config
+- YAML Syntax Reference: https://docs.example.com/- Configuration Templates: https://docs.example.com/templates
+
+### Example 3: Code Generation Failed
+❌ Error: Code Generation Failed
+==============================
+Context: Generating Java class for new module
+Cause: Template not found for module type 'CustomModule'
+Impact: Cannot generate required code files
+
+Suggested Actions:
+1. Check if template exists for this module type
+2. Verify template path in configuration
+3. Create custom template if needed
+
+Recovery Options:
+[R] Retry with different template
+[S] Skip code generation
+[A] Abort operation
+[H] Get help with templates
+
+Documentation:
+- Template Guide: https://docs.example.com/templates
+- Template Syntax Reference: https://docs.example.com/template-syntax
+- Custom Template Creation: https://docs.example.com/custom-templates
