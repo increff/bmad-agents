@@ -1,0 +1,83 @@
+# Repository Configuration Template
+# This template defines the structure for repository path configuration
+
+repositories:
+  loadapi:
+    name: "LoadAPI Repository"
+    description: "Python LoadAPI repository for data loading and processing"
+    path: "/path/to/ms-loadapis-ril-final"
+    type: "python"
+    required_files:
+      - "loadapi/loadapi_provider.py"
+      - "loadapi/iss/__init__.py"
+      - "loadapi/analysis/__init__.py"
+    validation:
+      - "Check for LoadAPI classes"
+      - "Validate __init__.py registrations"
+      - "Verify loadapi_provider.py mappings"
+
+  config:
+    name: "Configuration Repository"
+    description: "Configuration repository for module inputs, outputs, and templates"
+    path: "/path/to/irisx-config"
+    type: "config"
+    required_files:
+      - "module_input.json"
+      - "module_output.json"
+      - "upload-files.json"
+    validation:
+      - "Check JSON schema validity"
+      - "Validate configuration consistency"
+      - "Verify template files exist"
+
+  algorithm:
+    name: "Algorithm Repository"
+    description: "Java algorithm repository for business logic modules"
+    path: "/path/to/irisx-algo"
+    type: "java"
+    required_files:
+      - "src/main/java/com/increff/irisx/module"
+      - "src/main/java/com/increff/irisx/row"
+    validation:
+      - "Check for AbstractModule extensions"
+      - "Validate module structure"
+      - "Verify data row classes"
+
+configuration:
+  default_profile: "default"
+  profiles:
+    default:
+      description: "Default repository configuration"
+      repositories:
+        loadapi: "/path/to/ms-loadapis-ril-final"
+        config: "/path/to/irisx-config"
+        algorithm: "/path/to/irisx-algo"
+
+    development:
+      description: "Development environment configuration"
+      repositories:
+        loadapi: "/dev/path/to/ms-loadapis-ril-final"
+        config: "/dev/path/to/irisx-config"
+        algorithm: "/dev/path/to/irisx-algo"
+
+    production:
+      description: "Production environment configuration"
+      repositories:
+        loadapi: "/prod/path/to/ms-loadapis-ril-final"
+        config: "/prod/path/to/irisx-config"
+        algorithm: "/prod/path/to/irisx-algo"
+
+validation:
+  enabled: true
+  checks:
+    - "Path existence"
+    - "Repository structure"
+    - "Required files"
+    - "File permissions"
+    - "Repository compatibility"
+
+backup:
+  enabled: true
+  location: "./config/backups"
+  retention_days: 30
+  auto_backup: true
