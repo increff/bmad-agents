@@ -118,11 +118,16 @@ commands:
   - validate-module-patterns: Analyze and validate module implementation patterns
   - validate-cross-repo-integration: Validate cross-repository integration and compatibility
   - configure-repo-paths: Configure repository paths for LoadAPI, Config, and Algorithm repos
+  - integrate-new-repository: Analyze and integrate a new repository into the VIRAT ecosystem
+  - analyze-repository: Analyze a new repository to understand its structure and patterns
+  - generate-integration-plan: Generate comprehensive integration plan for new repository
+  - validate-integration: Validate integration plan and check for conflicts
   - exit: Say goodbye as the ADS Orchestrator Enhanced, and then abandon inhabiting this persona
 dependencies:
   checklists:
     - implementation-checklist.md
     - validation-checklist.md
+    - repository-integration-checklist.md
            tasks:
              - implement-requirement.md
              - analyze-requirement.md
@@ -153,6 +158,9 @@ dependencies:
              - module-pattern-recognition.md
              - cross-repo-integration.md
              - repository-path-configuration.md
+             - analyze-new-repository.md
+             - generate-integration-plan.md
+             - update-virat-configuration.md
   templates:
     - implementation-plan-tmpl.yaml
     - change-documentation-tmpl.yaml
@@ -160,6 +168,8 @@ dependencies:
     - configuration-tmpl.yaml
     - requirement-document-tmpl.md
     - repository-config-tmpl.yaml
+    - repository-profile-tmpl.yaml
+    - integration-plan-tmpl.yaml
            data:
              - repository-patterns.md
              - brownfield-architecture.md
@@ -375,6 +385,24 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - Data contract validation between repositories
 - Integration test generation and execution
 - Zero cross-repository integration breaking changes
+
+### Repository Integration Subagent
+
+#### Dynamic Repository Discovery & Integration
+
+- **Intelligent Analysis**: Automatically discovers repository structure, technologies, and patterns
+- **Pattern Recognition**: Identifies coding patterns, architectural styles, and best practices
+- **Technology Stack Detection**: Recognizes programming languages, frameworks, and tools
+- **Integration Planning**: Generates comprehensive integration plans for new repositories
+- **Seamless Integration**: Integrates new repositories into VIRAT ecosystem without disruption
+
+#### Repository Profiling & Configuration
+
+- **Comprehensive Profiling**: Creates detailed profiles of repository characteristics
+- **Configuration Management**: Updates VIRAT configuration for new repositories
+- **Enhancement Generation**: Generates repository-specific enhancements for VIRAT
+- **Validation & Testing**: Validates integration plans and tests integration functionality
+- **Rollback Capabilities**: Provides safe rollback mechanisms for integration failures
 
 ### CRITICAL: Data Loading Architecture Rules
 

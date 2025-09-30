@@ -1,0 +1,142 @@
+# Repository Profile Template
+# This template defines the structure for repository profiles in VIRAT
+
+repository_profile:
+  basic_info:
+    name: "Repository Name"
+    description: "Repository description and purpose"
+    path: "/path/to/repository"
+    type: "python|java|config|frontend|backend|fullstack|other"
+    version: "1.0.0"
+    owner: "Repository owner or team"
+    created_date: "YYYY-MM-DD"
+    last_updated: "YYYY-MM-DD"
+
+  technology_stack:
+    primary_language: "Primary programming language"
+    languages:
+      - "Language 1"
+      - "Language 2"
+    frameworks:
+      - "Framework 1"
+      - "Framework 2"
+    databases:
+      - "Database 1"
+      - "Database 2"
+    build_tools:
+      - "Build tool 1"
+      - "Build tool 2"
+    package_managers:
+      - "Package manager 1"
+      - "Package manager 2"
+    testing_frameworks:
+      - "Testing framework 1"
+      - "Testing framework 2"
+    deployment_tools:
+      - "Deployment tool 1"
+      - "Deployment tool 2"
+
+  architecture:
+    pattern: "MVC|Microservices|Monolith|Serverless|Other"
+    layers:
+      - "Layer 1"
+      - "Layer 2"
+    components:
+      - "Component 1"
+      - "Component 2"
+    services:
+      - "Service 1"
+      - "Service 2"
+    data_flow: "Description of data flow patterns"
+
+  patterns:
+    coding_patterns:
+      - "Pattern 1"
+      - "Pattern 2"
+    architectural_patterns:
+      - "Architectural pattern 1"
+      - "Architectural pattern 2"
+    design_patterns:
+      - "Design pattern 1"
+      - "Design pattern 2"
+    anti_patterns:
+      - "Anti-pattern 1"
+      - "Anti-pattern 2"
+
+  dependencies:
+    internal:
+      - "Internal dependency 1"
+      - "Internal dependency 2"
+    external:
+      - "External dependency 1"
+      - "External dependency 2"
+    circular_dependencies:
+      - "Circular dependency 1"
+      - "Circular dependency 2"
+
+  integration_points:
+    apis:
+      - "API endpoint 1"
+      - "API endpoint 2"
+    data_interfaces:
+      - "Data interface 1"
+      - "Data interface 2"
+    configuration:
+      - "Configuration file 1"
+      - "Configuration file 2"
+    environment_variables:
+      - "Environment variable 1"
+      - "Environment variable 2"
+
+  quality_metrics:
+    code_coverage: "Percentage"
+    complexity_score: "Score"
+    maintainability_index: "Index"
+    technical_debt: "Debt amount"
+    security_score: "Security score"
+
+  virat_integration:
+    commands:
+      - "Command 1"
+      - "Command 2"
+    enhancements:
+      - "Enhancement 1"
+      - "Enhancement 2"
+    validation_rules:
+      - "Validation rule 1"
+      - "Validation rule 2"
+    monitoring:
+      - "Monitoring metric 1"
+      - "Monitoring metric 2"
+
+  configuration:
+    environment_specific:
+      development:
+        path: "/dev/path/to/repo"
+        config: "dev-config.yaml"
+      staging:
+        path: "/staging/path/to/repo"
+        config: "staging-config.yaml"
+      production:
+        path: "/prod/path/to/repo"
+        config: "prod-config.yaml"
+
+    access_control:
+      read_permissions: ["user1", "user2"]
+      write_permissions: ["user1", "user2"]
+      admin_permissions: ["admin1", "admin2"]
+
+    backup_strategy:
+      enabled: true
+      frequency: "daily|weekly|monthly"
+      retention: "30 days"
+      location: "/backup/location"
+
+  integration_status:
+    status: "pending|in_progress|completed|failed"
+    integration_date: "YYYY-MM-DD"
+    last_validation: "YYYY-MM-DD"
+    issues:
+      - "Issue 1"
+      - "Issue 2"
+    notes: "Integration notes and observations"
