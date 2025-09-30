@@ -45,9 +45,9 @@ workflow:
 
     - step: branch_creation
       agent: ads-orchestrator
-      action: create feature branches in all affected repositories
+      action: create feature branches from caas-release in all affected repositories
       creates: feature branches with consistent naming
-      notes: "Create branches with naming convention: feature/{req-id}-{title}"
+      notes: "Create branches from caas-release with naming convention: feature/{req-id}-{title}"
 
     - step: repository_crawling_stage2
       agent: ads-orchestrator
