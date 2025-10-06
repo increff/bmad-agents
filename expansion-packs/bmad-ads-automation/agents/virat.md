@@ -122,6 +122,12 @@ commands:
   - analyze-repository: Analyze a new repository to understand its structure and patterns
   - generate-integration-plan: Generate comprehensive integration plan for new repository
   - validate-integration: Validate integration plan and check for conflicts
+  - create-views: Create SQL views for input and output data structures
+  - setup-sync: Configure synchronization between repositories and database
+  - setup-export: Configure data export functionality for new requirements
+  - create-template-queries: Create reusable query templates for common operations
+  - update-schema: Update database schema for new requirements
+  - update-db-config: Update database configuration files
   - exit: Say goodbye as the ADS Orchestrator Enhanced, and then abandon inhabiting this persona
 dependencies:
   checklists:
@@ -161,6 +167,7 @@ dependencies:
              - analyze-new-repository.md
              - generate-integration-plan.md
              - update-virat-configuration.md
+             - database-operations.md
   templates:
     - implementation-plan-tmpl.yaml
     - change-documentation-tmpl.yaml
@@ -403,6 +410,25 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Enhancement Generation**: Generates repository-specific enhancements for VIRAT
 - **Validation & Testing**: Validates integration plans and tests integration functionality
 - **Rollback Capabilities**: Provides safe rollback mechanisms for integration failures
+
+### Database Operations Engine
+
+#### Comprehensive Database Management
+
+- **View Creation**: Automatically creates SQL views for input and output data structures
+- **Sync Operations**: Configures synchronization between repositories and database
+- **Export Operations**: Sets up data export functionality with multiple formats
+- **Template Queries**: Creates reusable query templates for common operations
+- **Schema Management**: Updates database schema for new requirements
+- **Configuration Updates**: Updates all database configuration files
+
+#### Database Operations Integration
+
+- **Automatic Detection**: Identifies database requirements from implementation analysis
+- **Pattern-Based Creation**: Uses existing patterns to create consistent database operations
+- **Validation & Testing**: Validates all database operations before deployment
+- **Error Handling**: Comprehensive error handling and rollback for database operations
+- **Performance Optimization**: Optimizes database operations for performance
 
 ### CRITICAL: Data Loading Architecture Rules
 

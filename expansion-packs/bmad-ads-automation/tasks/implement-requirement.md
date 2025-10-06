@@ -159,13 +159,51 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 10. Documentation and Results
 
-**Step 13: Push Changes**
+**Step 13: Database Operations**
+
+1. **Create Database Views**:
+   - Use `*create-views` command to create SQL views
+   - Create input views (`child-input-*.sql`) for new data structures
+   - Create output views (`child-output-*.sql`) for result data
+   - Validate view syntax and functionality
+
+2. **Setup Sync Operations**:
+   - Use `*setup-sync` command to configure synchronization
+   - Create sync configurations for data flow
+   - Implement sync triggers and schedules
+   - Test sync functionality
+
+3. **Setup Export Operations**:
+   - Use `*setup-export` command to configure exports
+   - Create export configurations for multiple formats
+   - Set up export destinations and schedules
+   - Test export functionality
+
+4. **Create Template Queries**:
+   - Use `*create-template-queries` command to create reusable queries
+   - Create parameterized query templates
+   - Document template usage and parameters
+   - Test template queries
+
+5. **Update Database Schema**:
+   - Use `*update-schema` command to modify database schema
+   - Create migration scripts for schema changes
+   - Add new columns, indexes, and constraints
+   - Validate schema changes
+
+6. **Update Database Configuration**:
+   - Use `*update-db-config` command to update configuration files
+   - Update `module_input.json` with new input configurations
+   - Update `module_output.json` with new output configurations
+   - Update `upload-files.json` with new file configurations
+
+**Step 14: Push Changes**
 
 1. **Push Feature Branches**: Use `*git-push` to push all feature branches to remote repositories
 2. **Verify Remote Branches**: Confirm all branches are available on remote
 3. **Update Branch URLs**: Add remote branch URLs to requirement document
 
-**Step 14: Update Documentation**
+**Step 15: Update Documentation**
 
 1. **Update Requirement Document**: Add implementation results to original document
 2. **Add Changelog**: Update changelog section with development progress
@@ -186,6 +224,8 @@ Execute the complete development workflow for implementing a requirement across 
 - **Module selection validated** to prevent incorrect targeting (e.g., ISS vs Distribution)
 - All three repositories have feature branches created from caas-release
 - All required code changes implemented following existing patterns
+- **All database operations completed**: views, sync, export, template queries, schema updates
+- **Database configuration files updated**: module_input.json, module_output.json, upload-files.json
 - All changes committed to feature branches
 - Feature branches pushed to remote repositories
 - All validation tests pass
@@ -210,6 +250,12 @@ Execute the complete development workflow for implementing a requirement across 
 - **CRITICAL: Output Sync Registration**: If agent creates new output, MUST register it in Util Output Sync Module
 - **CRITICAL: Output CAAS JSON Configuration**: If agent creates new output, MUST add it to Output CAAS JSON
 - **CRITICAL: Output Pattern Discovery**: If agent doesn't follow existing output registration pattern, STOP and check existing Util Output Sync Module and Output CAAS JSON patterns
+- **CRITICAL: Database Operations Required**: If agent creates/modifies LoadAPIs, MUST create corresponding database operations (views, sync, export, template queries)
+- **CRITICAL: View Creation**: If agent creates new LoadAPI, MUST create corresponding input/output views in irisx-config
+- **CRITICAL: Sync Configuration**: If agent creates new LoadAPI, MUST configure sync operations for data flow
+- **CRITICAL: Export Setup**: If agent creates new LoadAPI, MUST setup export operations for data delivery
+- **CRITICAL: Template Queries**: If agent creates new LoadAPI, MUST create reusable query templates
+- **CRITICAL: Schema Updates**: If agent creates new LoadAPI, MUST update database schema and configuration files
 
 ## Notes
 
