@@ -16,7 +16,7 @@ Execute the complete development workflow for implementing a requirement across 
 
 - Requirement document must be provided
 - All three repositories must be accessible
-- BMAD core agents must be available (@analyst.md, @dev.md, @qa.md)
+- BMAD core agents must be available (@bmad-core/agents/analyst.md, @bmad-core/agents/dev.md, @bmad-core/agents/qa.md)
 
 **Step 1: Load Requirement Document**
 
@@ -37,9 +37,9 @@ Execute the complete development workflow for implementing a requirement across 
 9. **Registration Analysis**: Analyze what needs to be registered across all three repositories
 10. **Cross-Repository Impact**: Assess impact on Algorithm, LoadAPI, and Config repositories
 
-**Step 2: Use @analyst.md for Analysis**
+**Step 2: Use @bmad-core/agents/analyst.md for Analysis**
 
-1. **Activate @analyst.md**: Use the analyst persona to analyze the requirement
+1. **Activate @bmad-core/agents/analyst.md**: Use the analyst persona to analyze the requirement
 2. **Create User Stories**: Generate user stories based on the requirement
 3. **Define Acceptance Criteria**: Create clear acceptance criteria for the implementation
 4. **Update Requirement Document**: Add user stories and acceptance criteria to the requirement document
@@ -74,16 +74,18 @@ Execute the complete development workflow for implementing a requirement across 
    - Data structure patterns (Row classes, File classes, validation patterns)
    - Business logic patterns (GroupModule, AbstractUtilModuleGroup)
 
-2. **LoadAPI Repository Patterns**:
+2. **LoadAPI Repository Patterns** (Delegate to LoadAPI Pattern Expert):
    - LoadAPI registration patterns (**init**.py, loadapi_provider.py)
    - LoadAPI structure patterns (LoadApi, IntegrationLoadApi inheritance)
    - Validation patterns (pre_validate_initializer, validate_row methods)
    - Constants patterns (MsgErrors, module-specific constants)
+   - **CRITICAL**: Use `loadapi-pattern-expert.md` for LoadAPI-specific analysis and patterns
 
-3. **Configuration Repository Patterns**:
+3. **Configuration Repository Patterns** (Delegate to Configuration Pattern Expert):
    - SQL view patterns (child-input, child-output, parent-input, interim)
    - Template patterns (TSV format, export naming conventions)
    - JSON configuration patterns (module_input.json, module_output.json, upload-files.json)
+   - **CRITICAL**: Use `config-pattern-expert.md` for configuration-specific analysis and patterns
    - Database operation patterns (OPENROWSET, BULK file reading)
 
 4. **Cross-Repository Integration Patterns**:
@@ -148,9 +150,9 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 7. Implementation
 
-**Step 10: Use @dev.md for Code Implementation**
+**Step 10: Use @bmad-core/agents/dev.md for Code Implementation**
 
-1. **Activate @dev.md**: Use the developer persona to implement changes
+1. **Activate @bmad-core/agents/dev.md**: Use the developer persona to implement changes
 2. **Execute Develop Story**: Use `*develop-story` command
 3. **Follow Patterns**: Implement changes following discovered patterns
 4. **Template-Based Generation**: Use existing templates for code generation
@@ -158,9 +160,9 @@ Execute the complete development workflow for implementing a requirement across 
 6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
 7. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
-**Step 10.5: Use @qa.md for Basic Testing**
+**Step 10.5: Use @bmad-core/agents/qa.md for Basic Testing**
 
-1. **Activate @qa.md**: Use the QA persona to create and execute basic tests
+1. **Activate @bmad-core/agents/qa.md**: Use the QA persona to create and execute basic tests
 2. **Create Unit Tests**: Generate unit tests for static methods and new functionality
 3. **Test New Data Classes**: Create tests for new data structures and their methods
 4. **Test Static Methods**: Create tests for calculation logic and utility methods

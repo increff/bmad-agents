@@ -15,7 +15,19 @@ Analyze requirement documents and create implementation plans by intelligently s
    cat $REQUIREMENT_FILE
    ```
 
-2. **Identify Key Components**:
+2. **Requirement Classification**:
+   - **Algorithm Requirements**: Business logic, modules, data structures, validation
+   - **LoadAPI Requirements**: Data upload, denormalization, processing, import/export
+   - **Configuration Requirements**: SQL views, templates, JSON configuration, schemas
+   - **Cross-Repository Requirements**: Integration, data flow, pipeline coordination
+
+3. **Keyword Analysis and Repository Impact Prediction**:
+   - **Store Keywords** → Store denormalization, store modules, store validation, store configuration
+   - **SKU Keywords** → SKU denormalization, EAN validation, SKU modules, SKU configuration
+   - **Style Keywords** → Style denormalization, style_code validation, style modules, style configuration
+   - **Inventory Keywords** → Inventory modules, warehouse denormalization, stock calculations, inventory configuration
+
+4. **Identify Key Components**:
    - **Primary Module**: Main module affected by the requirement
    - **Secondary Modules**: Any additional modules that might be affected
    - **Data Structures**: Input/output data structures involved
@@ -48,12 +60,117 @@ Analyze requirement documents and create implementation plans by intelligently s
 
    # Check SchemaProvider and FileName patterns
    grep -r "SchemaProvider\|FileName" $REPO_PATH/src/main/java/com/increff/irisx/
+   ```
+
+````
+
+### 3. LoadAPI Analysis Delegation
+
+**CRITICAL**: For LoadAPI-specific analysis, delegate to the specialized LoadAPI Pattern Expert agent.
+
+**LoadAPI Delegation Rules**:
+- **LoadAPI Pattern Analysis**: Delegate to `loadapi-pattern-expert.md`
+- **Denormalization Analysis**: Delegate to `loadapi-pattern-expert.md`
+- **LoadAPI Implementation Guidance**: Delegate to `loadapi-pattern-expert.md`
+- **Repository Structure Analysis**: Delegate to `loadapi-pattern-expert.md`
+
+**LoadAPI Pattern Expert Commands**:
+- `analyze-patterns`: Analyze LoadAPI repository for structural and naming patterns
+- `analyze-denormalization`: Analyze denormalization patterns (user upload vs. database storage)
+- `create-loadapi`: Provide guidance for creating a new LoadAPI
+- `add-fields`: Provide guidance for adding new fields to an existing LoadAPI
+- `get-denormalization-matrix`: Provide the denormalization field mapping matrix
+
+**VIRAT's Role**: Identify when LoadAPI expertise is needed and delegate to the LoadAPI Pattern Expert agent.
+
+### 4. Configuration Analysis Delegation
+
+**CRITICAL**: For configuration-specific analysis, delegate to the specialized Configuration Pattern Expert agent.
+
+**Configuration Delegation Rules**:
+- **Configuration Pattern Analysis**: Delegate to `config-pattern-expert.md`
+- **SQL View Creation**: Delegate to `config-pattern-expert.md`
+- **Template Generation**: Delegate to `config-pattern-expert.md`
+- **Cross-Repository Configuration**: Delegate to `config-pattern-expert.md`
+
+**Configuration Pattern Expert Commands**:
+- `analyze-json-config`: Analyze JSON configuration patterns (module_input.json, module_output.json, upload-files.json)
+- `analyze-sql-views`: Analyze SQL view creation patterns and OPENROWSET usage
+- `analyze-templates`: Analyze TSV template patterns and structure
+- `create-module-config`: Provide guidance for creating new module configuration
+- `create-sql-view`: Provide guidance for creating SQL views (child-input, child-output, parent-input)
+- `create-template`: Provide guidance for creating TSV templates
+
+**VIRAT's Role**: Identify when configuration expertise is needed and delegate to the Configuration Pattern Expert agent.
+
+### 5. Change Prediction and Repository Impact Analysis
+
+1. **Predict Algorithm Repository Changes**:
+   ```bash
+   # Check for module-related changes
+   grep -r "new module\|create module\|add module" $REQUIREMENT_FILE
+
+   # Check for data structure changes
+   grep -r "new data\|add field\|new table" $REQUIREMENT_FILE
+
+   # Check for business logic changes
+   grep -r "calculation\|algorithm\|business rule" $REQUIREMENT_FILE
+````
+
+2. **Predict LoadAPI Repository Changes**:
+
+   ```bash
+   # Check for LoadAPI-related changes
+   grep -r "new loadapi\|create loadapi\|data upload" $REQUIREMENT_FILE
+
+   # Check for denormalization needs
+   grep -r "store\|sku\|style\|warehouse\|channel\|ean\|style_code" $REQUIREMENT_FILE
+   ```
+
+3. **Predict Configuration Repository Changes**:
+
+   ```bash
+   # Check for SQL view requirements
+   grep -r "sql view\|database view\|data view" $REQUIREMENT_FILE
+
+   # Check for template requirements
+   grep -r "template\|tsv\|sample data" $REQUIREMENT_FILE
+   ```
+
+4. **Cross-Repository Impact Assessment**:
+   - **Integration Requirements**: Changes across all three repositories
+   - **Data Flow Requirements**: End-to-end pipeline changes
+   - **Registration Requirements**: What needs to be registered in each repository
+   - **Dependency Analysis**: Cross-repository dependencies and consistency requirements
+
+### 6. Implementation Planning
+
+1. **File Change Prediction**:
+   - **Algorithm Repository**: ModuleProvider.java, new modules, Row/File classes, validation logic
+   - **LoadAPI Repository**: LoadAPI classes, registration files, ObjectMaps, denormalization
+   - **Configuration Repository**: SQL views, TSV templates, JSON configuration, schemas
+
+2. **Registration Requirements**:
+   - **Algorithm**: ModuleProvider, ValidationModule, GroupModule registrations
+   - **LoadAPI**: **init**.py, loadapi_provider.py, MsgErrors.py registrations
+   - **Configuration**: JSON configuration, schema updates, template integration
+
+3. **Implementation Sequence**:
+   - **Phase 1**: Algorithm repository changes (business logic, data structures)
+   - **Phase 2**: LoadAPI repository changes (data processing, denormalization)
+   - **Phase 3**: Configuration repository changes (views, templates, configuration)
+   - **Phase 4**: Cross-repository integration and validation
 
    # Check LoadAPI provider patterns
-   grep -r "loadapi_provider\|__init__.py" $LOADAPI_PATH/loadapi/
+
+   grep -r "loadapi_provider\|**init**.py" $LOADAPI_PATH/loadapi/
 
    # Check configuration patterns
+
    ls $CONFIG_PATH/template/ | grep -E "(export|child-input|child-output)"
+
+   ```
+
    ```
 
 4. **Registration Analysis**:
@@ -278,3 +395,113 @@ The AI will:
 6. **Follow Existing Patterns** for consistency
 
 **Key Principle**: The AI should focus on **understanding the complete requirement context** and then intelligently select steps based on what actually needs to be changed, rather than following predetermined step mappings.
+
+## Comprehensive Implementation Steps Reference
+
+### All Possible Implementation Steps
+
+The following is a comprehensive list of all possible implementation steps across all requirement types. The AI will intelligently select which steps are needed for each specific requirement.
+
+#### 1. **Module Analysis & Identification**
+
+- [ ] **Identify Primary Module**: Determine the main module affected by the requirement
+- [ ] **Identify Secondary Modules**: Determine any secondary modules that might be affected
+- [ ] **Analyze Module Dependencies**: Check for cross-module dependencies
+- [ ] **Determine Module Type**: Identify if it's a new module, existing module, or module modification
+
+#### 2. **Data Structure Operations**
+
+- [ ] **Create New Row Classes**: Create new data row classes in `row/input/` or `row/output/` (simple POJOs with public fields)
+- [ ] **Create New File Classes**: Create new file classes in `file/input/` or `file/output/` extending `AbstractTSVFile<RowClass>`
+- [ ] **Update Existing Row Classes**: Modify existing data row classes to add/remove/change fields
+- [ ] **Update Existing File Classes**: Modify existing file classes to handle new columns or logic (update getHeaders() and read() methods)
+- [ ] **Create New Data Classes**: Create new data classes in module directories
+- [ ] **Update Existing Data Classes**: Modify existing data classes with new fields or methods
+- [ ] **Update FileName Constants**: Add new file name constants in `FileName.java` (snake_case, no extensions)
+- [ ] **Update SchemaProvider**: Register new file classes in `SchemaProvider.java` with proper imports
+
+#### 3. **Module Structure Operations**
+
+- [ ] **Create New Module Directory**: Create complete new module directory structure
+- [ ] **Create Group Module Class**: Create `{Module}GroupModule.java` extending `AbstractUtilModuleGroup`
+- [ ] **Create Main Module Class**: Create main module class (e.g., `{Module}AllocationModule.java`)
+- [ ] **Create Helper Module Class**: Create helper class (e.g., `{Module}Helper.java`)
+- [ ] **Update Existing Module Classes**: Modify existing module classes with new logic
+- [ ] **Update Existing Helper Classes**: Modify existing helper classes with new methods
+
+#### 4. **Validation Operations**
+
+- [ ] **Create New Validation Module**: Create `{Module}ValidationModule.java` extending `AbstractValidationModule`
+- [ ] **Create Validation Constants**: Create `{Module}ValidationConstants.java` extending `AbstractConstants` with error messages
+- [ ] **Update Existing Validation Module**: Modify existing validation modules with new rules
+- [ ] **Add Validation Rules**: Add new validation rules to existing validation classes
+- [ ] **Update Validation Logic**: Modify existing validation logic
+- [ ] **Register Validation Module**: Add validation module to GroupModule and register in ModuleProvider
+
+#### 5. **LoadAPI Operations**
+
+- [ ] **Create New LoadAPI Directory**: Create new LoadAPI module directory (e.g., `{module}/`)
+- [ ] **Create Main LoadAPI Class**: Create main LoadAPI class extending `LoadApi` (e.g., `{Module}LoadApi.py`)
+- [ ] **Create Integration LoadAPI Class**: Create integration LoadAPI class extending `IntegrationLoadApi` (e.g., `{System}IntegrationApi.py`)
+- [ ] **Update Existing LoadAPI Classes**: Modify existing LoadAPI classes with new logic
+- [ ] **Register LoadAPI**: Register new LoadAPI in appropriate provider files
+- [ ] **Update LoadAPI Constants**: Add new constants for LoadAPI configuration
+- [ ] **Create LoadAPI Tests**: Create test files for new LoadAPI functionality
+
+#### 6. **Configuration Operations**
+
+- [ ] **Update Module Input JSON**: Add new input configurations to `module_input.json`
+- [ ] **Update Module Output JSON**: Add new output configurations to `module_output.json`
+- [ ] **Update CAAS JSON**: Add new configurations to CAAS JSON files
+- [ ] **Update Export Definitions**: Add new export definitions
+- [ ] **Update SQL Views**: Create or update SQL view definitions
+- [ ] **Update TSV Templates**: Create or update TSV input templates
+- [ ] **Update Configuration Files**: Update any other configuration files as needed
+
+#### 7. **Cross-Repository Integration**
+
+- [ ] **Algorithm Repository Changes**: Implement changes in `irisx-algo` repository
+- [ ] **LoadAPI Repository Changes**: Implement changes in `ms-loadapis-ril-final` repository
+- [ ] **Config Repository Changes**: Implement changes in `irisx-config` repository
+- [ ] **Cross-Repository Validation**: Ensure consistency across all repositories
+- [ ] **Cross-Repository Testing**: Test integration between repositories
+- [ ] **Cross-Repository Documentation**: Update documentation across repositories
+
+#### 8. **Testing and Validation**
+
+- [ ] **Create Unit Tests**: Create unit tests for new functionality
+- [ ] **Create Integration Tests**: Create integration tests for cross-module functionality
+- [ ] **Run Existing Tests**: Ensure existing tests still pass
+- [ ] **Validate Implementation**: Validate implementation against requirements
+- [ ] **Performance Testing**: Test performance impact of changes
+- [ ] **Regression Testing**: Ensure no existing functionality is broken
+
+#### 9. **Documentation and Registration**
+
+- [ ] **Update ModuleProvider**: Register new modules in `ModuleProvider.java`
+- [ ] **Update SchemaProvider**: Register new schemas in `SchemaProvider.java`
+- [ ] **Update FileName**: Add new file names to `FileName.java`
+- [ ] **Update Constants**: Add new constants as needed
+- [ ] **Update Documentation**: Update relevant documentation
+- [ ] **Create Change Log**: Document all changes made
+
+#### 10. **Pattern Recognition and Consistency**
+
+- [ ] **Analyze Existing Patterns**: Study existing patterns in the codebase
+- [ ] **Follow Naming Conventions**: Ensure consistent naming across all files
+- [ ] **Follow Code Structure**: Maintain consistent code structure
+- [ ] **Follow Registration Patterns**: Use consistent registration patterns
+- [ ] **Follow Testing Patterns**: Use consistent testing patterns
+- [ ] **Follow Documentation Patterns**: Use consistent documentation patterns
+
+### Intelligent Step Selection
+
+The AI should analyze the requirement and select only the relevant steps from the above comprehensive list. For example:
+
+- **New Column Addition**: Steps 2, 4, 6, 8, 9
+- **New Module Creation**: Steps 1, 3, 4, 5, 6, 7, 8, 9, 10
+- **Formula Change**: Steps 2, 3, 4, 8, 9
+- **New Input File**: Steps 2, 5, 6, 8, 9
+- **New Output File**: Steps 2, 6, 8, 9
+
+This approach eliminates the need for separate agent files for each requirement type while providing comprehensive coverage of all possible implementation scenarios.

@@ -12,72 +12,101 @@ workflow:
     - pattern-based-development
     - brownfield-enhancement
 
-  sequence:
-    - step: requirement_analysis
-      agent: ads-orchestrator
-      action: analyze requirement document and create implementation plan
-      creates: implementation plan with repository mapping
-      notes: "Parse requirement document and identify affected repositories and modules"
+  phases:
+    - phase: analysis_planning
+      agent: virat
+      steps:
+        - step: requirement_analysis
+          action: analyze requirement document and create implementation plan
+          creates: implementation plan with repository mapping
+          notes: "Parse requirement document and identify affected repositories and modules"
+        - step: module_identification
+          action: identify target modules and patterns from requirement
+          creates: module mapping and pattern identification
+          notes: "Identify primary and secondary modules affected by requirement"
+        - step: dependency_mapping
+          action: analyze shared dependencies and impact assessment
+          creates: dependency analysis and modification recommendations
+          notes: "Identify shared classes, constants, and utilities that need careful handling"
 
-    - step: repository_crawling_stage1
-      agent: ads-orchestrator
-      action: crawl all three repositories to understand current state
-      creates: repository state map with patterns and templates
-      notes: "Comprehensive crawling of irisx-algo, ms-loadapis-ril-final, and irisx-config"
+    - phase: repository_intelligence
+      agent: virat
+      steps:
+        - step: repository_crawling
+          action: crawl all three repositories to understand current state and patterns
+          creates: comprehensive repository state map with patterns and templates
+          notes: "Consolidated crawling of irisx-algo, ms-loadapis-ril-final, and irisx-config with pattern analysis"
+        - step: pattern_recognition
+          action: analyze crawled data to identify patterns and enhance requirements
+          creates: pattern classification and enhanced requirements
+          notes: "Classify patterns into structural, code, data, configuration, and validation categories"
+        - step: loadapi_pattern_analysis
+          agent: loadapi-pattern-expert
+          action: analyze LoadAPI-specific patterns and denormalization requirements
+          creates: LoadAPI pattern analysis and implementation guidance
+          notes: "Delegate to LoadAPI Pattern Expert for LoadAPI-specific patterns, denormalization analysis, and implementation guidance"
+        - step: config_pattern_analysis
+          agent: config-pattern-expert
+          action: analyze configuration-specific patterns and cross-repository coordination
+          creates: Configuration pattern analysis and implementation guidance
+          notes: "Delegate to Configuration Pattern Expert for configuration patterns, SQL view creation, template generation, and cross-repository coordination"
+        - step: template_generation
+          action: generate implementation templates based on discovered patterns
+          creates: implementation templates and validation patterns
+          notes: "Generate templates and patterns to follow during implementation"
 
-    - step: pattern_analysis
-      agent: ads-orchestrator
-      action: analyze crawled data to identify patterns and enhance requirements
-      creates: pattern classification and enhanced requirements
-      notes: "Classify patterns into structural, code, data, configuration, and validation categories"
+    - phase: story_branch_management
+      steps:
+        - step: story_creation
+          agent: sm-agent
+          action: create implementation story using draft command
+          creates: detailed user story with acceptance criteria
+          notes: "Use SM agent with *draft command and create-next-story.md task"
+        - step: branch_creation
+          agent: virat
+          action: create feature branches from caas-release in all affected repositories
+          creates: feature branches with consistent naming
+          notes: "Create branches from caas-release with naming convention: feature/{req-id}-{title}"
 
-    - step: dependency_analysis
-      agent: ads-orchestrator
-      action: analyze shared dependencies and impact assessment
-      creates: dependency analysis and modification recommendations
-      notes: "Identify shared classes, constants, and utilities that need careful handling"
+    - phase: implementation
+      agent: dev-agent
+      steps:
+        - step: code_implementation
+          action: implement changes using develop-story command
+          creates: modified source files with new functionality
+          notes: "Use Dev agent with *develop-story command and strict story file updates"
+        - step: configuration_updates
+          action: update configuration files across repositories
+          creates: updated configuration files
+          notes: "Update configuration files in all affected repositories"
+        - step: cross_repository_sync
+          action: synchronize changes across all three repositories
+          creates: synchronized repository state
+          notes: "Ensure consistency across Algorithm, LoadAPI, and Config repositories"
 
-    - step: story_creation
-      agent: sm
-      action: create implementation story using draft command
-      creates: detailed user story with acceptance criteria
-      notes: "Use SM agent with *draft command and create-next-story.md task"
+    - phase: validation_testing
+      agent: qa-agent
+      steps:
+        - step: implementation_validation
+          action: validate implementation using review-qa and run-tests
+          creates: validation reports and test results
+          notes: "Use QA agent with *review-qa and *run-tests commands"
+        - step: quality_assurance
+          action: perform comprehensive quality assurance checks
+          creates: quality assurance reports
+          notes: "Perform comprehensive quality checks and validation"
 
-    - step: branch_creation
-      agent: ads-orchestrator
-      action: create feature branches from caas-release in all affected repositories
-      creates: feature branches with consistent naming
-      notes: "Create branches from caas-release with naming convention: feature/{req-id}-{title}"
-
-    - step: repository_crawling_stage2
-      agent: ads-orchestrator
-      action: crawl specific modules before implementation
-      creates: implementation patterns and templates to follow
-      notes: "Pre-implementation crawling to ensure accuracy"
-
-    - step: implementation
-      agent: dev
-      action: implement changes using develop-story command
-      creates: modified source files with new functionality
-      notes: "Use Dev agent with *develop-story command and strict story file updates"
-
-    - step: repository_crawling_stage3
-      agent: ads-orchestrator
-      action: crawl validation patterns after implementation
-      creates: validation patterns and test structures to follow
-      notes: "Post-implementation crawling for validation"
-
-    - step: validation
-      agent: qa
-      action: validate implementation using review-qa and run-tests
-      creates: validation reports and test results
-      notes: "Use QA agent with *review-qa and *run-tests commands"
-
-    - step: documentation
-      agent: ads-orchestrator
-      action: update requirement document with implementation results
-      creates: updated documentation with complete implementation details
-      notes: "Update original requirement document with results"
+    - phase: documentation_delivery
+      agent: virat
+      steps:
+        - step: result_documentation
+          action: update requirement document with implementation results
+          creates: updated documentation with complete implementation details
+          notes: "Update original requirement document with results"
+        - step: change_summary
+          action: create comprehensive change summary
+          creates: change summary and delivery documentation
+          notes: "Create comprehensive summary of all changes made"
 
   success_criteria:
     - All three repositories have feature branches created
