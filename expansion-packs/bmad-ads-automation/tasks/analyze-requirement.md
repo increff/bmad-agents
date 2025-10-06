@@ -219,205 +219,40 @@ Analyze requirement documents to identify correct modules, create implementation
 2. **File Identification**: Identify specific files to modify based on actual structure
 3. **Pattern Matching**: Find existing patterns to follow from actual code
 4. **Dependency Analysis**: Identify any cross-module dependencies from actual code
-5. **Implementation Steps**: Create comprehensive step-by-step implementation plan based on real structure
+5. **Database Operations Planning**: Plan database operations for irisx-config repository
+6. **Implementation Steps**: Create step-by-step implementation plan based on real structure
 
-#### 7.1 Dynamic Implementation Steps Generation
+#### 7.1 Database Operations Planning
 
-**CRITICAL**: Generate implementation steps dynamically based on requirement analysis and repository crawling results. Only include steps that are actually needed for the specific requirement.
+**CRITICAL**: Every implementation plan MUST include database operations for irisx-config repository:
 
-**Step Generation Logic**:
+1. **SQL View Creation**:
+   - Create `view-creation/child-input-*.sql` files for new input data structures
+   - Create `view-creation/child-output-*.sql` files for new output data structures
+   - Follow existing SQL view patterns and naming conventions
+   - Configure OPENROWSET with proper DATA_SOURCE and FORMAT settings
 
-1. **FIRST: Complete Requirement Analysis**:
-   - Analyze requirement type and scope
-   - Identify affected modules through crawling
-   - Discover existing patterns and structures
-   - Map dependencies and relationships
+2. **Synchronization Operations**:
+   - Create synchronization logic in `sync/` directory
+   - Ensure data consistency between repositories and database
+   - Follow existing synchronization patterns and configurations
 
-2. **SECOND: Repository Crawling Analysis**:
-   - Crawl irisx-algo to understand current module structure
-   - Crawl ms-loadapis-ril-final to understand LoadAPI patterns
-   - Crawl irisx-config to understand configuration patterns
-   - Identify what exists vs what needs to be created
+3. **Export Operations**:
+   - Create export configurations in `export/` directory
+   - Support multiple export formats (CSV, TSV, JSON, etc.)
+   - Create reusable export templates for common operations
 
-3. **THIRD: Dynamic Step Generation**: Based on analysis and crawling results, identify which components need to be created/modified:
-   - New input data → Steps 1-6, 7-8 (if LoadAPI needed), 9, 11-18 (if database operations needed)
-   - New output data → Steps 11-18 (database operations), 19-24 (if module changes needed)
-   - Existing module modification → Steps 19-24 (module implementation)
-   - LoadAPI changes → Steps 7-8, 11-18 (database operations)
-   - Configuration changes → Step 9
-   - Business logic changes → Step 10, 19-24 (module implementation)
+4. **Template Query Management**:
+   - Create TSV input templates in `template/` directory
+   - Create reusable SQL query templates
+   - Follow existing template patterns and naming conventions
 
-4. **FOURTH: Generate Targeted Step List**: Create a dynamic list of steps based on what's actually needed and what was discovered through crawling
-
-**Available Implementation Steps** (use only as needed):
-
-**Core Input Steps** (use when adding new input data):
-
-- **Step 1: Create Input Row Class** - `{ModuleName}Row.java`
-- **Step 2: Create File Handler** - `{ModuleName}File.java`
-- **Step 3: Update Schema Provider Registration** - `SchemaProvider.java`
-- **Step 4: Update Filename Constants** - `FileName.java`
-- **Step 5: Data Loading Integration** - `{ModuleName}PrepareDataModule.java`
-- **Step 6: Data Storage & Access** - `Base{ModuleName}Data.java`
-
-**LoadAPI Steps** (use when creating new LoadAPIs):
-
-- **Step 7: Create Load API** - `{ModuleName}LoadApi.py`
-- **Step 8: Register Load API** - `__init__.py`
-
-**Configuration Steps** (use when adding new configurations):
-
-- **Step 9: Update Configuration Files** - Template files and JSON configs
-
-**Business Logic Steps** (use when modifying business logic):
-
-- **Step 10: Business Logic Integration** - Helper classes and iteration runners
-
-**Database Operations Steps** (use when LoadAPIs are created/modified):
-
-- **Step 11: Create Input View** - SQL input views
-- **Step 12: Create Output View** - SQL output views
-- **Step 13: Setup Sync** - Sync configuration
-- **Step 14: Setup Export** - Export configuration
-- **Step 15: Create Template Queries** - Reusable queries
-- **Step 16: Update Schema** - Database schema modifications
-- **Step 17: Update Module Output Configuration** - Output JSON configs
-- **Step 18: Update Upload Files Configuration** - Upload file configs
-
-**Module Implementation Steps** (use when modifying existing modules):
-
-- **Step 19: Update Module Data Class** - Data classes
-- **Step 20: Update Module Implementation** - Module logic
-- **Step 21: Update Module Data Row** - Data row classes
-- **Step 22: Create Validation Rules** - Validation classes
-- **Step 23: Update Constants** - Constants classes
-- **Step 24: Create Tests** - Test classes
-
-**Step Selection Rules**:
-
-- **New Input Requirement**: Include Steps 1-6, 7-8 (if LoadAPI needed), 9, 11-18 (if database operations needed)
-- **New Output Requirement**: Include Steps 11-18 (database operations), 19-24 (if module changes needed)
-- **Existing Module Modification**: Include Steps 19-24 (module implementation)
-- **LoadAPI Changes**: Include Steps 7-8, 11-18 (database operations)
-- **Configuration Changes**: Include Step 9
-- **Business Logic Changes**: Include Step 10, 19-24 (module implementation)
-
-### 7.2 Implementation Plan Output
-
-**CRITICAL**: After completing the requirement analysis and repository crawling, output the implementation plan in the following format. The plan should be based on what was discovered through crawling, not hardcoded steps.
-
-```
-## Implementation Plan
-
-Step 1: Create Input Row Class
-File: {ModuleName}Row.java
-Location: /irisx-algo/src/main/java/com/increff/irisx/row/input/{module}/
-Fields: {fields based on requirement analysis}
-Pattern: Follow existing row class patterns
-
-Step 2: Create Load API
-File: {ModuleName}LoadApi.py
-Location: /ms-loadapis-ril-final/loadapi/{module}/
-Pattern: Follow existing LoadAPI structure
-Reference: Use similar LoadAPI as template
-
-Step 3: Register Load API
-File: /ms-loadapis-ril-final/loadapi/__init__.py
-Import ID: import_{module}_input_{feature_name}
-Pattern: Follow existing registration patterns
-
-Step 4: Update Configuration
-File: /irisx-config/module_input.json
-Input: input_{module}_{feature_name}
-Pattern: Follow existing input configuration patterns
-
-Step 5: Update Filename Constants
-File: /irisx-algo/src/main/java/com/increff/irisx/constants/FileName.java
-Constant: {MODULE}_{FEATURE_NAME}
-Pattern: Follow existing filename constant patterns
-
-Step 6: Update Schema Provider
-File: /irisx-algo/src/main/java/com/increff/irisx/provider/SchemaProvider.java
-Import: Add {module} input file import
-Pattern: Follow existing schema provider patterns
-
-Step 7: Database Operations - Create Input View
-File: /irisx-config/view-creation/child-input-{module}-{feature}.sql
-View: child_input_{module}_{feature}
-Pattern: Follow existing input view patterns
-
-Step 8: Database Operations - Create Output View
-File: /irisx-config/view-creation/child-output-{module}-{feature}.sql
-View: child_output_{module}_{feature}
-Pattern: Follow existing output view patterns
-
-Step 9: Database Operations - Setup Sync
-File: /irisx-config/sync/{module}-{feature}-sync.yaml
-Config: Sync configuration for data flow
-Pattern: Follow existing sync configuration patterns
-
-Step 10: Database Operations - Setup Export
-File: /irisx-config/export/{module}-{feature}-export.yaml
-Config: Export configuration for data delivery
-Pattern: Follow existing export configuration patterns
-
-Step 11: Database Operations - Create Template Queries
-File: /irisx-config/template-queries/{module}-{feature}-queries.sql
-Queries: Reusable parameterized queries
-Pattern: Follow existing template query patterns
-
-Step 12: Database Operations - Update Schema
-File: /irisx-config/migrations/add_{module}_{feature}.sql
-Schema: Database schema modifications
-Pattern: Follow existing migration patterns
-
-Step 13: Database Operations - Update Module Output Configuration
-File: /irisx-config/module_output.json
-Output: output_{module}_{feature_name}
-Pattern: Follow existing output configuration patterns
-
-Step 14: Database Operations - Update Upload Files Configuration
-File: /irisx-config/upload-files.json
-Config: File upload configuration for new feature
-Pattern: Follow existing upload files configuration patterns
-
-Step 15: Update Module Data Class
-File: /irisx-algo/src/main/java/com/increff/irisx/data/{ModuleName}Data.java
-Fields: Add new fields based on requirement
-Pattern: Follow existing module data patterns
-
-Step 16: Update Module Implementation
-File: /irisx-algo/src/main/java/com/increff/irisx/module/{module}/{ModuleName}Module.java
-Logic: Implement business logic for new feature
-Pattern: Follow existing module implementation patterns
-
-Step 17: Update Module Data Row
-File: /irisx-algo/src/main/java/com/increff/irisx/row/{module}/{ModuleName}DataRow.java
-Fields: Add new fields for data processing
-Pattern: Follow existing module data row patterns
-
-Step 18: Create Validation Rules
-File: /irisx-algo/src/main/java/com/increff/irisx/module/validation/{ModuleName}Validation.java
-Rules: Business validation rules for new feature
-Pattern: Follow existing validation patterns
-
-Step 19: Update Constants
-File: /irisx-algo/src/main/java/com/increff/irisx/constants/{ModuleName}Constants.java
-Constants: Add new constants for the feature
-Pattern: Follow existing constants patterns
-
-Step 20: Create Tests
-File: /irisx-algo/src/test/java/com/increff/irisx/module/{module}/{ModuleName}ModuleTest.java
-Tests: Unit tests for new functionality
-Pattern: Follow existing test patterns
-```
-
-**CRITICAL**:
-
-1. **FIRST**: Complete requirement analysis and repository crawling to understand what exists and what needs to be created
-2. **SECOND**: Generate implementation steps dynamically based on analysis results - only include steps that are actually needed
-3. **THIRD**: Each step must include the file path, purpose, and pattern reference based on what was discovered through crawling
-4. **FOURTH**: Do not hardcode steps - use the dynamic step generation logic based on requirement type and crawling results
+5. **Configuration Updates**:
+   - Update `module_input.json` with new input configurations
+   - Update `module_output.json` with new output configurations
+   - Update `upload-files.json` with new file upload configurations
+   - Update SchemaProvider with new data schemas
+   - Update filename configurations for new data structures
 
 ### 8. Validation
 
@@ -521,3 +356,9 @@ Pattern: Follow existing test patterns
 - [ ] **CRITICAL: Input JSON configuration validated** - Any new input is part of input JSON in config
 - [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
 - [ ] **CRITICAL: Output CAAS JSON configuration validated** - Any new output is part of Output CAAS JSON
+- [ ] **CRITICAL: Database operations planned** - SQL views, sync, export, and template queries included in implementation plan
+- [ ] **CRITICAL: SQL view creation planned** - Input and output views planned for new data structures
+- [ ] **CRITICAL: Synchronization operations planned** - Sync logic planned for data consistency
+- [ ] **CRITICAL: Export operations planned** - Export configurations planned for new requirements
+- [ ] **CRITICAL: Template queries planned** - TSV templates and SQL query templates planned
+- [ ] **CRITICAL: Configuration updates planned** - All JSON configs planned for updates

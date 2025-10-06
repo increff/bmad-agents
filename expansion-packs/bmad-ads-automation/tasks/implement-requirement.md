@@ -24,14 +24,15 @@ Execute the complete development workflow for implementing a requirement across 
 2. Parse requirement ID, title, description, and technical requirements
 3. Identify the type of change required (new column, new input, formula change, new module, etc.)
 
-**Step 1.5: Comprehensive Analysis and Planning**
+**Step 1.5: Module Identification**
 
-1. **Execute Analyze Requirement Task**: Use `*analyze` command to get comprehensive implementation plan
-2. **Get Implementation Plan**: Retrieve the detailed 20-step implementation plan from analyze-requirement task
-3. **Validate Plan**: Ensure the plan includes all necessary steps (code, database operations, configuration)
-4. **Module Identification**: Use module identification results from analyze-requirement task
-5. **Pattern Discovery**: Use discovered patterns from analyze-requirement task
-6. **Repository Mapping**: Use repository mapping results from analyze-requirement task
+1. **Load Module Abbreviations**: Reference `module-abbreviations.md` for module mapping
+2. **Keyword Matching**: Match requirement keywords to module abbreviations
+3. **Context Validation**: Ensure identified modules make sense for the requirement
+4. **Primary Module Selection**: Identify the main module to modify
+5. **Secondary Modules**: Identify any additional modules that might be affected
+6. **Validate Module Choice**: Prevent incorrect targeting (e.g., ISS vs Distribution)
+7. **Document Module Selection**: Record why specific modules were chosen
 
 **Step 2: Repository Crawling - Stage 1 (Analysis Phase)**
 
@@ -122,15 +123,12 @@ Execute the complete development workflow for implementing a requirement across 
 **Step 10: Code Implementation**
 
 1. **Use Dev Agent**: Transform to Dev agent using `*agent dev`
-2. **Execute Implementation Plan**: Follow the detailed 20-step implementation plan from analyze-requirement task
-3. **Execute Steps 1-6**: Implement core code changes (Input Row Class, Load API, Registration, Configuration, Filename Constants, Schema Provider)
-4. **Execute Steps 7-14**: Implement database operations (Views, Sync, Export, Template Queries, Schema, Configuration)
-5. **Execute Steps 15-20**: Implement module changes (Data Class, Module Implementation, Data Row, Validation, Constants, Tests)
-6. **Follow Patterns**: Implement changes following discovered patterns from analyze-requirement task
-7. **Template-Based Generation**: Use existing templates for code generation
-8. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
-9. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
-10. **Update Requirement Document**: Add implementation details and code changes to requirement document
+2. **Execute Develop Story**: Use `*develop-story` command
+3. **Follow Patterns**: Implement changes following discovered patterns
+4. **Template-Based Generation**: Use existing templates for code generation
+5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
+6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
+7. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
 **Implementation Details:**
 
@@ -161,51 +159,13 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 10. Documentation and Results
 
-**Step 13: Database Operations**
-
-1. **Create Database Views**:
-   - Use `*create-views` command to create SQL views
-   - Create input views (`child-input-*.sql`) for new data structures
-   - Create output views (`child-output-*.sql`) for result data
-   - Validate view syntax and functionality
-
-2. **Setup Sync Operations**:
-   - Use `*setup-sync` command to configure synchronization
-   - Create sync configurations for data flow
-   - Implement sync triggers and schedules
-   - Test sync functionality
-
-3. **Setup Export Operations**:
-   - Use `*setup-export` command to configure exports
-   - Create export configurations for multiple formats
-   - Set up export destinations and schedules
-   - Test export functionality
-
-4. **Create Template Queries**:
-   - Use `*create-template-queries` command to create reusable queries
-   - Create parameterized query templates
-   - Document template usage and parameters
-   - Test template queries
-
-5. **Update Database Schema**:
-   - Use `*update-schema` command to modify database schema
-   - Create migration scripts for schema changes
-   - Add new columns, indexes, and constraints
-   - Validate schema changes
-
-6. **Update Database Configuration**:
-   - Use `*update-db-config` command to update configuration files
-   - Update `module_input.json` with new input configurations
-   - Update `module_output.json` with new output configurations
-   - Update `upload-files.json` with new file configurations
-
-**Step 14: Push Changes**
+**Step 13: Push Changes**
 
 1. **Push Feature Branches**: Use `*git-push` to push all feature branches to remote repositories
 2. **Verify Remote Branches**: Confirm all branches are available on remote
 3. **Update Branch URLs**: Add remote branch URLs to requirement document
 
-**Step 15: Update Documentation**
+**Step 14: Update Documentation**
 
 1. **Update Requirement Document**: Add implementation results to original document
 2. **Add Changelog**: Update changelog section with development progress
@@ -226,8 +186,6 @@ Execute the complete development workflow for implementing a requirement across 
 - **Module selection validated** to prevent incorrect targeting (e.g., ISS vs Distribution)
 - All three repositories have feature branches created from caas-release
 - All required code changes implemented following existing patterns
-- **All database operations completed**: views, sync, export, template queries, schema updates
-- **Database configuration files updated**: module_input.json, module_output.json, upload-files.json
 - All changes committed to feature branches
 - Feature branches pushed to remote repositories
 - All validation tests pass
@@ -252,12 +210,6 @@ Execute the complete development workflow for implementing a requirement across 
 - **CRITICAL: Output Sync Registration**: If agent creates new output, MUST register it in Util Output Sync Module
 - **CRITICAL: Output CAAS JSON Configuration**: If agent creates new output, MUST add it to Output CAAS JSON
 - **CRITICAL: Output Pattern Discovery**: If agent doesn't follow existing output registration pattern, STOP and check existing Util Output Sync Module and Output CAAS JSON patterns
-- **CRITICAL: Database Operations Required**: If agent creates/modifies LoadAPIs, MUST create corresponding database operations (views, sync, export, template queries)
-- **CRITICAL: View Creation**: If agent creates new LoadAPI, MUST create corresponding input/output views in irisx-config
-- **CRITICAL: Sync Configuration**: If agent creates new LoadAPI, MUST configure sync operations for data flow
-- **CRITICAL: Export Setup**: If agent creates new LoadAPI, MUST setup export operations for data delivery
-- **CRITICAL: Template Queries**: If agent creates new LoadAPI, MUST create reusable query templates
-- **CRITICAL: Schema Updates**: If agent creates new LoadAPI, MUST update database schema and configuration files
 
 ## Notes
 
