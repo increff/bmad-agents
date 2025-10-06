@@ -212,6 +212,20 @@ Analyze requirement documents to identify correct modules, create implementation
     ```bash
     grep -r "output\|Output" /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/util/ | head -10
     ```
+13. **CRITICAL: Discover Database Operations Patterns**: Find existing database operations for LoadAPIs
+    ```bash
+    find /Users/viratbansal/IdeaProjects/irisx-config -name "child-input-*.sql" | head -5
+    find /Users/viratbansal/IdeaProjects/irisx-config -name "child-output-*.sql" | head -5
+    find /Users/viratbansal/IdeaProjects/irisx-config -name "sync" -type d | head -3
+    find /Users/viratbansal/IdeaProjects/irisx-config -name "export" -type d | head -3
+    find /Users/viratbansal/IdeaProjects/irisx-config -name "template-queries" -type d | head -3
+    ```
+14. **CRITICAL: Discover Database Configuration Patterns**: Find how database operations are configured
+    ```bash
+    grep -r "view\|View" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
+    grep -r "sync\|Sync" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
+    grep -r "export\|Export" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
+    ```
 
 ### 7. Implementation Plan Creation
 
@@ -220,6 +234,13 @@ Analyze requirement documents to identify correct modules, create implementation
 3. **Pattern Matching**: Find existing patterns to follow from actual code
 4. **Dependency Analysis**: Identify any cross-module dependencies from actual code
 5. **Implementation Steps**: Create step-by-step implementation plan based on real structure
+6. **Database Operations Planning**: If LoadAPIs are involved, plan comprehensive database operations:
+   - **View Creation**: Plan input/output SQL views for new data structures
+   - **Sync Operations**: Plan data synchronization between repositories and database
+   - **Export Operations**: Plan multi-format data export functionality
+   - **Template Queries**: Plan reusable parameterized queries
+   - **Schema Updates**: Plan database schema modifications and migrations
+   - **Configuration Updates**: Plan updates to module_input.json, module_output.json, upload-files.json
 
 ### 8. Validation
 
@@ -239,6 +260,13 @@ Analyze requirement documents to identify correct modules, create implementation
    - **CRITICAL: Input JSON Configuration**: Verify any new input is part of input JSON in config
    - **CRITICAL: Output Sync Registration**: Verify any new output is registered in Util Output Sync Module
    - **CRITICAL: Output CAAS JSON Configuration**: Verify any new output is part of Output CAAS JSON
+   - **CRITICAL: Database Operations Required**: If LoadAPIs are involved, verify database operations are planned
+   - **CRITICAL: View Creation Planned**: Verify input/output views are planned for new data structures
+   - **CRITICAL: Sync Operations Planned**: Verify sync operations are planned for data flow
+   - **CRITICAL: Export Operations Planned**: Verify export operations are planned for data delivery
+   - **CRITICAL: Template Queries Planned**: Verify template queries are planned for common operations
+   - **CRITICAL: Schema Updates Planned**: Verify database schema updates are planned
+   - **CRITICAL: Configuration Updates Planned**: Verify database configuration updates are planned
 
 ## Module Identification Examples
 
@@ -265,7 +293,63 @@ Analyze requirement documents to identify correct modules, create implementation
 - "Override" → Distribution supports override mechanisms
   **Target Files**: `BaseDistributionData.java`, `DistributionAllocationModule.java`
 
-### Example 3: OTB Module
+### Example 3: Distribution Module with LoadAPI (Complete Implementation Plan)
+
+**Requirement**: "ADD a new input in distribution to store STORE SKU LEVEL ROS OVERRIDE"
+**Keywords**: "distribution", "store sku", "ros override", "input"
+**Primary Module**: Distribution
+**Reasoning**:
+
+- "Distribution" → Distribution module
+- "Store SKU level" → SKU-level data handling
+- "ROS override" → Rate of Sale override functionality
+- "Input" → New input data structure
+
+**Complete Implementation Plan**:
+
+**Step 1: Create Input Row Class**
+
+- File: `StoreSkuRosOverrideRow.java`
+- Location: `/irisx-algo/src/main/java/com/increff/irisx/row/input/distribution/`
+- Fields: store, sku, ros (following existing patterns)
+
+**Step 2: Create Load API**
+
+- File: `StoreSkuRosOverrideLoadApi.py`
+- Location: `/ms-loadapis-ril-final/loadapi/distribution/`
+- Pattern: Follow `DistributionChannelStyleOverrideLoadApi` structure
+
+**Step 3: Register Load API**
+
+- File: `/ms-loadapis-ril-final/loadapi/__init__.py`
+- Import ID: `import_dist_input_store_sku_ros_override`
+
+**Step 4: Update Configuration**
+
+- File: `/irisx-config/module_input.json`
+- Input: `input_dist_store_sku_ros_override`
+
+**Step 5: Update Filename Constants**
+
+- File: `/irisx-algo/src/main/java/com/increff/irisx/constants/FileName.java`
+- Constant: `DIST_STORE_SKU_ROS_OVERRIDE`
+
+**Step 6: Update Schema Provider**
+
+- File: `/irisx-algo/src/main/java/com/increff/irisx/provider/SchemaProvider.java`
+- Import: Add distribution input file import
+
+**Step 7: Database Operations (CRITICAL - Missing from current plans)**
+
+- **Create Input View**: `child-input-distribution-store-sku-ros-override.sql`
+- **Create Output View**: `child-output-distribution-store-sku-ros-override.sql`
+- **Setup Sync Operations**: Configure data synchronization
+- **Setup Export Operations**: Configure multi-format data export
+- **Create Template Queries**: Create reusable parameterized queries
+- **Update Database Schema**: Add new table and indexes
+- **Update Database Configuration**: Update `module_input.json`, `module_output.json`, `upload-files.json`
+
+### Example 4: OTB Module
 
 **Requirement**: "MODIFY BUYING CALCULATIONS FOR NEW STORES"
 **Keywords**: "buying", "calculations", "new stores"
@@ -323,3 +407,10 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] **CRITICAL: Input JSON configuration validated** - Any new input is part of input JSON in config
 - [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
 - [ ] **CRITICAL: Output CAAS JSON configuration validated** - Any new output is part of Output CAAS JSON
+- [ ] **CRITICAL: Database operations planned** - If LoadAPIs are involved, comprehensive database operations are planned
+- [ ] **CRITICAL: View creation planned** - Input/output views are planned for new data structures
+- [ ] **CRITICAL: Sync operations planned** - Data synchronization is planned between repositories and database
+- [ ] **CRITICAL: Export operations planned** - Multi-format data export is planned for new requirements
+- [ ] **CRITICAL: Template queries planned** - Reusable query templates are planned for common operations
+- [ ] **CRITICAL: Schema updates planned** - Database schema modifications are planned for new requirements
+- [ ] **CRITICAL: Configuration updates planned** - Database configuration files are planned for updates
