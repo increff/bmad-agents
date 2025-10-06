@@ -295,9 +295,26 @@ Analyze requirement documents to identify correct modules, create implementation
 
 #### 7.1 Database Operations Planning
 
-**CRITICAL**: Every implementation plan MUST include database operations for irisx-config repository based on edit/add/delete operations:
+**CONDITIONAL**: Database operations for irisx-config repository are required ONLY when changing input/output files or data structures:
 
-1. **SQL View Operations** (319+ existing views):
+**When Database Operations ARE Required:**
+
+- Adding new input fields to existing modules
+- Adding new output fields to existing modules
+- Creating new input/output data structures
+- Modifying existing input/output schemas
+- Adding new modules with input/output requirements
+- Removing input/output fields or modules
+
+**When Database Operations are NOT Required:**
+
+- Pure business logic changes (formulas, calculations)
+- Internal module refactoring without schema changes
+- Bug fixes that don't affect data structures
+- Performance optimizations without schema changes
+- Code style or documentation changes
+
+1. **SQL View Operations** (319+ existing views) - **ONLY if input/output changes**:
    - **EDIT**: Modify existing `view-creation/child-input-{component}.sql` and `child-output-{component}.sql` files
    - **ADD**: Create new `view-creation/child-input-{component}.sql` and `child-output-{component}.sql` files following pattern
    - **DELETE**: Remove obsolete `view-creation/child-{type}-{component}.sql` files
@@ -305,7 +322,7 @@ Analyze requirement documents to identify correct modules, create implementation
    - **OPENROWSET Configuration**: Use proper DATA_SOURCE and FORMAT settings
    - **Field Mapping**: Map input/output fields to appropriate SQL data types
 
-2. **Synchronization Operations** (156+ existing sync files):
+2. **Synchronization Operations** (156+ existing sync files) - **ONLY if data structure changes**:
    - **EDIT**: Modify existing `sync/{module}_{component}.sql` files
    - **ADD**: Create new `sync/{module}_{component}.sql` files following pattern
    - **DELETE**: Remove obsolete `sync/{module}_{component}.sql` files
@@ -313,7 +330,7 @@ Analyze requirement documents to identify correct modules, create implementation
    - **Sync Patterns**: Follow existing synchronization patterns and configurations
    - **Module Mapping**: Use discovered module abbreviations (AG, BI, DISC, DIST, A, AP, DEP, EOSS, OTB, ISS, TRANSACTIONAL)
 
-3. **Export Operations** (223+ existing export files):
+3. **Export Operations** (223+ existing export files) - **ONLY if output changes**:
    - **EDIT**: Modify existing `export/export_{module}_{type}_{component}.sql` files
    - **ADD**: Create new `export/export_{module}_{type}_{component}.sql` files following pattern
    - **DELETE**: Remove obsolete `export/export_{module}_{type}_{component}.sql` files
@@ -321,7 +338,7 @@ Analyze requirement documents to identify correct modules, create implementation
    - **Multiple Formats**: Support CSV, TSV, JSON export formats
    - **Reusable Templates**: Create reusable export templates for common operations
 
-4. **Template Query Management** (108+ existing templates):
+4. **Template Query Management** (108+ existing templates) - **ONLY if input changes**:
    - **EDIT**: Modify existing `template/export_{module}_input_{component}_template.tsv` files
    - **ADD**: Create new `template/export_{module}_input_{component}_template.tsv` files following pattern
    - **DELETE**: Remove obsolete `template/export_{module}_input_{component}_template.tsv` files
@@ -329,7 +346,7 @@ Analyze requirement documents to identify correct modules, create implementation
    - **Naming Convention**: Use `export_{module}_{type}_{component}_template.tsv` pattern
    - **Field Documentation**: Include field descriptions and examples in templates
 
-5. **Configuration Updates** (3 JSON config files):
+5. **Configuration Updates** (3 JSON config files) - **ONLY if input/output changes**:
    - **EDIT**: Modify existing entries in `module_input.json` (250KB), `module_output.json` (20KB), `upload-files.json` (60KB)
    - **ADD**: Add new entries to JSON configs following existing structure
    - **DELETE**: Remove obsolete entries from JSON configs
@@ -445,12 +462,12 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] **CRITICAL: Input JSON configuration validated** - Any new input is part of input JSON in config
 - [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
 - [ ] **CRITICAL: Output CAAS JSON configuration validated** - Any new output is part of Output CAAS JSON
-- [ ] **CRITICAL: Database operations planned** - SQL views, sync, export, and template queries included in implementation plan
-- [ ] **CRITICAL: SQL view creation planned** - Input and output views planned for new data structures
-- [ ] **CRITICAL: Synchronization operations planned** - Sync logic planned for data consistency
-- [ ] **CRITICAL: Export operations planned** - Export configurations planned for new requirements
-- [ ] **CRITICAL: Template queries planned** - TSV templates and SQL query templates planned
-- [ ] **CRITICAL: Configuration updates planned** - All JSON configs planned for updates
+- [ ] **CONDITIONAL: Database operations planned** - SQL views, sync, export, and template queries included ONLY if input/output changes
+- [ ] **CONDITIONAL: SQL view creation planned** - Input and output views planned ONLY for new data structures
+- [ ] **CONDITIONAL: Synchronization operations planned** - Sync logic planned ONLY for data structure changes
+- [ ] **CONDITIONAL: Export operations planned** - Export configurations planned ONLY for output changes
+- [ ] **CONDITIONAL: Template queries planned** - TSV templates and SQL query templates planned ONLY for input changes
+- [ ] **CONDITIONAL: Configuration updates planned** - JSON configs planned for updates ONLY if input/output changes
 - [ ] **CRITICAL: Dynamic structure discovery completed** - All irisx-config directories and files discovered programmatically
 - [ ] **CRITICAL: File count analysis completed** - Accurate counts for templates (108), views (319), sync (156), export (223)
 - [ ] **CRITICAL: Pattern recognition completed** - All naming patterns and conventions identified
