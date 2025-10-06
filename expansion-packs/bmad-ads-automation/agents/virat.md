@@ -141,55 +141,19 @@ commands:
   - predictive-analytics: Analyze implementation patterns and predict future optimizations
   - failure-prediction: Analyze implementation for potential failure points and risk assessment
   - code-quality-prediction: Analyze code quality and predict potential issues
-  - intelligent-documentation: Generate enhanced documentation with AI insights and context
   - pattern-optimization: Suggest pattern improvements and intelligent conflict resolution
-  - requirement-pattern-learning: Learn from successful implementations to predict optimal patterns
-  - performance-optimization-ml: ML-based performance prediction and optimization suggestions
-  - nlp-requirement-understanding: Advanced NLP to understand complex, ambiguous requirements
-  - context-aware-analysis: Better understanding of business context and domain knowledge
-  - smart-requirement-parsing: Extract technical details from business requirements automatically
-  - dynamic-pattern-selection: Automatically select best patterns based on context
-  - intelligent-risk-assessment: Intelligent risk assessment for different implementation approaches
-  - ai-optimization-suggestions: AI-driven suggestions for better implementation approaches
-  - intelligent-conflict-resolution: Intelligent resolution of pattern conflicts and dependencies
 
   # === ADVANCED TESTING & VALIDATION ===
   - advanced-testing-validation: Trigger advanced testing and validation after AI enhancement
   - intelligent-test-generation: Generate comprehensive tests based on implementation patterns
   - advanced-validation-framework: Perform multi-level validation across repositories
   - continuous-quality-assurance: Implement real-time quality monitoring and automated code reviews
-  - ai-generated-tests: Generate comprehensive tests using AI patterns and implementation analysis
-  - property-based-testing: Generate property-based tests for complex logic and edge cases
-  - mutation-testing: Automated mutation testing for test quality assessment and coverage
-  - performance-test-generation: Generate performance tests based on requirements and patterns
-  - multi-level-validation: Validation at multiple levels (syntax, semantics, performance)
-  - cross-repository-validation: Comprehensive cross-repository validation and integration testing
-  - business-logic-validation: Validate business logic against requirements and specifications
-  - integration-validation: Validate integration between different components and repositories
-  - real-time-quality-monitoring: Continuous monitoring of code quality and standards compliance
-  - automated-code-reviews: Automated code review with AI assistance and pattern analysis
-  - quality-gates: Automated quality gates with configurable thresholds and standards
-  - quality-metrics: Comprehensive quality metrics and reporting with trend analysis
 
   # === ADVANCED DOCUMENTATION & KNOWLEDGE MANAGEMENT ===
   - advanced-documentation-knowledge: Trigger advanced documentation and knowledge management after testing validation
   - intelligent-documentation: Automatically generate comprehensive documentation with AI insights
   - knowledge-management: Implement comprehensive knowledge management system
   - searchable-knowledge-base: Create searchable knowledge base with AI-powered search
-  - auto-generated-documentation: Automatically generate comprehensive documentation from implementation
-  - interactive-documentation: Create interactive documentation with examples and demos
-  - version-controlled-documentation: Implement version control for documentation
-  - searchable-knowledge-base-ai: Create searchable knowledge base with AI-powered search capabilities
-  - pattern-library: Create comprehensive pattern library with examples and best practices
-  - best-practices-database: Create database of best practices and lessons learned
-  - expert-knowledge-capture: Capture and share expert knowledge across team members
-  - learning-management: Implement learning management system for team members
-  - documentation-generation: Generate comprehensive documentation with AI assistance
-  - knowledge-discovery: AI-powered knowledge discovery and retrieval system
-  - pattern-examples: Create comprehensive pattern examples with implementation guides
-  - lessons-learned-capture: Capture and document lessons learned from implementations
-  - expert-knowledge-sharing: Share expert knowledge across team members and projects
-  - team-learning-system: Learning management system for continuous team improvement
 
   - exit: Say goodbye as the ADS Orchestrator Enhanced, and then abandon inhabiting this persona
 dependencies:
@@ -702,7 +666,6 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 *predictive-analytics
 *failure-prediction
 *code-quality-prediction
-*intelligent-documentation
 *pattern-optimization
 ```
 
@@ -718,18 +681,6 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 *intelligent-test-generation
 *advanced-validation-framework
 *continuous-quality-assurance
-*ai-generated-tests
-*property-based-testing
-*mutation-testing
-*performance-test-generation
-*multi-level-validation
-*cross-repository-validation
-*business-logic-validation
-*integration-validation
-*real-time-quality-monitoring
-*automated-code-reviews
-*quality-gates
-*quality-metrics
 ```
 
 ### Advanced Documentation & Knowledge Management
@@ -744,20 +695,6 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 *intelligent-documentation
 *knowledge-management
 *searchable-knowledge-base
-*auto-generated-documentation
-*interactive-documentation
-*version-controlled-documentation
-*searchable-knowledge-base-ai
-*pattern-library
-*best-practices-database
-*expert-knowledge-capture
-*learning-management
-*documentation-generation
-*knowledge-discovery
-*pattern-examples
-*lessons-learned-capture
-*expert-knowledge-sharing
-*team-learning-system
 ```
 
 ### Configuration Management

@@ -287,18 +287,6 @@ VIRAT includes advanced testing and validation as a post-processing step that ru
 *intelligent-test-generation
 *advanced-validation-framework
 *continuous-quality-assurance
-*ai-generated-tests
-*property-based-testing
-*mutation-testing
-*performance-test-generation
-*multi-level-validation
-*cross-repository-validation
-*business-logic-validation
-*integration-validation
-*real-time-quality-monitoring
-*automated-code-reviews
-*quality-gates
-*quality-metrics
 ```
 
 ### Key Features
@@ -355,20 +343,6 @@ VIRAT includes advanced documentation and knowledge management as a post-process
 *intelligent-documentation
 *knowledge-management
 *searchable-knowledge-base
-*auto-generated-documentation
-*interactive-documentation
-*version-controlled-documentation
-*searchable-knowledge-base-ai
-*pattern-library
-*best-practices-database
-*expert-knowledge-capture
-*learning-management
-*documentation-generation
-*knowledge-discovery
-*pattern-examples
-*lessons-learned-capture
-*expert-knowledge-sharing
-*team-learning-system
 ```
 
 ### Key Features
