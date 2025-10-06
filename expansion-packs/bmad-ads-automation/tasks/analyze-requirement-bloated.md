@@ -373,9 +373,9 @@ Analyze requirement documents to identify correct modules, create implementation
    - STOP if any Python API tries to use `db().select()` pattern
    - **CRITICAL: Load API Registration**: Verify any new Load API is registered in `__init__.py` files
    - **CRITICAL: Registration Pattern**: Check that Load API registration follows existing patterns
-   - **CRITICAL: Input Schema Registration**: Verify any new input is registered in SchemaProvider
-   - **CRITICAL: Filename Configuration**: Verify any new input has proper filename configuration
-   - **CRITICAL: Input JSON Configuration**: Verify any new input is part of input JSON in config
+   - **CRITICAL: Input Schema Registration**: Verify any new input for processing modules is registered in SchemaProvider. For simple input file additions, basic file creation is sufficient
+   - **CRITICAL: Filename Configuration**: Verify any new input for processing modules has proper filename configuration. For simple input file additions, this is optional
+   - **CRITICAL: Input JSON Configuration**: Verify any new input for processing modules is part of input JSON in config. For simple input file additions, this is optional
    - **CRITICAL: Output Sync Registration**: Verify any new output is registered in Util Output Sync Module
    - **CRITICAL: Output CAAS JSON Configuration**: Verify any new output is part of Output CAAS JSON
 
@@ -457,9 +457,9 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] **CRITICAL: No architectural violations** - No file loading in Java modules, no `db().select()` in Python APIs
 - [ ] **CRITICAL: Load API registration validated** - Any new Load API registered in `__init__.py` files
 - [ ] **CRITICAL: Registration patterns followed** - Load API registration follows existing patterns
-- [ ] **CRITICAL: Input schema registration validated** - Any new input registered in SchemaProvider
-- [ ] **CRITICAL: Filename configuration validated** - Any new input has proper filename configuration
-- [ ] **CRITICAL: Input JSON configuration validated** - Any new input is part of input JSON in config
+- [ ] **CRITICAL: Input schema registration validated** - Any new input for processing modules registered in SchemaProvider. For simple input file additions, basic file creation is sufficient
+- [ ] **CRITICAL: Filename configuration validated** - Any new input for processing modules has proper filename configuration. For simple input file additions, this is optional
+- [ ] **CRITICAL: Input JSON configuration validated** - Any new input for processing modules is part of input JSON in config. For simple input file additions, this is optional
 - [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
 - [ ] **CRITICAL: Output CAAS JSON configuration validated** - Any new output is part of Output CAAS JSON
 - [ ] **CONDITIONAL: Database operations planned** - SQL views, sync, export, and template queries included ONLY if input/output changes

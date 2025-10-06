@@ -181,8 +181,8 @@ The output of this implementation task includes:
 - **CRITICAL: Architecture Violations**: If agent tries to handle file loading in Java modules, STOP and explain that Python load APIs handle file loading
 - **CRITICAL: Load API Registration**: If agent creates new Load API, MUST register it in `__init__.py` files (there are 2 files)
 - **CRITICAL: Registration Pattern**: If agent doesn't follow existing Load API registration pattern, STOP and check existing `__init__.py` files
-- **CRITICAL: Input Schema Registration**: If agent creates new input, MUST register it in SchemaProvider and Filename
-- **CRITICAL: Input JSON Configuration**: If agent creates new input, MUST add it to input JSON in config
+- **CRITICAL: Input Schema Registration**: If agent creates new input for processing modules, MUST register it in SchemaProvider and Filename. For simple input file additions, basic file creation is sufficient
+- **CRITICAL: Input JSON Configuration**: If agent creates new input for processing modules, MUST add it to input JSON in config. For simple input file additions, this is optional
 - **CRITICAL: Input Pattern Discovery**: If agent doesn't follow existing input registration pattern, STOP and check existing SchemaProvider, Filename, and input JSON patterns
 - **CRITICAL: Output Sync Registration**: If agent creates new output, MUST register it in Util Output Sync Module
 - **CRITICAL: Output CAAS JSON Configuration**: If agent creates new output, MUST add it to Output CAAS JSON

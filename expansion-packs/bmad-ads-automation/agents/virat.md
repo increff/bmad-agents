@@ -501,7 +501,7 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Module Registration**: New modules SHOULD be registered in ModuleProvider.java with ModuleName constants ONLY when creating new processing modules, NOT for simple input file additions
 - **Input File Only Tasks**: When task is to "add new input" or "create input file", DO NOT add ModuleName constants - only create the input file and row classes
 - **Validation Requirements**: Most operations require ValidationModule and ValidationConstants, register in GroupModule. For simple input file additions, basic validation in the file reader is sufficient
-- **File Registration**: New data files MUST be registered in FileName.java, SchemaProvider.java, and configuration JSONs
+- **File Registration**: New data files for processing modules MUST be registered in FileName.java, SchemaProvider.java, and configuration JSONs. For simple input file additions, basic file creation is sufficient
 - **Row Classes**: Simple POJOs with public fields
 - **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders() and read() methods
 - **FileName Constants**: snake_case naming, no extensions

@@ -212,9 +212,9 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **Module Dependencies**: Analyze dependencies to determine if cross-module changes are needed
 - **Data Flow**: Analyze data flow to determine if input/output changes are needed
 - **Business Logic**: Analyze business logic to determine if calculation changes are needed
-- **Module Registration**: If creating new modules, must register in ModuleProvider.java with ModuleName constants
-- **Validation Requirements**: Most operations require validation - create ValidationModule and ValidationConstants, register in GroupModule
-- **File Registration**: New data files must be registered in FileName.java, SchemaProvider.java, and configuration JSONs
+- **Module Registration**: If creating new processing modules, must register in ModuleProvider.java with ModuleName constants. For simple input file additions, module registration is not required
+- **Validation Requirements**: Most operations require validation - create ValidationModule and ValidationConstants, register in GroupModule. For simple input file additions, basic validation in file reader is sufficient
+- **File Registration**: New data files for processing modules must be registered in FileName.java, SchemaProvider.java, and configuration JSONs. For simple input file additions, basic file creation is sufficient
 - **SQL View Patterns**: Follow child-input, child-output, parent-input, interim naming patterns with OPENROWSET structure
 - **Template Patterns**: TSV templates with headers and sample data, following export*{module}*{type}\_template.tsv naming
 - **JSON Configuration**: Update module_input.json (sync/download), module_output.json (module arrays), upload-files.json (file metadata)

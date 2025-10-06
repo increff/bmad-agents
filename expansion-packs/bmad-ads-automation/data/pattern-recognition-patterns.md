@@ -266,12 +266,12 @@ import com.increff.irisx.file.input.NewInputFile;
 #### Registration Validation
 
 - **Load APIs**: Must be registered in `__init__.py` files
-- **Inputs**: Must be registered in SchemaProvider and Filename
+- **Inputs**: Must be registered in SchemaProvider and Filename for processing modules. For simple input file additions, basic file creation is sufficient
 - **Outputs**: Must be registered in Util Output Sync Module and Output CAAS JSON
 
 #### Configuration Validation
 
-- **Input JSON**: All inputs must be in input JSON configuration
+- **Input JSON**: All inputs for processing modules must be in input JSON configuration. For simple input file additions, this is optional
 - **Output JSON**: All outputs must be in output JSON configuration
 - **Environment Configs**: Must handle dev/staging/prod configurations
 
