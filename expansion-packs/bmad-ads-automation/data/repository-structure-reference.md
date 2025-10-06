@@ -57,7 +57,7 @@ $REPO_PATH/src/main/java/com/increff/irisx/
 
 ```
 $LOADAPI_PATH/
-├── loadapi/                     # Load API implementations (28 directories)
+E├── loadapi/                     # Load API implementations (28 directories)
 │   ├── common/                  # Base classes and utilities
 │   │   ├── abstract_loadapi.py  # Base LoadAPI class
 │   │   └── [utilities]/         # Common utilities
