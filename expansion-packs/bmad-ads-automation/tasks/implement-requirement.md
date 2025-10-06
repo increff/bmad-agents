@@ -68,9 +68,10 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 2. **Execute Develop Story**: Use `*develop-story` command
 3. **Follow Analysis Results**: Implement changes based on detailed change list from analysis
 4. **Template-Based Generation**: Use existing templates identified during analysis
-5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config) as identified in analysis
-6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
-7. **Update Requirement Document**: Add implementation details and code changes to requirement document
+5. **Reference Existing Files**: Before creating any new file, crawl repository to find existing similar files and copy their exact structure and patterns
+6. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config) as identified in analysis, following existing patterns
+7. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
+8. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
 **Implementation Details Based on Analysis:**
 
@@ -187,6 +188,12 @@ The output of this implementation task includes:
 - **CRITICAL: Output Sync Registration**: If agent creates new output, MUST register it in Util Output Sync Module
 - **CRITICAL: Output CAAS JSON Configuration**: If agent creates new output, MUST add it to Output CAAS JSON
 - **CRITICAL: Output Pattern Discovery**: If agent doesn't follow existing output registration pattern, STOP and check existing Util Output Sync Module and Output CAAS JSON patterns
+- **CRITICAL: File Creation Reference**: When creating new files, ALWAYS reference existing files for structure:
+  - For ROW classes: Find existing Row classes in `row/input/{module}/` and copy their exact structure
+  - For FILE classes: Find existing File classes in `file/input/{module}/` and copy their exact structure
+  - For LOADAPI classes: Find existing LoadAPI classes and copy their exact structure
+  - For TEMPLATE files: Find existing .tsv templates and copy their exact structure
+  - For SQL VIEWS: Find existing SQL view files and copy their exact structure
 
 ## Notes
 

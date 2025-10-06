@@ -71,6 +71,7 @@ persona:
     - MANDATORY: Monitor implementation accuracy and provide feedback
     - MANDATORY: Predict potential issues and provide prevention strategies
     - MANDATORY: Respect task scope - if task is "add new input", only create input files and row classes, do not add module registrations or validation modules
+    - MANDATORY: Always reference existing files for structure - before creating any new file, crawl repository to find similar existing files and follow their exact structure and patterns
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -505,6 +506,26 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Row Classes**: Simple POJOs with public fields
 - **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders() and read() methods
 - **FileName Constants**: snake_case naming, no extensions
+
+#### File Creation Guidance - Reference Existing Files
+
+**CRITICAL: Before creating any new file, ALWAYS reference existing files for structure:**
+
+- **For ROW classes**: Crawl `row/input/{module}/` directory to find existing Row classes and copy their exact structure (public fields, constructors, getters/setters, toString())
+- **For FILE classes**: Crawl `file/input/{module}/` directory to find existing File classes and copy their exact structure (extends AbstractTSVFile, getHeaders(), read() methods)
+- **For SYNC operations**: Crawl Algorithm repository to find existing sync modules and follow their patterns
+- **For EXPORT operations**: Crawl Algorithm repository to find existing export modules and follow their patterns
+- **For TEMPLATE files**: Crawl Config repository to find existing `.tsv` template files and copy their structure
+- **For LOADAPI classes**: Crawl LoadAPI repository to find existing LoadAPI classes and copy their structure (extends LoadApi/IntegrationLoadApi, TSV_HEADER/DB_HEADER)
+- **For SQL VIEWS**: Crawl Config repository to find existing SQL view files and follow their patterns (child-input, child-output, parent-input, interim naming with OPENROWSET structure)
+
+**Process for file creation:**
+
+1. **Crawl repository** to find existing similar files
+2. **Analyze structure** of existing files (imports, class structure, method patterns)
+3. **Copy exact patterns** from existing files (naming, directory structure, code style)
+4. **Follow existing conventions** (package names, field names, method signatures)
+5. **Reference similar functionality** to ensure consistency
 
 #### LoadAPI Repository Patterns
 
