@@ -15,12 +15,14 @@ A single comprehensive list of all possible implementation steps across all requ
 
 ### 2. **Data Structure Operations**
 
-- [ ] **Create New Row Classes**: Create new data row classes in `row/input/` or `row/output/`
-- [ ] **Create New File Classes**: Create new file classes in `file/input/` or `file/output/`
+- [ ] **Create New Row Classes**: Create new data row classes in `row/input/` or `row/output/` (simple POJOs with public fields)
+- [ ] **Create New File Classes**: Create new file classes in `file/input/` or `file/output/` extending `AbstractTSVFile<RowClass>`
 - [ ] **Update Existing Row Classes**: Modify existing data row classes to add/remove/change fields
-- [ ] **Update Existing File Classes**: Modify existing file classes to handle new columns or logic
+- [ ] **Update Existing File Classes**: Modify existing file classes to handle new columns or logic (update getHeaders() and read() methods)
 - [ ] **Create New Data Classes**: Create new data classes in module directories
 - [ ] **Update Existing Data Classes**: Modify existing data classes with new fields or methods
+- [ ] **Update FileName Constants**: Add new file name constants in `FileName.java` (snake_case, no extensions)
+- [ ] **Update SchemaProvider**: Register new file classes in `SchemaProvider.java` with proper imports
 
 ### 3. **Module Structure Operations**
 
@@ -57,19 +59,19 @@ A single comprehensive list of all possible implementation steps across all requ
 
 ### 6. **Configuration Operations**
 
-- [ ] **Create New SQL Views**: Create new SQL view files in `view-creation/`
+- [ ] **Create New SQL Views**: Create new SQL view files in `view-creation/` (child-input, child-output, parent-input, interim patterns)
 - [ ] **Update Existing SQL Views**: Modify existing SQL views with new columns or logic
-- [ ] **Create New Templates**: Create new template files in `template/`
+- [ ] **Create New Templates**: Create new template files in `template/` (TSV format with headers and sample data)
 - [ ] **Update Existing Templates**: Modify existing templates with new columns
 - [ ] **Create New Sync Files**: Create new sync SQL files in `sync/`
 - [ ] **Update Existing Sync Files**: Modify existing sync files
 - [ ] **Create New Export Files**: Create new export SQL files in `export/`
 - [ ] **Update Existing Export Files**: Modify existing export files
-- [ ] **Update Module Input JSON**: Update `module_input.json` with new input schemas
-- [ ] **Update Module Output JSON**: Update `module_output.json` with new output schemas
-- [ ] **Update Upload Files JSON**: Update `upload-files.json` with new file configurations
-- [ ] **Create Child Input Views**: Create child input SQL views (e.g., `child-input-{module}_{table}.sql`)
-- [ ] **Create Child Output Views**: Create child output SQL views (e.g., `child-output-{module}_{table}.sql`)
+- [ ] **Update Module Input JSON**: Update `module_input.json` with new input schemas (sync/download sections)
+- [ ] **Update Module Output JSON**: Update `module_output.json` with new output schemas (module arrays)
+- [ ] **Update Upload Files JSON**: Update `upload-files.json` with new file configurations (Module, SubModule, Display Name, ID, Description)
+- [ ] **Create Child Input Views**: Create child input SQL views (e.g., `child-input-{table}.sql` with OPENROWSET pattern)
+- [ ] **Create Child Output Views**: Create child output SQL views (e.g., `child-output-{table}.sql`)
 - [ ] **Create Parent Input Views**: Create parent input SQL views (e.g., `parent-input-{table}.sql`)
 - [ ] **Create Interim Views**: Create interim calculation views (e.g., `interim_{module}_{calculation}.sql`)
 
@@ -79,8 +81,8 @@ A single comprehensive list of all possible implementation steps across all requ
 - [ ] **Update ValidationModuleNames.java**: Add new validation module name constant (if validation needed)
 - [ ] **Update ModuleProvider.java**: Register new GroupModule and ValidationModule in @PostConstruct init() method
 - [ ] **Add Validation to GroupModule**: Add validation module to GroupModule's @PostConstruct init() method
-- [ ] **Update SchemaProvider.java**: Register new module inputs/outputs
-- [ ] **Update FileName.java**: Add new module file names
+- [ ] **Update SchemaProvider.java**: Register new module inputs/outputs (import file classes, add to schema maps)
+- [ ] **Update FileName.java**: Add new module file names (snake_case constants, no extensions)
 - [ ] **Create Module Constants**: Create new module-specific constants in `constants/{module}/`
 - [ ] **Update Other Providers**: Update ContextProvider, DependentOutputProvider, DbSyncProvider, LocalDateProvider if needed
 
@@ -212,6 +214,10 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **Business Logic**: Analyze business logic to determine if calculation changes are needed
 - **Module Registration**: If creating new modules, must register in ModuleProvider.java with ModuleName constants
 - **Validation Requirements**: Most operations require validation - create ValidationModule and ValidationConstants, register in GroupModule
+- **File Registration**: New data files must be registered in FileName.java, SchemaProvider.java, and configuration JSONs
+- **SQL View Patterns**: Follow child-input, child-output, parent-input, interim naming patterns with OPENROWSET structure
+- **Template Patterns**: TSV templates with headers and sample data, following export*{module}*{type}\_template.tsv naming
+- **JSON Configuration**: Update module_input.json (sync/download), module_output.json (module arrays), upload-files.json (file metadata)
 
 ### **Pattern Recognition**
 
