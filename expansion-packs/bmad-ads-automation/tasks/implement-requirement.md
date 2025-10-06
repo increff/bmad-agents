@@ -24,15 +24,14 @@ Execute the complete development workflow for implementing a requirement across 
 2. Parse requirement ID, title, description, and technical requirements
 3. Identify the type of change required (new column, new input, formula change, new module, etc.)
 
-**Step 1.5: Module Identification**
+**Step 1.5: Comprehensive Analysis and Planning**
 
-1. **Load Module Abbreviations**: Reference `module-abbreviations.md` for module mapping
-2. **Keyword Matching**: Match requirement keywords to module abbreviations
-3. **Context Validation**: Ensure identified modules make sense for the requirement
-4. **Primary Module Selection**: Identify the main module to modify
-5. **Secondary Modules**: Identify any additional modules that might be affected
-6. **Validate Module Choice**: Prevent incorrect targeting (e.g., ISS vs Distribution)
-7. **Document Module Selection**: Record why specific modules were chosen
+1. **Execute Analyze Requirement Task**: Use `*analyze` command to get comprehensive implementation plan
+2. **Get Implementation Plan**: Retrieve the detailed 20-step implementation plan from analyze-requirement task
+3. **Validate Plan**: Ensure the plan includes all necessary steps (code, database operations, configuration)
+4. **Module Identification**: Use module identification results from analyze-requirement task
+5. **Pattern Discovery**: Use discovered patterns from analyze-requirement task
+6. **Repository Mapping**: Use repository mapping results from analyze-requirement task
 
 **Step 2: Repository Crawling - Stage 1 (Analysis Phase)**
 
@@ -123,12 +122,15 @@ Execute the complete development workflow for implementing a requirement across 
 **Step 10: Code Implementation**
 
 1. **Use Dev Agent**: Transform to Dev agent using `*agent dev`
-2. **Execute Develop Story**: Use `*develop-story` command
-3. **Follow Patterns**: Implement changes following discovered patterns
-4. **Template-Based Generation**: Use existing templates for code generation
-5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
-6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
-7. **Update Requirement Document**: Add implementation details and code changes to requirement document
+2. **Execute Implementation Plan**: Follow the detailed 20-step implementation plan from analyze-requirement task
+3. **Execute Steps 1-6**: Implement core code changes (Input Row Class, Load API, Registration, Configuration, Filename Constants, Schema Provider)
+4. **Execute Steps 7-14**: Implement database operations (Views, Sync, Export, Template Queries, Schema, Configuration)
+5. **Execute Steps 15-20**: Implement module changes (Data Class, Module Implementation, Data Row, Validation, Constants, Tests)
+6. **Follow Patterns**: Implement changes following discovered patterns from analyze-requirement task
+7. **Template-Based Generation**: Use existing templates for code generation
+8. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
+9. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
+10. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
 **Implementation Details:**
 
