@@ -82,6 +82,15 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 - **Configuration Repository Changes**: Implement configuration changes identified in analysis (templates, views, JSON configs)
 - **Schema Synchronization**: Maintain consistency across Java, Python, and SQL schemas as planned in analysis
 
+**CRITICAL: Smart Business Logic Implementation**
+
+- **Let Cursor Analyze**: Cursor should analyze existing business logic patterns and implement appropriate logic
+- **Context-Driven Implementation**: Provide requirement context and let Cursor determine what business logic is needed
+- **Pattern Recognition**: Cursor should recognize existing patterns and implement similar business logic
+- **Intelligent Implementation**: Cursor should understand the requirement functionally and implement the appropriate business logic
+- **Smart Integration**: Cursor should analyze existing modules and integrate new logic appropriately
+- **Automatic Pattern Following**: Cursor should automatically follow existing patterns and conventions
+
 ### 5. Testing and Validation
 
 **Step 7: Use @qa.md for Basic Testing**

@@ -74,6 +74,42 @@ persona:
 - **Processing Modules**: Include full registration, validation modules, and comprehensive testing
 - **Respect Boundaries**: Only implement what's explicitly requested in the task
 
+### Business Logic Implementation Requirements
+
+**CRITICAL: Every implementation MUST include actual business logic, not just data structures:**
+
+#### **Intelligent Implementation Guidance**
+- **Context-Driven**: Provide requirement context and let Cursor analyze existing patterns to implement appropriate business logic
+- **Pattern Recognition**: Cursor should analyze existing business logic patterns and implement similar functionality
+- **Smart Integration**: Cursor should understand how new data integrates with existing business logic
+- **Functional Understanding**: Cursor should understand what the requirement is asking for functionally and implement accordingly
+
+#### **Implementation Approach**
+- **Analyze Existing**: Cursor should analyze existing business logic patterns in the codebase
+- **Understand Requirements**: Cursor should understand what the requirement is asking for functionally
+- **Implement Appropriately**: Cursor should implement the business logic that makes sense for the requirement
+- **Follow Patterns**: Cursor should follow existing patterns and conventions in the codebase
+
+#### **Intelligent Guidance for Cursor**
+- **Override Requirements**: "This requirement needs override logic - analyze existing override patterns and implement accordingly"
+- **Calculation Requirements**: "This requirement needs calculation logic - find similar calculations and implement the business logic"
+- **Processing Requirements**: "This requirement needs data processing - analyze existing processing patterns and implement the logic"
+- **Integration Requirements**: "This requirement needs integration with existing modules - analyze existing integration patterns and implement accordingly"
+
+#### **Context Provision Strategy**
+- **Requirement Context**: Provide clear requirement context and business purpose
+- **Existing Code Context**: Point to existing similar implementations for pattern recognition
+- **Business Logic Context**: Explain what the system should DO with the new data
+- **Integration Context**: Explain how the new logic fits into existing workflows
+- **Functional Context**: Explain the business functionality that needs to be implemented
+
+#### **Smart Implementation Triggers**
+- **Data Loading**: If data is loaded but not used, Cursor should implement business logic to use it
+- **Override Data**: If override data exists, Cursor should implement override logic
+- **Calculation Inputs**: If new inputs are added, Cursor should implement calculations that use them
+- **Processing Data**: If new data structures exist, Cursor should implement processing logic
+- **Integration Points**: If new modules exist, Cursor should implement integration logic
+
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -199,6 +235,7 @@ dependencies:
     - advanced-documentation-knowledge-management.md
     - precision-validation-system.md
     - intelligent-code-generation.md
+    - business-logic-implementation.md
              - update-documentation.md
              - single-command-workflow.md
              - error-handling-improvements.md
@@ -545,18 +582,28 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 
 **CRITICAL: Complete these steps for every implementation:**
 
-1. **Implementation:**
+1. **Data Structure Implementation:**
    - ✅ **Reference existing files** for structure and patterns
    - ✅ **Create complete files** with proper methods and validation
    - ✅ **Follow naming conventions** and established patterns
 
-2. **Testing:**
+2. **Smart Business Logic Implementation:**
+   - ✅ **Let Cursor analyze existing patterns** and implement appropriate business logic
+   - ✅ **Provide requirement context** and let Cursor determine what logic is needed
+   - ✅ **Trust Cursor's intelligence** to implement appropriate business logic
+   - ✅ **Let Cursor integrate** with existing modules and processing flows
+   - ✅ **Let Cursor implement** the business logic that makes sense for the requirement
+
+3. **Testing:**
    - ✅ **Create unit tests** for new functionality
+   - ✅ **Test business logic** and calculation accuracy
    - ✅ **Test data validation** and error handling
+   - ✅ **Test integration** with existing modules
    - ✅ **Verify compilation** and basic functionality
 
-3. **Documentation:**
+4. **Documentation:**
    - ✅ **Document new classes** and methods
+   - ✅ **Document business logic** and calculation formulas
    - ✅ **Provide usage examples** for new functionality
    - ✅ **Update requirement document** with implementation details
 
