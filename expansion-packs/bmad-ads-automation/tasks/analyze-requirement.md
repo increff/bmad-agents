@@ -21,8 +21,10 @@ Analyze requirement documents and create implementation plans by intelligently s
    - **Data Structures**: Input/output data structures involved
    - **Business Logic**: Business rules and calculations involved
    - **Integration Points**: Any cross-module or external integrations
+   - **Cross-Repository Impact**: Impact on Algorithm, LoadAPI, and Config repositories
+   - **Registration Requirements**: What needs to be registered across repositories
 
-### 2. Module Identification
+### 2. Module Identification and Pattern Analysis
 
 1. **Identify Target Modules**:
 
@@ -32,10 +34,32 @@ Analyze requirement documents and create implementation plans by intelligently s
    ```
 
 2. **Analyze Module Dependencies**:
+
    ```bash
    # Check for cross-module dependencies
    grep -r "import.*module" $REPO_PATH/src/main/java/com/increff/irisx/module/
    ```
+
+3. **Pattern Recognition Analysis**:
+
+   ```bash
+   # Check ModuleProvider patterns
+   grep -r "ModuleProvider\|ModuleName\|ValidationModuleNames" $REPO_PATH/src/main/java/com/increff/irisx/
+
+   # Check SchemaProvider and FileName patterns
+   grep -r "SchemaProvider\|FileName" $REPO_PATH/src/main/java/com/increff/irisx/
+
+   # Check LoadAPI provider patterns
+   grep -r "loadapi_provider\|__init__.py" $LOADAPI_PATH/loadapi/
+
+   # Check configuration patterns
+   ls $CONFIG_PATH/template/ | grep -E "(export|child-input|child-output)"
+   ```
+
+4. **Registration Analysis**:
+   - **Algorithm Repository**: ModuleProvider, ModuleName, ValidationModuleNames, SchemaProvider, FileName
+   - **LoadAPI Repository**: **init**.py files, loadapi_provider.py, MsgErrors.py
+   - **Configuration Repository**: module_input.json, module_output.json, upload-files.json
 
 ### 3. Implementation Type Determination
 
@@ -114,20 +138,60 @@ Analyze requirement documents and create implementation plans by intelligently s
    ls -la $CONFIG_PATH/template/export_{MODULE_NAME}_*
    ```
 
-### 6. Pattern Recognition
+### 6. Comprehensive Pattern Recognition
 
-1. **Find Existing Patterns**:
+1. **Algorithm Repository Patterns**:
 
    ```bash
-   # Look for similar implementations to follow patterns
-   find $REPO_PATH -name "*{SIMILAR_MODULE}*" -type f | head -5
+   # Module registration patterns
+   find $REPO_PATH -name "ModuleProvider.java" -exec cat {} \;
+   find $REPO_PATH -name "ModuleName.java" -exec cat {} \;
+   find $REPO_PATH -name "ValidationModuleNames.java" -exec cat {} \;
+
+   # File registration patterns
+   find $REPO_PATH -name "SchemaProvider.java" -exec cat {} \;
+   find $REPO_PATH -name "FileName.java" -exec cat {} \;
+
+   # Data structure patterns
+   find $REPO_PATH -name "*Row.java" | head -5
+   find $REPO_PATH -name "*File.java" | head -5
    ```
 
-2. **Analyze Naming Conventions**:
+2. **LoadAPI Repository Patterns**:
+
    ```bash
-   # Check existing naming patterns
-   ls $REPO_PATH/src/main/java/com/increff/irisx/module/ | grep -E "(Module|Group)"
+   # LoadAPI registration patterns
+   find $LOADAPI_PATH -name "__init__.py" -exec cat {} \;
+   find $LOADAPI_PATH -name "loadapi_provider.py" -exec cat {} \;
+
+   # LoadAPI structure patterns
+   find $LOADAPI_PATH -name "*LoadApi.py" | head -5
+   find $LOADAPI_PATH -name "*IntegrationApi.py" | head -5
+
+   # Constants patterns
+   find $LOADAPI_PATH -name "MsgErrors.py" -exec cat {} \;
    ```
+
+3. **Configuration Repository Patterns**:
+
+   ```bash
+   # SQL view patterns
+   ls $CONFIG_PATH/view-creation/ | grep -E "(child-input|child-output|parent-input|interim)"
+
+   # Template patterns
+   ls $CONFIG_PATH/template/ | grep -E "export.*template"
+
+   # JSON configuration patterns
+   cat $CONFIG_PATH/module_input.json | head -20
+   cat $CONFIG_PATH/module_output.json | head -20
+   cat $CONFIG_PATH/upload-files.json | head -20
+   ```
+
+4. **Cross-Repository Integration Patterns**:
+   - **Data Flow**: How data flows between Algorithm, LoadAPI, and Config repositories
+   - **Registration Dependencies**: What needs to be registered in each repository
+   - **Naming Conventions**: Consistent naming across repositories
+   - **Error Handling**: Validation and error handling patterns
 
 ### 7. Implementation Plan Creation
 
@@ -142,27 +206,36 @@ Analyze requirement documents and create implementation plans by intelligently s
    - Specific class names and methods
    - Specific configuration updates
    - Specific validation requirements
+   - Specific registration requirements (ModuleProvider, SchemaProvider, LoadAPI providers)
+   - Specific pattern adherence requirements
+   - Cross-repository integration requirements
 
 ## Success Criteria
 
 - [ ] **Requirement understood** - Key components and objectives identified
-- [ ] **Implementation type determined** - Correct type selected from 12 options
+- [ ] **Implementation type determined** - Correct type selected from 18 options
 - [ ] **Relevant steps selected** - Appropriate steps chosen from comprehensive list
 - [ ] **Files identified** - Target files for modification/creation identified
-- [ ] **Patterns recognized** - Existing patterns identified for consistency
+- [ ] **Patterns recognized** - Existing patterns identified for consistency across all repositories
+- [ ] **Registration requirements identified** - All registration points across repositories identified
+- [ ] **Cross-repository impact analyzed** - Impact on Algorithm, LoadAPI, and Config repositories assessed
 - [ ] **Implementation plan created** - Step-by-step plan with specific details
 - [ ] **Dependencies analyzed** - Cross-module dependencies identified
 - [ ] **Validation planned** - Validation and testing steps included
+- [ ] **Pattern adherence planned** - Consistency with existing patterns ensured
 
 ## Output
 
-- **Implementation Type**: Selected from 12 possible types
+- **Implementation Type**: Selected from 18 possible types
 - **Selected Steps**: List of relevant steps from comprehensive-implementation-steps.md
 - **Target Files**: Specific files to modify, create, or delete
 - **Implementation Plan**: Step-by-step plan with specific details
-- **Pattern References**: Existing patterns to follow
+- **Pattern References**: Existing patterns to follow across all repositories
+- **Registration Requirements**: All registration points across Algorithm, LoadAPI, and Config repositories
+- **Cross-Repository Impact**: Impact assessment on all three repositories
 - **Dependencies**: Cross-module dependencies identified
 - **Validation Plan**: Validation and testing approach
+- **Pattern Adherence Plan**: Consistency with existing patterns ensured
 
 ## AI Decision Logic
 
@@ -176,9 +249,9 @@ The AI will:
    - Are there any cross-repository dependencies?
 
 2. **Determine Impact Scope**:
-   - **Algorithm Repository**: Does the change affect Java classes, data structures, business logic?
-   - **LoadAPI Repository**: Does the change require new data loading, processing, or integration?
-   - **Configuration Repository**: Does the change require new views, templates, or configurations?
+   - **Algorithm Repository**: Does the change affect Java classes, data structures, business logic, module registration, file registration?
+   - **LoadAPI Repository**: Does the change require new data loading, processing, integration, LoadAPI registration, constants?
+   - **Configuration Repository**: Does the change require new views, templates, configurations, JSON updates?
 
 3. **Select Steps Based on Actual Impact**:
    - **Always Include**: Module Analysis, Validation & Testing, Documentation
@@ -190,6 +263,8 @@ The AI will:
    - Specific class names
    - Specific method names
    - Specific configuration updates
+   - Specific registration requirements
+   - Specific pattern adherence requirements
 
 5. **Adapt Based on Context**:
    - File existence (create vs update)
@@ -197,6 +272,8 @@ The AI will:
    - Data flow requirements
    - Business logic requirements
    - Cross-repository impact
+   - Registration requirements
+   - Pattern consistency requirements
 
 6. **Follow Existing Patterns** for consistency
 
