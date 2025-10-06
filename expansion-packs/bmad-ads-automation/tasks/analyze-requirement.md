@@ -77,7 +77,7 @@ Analyze requirement documents and create implementation plans by intelligently s
    - **Validation Operations**: If validation rules need to be added, modified, or removed
    - **LoadAPI Operations**: If data loading, processing, or integration logic needs changes
    - **Configuration Operations**: If SQL views, templates, or configuration files need changes
-   - **Registration Operations**: If new components need to be registered in providers or constants
+   - **Registration Operations**: If new components need to be registered in providers or constants (ModuleProvider, ModuleName, ValidationModuleNames)
    - **Business Logic Operations**: If business logic, calculations, or processing rules need changes
    - **Integration Operations**: If cross-module or external system integration is needed
    - **Performance Operations**: If performance optimization or monitoring is needed

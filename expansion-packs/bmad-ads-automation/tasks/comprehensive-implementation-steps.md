@@ -73,19 +73,13 @@ A single comprehensive list of all possible implementation steps across all requ
 
 ### 7. **Registration Operations**
 
-- [ ] **Update ModuleName.java**: Add new module name constant
-- [ ] **Update ValidationModuleNames.java**: Add new validation module name constant
-- [ ] **Update ModuleProvider.java**: Register new module and validation module
+- [ ] **Update ModuleName.java**: Add new module name constant (snake_case)
+- [ ] **Update ValidationModuleNames.java**: Add new validation module name constant (if validation needed)
+- [ ] **Update ModuleProvider.java**: Register new GroupModule and ValidationModule in @PostConstruct init() method
 - [ ] **Update SchemaProvider.java**: Register new module inputs/outputs
 - [ ] **Update FileName.java**: Add new module file names
-- [ ] **Update Main Application**: Register new module in Spring context
-- [ ] **Update ContextProvider.java**: Register new context providers if needed
-- [ ] **Update DependentOutputProvider.java**: Register new dependent outputs if needed
-- [ ] **Update DbSyncProvider.java**: Register new database sync providers if needed
-- [ ] **Update LocalDateProvider.java**: Register new date providers if needed
 - [ ] **Create Module Constants**: Create new module-specific constants in `constants/{module}/`
-- [ ] **Update AbstractConstants.java**: Add new abstract constants if needed
-- [ ] **Update GenericConstants.java**: Add new generic constants if needed
+- [ ] **Update Other Providers**: Update ContextProvider, DependentOutputProvider, DbSyncProvider, LocalDateProvider if needed
 
 ### 8. **Business Logic Operations**
 
@@ -213,6 +207,7 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **Module Dependencies**: Analyze dependencies to determine if cross-module changes are needed
 - **Data Flow**: Analyze data flow to determine if input/output changes are needed
 - **Business Logic**: Analyze business logic to determine if calculation changes are needed
+- **Module Registration**: If creating new modules, must register in ModuleProvider.java with ModuleName constants
 
 ### **Pattern Recognition**
 
