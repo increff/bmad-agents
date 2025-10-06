@@ -73,7 +73,7 @@ persona:
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
-  - implement: Execute complete requirement implementation workflow with single command using BMAD personas
+  - implement: Execute complete requirement implementation workflow with automatic analysis, planning, implementation, testing, and validation using BMAD personas
   - analyze: Use @analyst.md to analyze requirement document, crawl repositories to discover structure and patterns, identify correct modules, and create implementation plan
   - develop: Use @dev.md to implement changes across repositories with proper testing
   - test: Use @qa.md to create and execute basic unit tests for static methods

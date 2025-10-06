@@ -8,27 +8,29 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ## Task Instructions
 
-### 1. Analysis Review and Validation
+### 1. Automatic Analysis Phase
 
-**CRITICAL:** This task executes implementation based on the comprehensive analysis results from analyze-requirement.md.
+**CRITICAL:** This task automatically triggers comprehensive analysis before implementation.
 
-**Prerequisites:**
+**Step 1: Trigger Comprehensive Analysis**
 
-- Comprehensive analysis must be completed via analyze-requirement task
-- Detailed change list must be available
-- Implementation plan must be created
-- All three repositories must be accessible
-- BMAD core agents must be available (@analyst.md, @dev.md, @qa.md)
+1. **Auto-Call Analyze Task**: Automatically execute analyze-requirement task first
+2. **Comprehensive Repository Crawling**: Crawl all three repositories to identify patterns and dependencies
+3. **Change Identification**: Identify ALL changes that will be required
+4. **Pattern Analysis**: Analyze existing patterns across all repositories
+5. **Dependency Mapping**: Map all dependencies and impacts
+6. **Implementation Planning**: Create detailed implementation plan
+7. **Risk Assessment**: Assess implementation risks and mitigation strategies
 
-**Step 1: Review Analysis Results**
+**Step 2: Analysis Results Validation**
 
-1. **Load Analysis Results**: Review the comprehensive analysis from analyze-requirement task
+1. **Review Analysis Results**: Review the comprehensive analysis results
 2. **Validate Change List**: Confirm all identified changes are accurate and complete
 3. **Review Implementation Plan**: Confirm implementation strategy and order
 4. **Validate Dependencies**: Confirm all dependencies are correctly identified
 5. **Review Risk Assessment**: Understand implementation risks and mitigation strategies
 
-**Step 2: Pre-Implementation Validation**
+**Step 3: Pre-Implementation Validation**
 
 1. **Pattern Compliance Check**: Verify all changes follow established patterns
 2. **Dependency Validation**: Ensure all dependencies are correctly identified
@@ -38,7 +40,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ### 2. Story Creation and Planning
 
-**Step 3: Create Implementation Story**
+**Step 4: Create Implementation Story**
 
 1. **Use SM Agent**: Transform to SM agent using `*agent sm`
 2. **Execute Draft Command**: Use `*draft` command with `create-next-story.md` task
@@ -48,7 +50,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ### 3. Branch Creation and Repository Operations
 
-**Step 4: Create Feature Branches**
+**Step 5: Create Feature Branches**
 
 1. **Execute Git Operations**: Use `*git-branch` command to create actual feature branches
 2. **Branch Naming**: Use convention `feature/{req-id}-{title}`
@@ -60,7 +62,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ### 4. Implementation Execution
 
-**Step 5: Use @dev.md for Code Implementation**
+**Step 6: Use @dev.md for Code Implementation**
 
 1. **Activate @dev.md**: Use the developer persona to implement changes
 2. **Execute Develop Story**: Use `*develop-story` command
@@ -79,7 +81,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ### 5. Testing and Validation
 
-**Step 6: Use @qa.md for Basic Testing**
+**Step 7: Use @qa.md for Basic Testing**
 
 1. **Activate @qa.md**: Use the QA persona to create and execute basic tests
 2. **Create Unit Tests**: Generate unit tests for new functionality identified in analysis
@@ -89,7 +91,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 6. **Execute Tests**: Run basic unit tests to validate implementation
 7. **Document Test Results**: Include test results in the final documentation
 
-**Step 7: Execute Validation**
+**Step 8: Execute Validation**
 
 1. **Use QA Agent**: Transform to QA agent using `*agent qa`
 2. **Run Review QA**: Use `*review-qa` command
@@ -100,7 +102,7 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ### 6. Documentation and Results
 
-**Step 8: Push Changes**
+**Step 9: Push Changes**
 
 1. **Push Feature Branches**: Use `*git-push` to push all feature branches to remote repositories
 2. **Verify Remote Branches**: Confirm all branches are available on remote
@@ -108,10 +110,11 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 
 ## Summary
 
-This implementation task executes the actual code changes based on the comprehensive analysis results from the analyze-requirement task. The key difference is:
+This implementation task automatically triggers comprehensive analysis and then executes the actual code changes. The workflow is:
 
-- **Analysis Phase**: Identifies ALL changes, dependencies, and impacts upfront
+- **Automatic Analysis Phase**: Automatically calls analyze-requirement task to identify ALL changes, dependencies, and impacts upfront
 - **Implementation Phase**: Executes the changes based on the detailed analysis results
+- **Complete Workflow**: Single command triggers the entire development lifecycle
 
 This approach ensures:
 
@@ -119,13 +122,14 @@ This approach ensures:
 - **Accurate Implementation**: All changes are based on thorough analysis and pattern recognition
 - **Reduced Risk**: Dependencies and impacts are identified and planned for upfront
 - **Predictable Results**: Implementation follows a detailed plan created during analysis
+- **Single Command**: One command triggers analysis, planning, implementation, testing, and validation
 
 ## Prerequisites
 
-- **MANDATORY**: Complete analysis via analyze-requirement task must be performed first
-- **MANDATORY**: Detailed change list and implementation plan must be available
-- **MANDATORY**: All identified patterns and dependencies must be documented
-- **MANDATORY**: Risk assessment and mitigation strategies must be in place
+- **MANDATORY**: Requirement document must be provided
+- **MANDATORY**: All three repositories must be accessible
+- **MANDATORY**: BMAD core agents must be available (@analyst.md, @dev.md, @qa.md)
+- **AUTOMATIC**: Analysis phase is automatically triggered and completed first
 
 ## Output
 
