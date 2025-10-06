@@ -212,20 +212,6 @@ Analyze requirement documents to identify correct modules, create implementation
     ```bash
     grep -r "output\|Output" /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/util/ | head -10
     ```
-13. **CRITICAL: Discover Database Operations Patterns**: Find existing database operations for LoadAPIs
-    ```bash
-    find /Users/viratbansal/IdeaProjects/irisx-config -name "child-input-*.sql" | head -5
-    find /Users/viratbansal/IdeaProjects/irisx-config -name "child-output-*.sql" | head -5
-    find /Users/viratbansal/IdeaProjects/irisx-config -name "sync" -type d | head -3
-    find /Users/viratbansal/IdeaProjects/irisx-config -name "export" -type d | head -3
-    find /Users/viratbansal/IdeaProjects/irisx-config -name "template-queries" -type d | head -3
-    ```
-14. **CRITICAL: Discover Database Configuration Patterns**: Find how database operations are configured
-    ```bash
-    grep -r "view\|View" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
-    grep -r "sync\|Sync" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
-    grep -r "export\|Export" /Users/viratbansal/IdeaProjects/irisx-config/ | head -10
-    ```
 
 ### 7. Implementation Plan Creation
 
@@ -233,14 +219,131 @@ Analyze requirement documents to identify correct modules, create implementation
 2. **File Identification**: Identify specific files to modify based on actual structure
 3. **Pattern Matching**: Find existing patterns to follow from actual code
 4. **Dependency Analysis**: Identify any cross-module dependencies from actual code
-5. **Implementation Steps**: Create step-by-step implementation plan based on real structure
-6. **Database Operations Planning**: If LoadAPIs are involved, plan comprehensive database operations:
-   - **View Creation**: Plan input/output SQL views for new data structures
-   - **Sync Operations**: Plan data synchronization between repositories and database
-   - **Export Operations**: Plan multi-format data export functionality
-   - **Template Queries**: Plan reusable parameterized queries
-   - **Schema Updates**: Plan database schema modifications and migrations
-   - **Configuration Updates**: Plan updates to module_input.json, module_output.json, upload-files.json
+5. **Implementation Steps**: Create comprehensive step-by-step implementation plan based on real structure
+
+#### 7.1 Detailed Implementation Steps
+
+**Step 1: Create Input Row Class**
+
+- **File**: `{ModuleName}Row.java` (e.g., `StoreSkuRosOverrideRow.java`)
+- **Location**: `/irisx-algo/src/main/java/com/increff/irisx/row/input/{module}/`
+- **Fields**: Based on requirement analysis (e.g., store, sku, ros)
+- **Pattern**: Follow existing row class patterns discovered through crawling
+
+**Step 2: Create Load API**
+
+- **File**: `{ModuleName}LoadApi.py` (e.g., `StoreSkuRosOverrideLoadApi.py`)
+- **Location**: `/ms-loadapis-ril-final/loadapi/{module}/`
+- **Pattern**: Follow existing LoadAPI structure discovered through crawling
+- **Reference**: Use similar LoadAPI as template (e.g., `DistributionChannelStyleOverrideLoadApi`)
+
+**Step 3: Register Load API**
+
+- **File**: `/ms-loadapis-ril-final/loadapi/__init__.py`
+- **Import ID**: `import_{module}_input_{feature_name}` (e.g., `import_dist_input_store_sku_ros_override`)
+- **Pattern**: Follow existing registration patterns discovered through crawling
+
+**Step 4: Update Configuration**
+
+- **File**: `/irisx-config/module_input.json`
+- **Input**: `input_{module}_{feature_name}` (e.g., `input_dist_store_sku_ros_override`)
+- **Pattern**: Follow existing input configuration patterns
+
+**Step 5: Update Filename Constants**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/constants/FileName.java`
+- **Constant**: `{MODULE}_{FEATURE_NAME}` (e.g., `DIST_STORE_SKU_ROS_OVERRIDE`)
+- **Pattern**: Follow existing filename constant patterns
+
+**Step 6: Update Schema Provider**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/provider/SchemaProvider.java`
+- **Import**: Add {module} input file import
+- **Pattern**: Follow existing schema provider patterns
+
+**Step 7: Database Operations - Create Input View**
+
+- **File**: `/irisx-config/view-creation/child-input-{module}-{feature}.sql`
+- **View**: `child_input_{module}_{feature}` (e.g., `child_input_distribution_store_sku_ros_override`)
+- **Pattern**: Follow existing input view patterns
+
+**Step 8: Database Operations - Create Output View**
+
+- **File**: `/irisx-config/view-creation/child-output-{module}-{feature}.sql`
+- **View**: `child_output_{module}_{feature}` (e.g., `child_output_distribution_store_sku_ros_override`)
+- **Pattern**: Follow existing output view patterns
+
+**Step 9: Database Operations - Setup Sync**
+
+- **File**: `/irisx-config/sync/{module}-{feature}-sync.yaml`
+- **Config**: Sync configuration for data flow
+- **Pattern**: Follow existing sync configuration patterns
+
+**Step 10: Database Operations - Setup Export**
+
+- **File**: `/irisx-config/export/{module}-{feature}-export.yaml`
+- **Config**: Export configuration for data delivery
+- **Pattern**: Follow existing export configuration patterns
+
+**Step 11: Database Operations - Create Template Queries**
+
+- **File**: `/irisx-config/template-queries/{module}-{feature}-queries.sql`
+- **Queries**: Reusable parameterized queries
+- **Pattern**: Follow existing template query patterns
+
+**Step 12: Database Operations - Update Schema**
+
+- **File**: `/irisx-config/migrations/add_{module}_{feature}.sql`
+- **Schema**: Database schema modifications
+- **Pattern**: Follow existing migration patterns
+
+**Step 13: Database Operations - Update Module Output Configuration**
+
+- **File**: `/irisx-config/module_output.json`
+- **Output**: `output_{module}_{feature_name}` (e.g., `output_dist_store_sku_ros_override`)
+- **Pattern**: Follow existing output configuration patterns
+
+**Step 14: Database Operations - Update Upload Files Configuration**
+
+- **File**: `/irisx-config/upload-files.json`
+- **Config**: File upload configuration for new feature
+- **Pattern**: Follow existing upload files configuration patterns
+
+**Step 15: Update Module Data Class**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/data/{ModuleName}Data.java`
+- **Fields**: Add new fields based on requirement
+- **Pattern**: Follow existing module data patterns
+
+**Step 16: Update Module Implementation**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/module/{module}/{ModuleName}Module.java`
+- **Logic**: Implement business logic for new feature
+- **Pattern**: Follow existing module implementation patterns
+
+**Step 17: Update Module Data Row**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/row/{module}/{ModuleName}DataRow.java`
+- **Fields**: Add new fields for data processing
+- **Pattern**: Follow existing module data row patterns
+
+**Step 18: Create Validation Rules**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/module/validation/{ModuleName}Validation.java`
+- **Rules**: Business validation rules for new feature
+- **Pattern**: Follow existing validation patterns
+
+**Step 19: Update Constants**
+
+- **File**: `/irisx-algo/src/main/java/com/increff/irisx/constants/{ModuleName}Constants.java`
+- **Constants**: Add new constants for the feature
+- **Pattern**: Follow existing constants patterns
+
+**Step 20: Create Tests**
+
+- **File**: `/irisx-algo/src/test/java/com/increff/irisx/module/{module}/{ModuleName}ModuleTest.java`
+- **Tests**: Unit tests for new functionality
+- **Pattern**: Follow existing test patterns
 
 ### 8. Validation
 
@@ -260,13 +363,6 @@ Analyze requirement documents to identify correct modules, create implementation
    - **CRITICAL: Input JSON Configuration**: Verify any new input is part of input JSON in config
    - **CRITICAL: Output Sync Registration**: Verify any new output is registered in Util Output Sync Module
    - **CRITICAL: Output CAAS JSON Configuration**: Verify any new output is part of Output CAAS JSON
-   - **CRITICAL: Database Operations Required**: If LoadAPIs are involved, verify database operations are planned
-   - **CRITICAL: View Creation Planned**: Verify input/output views are planned for new data structures
-   - **CRITICAL: Sync Operations Planned**: Verify sync operations are planned for data flow
-   - **CRITICAL: Export Operations Planned**: Verify export operations are planned for data delivery
-   - **CRITICAL: Template Queries Planned**: Verify template queries are planned for common operations
-   - **CRITICAL: Schema Updates Planned**: Verify database schema updates are planned
-   - **CRITICAL: Configuration Updates Planned**: Verify database configuration updates are planned
 
 ## Module Identification Examples
 
@@ -293,63 +389,7 @@ Analyze requirement documents to identify correct modules, create implementation
 - "Override" → Distribution supports override mechanisms
   **Target Files**: `BaseDistributionData.java`, `DistributionAllocationModule.java`
 
-### Example 3: Distribution Module with LoadAPI (Complete Implementation Plan)
-
-**Requirement**: "ADD a new input in distribution to store STORE SKU LEVEL ROS OVERRIDE"
-**Keywords**: "distribution", "store sku", "ros override", "input"
-**Primary Module**: Distribution
-**Reasoning**:
-
-- "Distribution" → Distribution module
-- "Store SKU level" → SKU-level data handling
-- "ROS override" → Rate of Sale override functionality
-- "Input" → New input data structure
-
-**Complete Implementation Plan**:
-
-**Step 1: Create Input Row Class**
-
-- File: `StoreSkuRosOverrideRow.java`
-- Location: `/irisx-algo/src/main/java/com/increff/irisx/row/input/distribution/`
-- Fields: store, sku, ros (following existing patterns)
-
-**Step 2: Create Load API**
-
-- File: `StoreSkuRosOverrideLoadApi.py`
-- Location: `/ms-loadapis-ril-final/loadapi/distribution/`
-- Pattern: Follow `DistributionChannelStyleOverrideLoadApi` structure
-
-**Step 3: Register Load API**
-
-- File: `/ms-loadapis-ril-final/loadapi/__init__.py`
-- Import ID: `import_dist_input_store_sku_ros_override`
-
-**Step 4: Update Configuration**
-
-- File: `/irisx-config/module_input.json`
-- Input: `input_dist_store_sku_ros_override`
-
-**Step 5: Update Filename Constants**
-
-- File: `/irisx-algo/src/main/java/com/increff/irisx/constants/FileName.java`
-- Constant: `DIST_STORE_SKU_ROS_OVERRIDE`
-
-**Step 6: Update Schema Provider**
-
-- File: `/irisx-algo/src/main/java/com/increff/irisx/provider/SchemaProvider.java`
-- Import: Add distribution input file import
-
-**Step 7: Database Operations (CRITICAL - Missing from current plans)**
-
-- **Create Input View**: `child-input-distribution-store-sku-ros-override.sql`
-- **Create Output View**: `child-output-distribution-store-sku-ros-override.sql`
-- **Setup Sync Operations**: Configure data synchronization
-- **Setup Export Operations**: Configure multi-format data export
-- **Create Template Queries**: Create reusable parameterized queries
-- **Update Database Schema**: Add new table and indexes
-- **Update Database Configuration**: Update `module_input.json`, `module_output.json`, `upload-files.json`
-
-### Example 4: OTB Module
+### Example 3: OTB Module
 
 **Requirement**: "MODIFY BUYING CALCULATIONS FOR NEW STORES"
 **Keywords**: "buying", "calculations", "new stores"
@@ -407,10 +447,3 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] **CRITICAL: Input JSON configuration validated** - Any new input is part of input JSON in config
 - [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
 - [ ] **CRITICAL: Output CAAS JSON configuration validated** - Any new output is part of Output CAAS JSON
-- [ ] **CRITICAL: Database operations planned** - If LoadAPIs are involved, comprehensive database operations are planned
-- [ ] **CRITICAL: View creation planned** - Input/output views are planned for new data structures
-- [ ] **CRITICAL: Sync operations planned** - Data synchronization is planned between repositories and database
-- [ ] **CRITICAL: Export operations planned** - Multi-format data export is planned for new requirements
-- [ ] **CRITICAL: Template queries planned** - Reusable query templates are planned for common operations
-- [ ] **CRITICAL: Schema updates planned** - Database schema modifications are planned for new requirements
-- [ ] **CRITICAL: Configuration updates planned** - Database configuration files are planned for updates
