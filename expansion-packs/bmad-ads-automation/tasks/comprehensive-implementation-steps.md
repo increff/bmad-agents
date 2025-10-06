@@ -33,10 +33,12 @@ A single comprehensive list of all possible implementation steps across all requ
 
 ### 4. **Validation Operations**
 
-- [ ] **Create New Validation Module**: Create `{Module}InputValidationModule.java` extending `AbstractValidationModule`
+- [ ] **Create New Validation Module**: Create `{Module}ValidationModule.java` extending `AbstractValidationModule`
+- [ ] **Create Validation Constants**: Create `{Module}ValidationConstants.java` extending `AbstractConstants` with error messages
 - [ ] **Update Existing Validation Module**: Modify existing validation modules with new rules
 - [ ] **Add Validation Rules**: Add new validation rules to existing validation classes
 - [ ] **Update Validation Logic**: Modify existing validation logic
+- [ ] **Register Validation Module**: Add validation module to GroupModule and register in ModuleProvider
 
 ### 5. **LoadAPI Operations**
 
@@ -76,6 +78,7 @@ A single comprehensive list of all possible implementation steps across all requ
 - [ ] **Update ModuleName.java**: Add new module name constant (snake_case)
 - [ ] **Update ValidationModuleNames.java**: Add new validation module name constant (if validation needed)
 - [ ] **Update ModuleProvider.java**: Register new GroupModule and ValidationModule in @PostConstruct init() method
+- [ ] **Add Validation to GroupModule**: Add validation module to GroupModule's @PostConstruct init() method
 - [ ] **Update SchemaProvider.java**: Register new module inputs/outputs
 - [ ] **Update FileName.java**: Add new module file names
 - [ ] **Create Module Constants**: Create new module-specific constants in `constants/{module}/`
@@ -208,6 +211,7 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **Data Flow**: Analyze data flow to determine if input/output changes are needed
 - **Business Logic**: Analyze business logic to determine if calculation changes are needed
 - **Module Registration**: If creating new modules, must register in ModuleProvider.java with ModuleName constants
+- **Validation Requirements**: Most operations require validation - create ValidationModule and ValidationConstants, register in GroupModule
 
 ### **Pattern Recognition**
 

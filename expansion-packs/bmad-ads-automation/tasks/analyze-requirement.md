@@ -74,7 +74,7 @@ Analyze requirement documents and create implementation plans by intelligently s
    - **Module Analysis & Identification**: Always needed
    - **Data Structure Operations**: If data structures need to be created, modified, or deleted
    - **Module Structure Operations**: If new modules need to be created or existing modules restructured
-   - **Validation Operations**: If validation rules need to be added, modified, or removed
+   - **Validation Operations**: If validation rules need to be added, modified, or removed (most operations require validation)
    - **LoadAPI Operations**: If data loading, processing, or integration logic needs changes
    - **Configuration Operations**: If SQL views, templates, or configuration files need changes
    - **Registration Operations**: If new components need to be registered in providers or constants (ModuleProvider, ModuleName, ValidationModuleNames)
@@ -88,11 +88,11 @@ Analyze requirement documents and create implementation plans by intelligently s
    - **Documentation Operations**: Always needed
 
 3. **Context-Driven Selection Examples**:
-   - **"Add new field to existing table"**: Steps 1, 2, 6, 8, 14, 15
-   - **"Update calculation formula"**: Steps 1, 8, 14, 15
-   - **"Add new input file"**: Steps 1, 2, 5, 6, 7, 14, 15
+   - **"Add new field to existing table"**: Steps 1, 2, 4, 6, 8, 14, 15
+   - **"Update calculation formula"**: Steps 1, 4, 8, 14, 15
+   - **"Add new input file"**: Steps 1, 2, 4, 5, 6, 7, 14, 15
    - **"Create new module"**: Steps 1, 2, 3, 4, 5, 6, 7, 14, 15
-   - **"Update existing logic"**: Steps 1, 8, 14, 15 (plus others based on what actually changes)
+   - **"Update existing logic"**: Steps 1, 4, 8, 14, 15 (plus others based on what actually changes)
    - **"Remove obsolete functionality"**: Steps 1, 13, 14, 15
 
 ### 5. File Impact Analysis
