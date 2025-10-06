@@ -65,7 +65,17 @@ Analyze requirement documents to identify correct modules, create implementation
    - **ADD**: New files that need to be created
    - **DELETE**: Files that need to be removed
 
-2. **Impact Analysis**: Check dependencies and references
+2. **Determine Implementation Type**:
+   - **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
+   - **MODIFY EXISTING**: Edit existing files to add fields or functionality
+   - **DELETE/REMOVE**: Remove files or functionality
+
+3. **For NEW TABLE/DATA STRUCTURE Requirements**:
+   - **Algorithm Repository**: Create new data classes AND edit module classes to USE them
+   - **LoadAPI Repository**: Create new LoadAPI classes AND register them
+   - **Config Repository**: Create new SQL views, templates, sync, export files
+
+4. **Impact Analysis**: Check dependencies and references
    ```bash
    # Check for references to files being modified
    for file in $(find $REPO_PATH $LOADAPI_PATH $CONFIG_PATH -name "*{MODULE_NAME}*" -type f); do
@@ -105,7 +115,26 @@ Analyze requirement documents to identify correct modules, create implementation
 2. **File Identification**: Identify specific files to modify, create, or remove
 3. **Pattern Matching**: Find existing patterns to follow from actual code
 4. **Dependency Analysis**: Identify any cross-module dependencies
-5. **Implementation Steps**: Create step-by-step implementation plan
+5. **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED in module logic
+6. **Implementation Steps**: Create step-by-step implementation plan
+
+#### For NEW TABLE/DATA STRUCTURE Requirements:
+
+**Algorithm Repository Operations:**
+
+- **CREATE**: New data classes (e.g., `StoreSkuRosOverrideData.java`, `StoreSkuRosOverrideRow.java`)
+- **EDIT**: Registration files (`SchemaProvider.java`, `Filename.java`)
+- **EDIT**: Module classes to USE new data (`{Module}Module.java`, `{Module}Service.java`, `{Module}Controller.java`)
+
+**LoadAPI Repository Operations:**
+
+- **CREATE**: New LoadAPI classes (e.g., `StoreSkuRosOverrideLoadApi.py`)
+- **EDIT**: Registration files (`__init__.py` files)
+
+**Config Repository Operations:**
+
+- **CREATE**: New SQL views, templates, sync, export files
+- **EDIT**: Configuration files (`module_input.json`, `module_output.json`)
 
 ### 7. Validation
 
@@ -123,6 +152,8 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] Patterns identified for consistent implementation
 - [ ] Validation completed successfully
 - [ ] No incorrect module targeting (e.g., ISS vs Distribution)
+- [ ] **Implementation type identified** - NEW TABLE vs MODIFY EXISTING vs DELETE
+- [ ] **For NEW TABLE: Usage analysis completed** - Module classes identified to USE new data
 - [ ] **CONDITIONAL: Database operations planned** - ONLY if input/output changes
 - [ ] **CRITICAL: Data loading architecture validated** - Java modules use `db().select()`, Python APIs handle file loading
 - [ ] **CRITICAL: Load API registration validated** - Any new Load API registered in `__init__.py` files
@@ -132,7 +163,9 @@ Analyze requirement documents to identify correct modules, create implementation
 ## Output
 
 - **Identified Modules**: List of primary and secondary modules
-- **Target Files**: Specific files to modify in each module
+- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs MODIFY EXISTING vs DELETE
+- **Target Files**: Specific files to modify, create, or delete in each module
+- **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED
 - **Implementation Plan**: Step-by-step implementation approach
 - **Pattern References**: Existing patterns to follow
 - **Validation Results**: Confirmation of module and file selection
