@@ -6,13 +6,16 @@ This task handles all database operations required for irisx-config repository i
 
 ## Steps
 
-### 1. SQL View Creation
+### 1. SQL View Creation (319+ existing views)
 
-- **Input Views**: Create `view-creation/child-input-*.sql` files for new input data structures
-- **Output Views**: Create `view-creation/child-output-*.sql` files for new output data structures
-- **View Patterns**: Follow existing SQL view patterns and naming conventions
+- **Input Views**: Create `view-creation/child-input-{component}.sql` files following `child-input-{module}_{component}.sql` pattern
+- **Output Views**: Create `view-creation/child-output-{component}.sql` files following `child-output-{module}_{component}.sql` pattern
+- **Naming Convention**: Follow `child-{type}-{module}_{component}.sql` pattern (e.g., `child-input-a_aop.sql`, `child-output-a_ag_id.sql`)
 - **Data Source Configuration**: Configure OPENROWSET with proper DATA_SOURCE and FORMAT settings
 - **Field Mapping**: Map input/output fields to appropriate SQL data types
+- **Pattern Examples**:
+  - Input: `child-input-a_aop.sql`, `child-input-a_brand_config.sql`, `child-input-a_category_config.sql`
+  - Output: `child-output-a_ag_id.sql`, `child-output-export_analysis_ist.sql`, `child-output-export_ap_output.sql`
 
 ### 2. Synchronization Operations
 

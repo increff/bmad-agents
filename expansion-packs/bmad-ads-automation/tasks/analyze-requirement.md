@@ -49,15 +49,21 @@ Analyze requirement documents to identify correct modules, create implementation
 
 1. **Discover All Available Modules**: First, discover all modules in irisx-algo
    ```bash
-   ls -la /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/module/
+   # Get repository path from configuration
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   ls -la $REPO_PATH/src/main/java/com/increff/irisx/module/
    ```
 2. **Discover All API Endpoints**: Understand the API structure in ms-loadapis-ril-final
    ```bash
-   find /Users/viratbansal/IdeaProjects/ms-loadapis-ril-final -name "*.py" | grep -E "(api|load)" | head -20
+   # Get repository path from configuration
+   LOADAPI_PATH=$(grep -A 5 "ms-loadapis-ril-final:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   find $LOADAPI_PATH -name "*.py" | grep -E "(api|load)" | head -20
    ```
 3. **Discover All Configuration Files**: Understand the configuration structure in irisx-config
    ```bash
-   find /Users/viratbansal/IdeaProjects/irisx-config -type f | head -20
+   # Get repository path from configuration
+   CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   find $CONFIG_PATH -type f | head -20
    ```
 4. **Map Repository Relationships**: Understand how the three repositories interact
 5. **Identify Common Patterns**: Find patterns across all repositories
@@ -68,16 +74,22 @@ Analyze requirement documents to identify correct modules, create implementation
 
 1. **Discover All Modules**: First, discover all available modules
    ```bash
-   ls -la /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/module/
+   # Get repository path from configuration
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   ls -la $REPO_PATH/src/main/java/com/increff/irisx/module/
    ```
 2. **Navigate to Target Module**: Go to the identified module directory based on requirement analysis
 3. **Examine Module Structure**:
    ```bash
-   ls -la /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/
+   # Get repository path from configuration
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   ls -la $REPO_PATH/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/
    ```
 4. **Analyze Key Classes**: Read main module classes to understand structure
    ```bash
-   find /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/ -name "*.java" | head -10
+   # Get repository path from configuration
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   find $REPO_PATH/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/ -name "*.java" | head -10
    ```
 5. **Data Class Analysis**: Examine data classes and their fields
 6. **Interface Analysis**: Check interfaces and abstract classes
@@ -85,7 +97,9 @@ Analyze requirement documents to identify correct modules, create implementation
 8. **Pattern Discovery**: Find existing patterns for similar functionality
 9. **Search for Related Files**: Look for files with similar functionality
    ```bash
-   grep -r "{REQUIREMENT_KEYWORD}" /Users/viratbansal/IdeaProjects/irisx-algo/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/
+   # Get repository path from configuration
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   grep -r "{REQUIREMENT_KEYWORD}" $REPO_PATH/src/main/java/com/increff/irisx/module/{TARGET_MODULE}/
    ```
 
 #### 5.2 Crawl ms-loadapis-ril-final Repository
@@ -115,21 +129,77 @@ Analyze requirement documents to identify correct modules, create implementation
 #### 5.3 Crawl irisx-config Repository
 
 1. **Discover Configuration Structure**: First, understand the overall configuration structure
+
    ```bash
    ls -la /Users/viratbansal/IdeaProjects/irisx-config/
    ```
-2. **Navigate to Configuration Files**: Find relevant config files based on requirement keywords
+
+2. **Targeted File Discovery**: Find all relevant files for the specific requirement
+
    ```bash
-   find /Users/viratbansal/IdeaProjects/irisx-config -name "*{REQUIREMENT_KEYWORD}*" -o -name "*{MODULE_NAME}*"
+   # Get repository path from configuration
+   CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+
+   # Find all files related to the requirement
+   find $CONFIG_PATH -name "*{REQUIREMENT_KEYWORD}*" -o -name "*{MODULE_NAME}*"
+   find $CONFIG_PATH -type f -exec grep -l "{REQUIREMENT_KEYWORD}" {} \;
    ```
-3. **Database Schema Analysis**: Examine SQL files and schema changes
+
+3. **File Impact Analysis**: Identify all files that need to be edited, added, or deleted
+
    ```bash
-   find /Users/viratbansal/IdeaProjects/irisx-config -name "*.sql" | head -10
+   # Get repository path from configuration
+   CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+
+   # Find files to EDIT (existing files that need changes)
+   find $CONFIG_PATH -name "*{MODULE_NAME}*" -type f
+   find $CONFIG_PATH -type f -exec grep -l "{REQUIREMENT_KEYWORD}" {} \;
+
+   # Find files to ADD (new files that need to be created)
+   # Based on requirement analysis, determine which new files are needed
+
+   # Find files to DELETE (files that need to be removed)
+   # Based on requirement analysis, determine which files are obsolete
    ```
-4. **Configuration Patterns**: Understand configuration structure
-5. **Dependency Analysis**: Check configuration dependencies
+
+4. **Change Impact Assessment**: Analyze the impact of edit/add/delete operations
+
    ```bash
-   grep -r "{REQUIREMENT_KEYWORD}" /Users/viratbansal/IdeaProjects/irisx-config/
+   # Check dependencies for files to be edited
+   for file in $(find $CONFIG_PATH -name "*{MODULE_NAME}*" -type f); do
+     echo "Analyzing dependencies for: $file"
+     grep -r "$(basename $file)" $CONFIG_PATH/
+   done
+
+   # Check for references to files to be deleted
+   for file in $(find $CONFIG_PATH -name "*{OBSOLETE_PATTERN}*" -type f); do
+     echo "Checking references to: $file"
+     grep -r "$(basename $file)" $CONFIG_PATH/
+   done
+   ```
+
+5. **Cross-Repository Impact**: Check impact on other repositories
+
+   ```bash
+   # Get other repository paths
+   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   LOADAPI_PATH=$(grep -A 5 "ms-loadapis-ril-final:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+
+   # Check irisx-algo for references to config changes
+   grep -r "{REQUIREMENT_KEYWORD}" $REPO_PATH/src/
+
+   # Check ms-loadapis-ril-final for references to config changes
+   grep -r "{REQUIREMENT_KEYWORD}" $LOADAPI_PATH/
+   ```
+
+6. **Validation Requirements**: Identify what needs to be validated after changes
+
+   ```bash
+   # Check for test files related to the requirement
+   find $CONFIG_PATH -name "*test*" -o -name "*spec*" | grep -i "{REQUIREMENT_KEYWORD}"
+
+   # Check for validation scripts
+   find $CONFIG_PATH -name "*validate*" -o -name "*check*" | grep -i "{REQUIREMENT_KEYWORD}"
    ```
 
 #### 5.4 Cross-Repository Analysis
@@ -215,44 +285,63 @@ Analyze requirement documents to identify correct modules, create implementation
 
 ### 7. Implementation Plan Creation
 
-1. **Module Mapping**: Map requirements to specific modules and files based on actual crawling
-2. **File Identification**: Identify specific files to modify based on actual structure
+1. **File Operation Mapping**: Map requirements to specific file operations (edit/add/delete)
+2. **File Identification**: Identify specific files to modify, create, or remove based on actual structure
 3. **Pattern Matching**: Find existing patterns to follow from actual code
 4. **Dependency Analysis**: Identify any cross-module dependencies from actual code
-5. **Database Operations Planning**: Plan database operations for irisx-config repository
-6. **Implementation Steps**: Create step-by-step implementation plan based on real structure
+5. **Change Impact Analysis**: Analyze impact of edit/add/delete operations
+6. **Database Operations Planning**: Plan database operations for irisx-config repository
+7. **Implementation Steps**: Create step-by-step implementation plan based on real structure
 
 #### 7.1 Database Operations Planning
 
-**CRITICAL**: Every implementation plan MUST include database operations for irisx-config repository:
+**CRITICAL**: Every implementation plan MUST include database operations for irisx-config repository based on edit/add/delete operations:
 
-1. **SQL View Creation**:
-   - Create `view-creation/child-input-*.sql` files for new input data structures
-   - Create `view-creation/child-output-*.sql` files for new output data structures
-   - Follow existing SQL view patterns and naming conventions
-   - Configure OPENROWSET with proper DATA_SOURCE and FORMAT settings
+1. **SQL View Operations** (319+ existing views):
+   - **EDIT**: Modify existing `view-creation/child-input-{component}.sql` and `child-output-{component}.sql` files
+   - **ADD**: Create new `view-creation/child-input-{component}.sql` and `child-output-{component}.sql` files following pattern
+   - **DELETE**: Remove obsolete `view-creation/child-{type}-{component}.sql` files
+   - **Naming Convention**: Follow `child-{type}-{module}_{component}.sql` pattern
+   - **OPENROWSET Configuration**: Use proper DATA_SOURCE and FORMAT settings
+   - **Field Mapping**: Map input/output fields to appropriate SQL data types
 
-2. **Synchronization Operations**:
-   - Create synchronization logic in `sync/` directory
-   - Ensure data consistency between repositories and database
-   - Follow existing synchronization patterns and configurations
+2. **Synchronization Operations** (156+ existing sync files):
+   - **EDIT**: Modify existing `sync/{module}_{component}.sql` files
+   - **ADD**: Create new `sync/{module}_{component}.sql` files following pattern
+   - **DELETE**: Remove obsolete `sync/{module}_{component}.sql` files
+   - **Data Consistency**: Ensure data consistency between repositories and database
+   - **Sync Patterns**: Follow existing synchronization patterns and configurations
+   - **Module Mapping**: Use discovered module abbreviations (AG, BI, DISC, DIST, A, AP, DEP, EOSS, OTB, ISS, TRANSACTIONAL)
 
-3. **Export Operations**:
-   - Create export configurations in `export/` directory
-   - Support multiple export formats (CSV, TSV, JSON, etc.)
-   - Create reusable export templates for common operations
+3. **Export Operations** (223+ existing export files):
+   - **EDIT**: Modify existing `export/export_{module}_{type}_{component}.sql` files
+   - **ADD**: Create new `export/export_{module}_{type}_{component}.sql` files following pattern
+   - **DELETE**: Remove obsolete `export/export_{module}_{type}_{component}.sql` files
+   - **Export Templates**: Create/modify `export/export_{module}_{type}_{component}_template.sql` files
+   - **Multiple Formats**: Support CSV, TSV, JSON export formats
+   - **Reusable Templates**: Create reusable export templates for common operations
 
-4. **Template Query Management**:
-   - Create TSV input templates in `template/` directory
-   - Create reusable SQL query templates
-   - Follow existing template patterns and naming conventions
+4. **Template Query Management** (108+ existing templates):
+   - **EDIT**: Modify existing `template/export_{module}_input_{component}_template.tsv` files
+   - **ADD**: Create new `template/export_{module}_input_{component}_template.tsv` files following pattern
+   - **DELETE**: Remove obsolete `template/export_{module}_input_{component}_template.tsv` files
+   - **Template Structure**: Follow existing TSV template structure with field definitions and examples
+   - **Naming Convention**: Use `export_{module}_{type}_{component}_template.tsv` pattern
+   - **Field Documentation**: Include field descriptions and examples in templates
 
-5. **Configuration Updates**:
-   - Update `module_input.json` with new input configurations
-   - Update `module_output.json` with new output configurations
-   - Update `upload-files.json` with new file upload configurations
-   - Update SchemaProvider with new data schemas
-   - Update filename configurations for new data structures
+5. **Configuration Updates** (3 JSON config files):
+   - **EDIT**: Modify existing entries in `module_input.json` (250KB), `module_output.json` (20KB), `upload-files.json` (60KB)
+   - **ADD**: Add new entries to JSON configs following existing structure
+   - **DELETE**: Remove obsolete entries from JSON configs
+   - **SchemaProvider**: Update with new data schemas in irisx-algo repository
+   - **Filename Configuration**: Update filename configurations for new data structures
+
+6. **Change Impact Validation**:
+   - **Dependency Check**: Verify no broken references after edit/add/delete operations
+   - **Pattern Compliance**: Validate all modified/new files follow established naming patterns
+   - **Module Consistency**: Ensure module abbreviations are consistent across all file types
+   - **Cross-Repository Integration**: Verify irisx-config changes integrate with other repositories
+   - **Rollback Plan**: Plan for rolling back changes if issues arise
 
 ### 8. Validation
 
@@ -362,3 +451,12 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] **CRITICAL: Export operations planned** - Export configurations planned for new requirements
 - [ ] **CRITICAL: Template queries planned** - TSV templates and SQL query templates planned
 - [ ] **CRITICAL: Configuration updates planned** - All JSON configs planned for updates
+- [ ] **CRITICAL: Dynamic structure discovery completed** - All irisx-config directories and files discovered programmatically
+- [ ] **CRITICAL: File count analysis completed** - Accurate counts for templates (108), views (319), sync (156), export (223)
+- [ ] **CRITICAL: Pattern recognition completed** - All naming patterns and conventions identified
+- [ ] **CRITICAL: Module mapping completed** - All module abbreviations mapped to components and files
+- [ ] **CRITICAL: Structure validation completed** - All new files follow established patterns and counts
+- [ ] **CRITICAL: File operations mapped** - All edit/add/delete operations identified and planned
+- [ ] **CRITICAL: Change impact analyzed** - Impact of all file operations assessed
+- [ ] **CRITICAL: Dependencies validated** - No broken references after operations
+- [ ] **CRITICAL: Rollback plan prepared** - Plan for rolling back changes if issues arise
