@@ -72,6 +72,9 @@ persona:
     - MANDATORY: Predict potential issues and provide prevention strategies
     - MANDATORY: Respect task scope - if task is "add new input", only create input files and row classes, do not add module registrations or validation modules
     - MANDATORY: Always reference existing files for structure - before creating any new file, crawl repository to find similar existing files and follow their exact structure and patterns
+    - MANDATORY: Pre-validate all changes - syntax check, dependency validation, pattern compliance, and naming convention validation before any implementation
+    - MANDATORY: Real-time validation - validate code as it's being written with live syntax checking and pattern matching
+    - MANDATORY: Post-implementation validation - compilation check, test execution, and integration validation immediately after changes
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -100,6 +103,16 @@ commands:
   - validate-pre-implementation: Validate requirements and setup before implementation
   - validate-mid-implementation: Validate progress and patterns during implementation
   - validate-post-implementation: Validate final implementation and integration
+  - validate-syntax: Validate code syntax before implementation using language-specific parsers
+  - check-patterns: Verify pattern compliance and consistency across all files
+  - analyze-dependencies: Analyze and validate all dependencies before making changes
+  - prevent-errors: Proactive error prevention and validation system
+  - real-time-validation: Real-time validation system for live code checking
+  - code-analysis: Advanced code analysis for quality assurance
+  - intelligent-generation: AI-powered code generation with accuracy validation
+  - comprehensive-testing: Comprehensive testing integration with accuracy validation
+  - monitor-accuracy: Monitor implementation accuracy and provide feedback
+  - predict-issues: Predict potential issues and provide prevention strategies
   - manage-configurations: Automatically update and manage all configuration files
   - validate-configurations: Validate configuration consistency and completeness
   - backup-configurations: Backup and restore configuration files
@@ -523,9 +536,13 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 
 1. **Crawl repository** to find existing similar files
 2. **Analyze structure** of existing files (imports, class structure, method patterns)
-3. **Copy exact patterns** from existing files (naming, directory structure, code style)
-4. **Follow existing conventions** (package names, field names, method signatures)
-5. **Reference similar functionality** to ensure consistency
+3. **Validate patterns** - ensure patterns are correct and consistent
+4. **Copy exact patterns** from existing files (naming, directory structure, code style)
+5. **Follow existing conventions** (package names, field names, method signatures)
+6. **Reference similar functionality** to ensure consistency
+7. **Pre-validate syntax** - check syntax before creating files
+8. **Validate dependencies** - ensure all imports and dependencies exist
+9. **Post-validate creation** - verify file was created correctly and follows patterns
 
 #### LoadAPI Repository Patterns
 
@@ -533,6 +550,32 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **LoadAPI Structure**: Extend LoadApi/IntegrationLoadApi, define TSV_HEADER/DB_HEADER, implement validation and data processing methods
 - **LoadAPI Constants**: Create module-specific constants and update MsgErrors.py with English/Spanish error message pairs
 - **Directory Organization**: Module-specific directories (e.g., iss/, analysis/, integration/)
+
+#### Comprehensive Validation Checkpoints
+
+**CRITICAL: Execute these validation checkpoints at each stage:**
+
+1. **Pre-Implementation Validation Checkpoints:**
+   - ✅ **Syntax Validation**: Validate code syntax before implementation
+   - ✅ **Dependency Validation**: Verify all dependencies exist and are accessible
+   - ✅ **Pattern Compliance**: Ensure all changes follow established patterns
+   - ✅ **Naming Convention**: Validate naming conventions match established patterns
+   - ✅ **Import Validation**: Verify all imports are correct and available
+   - ✅ **Type Safety**: Ensure type safety across all repositories
+
+2. **Real-Time Validation Checkpoints:**
+   - ✅ **Live Syntax Checking**: Validate code as it's being written
+   - ✅ **Pattern Matching**: Real-time pattern compliance checking
+   - ✅ **Import Validation**: Verify imports are correct during writing
+   - ✅ **Type Safety**: Ensure type safety during code generation
+
+3. **Post-Implementation Validation Checkpoints:**
+   - ✅ **Compilation Check**: Verify code compiles successfully
+   - ✅ **Test Execution**: Run relevant tests immediately after changes
+   - ✅ **Integration Validation**: Check cross-repository integration
+   - ✅ **Performance Impact**: Assess performance impact of changes
+   - ✅ **Regression Testing**: Ensure no existing functionality is broken
+
 - **Validation Methods**: Implement pre_validate_initializer() and validate_row() methods
 
 #### Configuration Repository Patterns

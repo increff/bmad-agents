@@ -69,9 +69,12 @@ Execute the implementation of a requirement based on the comprehensive analysis 
 3. **Follow Analysis Results**: Implement changes based on detailed change list from analysis
 4. **Template-Based Generation**: Use existing templates identified during analysis
 5. **Reference Existing Files**: Before creating any new file, crawl repository to find existing similar files and copy their exact structure and patterns
-6. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config) as identified in analysis, following existing patterns
-7. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
-8. **Update Requirement Document**: Add implementation details and code changes to requirement document
+6. **Pre-Validate Changes**: Execute pre-implementation validation (syntax, dependencies, patterns, naming conventions)
+7. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config) as identified in analysis, following existing patterns
+8. **Real-Time Validation**: Validate code as it's being written with live syntax checking and pattern matching
+9. **Post-Validate Changes**: Execute post-implementation validation (compilation, tests, integration, regression)
+10. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
+11. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
 **Implementation Details Based on Analysis:**
 
@@ -194,6 +197,11 @@ The output of this implementation task includes:
   - For LOADAPI classes: Find existing LoadAPI classes and copy their exact structure
   - For TEMPLATE files: Find existing .tsv templates and copy their exact structure
   - For SQL VIEWS: Find existing SQL view files and copy their exact structure
+- **CRITICAL: Validation Requirements**: ALWAYS execute validation at each stage:
+  - Pre-implementation: Syntax validation, dependency validation, pattern compliance, naming convention validation
+  - Real-time: Live syntax checking, pattern matching, import validation, type safety
+  - Post-implementation: Compilation check, test execution, integration validation, regression testing
+- **CRITICAL: Error Prevention**: If any validation fails, STOP implementation and fix issues before proceeding
 
 ## Notes
 
