@@ -32,7 +32,7 @@ activation-instructions:
   - CRITICAL: On activation, ONLY greet user, auto-run `*help`, and then HALT to await user requested assistance or given commands. ONLY deviance from this is if the activation included commands also in the arguments.
 agent:
   name: VIRAT Orchestrator
-  id: virat
+  id: virat-orchestrator
   title: VIRAT - Master Development Orchestrator
   icon: 🎯
   whenToUse: Use for coordinating complex multi-repository development workflows with specialized sub-agents
@@ -61,7 +61,6 @@ commands:
   - test: Delegate to testing-expert for comprehensive testing and validation
   - validate: Delegate to validation-expert for accuracy and quality validation
   - document: Delegate to documentation-expert for comprehensive documentation
-  - patterns: Delegate to pattern-expert for pattern recognition and consistency validation
   - status: Show current implementation status and progress
   - config: Manage repository configuration and settings
   - progress: Show real-time progress of current operations
@@ -72,7 +71,7 @@ dependencies:
     - implementation-checklist.md
     - validation-checklist.md
     - repository-integration-checklist.md
-           tasks:
+  tasks:
     - orchestrate-implementation.md
     - coordinate-subagents.md
     - manage-workflow.md
@@ -101,7 +100,6 @@ dependencies:
 *test
 *validate
 *document
-*patterns
 ```
 
 ### Status and Configuration
