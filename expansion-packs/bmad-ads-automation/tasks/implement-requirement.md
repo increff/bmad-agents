@@ -1,133 +1,54 @@
 <!-- Powered by BMAD™ Core -->
 
-# Implement Requirement - Complete Development Workflow
+# Implement Requirement - Execution Based on Analysis
 
 ## Purpose
 
-Execute the complete development workflow for implementing a requirement across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
+Execute the implementation of a requirement based on the comprehensive analysis results from the analyze-requirement task. This task focuses on actual code implementation, testing, and validation using the detailed change plan created during analysis.
 
 ## Task Instructions
 
-### 1. Initial Setup and Analysis
+### 1. Analysis Review and Validation
 
-**CRITICAL:** This task implements the complete BMAD ADS Automation workflow as defined in the PRD using BMAD personas.
+**CRITICAL:** This task executes implementation based on the comprehensive analysis results from analyze-requirement.md.
 
 **Prerequisites:**
 
-- Requirement document must be provided
+- Comprehensive analysis must be completed via analyze-requirement task
+- Detailed change list must be available
+- Implementation plan must be created
 - All three repositories must be accessible
 - BMAD core agents must be available (@analyst.md, @dev.md, @qa.md)
 
-**Step 1: Load Requirement Document**
+**Step 1: Review Analysis Results**
 
-1. Read the requirement document provided by the user
-2. Parse requirement ID, title, description, and technical requirements
-3. Identify the type of change required (new column, new input, formula change, new module, etc.)
+1. **Load Analysis Results**: Review the comprehensive analysis from analyze-requirement task
+2. **Validate Change List**: Confirm all identified changes are accurate and complete
+3. **Review Implementation Plan**: Confirm implementation strategy and order
+4. **Validate Dependencies**: Confirm all dependencies are correctly identified
+5. **Review Risk Assessment**: Understand implementation risks and mitigation strategies
 
-**Step 1.5: Module Identification and Pattern Analysis**
+**Step 2: Pre-Implementation Validation**
 
-1. **Load Module Abbreviations**: Reference `module-abbreviations.md` for module mapping
-2. **Keyword Matching**: Match requirement keywords to module abbreviations
-3. **Context Validation**: Ensure identified modules make sense for the requirement
-4. **Primary Module Selection**: Identify the main module to modify
-5. **Secondary Modules**: Identify any additional modules that might be affected
-6. **Validate Module Choice**: Prevent incorrect targeting (e.g., ISS vs Distribution)
-7. **Document Module Selection**: Record why specific modules were chosen
-8. **Pattern Recognition**: Identify existing patterns in ModuleProvider, SchemaProvider, FileName, LoadAPI providers
-9. **Registration Analysis**: Analyze what needs to be registered across all three repositories
-10. **Cross-Repository Impact**: Assess impact on Algorithm, LoadAPI, and Config repositories
+1. **Pattern Compliance Check**: Verify all changes follow established patterns
+2. **Dependency Validation**: Ensure all dependencies are correctly identified
+3. **Syntax Validation**: Validate that all code will compile successfully
+4. **Repository Status Check**: Ensure all repositories are in correct state
+5. **Branch Validation**: Confirm feature branches are created and ready
 
-**Step 2: Use @analyst.md for Analysis**
+### 2. Story Creation and Planning
 
-1. **Activate @analyst.md**: Use the analyst persona to analyze the requirement
-2. **Create User Stories**: Generate user stories based on the requirement
-3. **Define Acceptance Criteria**: Create clear acceptance criteria for the implementation
-4. **Update Requirement Document**: Add user stories and acceptance criteria to the requirement document
-
-**Step 3: Repository Crawling - Stage 1 (Analysis Phase)**
-
-1. **Crawl irisx-algo repository:**
-   - Analyze Java modules, abstract classes, data structures, constants
-   - Identify shared dependencies and inheritance patterns
-   - Map existing distribution, depletion, and validation modules
-   - Document current patterns and conventions
-
-2. **Crawl ms-loadapis-ril-final repository:**
-   - Analyze load API classes, common utilities, constants
-   - Identify existing load API patterns and inheritance
-   - Map distribution-specific load APIs
-   - Document current Python patterns
-
-3. **Crawl irisx-config repository:**
-   - Analyze TSV templates, SQL views, configuration files
-   - Identify existing template patterns and naming conventions
-   - Map configuration structures and dependencies
-   - Document current configuration patterns
-
-### 2. Pattern Analysis and Requirement Enhancement
-
-**Step 3: Comprehensive Pattern Discovery and Classification**
-
-1. **Algorithm Repository Patterns**:
-   - Module registration patterns (ModuleProvider, ModuleName, ValidationModuleNames)
-   - File registration patterns (FileName, SchemaProvider)
-   - Data structure patterns (Row classes, File classes, validation patterns)
-   - Business logic patterns (GroupModule, AbstractUtilModuleGroup)
-
-2. **LoadAPI Repository Patterns**:
-   - LoadAPI registration patterns (**init**.py, loadapi_provider.py)
-   - LoadAPI structure patterns (LoadApi, IntegrationLoadApi inheritance)
-   - Validation patterns (pre_validate_initializer, validate_row methods)
-   - Constants patterns (MsgErrors, module-specific constants)
-
-3. **Configuration Repository Patterns**:
-   - SQL view patterns (child-input, child-output, parent-input, interim)
-   - Template patterns (TSV format, export naming conventions)
-   - JSON configuration patterns (module_input.json, module_output.json, upload-files.json)
-   - Database operation patterns (OPENROWSET, BULK file reading)
-
-4. **Cross-Repository Integration Patterns**:
-   - Data flow patterns between repositories
-   - Registration dependencies across repositories
-   - Naming convention consistency patterns
-   - Error handling and validation patterns
-
-**Step 4: Requirement Enhancement**
-
-1. **Pattern Mapping**: Map discovered patterns to requirement types
-2. **Requirement Enhancement**: Enhance requirements with specific implementation details
-3. **Conflict Resolution**: Resolve conflicts between requirements and existing patterns
-4. **Strategy Optimization**: Optimize implementation strategy based on pattern analysis
-
-### 3. Dependency Analysis and Impact Assessment
-
-**Step 5: Shared Dependency Analysis**
-
-1. **Identify Shared Classes**: Find abstract classes like `AbstractAllocationModule`, `BaseIterationRunner`
-2. **Map Dependencies**: Identify all modules that extend shared classes
-3. **Impact Assessment**: Determine impact of changes on dependent modules
-4. **Override Strategy**: Plan override strategy to avoid breaking changes
-
-**Step 6: Repository Mapping**
-
-1. **Direct Dependencies**: Identify modules that directly implement the requirement
-2. **Data Dependencies**: Identify modules that consume/produce affected data
-3. **Configuration Dependencies**: Identify modules that need config updates
-4. **Create Change List**: Generate detailed repository change list
-
-### 4. Story Creation and Planning
-
-**Step 7: Create Implementation Story**
+**Step 3: Create Implementation Story**
 
 1. **Use SM Agent**: Transform to SM agent using `*agent sm`
 2. **Execute Draft Command**: Use `*draft` command with `create-next-story.md` task
-3. **Story Content**: Include enhanced requirements, dependency analysis, and implementation plan
-4. **Acceptance Criteria**: Define clear acceptance criteria for implementation
+3. **Story Content**: Include analysis results, detailed change list, and implementation plan
+4. **Acceptance Criteria**: Define clear acceptance criteria based on analysis results
 5. **Update Requirement Document**: Add story content to the requirement document itself
 
-### 5. Branch Creation and Repository Operations
+### 3. Branch Creation and Repository Operations
 
-**Step 8: Create Feature Branches**
+**Step 4: Create Feature Branches**
 
 1. **Execute Git Operations**: Use `*git-branch` command to create actual feature branches
 2. **Branch Naming**: Use convention `feature/{req-id}-{title}`
@@ -137,56 +58,38 @@ Execute the complete development workflow for implementing a requirement across 
 6. **Repository Status**: Ensure all repositories are on correct branches
 7. **Update Requirement Document**: Add branch URLs and repository information to requirement document
 
-### 6. Pre-Implementation Crawling - Stage 2
+### 4. Implementation Execution
 
-**Step 9: Pre-Implementation Analysis**
-
-1. **Crawl Specific Modules**: Analyze modules identified for changes
-2. **Related Modules**: Check related modules that might be affected
-3. **Existing Templates**: Find and analyze existing templates to follow
-4. **Shared Classes**: Analyze current implementations of shared classes
-
-### 7. Implementation
-
-**Step 10: Use @dev.md for Code Implementation**
+**Step 5: Use @dev.md for Code Implementation**
 
 1. **Activate @dev.md**: Use the developer persona to implement changes
 2. **Execute Develop Story**: Use `*develop-story` command
-3. **Follow Patterns**: Implement changes following discovered patterns
-4. **Template-Based Generation**: Use existing templates for code generation
-5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
+3. **Follow Analysis Results**: Implement changes based on detailed change list from analysis
+4. **Template-Based Generation**: Use existing templates identified during analysis
+5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config) as identified in analysis
 6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
 7. **Update Requirement Document**: Add implementation details and code changes to requirement document
 
-**Step 10.5: Use @qa.md for Basic Testing**
+**Implementation Details Based on Analysis:**
+
+- **Algorithm Repository Changes**: Implement changes identified in analysis (new/modified classes, methods, registrations)
+- **LoadAPI Repository Changes**: Implement LoadAPI changes identified in analysis (new/modified LoadAPI classes, validation, registration)
+- **Configuration Repository Changes**: Implement configuration changes identified in analysis (templates, views, JSON configs)
+- **Schema Synchronization**: Maintain consistency across Java, Python, and SQL schemas as planned in analysis
+
+### 5. Testing and Validation
+
+**Step 6: Use @qa.md for Basic Testing**
 
 1. **Activate @qa.md**: Use the QA persona to create and execute basic tests
-2. **Create Unit Tests**: Generate unit tests for static methods and new functionality
-3. **Test New Data Classes**: Create tests for new data structures and their methods
-4. **Test Static Methods**: Create tests for calculation logic and utility methods
-5. **Test LoadAPI Methods**: Create tests for new LoadAPI functionality
+2. **Create Unit Tests**: Generate unit tests for new functionality identified in analysis
+3. **Test New Data Classes**: Create tests for new data structures identified in analysis
+4. **Test Static Methods**: Create tests for calculation logic identified in analysis
+5. **Test LoadAPI Methods**: Create tests for new LoadAPI functionality identified in analysis
 6. **Execute Tests**: Run basic unit tests to validate implementation
 7. **Document Test Results**: Include test results in the final documentation
 
-**Implementation Details:**
-
-- **Java Changes**: Modify classes, add fields, update methods following existing patterns
-- **Python Changes**: Create load APIs following existing inheritance patterns
-- **Configuration Changes**: Update JSON configs, create TSV templates, create SQL views
-- **Schema Synchronization**: Maintain consistency across Java, Python, and SQL schemas
-
-### 8. Validation Crawling - Stage 3
-
-**Step 11: Validation Analysis**
-
-1. **Crawl Validation Modules**: Analyze validation modules related to changes
-2. **Test Patterns**: Find existing test structures and patterns
-3. **Configuration Validation**: Analyze configuration validation patterns
-4. **Integration Points**: Check integration points and dependencies
-
-### 9. Validation and Testing
-
-**Step 12: Execute Validation**
+**Step 7: Execute Validation**
 
 1. **Use QA Agent**: Transform to QA agent using `*agent qa`
 2. **Run Review QA**: Use `*review-qa` command
@@ -195,13 +98,45 @@ Execute the complete development workflow for implementing a requirement across 
 5. **Schema Validation**: Validate data schemas and configurations
 6. **Update Requirement Document**: Add test cases, test results, and validation outcomes to requirement document
 
-### 10. Documentation and Results
+### 6. Documentation and Results
 
-**Step 13: Push Changes**
+**Step 8: Push Changes**
 
 1. **Push Feature Branches**: Use `*git-push` to push all feature branches to remote repositories
 2. **Verify Remote Branches**: Confirm all branches are available on remote
 3. **Update Branch URLs**: Add remote branch URLs to requirement document
+
+## Summary
+
+This implementation task executes the actual code changes based on the comprehensive analysis results from the analyze-requirement task. The key difference is:
+
+- **Analysis Phase**: Identifies ALL changes, dependencies, and impacts upfront
+- **Implementation Phase**: Executes the changes based on the detailed analysis results
+
+This approach ensures:
+
+- **Complete Visibility**: You know exactly what will be changed before implementation begins
+- **Accurate Implementation**: All changes are based on thorough analysis and pattern recognition
+- **Reduced Risk**: Dependencies and impacts are identified and planned for upfront
+- **Predictable Results**: Implementation follows a detailed plan created during analysis
+
+## Prerequisites
+
+- **MANDATORY**: Complete analysis via analyze-requirement task must be performed first
+- **MANDATORY**: Detailed change list and implementation plan must be available
+- **MANDATORY**: All identified patterns and dependencies must be documented
+- **MANDATORY**: Risk assessment and mitigation strategies must be in place
+
+## Output
+
+The output of this implementation task includes:
+
+- **Implemented Changes**: All code changes as identified in the analysis
+- **Test Results**: Comprehensive test results for all implemented functionality
+- **Validation Results**: Results from all validation modules and tests
+- **Documentation Updates**: Updated requirement document with implementation details
+- **Branch Information**: Feature branch URLs and repository information
+- **Change Summary**: Summary of all implemented changes across all repositories
 
 **Step 14: Update Documentation**
 

@@ -1,12 +1,12 @@
-# Analyze Requirement Task (Simplified)
+# Analyze Requirement Task - Comprehensive Analysis & Change Identification
 
 ## Purpose
 
-Analyze requirement documents and create implementation plans by intelligently selecting relevant steps from the comprehensive implementation steps list.
+Comprehensively analyze requirement documents, crawl all repositories, identify ALL changes required, and create detailed implementation plans. This analysis phase determines exactly what will be modified before any implementation begins.
 
 ## Steps
 
-### 1. Requirement Analysis
+### 1. Requirement Analysis & Understanding
 
 1. **Read and Understand Requirement**:
 
@@ -15,51 +15,331 @@ Analyze requirement documents and create implementation plans by intelligently s
    cat $REQUIREMENT_FILE
    ```
 
-2. **Identify Key Components**:
-   - **Primary Module**: Main module affected by the requirement
-   - **Secondary Modules**: Any additional modules that might be affected
-   - **Data Structures**: Input/output data structures involved
-   - **Business Logic**: Business rules and calculations involved
-   - **Integration Points**: Any cross-module or external integrations
-   - **Cross-Repository Impact**: Impact on Algorithm, LoadAPI, and Config repositories
-   - **Registration Requirements**: What needs to be registered across repositories
+2. **Parse Requirement Details**:
+   - **Requirement ID**: Extract requirement identifier
+   - **Title**: Extract requirement title
+   - **Description**: Parse detailed description
+   - **Technical Requirements**: Identify specific technical needs
+   - **Business Logic**: Extract business rules and calculations
+   - **Data Requirements**: Identify input/output data structures
+   - **Integration Points**: Identify cross-module or external integrations
 
-### 2. Module Identification and Pattern Analysis
+3. **Requirement Classification**:
+   - **Change Type**: NEW TABLE/DATA STRUCTURE, NEW MODULE/SUBMODULE, UPDATE EXISTING LOGIC, MODIFY EXISTING, NEW COLUMN/FIELD, DELETE/REMOVE, INTEGRATION, PERFORMANCE, VALIDATION, REPORTING, CONFIGURATION, TESTING
+   - **Complexity Level**: Simple, Medium, Complex, Cross-Repository
+   - **Impact Scope**: Single Module, Multiple Modules, Cross-Repository, System-Wide
 
-1. **Identify Target Modules**:
+### 2. Comprehensive Repository Crawling - Stage 1
+
+**CRITICAL**: This comprehensive crawling identifies ALL changes that will be required before implementation begins.
+
+#### **A. Algorithm Repository (irisx-algo) Crawling**
+
+1. **Module Structure Analysis**:
 
    ```bash
    # Find relevant modules based on requirement keywords
-   grep -r "distribution\|iss\|otb\|eoss" $REPO_PATH/src/main/java/com/increff/irisx/module/ | head -10
+   grep -r "distribution\|iss\|otb\|eoss\|allocation\|depletion" $ALGO_REPO_PATH/src/main/java/com/increff/irisx/module/ | head -20
+
+   # Analyze module structure and inheritance
+   find $ALGO_REPO_PATH/src/main/java/com/increff/irisx/module/ -name "*.java" | xargs grep -l "extends\|implements"
+
+   # Check abstract classes and shared dependencies
+   grep -r "AbstractAllocationModule\|BaseIterationRunner\|AbstractUtilModuleGroup" $ALGO_REPO_PATH/src/main/java/
    ```
 
-2. **Analyze Module Dependencies**:
+2. **Data Structure Analysis**:
 
    ```bash
-   # Check for cross-module dependencies
-   grep -r "import.*module" $REPO_PATH/src/main/java/com/increff/irisx/module/
+   # Find Row classes and data structures
+   find $ALGO_REPO_PATH/src/main/java/com/increff/irisx/ -name "*Row.java" | head -10
+
+   # Find File classes and data structures
+   find $ALGO_REPO_PATH/src/main/java/com/increff/irisx/ -name "*File.java" | head -10
+
+   # Analyze existing data patterns
+   grep -r "private.*String\|private.*Integer\|private.*Double" $ALGO_REPO_PATH/src/main/java/com/increff/irisx/module/ | head -20
    ```
 
-3. **Pattern Recognition Analysis**:
+3. **Registration Pattern Analysis**:
 
    ```bash
    # Check ModuleProvider patterns
-   grep -r "ModuleProvider\|ModuleName\|ValidationModuleNames" $REPO_PATH/src/main/java/com/increff/irisx/
+   grep -r "ModuleProvider\|ModuleName\|ValidationModuleNames" $ALGO_REPO_PATH/src/main/java/com/increff/irisx/
 
    # Check SchemaProvider and FileName patterns
-   grep -r "SchemaProvider\|FileName" $REPO_PATH/src/main/java/com/increff/irisx/
+   grep -r "SchemaProvider\|FileName" $ALGO_REPO_PATH/src/main/java/com/increff/irisx/
 
-   # Check LoadAPI provider patterns
-   grep -r "loadapi_provider\|__init__.py" $LOADAPI_PATH/loadapi/
-
-   # Check configuration patterns
-   ls $CONFIG_PATH/template/ | grep -E "(export|child-input|child-output)"
+   # Check Args classes and constants
+   find $ALGO_REPO_PATH/src/main/java/com/increff/irisx/ -name "*Args.java" | head -10
+   find $ALGO_REPO_PATH/src/main/java/com/increff/irisx/ -name "*Constants.java" | head -10
    ```
 
-4. **Registration Analysis**:
-   - **Algorithm Repository**: ModuleProvider, ModuleName, ValidationModuleNames, SchemaProvider, FileName
-   - **LoadAPI Repository**: **init**.py files, loadapi_provider.py, MsgErrors.py
-   - **Configuration Repository**: module_input.json, module_output.json, upload-files.json
+#### **B. LoadAPI Repository (ms-loadapis-ril-final) Crawling**
+
+1. **LoadAPI Structure Analysis**:
+
+   ```bash
+   # Find LoadAPI classes and inheritance patterns
+   find $LOADAPI_REPO_PATH/loadapi/ -name "*.py" | xargs grep -l "LoadApi\|IntegrationLoadApi"
+
+   # Check LoadAPI provider patterns
+   grep -r "loadapi_provider\|__init__.py" $LOADAPI_REPO_PATH/loadapi/
+
+   # Analyze existing LoadAPI patterns
+   find $LOADAPI_REPO_PATH/loadapi/ -name "*.py" | xargs grep -l "pre_validate_initializer\|validate_row"
+   ```
+
+2. **Validation and Error Handling Analysis**:
+
+   ```bash
+   # Check MsgErrors and validation patterns
+   find $LOADAPI_REPO_PATH/ -name "MsgErrors.py" | xargs cat
+
+   # Analyze validation methods
+   grep -r "def validate\|def pre_validate" $LOADAPI_REPO_PATH/loadapi/ | head -20
+
+   # Check constants and configuration
+   find $LOADAPI_REPO_PATH/ -name "constants.py" | xargs cat
+   ```
+
+#### **C. Configuration Repository (irisx-config) Crawling**
+
+1. **Template and View Analysis**:
+
+   ```bash
+   # Check TSV templates
+   ls $CONFIG_REPO_PATH/template/ | grep -E "(export|child-input|child-output|parent-input|interim)"
+
+   # Check SQL views
+   find $CONFIG_REPO_PATH/ -name "*.sql" | head -10
+
+   # Analyze template patterns
+   find $CONFIG_REPO_PATH/template/ -name "*.tsv" | head -5 | xargs head -3
+   ```
+
+2. **Configuration File Analysis**:
+
+   ```bash
+   # Check JSON configuration files
+   find $CONFIG_REPO_PATH/ -name "module_input.json" -o -name "module_output.json" -o -name "upload-files.json" | head -10
+
+   # Analyze configuration patterns
+   find $CONFIG_REPO_PATH/ -name "*.json" | head -5 | xargs cat
+   ```
+
+### 3. Pattern Discovery and Classification
+
+#### **A. Algorithm Repository Patterns**
+
+1. **Module Registration Patterns**:
+   - ModuleProvider registration with ModuleName and ValidationModuleNames
+   - File registration with FileName and SchemaProvider
+   - Args class patterns for module parameters
+   - Constants class patterns for module-specific constants
+
+2. **Data Structure Patterns**:
+   - Row class patterns with private fields and getters/setters
+   - File class patterns for data file handling
+   - Validation patterns in data classes
+   - Business logic patterns in GroupModule and AbstractUtilModuleGroup
+
+3. **Inheritance Patterns**:
+   - AbstractAllocationModule inheritance patterns
+   - BaseIterationRunner usage patterns
+   - Shared utility class patterns
+
+#### **B. LoadAPI Repository Patterns**
+
+1. **LoadAPI Registration Patterns**:
+   - **init**.py file patterns for module registration
+   - loadapi_provider.py patterns for provider registration
+   - MsgErrors.py patterns for error handling
+
+2. **LoadAPI Structure Patterns**:
+   - LoadApi and IntegrationLoadApi inheritance patterns
+   - pre_validate_initializer method patterns
+   - validate_row method patterns
+   - Constants and configuration patterns
+
+#### **C. Configuration Repository Patterns**
+
+1. **SQL View Patterns**:
+   - child-input, child-output, parent-input, interim view patterns
+   - OPENROWSET and BULK file reading patterns
+   - Database operation patterns
+
+2. **Template Patterns**:
+   - TSV format and export naming conventions
+   - Template structure and column patterns
+   - Export file naming patterns
+
+3. **JSON Configuration Patterns**:
+   - module_input.json, module_output.json, upload-files.json patterns
+   - Configuration structure and naming conventions
+   - Database configuration patterns
+
+### 4. Dependency Analysis and Impact Assessment
+
+#### **A. Shared Dependency Analysis**
+
+1. **Identify Shared Classes**:
+
+   ```bash
+   # Find abstract classes and shared dependencies
+   grep -r "AbstractAllocationModule\|BaseIterationRunner\|AbstractUtilModuleGroup" $ALGO_REPO_PATH/src/main/java/
+
+   # Map all modules that extend shared classes
+   grep -r "extends AbstractAllocationModule\|extends BaseIterationRunner" $ALGO_REPO_PATH/src/main/java/
+   ```
+
+2. **Impact Assessment**:
+   - **Direct Dependencies**: Modules that directly implement the requirement
+   - **Data Dependencies**: Modules that consume/produce affected data
+   - **Configuration Dependencies**: Modules that need config updates
+   - **Cascading Impact**: Secondary and tertiary impacts of changes
+
+#### **B. Cross-Repository Dependency Mapping**
+
+1. **Data Flow Dependencies**:
+   - Algorithm → LoadAPI data flow patterns
+   - LoadAPI → Configuration data flow patterns
+   - Configuration → Algorithm data flow patterns
+
+2. **Registration Dependencies**:
+   - Module registration dependencies across repositories
+   - File registration dependencies across repositories
+   - Configuration registration dependencies across repositories
+
+### 5. Detailed Change Identification
+
+#### **A. Algorithm Repository Changes**
+
+1. **Module Changes**:
+   - **New Modules**: Identify if new modules need to be created
+   - **Existing Module Modifications**: Identify specific files to modify
+   - **Registration Updates**: Identify ModuleProvider, SchemaProvider, FileName updates needed
+
+2. **Data Structure Changes**:
+   - **New Row Classes**: Identify new data classes needed
+   - **New File Classes**: Identify new file handling classes needed
+   - **Existing Class Modifications**: Identify fields to add/modify/remove
+
+3. **Business Logic Changes**:
+   - **New Methods**: Identify new methods to implement
+   - **Modified Methods**: Identify existing methods to modify
+   - **New Calculations**: Identify new business logic to implement
+
+#### **B. LoadAPI Repository Changes**
+
+1. **LoadAPI Changes**:
+   - **New LoadAPI Classes**: Identify new LoadAPI classes needed
+   - **Existing LoadAPI Modifications**: Identify LoadAPI classes to modify
+   - **Registration Updates**: Identify **init**.py and loadapi_provider.py updates
+
+2. **Validation Changes**:
+   - **New Validation Methods**: Identify new validation logic needed
+   - **Modified Validation**: Identify existing validation to modify
+   - **Error Handling Updates**: Identify MsgErrors.py updates needed
+
+#### **C. Configuration Repository Changes**
+
+1. **Template Changes**:
+   - **New TSV Templates**: Identify new templates needed
+   - **Modified Templates**: Identify existing templates to modify
+   - **Export File Updates**: Identify export file changes needed
+
+2. **SQL View Changes**:
+   - **New SQL Views**: Identify new views needed
+   - **Modified Views**: Identify existing views to modify
+   - **Database Schema Updates**: Identify schema changes needed
+
+3. **Configuration File Changes**:
+   - **JSON Config Updates**: Identify module_input.json, module_output.json, upload-files.json updates
+   - **New Configuration Files**: Identify new configuration files needed
+
+### 6. Implementation Plan Creation
+
+#### **A. Change Summary**
+
+1. **Repository Impact Summary**:
+   - **Algorithm Repository**: List all files to be created/modified/deleted
+   - **LoadAPI Repository**: List all files to be created/modified/deleted
+   - **Configuration Repository**: List all files to be created/modified/deleted
+
+2. **Change Complexity Assessment**:
+   - **Simple Changes**: Single file modifications
+   - **Medium Changes**: Multiple file modifications in single repository
+   - **Complex Changes**: Cross-repository changes
+   - **System-Wide Changes**: Changes affecting multiple modules
+
+#### **B. Implementation Strategy**
+
+1. **Implementation Order**:
+   - **Phase 1**: Algorithm repository changes (core business logic)
+   - **Phase 2**: LoadAPI repository changes (data loading)
+   - **Phase 3**: Configuration repository changes (templates and views)
+   - **Phase 4**: Integration testing and validation
+
+2. **Risk Assessment**:
+   - **Low Risk**: Simple additions without breaking changes
+   - **Medium Risk**: Modifications to existing functionality
+   - **High Risk**: Changes to shared classes or core functionality
+
+3. **Testing Strategy**:
+   - **Unit Tests**: Tests for new methods and classes
+   - **Integration Tests**: Tests for cross-repository integration
+   - **Validation Tests**: Tests for data validation and business logic
+   - **Regression Tests**: Tests to ensure no existing functionality is broken
+
+### 7. Final Analysis Report
+
+#### **A. Comprehensive Change List**
+
+1. **Detailed File Changes**:
+   - **Algorithm Repository**: Complete list of files to create/modify/delete with specific changes
+   - **LoadAPI Repository**: Complete list of files to create/modify/delete with specific changes
+   - **Configuration Repository**: Complete list of files to create/modify/delete with specific changes
+
+2. **Dependency Impact**:
+   - **Affected Modules**: List of all modules that will be impacted
+   - **Shared Class Impact**: Impact on abstract classes and shared utilities
+   - **Cross-Repository Impact**: Impact on data flow and integration points
+
+3. **Implementation Requirements**:
+   - **New Classes**: List of all new classes to be created
+   - **Modified Classes**: List of all existing classes to be modified
+   - **New Methods**: List of all new methods to be implemented
+   - **Modified Methods**: List of all existing methods to be modified
+
+#### **B. Validation and Testing Plan**
+
+1. **Pre-Implementation Validation**:
+   - **Pattern Compliance**: Ensure all changes follow established patterns
+   - **Dependency Validation**: Ensure all dependencies are correctly identified
+   - **Syntax Validation**: Ensure all code will compile successfully
+
+2. **Post-Implementation Testing**:
+   - **Unit Testing**: Comprehensive unit tests for all new functionality
+   - **Integration Testing**: Tests for cross-repository integration
+   - **Validation Testing**: Tests for data validation and business logic
+   - **Regression Testing**: Tests to ensure no existing functionality is broken
+
+## Output
+
+The output of this comprehensive analysis includes:
+
+1. **Complete Change Identification**: Detailed list of ALL files that will be created, modified, or deleted
+2. **Dependency Analysis**: Complete analysis of all dependencies and impacts
+3. **Pattern Compliance**: Verification that all changes follow established patterns
+4. **Implementation Plan**: Detailed step-by-step implementation plan
+5. **Risk Assessment**: Assessment of implementation risks and mitigation strategies
+6. **Testing Strategy**: Comprehensive testing plan for validation
+7. **Validation Checklist**: Checklist to ensure all changes are properly implemented
+
+## Integration
+
+This comprehensive analysis phase integrates with the VIRAT agent to provide complete visibility into what changes will be made before any implementation begins, ensuring accurate and predictable development workflows.
 
 ### 3. Implementation Type Determination
 
