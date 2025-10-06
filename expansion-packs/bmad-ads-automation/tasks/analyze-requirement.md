@@ -1,105 +1,90 @@
-# Analyze Requirement Task - Simplified
+# Analyze Requirement Task (Simplified)
 
 ## Purpose
 
-Analyze requirement documents to identify correct modules, create implementation plans, and ensure proper module targeting.
+Analyze requirement documents and create implementation plans by intelligently selecting relevant steps from the comprehensive implementation steps list.
 
 ## Steps
 
 ### 1. Requirement Analysis
 
-1. **Read Requirement Document**: Load and parse the requirement document
-2. **Extract Keywords**: Identify key terms, modules, and business concepts
-3. **Parse Context**: Understand the business context and scope
-4. **Identify Dependencies**: Find related requirements or dependencies
+1. **Read and Understand Requirement**:
+
+   ```bash
+   # Read the requirement document
+   cat $REQUIREMENT_FILE
+   ```
+
+2. **Identify Key Components**:
+   - **Primary Module**: Main module affected by the requirement
+   - **Secondary Modules**: Any additional modules that might be affected
+   - **Data Structures**: Input/output data structures involved
+   - **Business Logic**: Business rules and calculations involved
+   - **Integration Points**: Any cross-module or external integrations
 
 ### 2. Module Identification
 
-1. **Load Module Abbreviations**: Reference `module-abbreviations.md` for module mapping
-2. **Keyword Matching**: Match requirement keywords to module abbreviations
-3. **Context Validation**: Ensure identified modules make sense for the requirement
-4. **Primary Module Selection**: Identify the main module to modify
-5. **Secondary Modules**: Identify any additional modules that might be affected
-
-#### Module Identification Rules
-
-- **"ideal size"** → ISS (Ideal Size Set) module
-- **"distribution"** → Distribution module
-- **"buying" or "otb"** → OTB (Open To Buy) module
-- **"end of season" or "eoss"** → EOSS module
-- **"business intelligence" or "bi"** → BI module
-
-#### Context-Based Identification
-
-- **Store + Category + Size** → ISS module
-- **Store + SKU + Allocation** → Distribution module
-- **Buying + Procurement** → OTB module
-- **Sale + Pricing** → EOSS module
-
-### 3. Targeted File Discovery
-
-1. **Get Repository Paths**: Load paths from configuration
+1. **Identify Target Modules**:
 
    ```bash
-   REPO_PATH=$(grep "irisx-algo:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
-   LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
-   CONFIG_PATH=$(grep "irisx-config:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+   # Find relevant modules based on requirement keywords
+   grep -r "distribution\|iss\|otb\|eoss" $REPO_PATH/src/main/java/com/increff/irisx/module/ | head -10
    ```
 
-2. **Find Related Files**: Discover files related to the requirement
-
+2. **Analyze Module Dependencies**:
    ```bash
-   # Find files in all repositories
-   find $REPO_PATH -name "*{REQUIREMENT_KEYWORD}*" -o -name "*{MODULE_NAME}*"
-   find $LOADAPI_PATH -name "*{REQUIREMENT_KEYWORD}*" -o -name "*{MODULE_NAME}*"
-   find $CONFIG_PATH -name "*{REQUIREMENT_KEYWORD}*" -o -name "*{MODULE_NAME}*"
-
-   # Find files containing requirement keywords
-   grep -r "{REQUIREMENT_KEYWORD}" $REPO_PATH/src/ $LOADAPI_PATH/ $CONFIG_PATH/
+   # Check for cross-module dependencies
+   grep -r "import.*module" $REPO_PATH/src/main/java/com/increff/irisx/module/
    ```
 
-### 4. File Operations Planning
+### 3. Implementation Type Determination
 
-1. **Identify File Operations**: Determine what needs to be edited, added, or deleted
-   - **EDIT**: Existing files that need changes
-   - **ADD**: New files that need to be created
-   - **DELETE**: Files that need to be removed
+**Determine the primary implementation type from these options:**
 
-2. **Determine Implementation Type**:
-   - **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
-   - **NEW MODULE/SUBMODULE**: Create entirely new modules with complete structure
-   - **UPDATE EXISTING LOGIC**: Modify existing business logic, formulas, calculations without creating new files
-   - **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
-   - **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
-   - **DELETE/REMOVE**: Remove files or functionality
-   - **INTEGRATION**: Cross-module or system integration requirements
-   - **PERFORMANCE**: Optimization and scalability requirements
-   - **VALIDATION**: Input/output validation requirements
-   - **REPORTING**: Report generation and export requirements
-   - **CONFIGURATION**: System and business configuration requirements
-   - **TESTING**: Unit, integration, and end-to-end testing requirements
+- **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
+- **NEW MODULE/SUBMODULE**: Create entirely new modules with complete structure
+- **UPDATE EXISTING LOGIC**: Modify existing business logic, formulas, calculations without creating new files
+- **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
+- **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
+- **DELETE/REMOVE**: Remove files or functionality
+- **INTEGRATION**: Cross-module or system integration requirements
+- **PERFORMANCE**: Optimization and scalability requirements
+- **VALIDATION**: Input/output validation requirements
+- **REPORTING**: Report generation and export requirements
+- **CONFIGURATION**: System and business configuration requirements
+- **TESTING**: Unit, integration, and end-to-end testing requirements
 
-3. **For NEW TABLE/DATA STRUCTURE Requirements**:
-   - **Algorithm Repository**: Create new data classes AND edit module classes to USE them
-   - **LoadAPI Repository**: Create new LoadAPI classes AND register them
-   - **Config Repository**: Create new SQL views, templates, sync, export files
+### 4. Step Selection from Comprehensive List
 
-4. **For NEW MODULE/SUBMODULE Requirements**:
-   - **Algorithm Repository**: Create complete new module structure with all necessary classes
-   - **LoadAPI Repository**: Create new LoadAPI module with all necessary APIs
-   - **Config Repository**: Create complete configuration structure for new module
+**Use `comprehensive-implementation-steps.md` to intelligently select which steps are needed:**
 
-5. **For UPDATE EXISTING LOGIC Requirements**:
-   - **Algorithm Repository**: Edit existing module classes to update business logic, formulas, calculations
-   - **LoadAPI Repository**: Edit existing LoadAPI classes to update processing logic
-   - **Config Repository**: Edit existing SQL views, templates, or configurations if needed
+1. **Analyze Requirement Context**:
+   - What files need to be created/modified/deleted?
+   - What modules are involved?
+   - What data structures are affected?
+   - What business logic needs to be implemented?
 
-6. **For NEW COLUMN/FIELD Requirements**:
-   - **Algorithm Repository**: Edit existing data classes to add new fields AND update calculation logic
-   - **LoadAPI Repository**: Update existing LoadAPI schemas if needed
-   - **Config Repository**: Update existing SQL views, templates, export files
+2. **Select Relevant Steps**:
+   - **Module Analysis & Identification**: Always needed
+   - **Data Structure Operations**: If data structures are involved
+   - **Module Structure Operations**: If modules are involved
+   - **Validation Operations**: If validation is needed
+   - **LoadAPI Operations**: If LoadAPIs are involved
+   - **Configuration Operations**: If configuration changes are needed
+   - **Registration Operations**: If new components need registration
+   - **Business Logic Operations**: If business logic is involved
+   - **Integration Operations**: If integration is needed
+   - **Performance Operations**: If performance optimization is needed
+   - **Reporting Operations**: If reporting is needed
+   - **Testing Operations**: If testing is needed
+   - **Cleanup Operations**: If cleanup is needed
+   - **Validation & Testing**: Always needed
+   - **Documentation Operations**: Always needed
 
-7. **Impact Analysis**: Check dependencies and references
+### 5. File Impact Analysis
+
+1. **Identify Files to Modify**:
+
    ```bash
    # Check for references to files being modified
    for file in $(find $REPO_PATH $LOADAPI_PATH $CONFIG_PATH -name "*{MODULE_NAME}*" -type f); do
@@ -107,300 +92,82 @@ Analyze requirement documents to identify correct modules, create implementation
    done
    ```
 
-### 8. Database Operations Planning (Conditional)
-
-**ONLY required when changing input/output files or data structures:**
-
-#### When Database Operations ARE Required:
-
-- Adding new input/output fields to existing modules
-- Creating new input/output data structures
-- Modifying existing input/output schemas
-- Adding new modules with input/output requirements
-
-#### When Database Operations are NOT Required:
-
-- Pure business logic changes (formulas, calculations)
-- Internal module refactoring without schema changes
-- Bug fixes that don't affect data structures
-- Performance optimizations without schema changes
-
-#### Database Operations (if required):
-
-1. **SQL Views**: Create/modify `view-creation/child-input-{component}.sql` and `child-output-{component}.sql`
-2. **Templates**: Create/modify `template/export_{module}_input_{component}_template.tsv`
-3. **Sync Operations**: Create/modify `sync/{module}_{component}.sql`
-4. **Export Operations**: Create/modify `export/export_{module}_{type}_{component}.sql`
-5. **Configuration Updates**: Update `module_input.json`, `module_output.json`, `upload-files.json`
-
-### 9. Implementation Plan Creation
-
-1. **File Operation Mapping**: Map requirements to specific file operations (edit/add/delete)
-2. **File Identification**: Identify specific files to modify, create, or remove
-3. **Pattern Matching**: Find existing patterns to follow from actual code
-4. **Dependency Analysis**: Identify any cross-module dependencies
-5. **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED in module logic
-6. **Implementation Steps**: Create step-by-step implementation plan
-
-#### For NEW TABLE/DATA STRUCTURE Requirements:
-
-**Algorithm Repository Operations:**
-
-- **CREATE**: New data classes (e.g., `StoreSkuRosOverrideData.java`, `StoreSkuRosOverrideRow.java`)
-- **CREATE**: New file classes (e.g., `StoreSkuRosOverrideFile.java` in `file/input/distribution/`)
-- **EDIT**: Registration files (`provider/SchemaProvider.java`, file classes in `file/input/`)
-- **EDIT**: Module classes to USE new data (`module/distribution/DistributionAllocationModule.java`, etc.)
-
-**LoadAPI Repository Operations:**
-
-- **CREATE**: New LoadAPI classes (e.g., `StoreSkuRosOverrideLoadApi.py` in `loadapi/distribution/`)
-- **EDIT**: Registration files (`loadapi/__init__.py`, `loadapi/distribution/__init__.py`)
-
-**Config Repository Operations:**
-
-- **CREATE**: New SQL views (e.g., `child-input-input_dist_store_sku_ros_override.sql` in `view-creation/`)
-- **CREATE**: New templates (e.g., `export_dist_input_store_sku_ros_override_template.tsv` in `template/`)
-- **CREATE**: New sync files (e.g., `dist_store_sku_ros_override.sql` in `sync/`)
-- **CREATE**: New export files (e.g., `export_dist_input_store_sku_ros_override.sql` in `export/`)
-- **EDIT**: Configuration files (`module_input.json`, `module_output.json`)
-
-#### For NEW MODULE/SUBMODULE Requirements:
-
-**Algorithm Repository Operations:**
-
-- **CREATE**: Complete new module directory (e.g., `module/{newModule}/`)
-- **CREATE**: Main module class (e.g., `{NewModule}AllocationModule.java`)
-- **CREATE**: Helper class (e.g., `{NewModule}Helper.java`)
-- **CREATE**: Data classes (e.g., `{NewModule}Data.java`, `{NewModule}ModuleData.java`)
-- **CREATE**: Input/Output file classes (e.g., `{NewModule}InputFile.java`, `{NewModule}OutputFile.java`)
-- **CREATE**: Input/Output row classes (e.g., `{NewModule}InputRow.java`, `{NewModule}OutputRow.java`)
-- **EDIT**: Main application files to register new module
-
-**LoadAPI Repository Operations:**
-
-- **CREATE**: New module directory (e.g., `loadapi/{newModule}/`)
-- **CREATE**: Main LoadAPI class (e.g., `{NewModule}LoadApi.py`)
-- **CREATE**: Input LoadAPI classes (e.g., `{NewModule}InputLoadApi.py`)
-- **CREATE**: Output LoadAPI classes (e.g., `{NewModule}OutputLoadApi.py`)
-- **CREATE**: Module-specific `__init__.py` file
-- **EDIT**: Main `__init__.py` to register new module
-
-**Config Repository Operations:**
-
-- **CREATE**: Complete input template structure (e.g., `export_{newModule}_input_*_template.tsv`)
-- **CREATE**: Complete output template structure (e.g., `export_{newModule}_output_*_template.tsv`)
-- **CREATE**: Complete SQL view structure (e.g., `child-input-{newModule}_*.sql`, `child-output-{newModule}_*.sql`)
-- **CREATE**: Complete sync structure (e.g., `{newModule}_*.sql`)
-- **CREATE**: Complete export structure (e.g., `export_{newModule}_*.sql`)
-- **EDIT**: `module_input.json` - Add complete new module input configuration
-- **EDIT**: `module_output.json` - Add complete new module output configuration
-- **EDIT**: `upload-files.json` - Add new module file upload configuration
-
-#### For UPDATE EXISTING LOGIC Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing module classes (e.g., `DistributionAllocationModule.java` - update business logic)
-- **EDIT**: Existing helper classes (e.g., `DistributionHelper.java` - update calculation methods)
-- **EDIT**: Existing data classes (e.g., update getters/setters, validation logic)
-- **EDIT**: Existing file classes (e.g., update file processing logic)
-- **EDIT**: Existing row classes (e.g., update data handling logic)
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes (e.g., update data processing logic)
-- **EDIT**: Existing validation methods (e.g., update validation rules)
-- **EDIT**: Existing utility methods (e.g., update data transformation logic)
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing SQL views (e.g., update query logic, add new calculations)
-- **EDIT**: Existing templates (e.g., update template structure if needed)
-- **EDIT**: Existing configurations (e.g., update business rules in JSON configs)
-
-#### For NEW COLUMN/FIELD Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing data classes (e.g., `DistFaqOutputRow.java` - add new field like `coverDays`)
-- **EDIT**: Existing file classes (e.g., `DistFaqOutputFile.java` - add new column handling)
-- **EDIT**: Module classes to calculate new field (e.g., `DistributionAllocationModule.java` - add formula logic)
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes if schema changes needed
-- **EDIT**: Registration files if new imports needed
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing SQL views (e.g., update `child-output-dist_faq.sql` to include new column)
-- **EDIT**: Existing templates (e.g., update `export_dist_output_faq_template.tsv`)
-- **EDIT**: Existing export files (e.g., update `export_dist_output_faq.sql`)
-- **EDIT**: Configuration files (`module_output.json` - add new output field)
-
-#### For INTEGRATION Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing module classes to add integration logic
-- **EDIT**: Existing helper classes to add integration utilities
-- **EDIT**: Existing data classes to add integration fields
-- **CREATE**: New integration classes if needed
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes to add integration endpoints
-- **EDIT**: Existing validation methods to add integration validation
-- **CREATE**: New integration LoadAPI classes if needed
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing SQL views to add integration queries
-- **EDIT**: Existing configurations to add integration settings
-- **CREATE**: New integration templates if needed
-
-#### For PERFORMANCE Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing module classes to optimize performance
-- **EDIT**: Existing helper classes to optimize calculations
-- **EDIT**: Existing data classes to optimize data structures
-- **CREATE**: New performance monitoring classes if needed
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes to optimize data loading
-- **EDIT**: Existing validation methods to optimize validation
-- **CREATE**: New performance monitoring LoadAPI classes if needed
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing SQL views to optimize queries
-- **EDIT**: Existing configurations to add performance settings
-- **CREATE**: New performance monitoring templates if needed
-
-#### For VALIDATION Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing validation modules to add new validation rules
-- **EDIT**: Existing data classes to add validation methods
-- **CREATE**: New validation classes if needed
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes to add validation logic
-- **EDIT**: Existing validation methods to add new rules
-- **CREATE**: New validation LoadAPI classes if needed
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing configurations to add validation settings
-- **CREATE**: New validation templates if needed
-
-#### For REPORTING Requirements:
-
-**Algorithm Repository Operations:**
-
-- **CREATE**: New report generation classes
-- **EDIT**: Existing output modules to add report functionality
-- **CREATE**: New report data classes
-
-**LoadAPI Repository Operations:**
-
-- **CREATE**: New report LoadAPI classes
-- **EDIT**: Existing output LoadAPI classes to add report endpoints
-
-**Config Repository Operations:**
-
-- **CREATE**: New report templates
-- **CREATE**: New report SQL views
-- **EDIT**: Existing configurations to add report settings
-
-#### For CONFIGURATION Requirements:
-
-**Algorithm Repository Operations:**
-
-- **EDIT**: Existing configuration classes to add new settings
-- **CREATE**: New configuration classes if needed
-
-**LoadAPI Repository Operations:**
-
-- **EDIT**: Existing LoadAPI classes to add configuration endpoints
-- **CREATE**: New configuration LoadAPI classes if needed
-
-**Config Repository Operations:**
-
-- **EDIT**: Existing configuration files to add new settings
-- **CREATE**: New configuration templates if needed
-
-#### For TESTING Requirements:
-
-**Algorithm Repository Operations:**
-
-- **CREATE**: New test classes for modules
-- **CREATE**: New test data classes
-- **EDIT**: Existing test classes to add new test cases
-
-**LoadAPI Repository Operations:**
-
-- **CREATE**: New test LoadAPI classes
-- **EDIT**: Existing test LoadAPI classes to add new test cases
-
-**Config Repository Operations:**
-
-- **CREATE**: New test configuration files
-- **CREATE**: New test templates
-
-### 10. Validation
-
-1. **Module Correctness**: Verify identified modules are correct for the requirement
-2. **File Existence**: Confirm target files exist in repositories
-3. **Pattern Consistency**: Ensure implementation follows existing patterns
-4. **Scope Validation**: Verify implementation scope matches requirement
-5. **Architecture Validation**: Verify Java modules use `db().select()`, Python APIs handle file loading
+2. **Check File Existence**:
+   ```bash
+   # Verify target files exist before deciding on create vs update operations
+   ls -la $REPO_PATH/src/main/java/com/increff/irisx/module/{MODULE_NAME}/
+   ls -la $LOADAPI_PATH/loadapi/{MODULE_NAME}/
+   ls -la $CONFIG_PATH/template/export_{MODULE_NAME}_*
+   ```
+
+### 6. Pattern Recognition
+
+1. **Find Existing Patterns**:
+
+   ```bash
+   # Look for similar implementations to follow patterns
+   find $REPO_PATH -name "*{SIMILAR_MODULE}*" -type f | head -5
+   ```
+
+2. **Analyze Naming Conventions**:
+   ```bash
+   # Check existing naming patterns
+   ls $REPO_PATH/src/main/java/com/increff/irisx/module/ | grep -E "(Module|Group)"
+   ```
+
+### 7. Implementation Plan Creation
+
+1. **Create Step-by-Step Plan**:
+   - List selected steps from comprehensive-implementation-steps.md
+   - Order steps logically (dependencies first)
+   - Add specific file paths and operations
+   - Include validation steps
+
+2. **Add Context-Specific Details**:
+   - Specific file names to create/modify
+   - Specific class names and methods
+   - Specific configuration updates
+   - Specific validation requirements
 
 ## Success Criteria
 
-- [ ] Correct modules identified based on requirement keywords and context
-- [ ] Target files confirmed to exist in repositories
-- [ ] Implementation plan created with clear steps
-- [ ] Patterns identified for consistent implementation
-- [ ] Validation completed successfully
-- [ ] No incorrect module targeting (e.g., ISS vs Distribution)
-- [ ] **Implementation type identified** - NEW TABLE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE vs INTEGRATION vs PERFORMANCE vs VALIDATION vs REPORTING vs CONFIGURATION vs TESTING
-- [ ] **For NEW TABLE: Usage analysis completed** - Module classes identified to USE new data
-- [ ] **For NEW MODULE/SUBMODULE: Module structure analysis completed** - Complete module structure identified
-- [ ] **For UPDATE EXISTING LOGIC: Logic analysis completed** - Existing logic identified for modification
-- [ ] **For NEW COLUMN/FIELD: Formula analysis completed** - Calculation logic identified for new field
-- [ ] **For INTEGRATION: Integration analysis completed** - Integration points and dependencies identified
-- [ ] **For PERFORMANCE: Performance analysis completed** - Performance bottlenecks and optimization opportunities identified
-- [ ] **For VALIDATION: Validation analysis completed** - Validation rules and requirements identified
-- [ ] **For REPORTING: Reporting analysis completed** - Report structure and data requirements identified
-- [ ] **For CONFIGURATION: Configuration analysis completed** - Configuration settings and requirements identified
-- [ ] **For TESTING: Testing analysis completed** - Test scenarios and requirements identified
-- [ ] **CONDITIONAL: Database operations planned** - ONLY if input/output changes
-- [ ] **CRITICAL: Data loading architecture validated** - Java modules use `db().select()`, Python APIs handle file loading
-- [ ] **CRITICAL: Load API registration validated** - Any new Load API registered in `__init__.py` files
-- [ ] **CRITICAL: Input schema registration validated** - Any new input registered in SchemaProvider
-- [ ] **CRITICAL: Output sync registration validated** - Any new output registered in Util Output Sync Module
+- [ ] **Requirement understood** - Key components and objectives identified
+- [ ] **Implementation type determined** - Correct type selected from 12 options
+- [ ] **Relevant steps selected** - Appropriate steps chosen from comprehensive list
+- [ ] **Files identified** - Target files for modification/creation identified
+- [ ] **Patterns recognized** - Existing patterns identified for consistency
+- [ ] **Implementation plan created** - Step-by-step plan with specific details
+- [ ] **Dependencies analyzed** - Cross-module dependencies identified
+- [ ] **Validation planned** - Validation and testing steps included
 
 ## Output
 
-- **Identified Modules**: List of primary and secondary modules
-- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE vs INTEGRATION vs PERFORMANCE vs VALIDATION vs REPORTING vs CONFIGURATION vs TESTING
-- **Target Files**: Specific files to modify, create, or delete in each module
-- **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED
-- **Module Structure Analysis**: For NEW MODULE/SUBMODULE requirements, identify complete module structure
-- **Logic Analysis**: For UPDATE EXISTING LOGIC requirements, identify existing logic to modify
-- **Formula Analysis**: For NEW COLUMN/FIELD requirements, identify calculation logic and dependencies
-- **Integration Analysis**: For INTEGRATION requirements, identify integration points and dependencies
-- **Performance Analysis**: For PERFORMANCE requirements, identify bottlenecks and optimization opportunities
-- **Validation Analysis**: For VALIDATION requirements, identify validation rules and requirements
-- **Reporting Analysis**: For REPORTING requirements, identify report structure and data requirements
-- **Configuration Analysis**: For CONFIGURATION requirements, identify configuration settings and requirements
-- **Testing Analysis**: For TESTING requirements, identify test scenarios and requirements
-- **Implementation Plan**: Step-by-step implementation approach
+- **Implementation Type**: Selected from 12 possible types
+- **Selected Steps**: List of relevant steps from comprehensive-implementation-steps.md
+- **Target Files**: Specific files to modify, create, or delete
+- **Implementation Plan**: Step-by-step plan with specific details
 - **Pattern References**: Existing patterns to follow
-- **Validation Results**: Confirmation of module and file selection
+- **Dependencies**: Cross-module dependencies identified
+- **Validation Plan**: Validation and testing approach
+
+## AI Decision Logic
+
+The AI will:
+
+1. **Analyze the requirement** to understand what needs to be implemented
+2. **Determine the implementation type** based on the requirement content
+3. **Select relevant steps** from comprehensive-implementation-steps.md based on:
+   - Implementation type
+   - File existence (create vs update)
+   - Module dependencies
+   - Data flow requirements
+   - Business logic requirements
+4. **Create a specific implementation plan** with:
+   - Exact file paths
+   - Specific class names
+   - Specific method names
+   - Specific configuration updates
+5. **Skip irrelevant steps** to avoid unnecessary work
+6. **Follow existing patterns** for consistency
+
+This approach eliminates duplication while providing comprehensive coverage of all possible implementation scenarios.

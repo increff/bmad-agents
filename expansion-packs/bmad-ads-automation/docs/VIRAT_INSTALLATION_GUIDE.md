@@ -74,7 +74,46 @@ We need to add a new input mechanism to store Store-SKU level ROS overrides.
 - Data is properly stored and accessible
 ```
 
-### Run VIRAT
+### Using VIRAT in Cursor IDE
+
+1. **Open your project in Cursor**
+2. **Create your requirement file** (e.g., `my-requirement.md`)
+3. **Use Cursor's AI chat** to run VIRAT:
+   - Open Cursor's AI chat (Cmd+L or Ctrl+L)
+   - Type: `@virat analyze and implement this requirement: my-requirement.md`
+   - Or: `@virat help me implement the Store-SKU ROS Override feature`
+
+4. **Alternative: Use terminal in Cursor**:
+
+   ```bash
+   # Using NPX (recommended)
+   npx bmad-method run virat --requirement my-requirement.md
+
+   # Or interactive mode
+   npx bmad-method run virat --interactive
+   ```
+
+### Using VIRAT with Claude AI
+
+1. **Upload your requirement file** to Claude
+2. **Provide context** about your repositories:
+
+   ```
+   I have three repositories:
+   - irisx-algo: Java/Spring Boot (core business logic)
+   - ms-loadapis-ril-final: Python (data loading APIs)
+   - irisx-config: Configuration/SQL (config files and templates)
+
+   Please analyze this requirement and provide implementation guidance.
+   ```
+
+3. **Ask Claude to act as VIRAT**:
+   ```
+   Please act as the VIRAT agent and help me implement this requirement across my three repositories.
+   Provide step-by-step implementation guidance.
+   ```
+
+### Traditional Command Line Usage
 
 ```bash
 # Using NPX (recommended)
@@ -120,6 +159,21 @@ npm run dev -- --verbose
 ```
 
 ## Quick Start Checklist
+
+### For Cursor IDE Users:
+
+- [ ] Install Node.js and prerequisites
+- [ ] Open your project in Cursor
+- [ ] Create your first requirement document
+- [ ] Use Cursor's AI chat: `@virat analyze and implement this requirement: my-requirement.md`
+
+### For Claude AI Users:
+
+- [ ] Upload your requirement file to Claude
+- [ ] Provide repository context to Claude
+- [ ] Ask Claude to act as VIRAT agent
+
+### For Command Line Users:
 
 - [ ] Install Node.js and prerequisites
 - [ ] Run `npx bmad-method install` (or manual setup)
