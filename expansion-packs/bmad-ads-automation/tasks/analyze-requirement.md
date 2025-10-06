@@ -345,6 +345,118 @@ Analyze requirement documents to identify correct modules, create implementation
 - **Tests**: Unit tests for new functionality
 - **Pattern**: Follow existing test patterns
 
+### 7.2 Implementation Plan Output
+
+**CRITICAL**: After completing the analysis, output the implementation plan in the following format:
+
+```
+## Implementation Plan
+
+Step 1: Create Input Row Class
+File: {ModuleName}Row.java
+Location: /irisx-algo/src/main/java/com/increff/irisx/row/input/{module}/
+Fields: {fields based on requirement analysis}
+Pattern: Follow existing row class patterns
+
+Step 2: Create Load API
+File: {ModuleName}LoadApi.py
+Location: /ms-loadapis-ril-final/loadapi/{module}/
+Pattern: Follow existing LoadAPI structure
+Reference: Use similar LoadAPI as template
+
+Step 3: Register Load API
+File: /ms-loadapis-ril-final/loadapi/__init__.py
+Import ID: import_{module}_input_{feature_name}
+Pattern: Follow existing registration patterns
+
+Step 4: Update Configuration
+File: /irisx-config/module_input.json
+Input: input_{module}_{feature_name}
+Pattern: Follow existing input configuration patterns
+
+Step 5: Update Filename Constants
+File: /irisx-algo/src/main/java/com/increff/irisx/constants/FileName.java
+Constant: {MODULE}_{FEATURE_NAME}
+Pattern: Follow existing filename constant patterns
+
+Step 6: Update Schema Provider
+File: /irisx-algo/src/main/java/com/increff/irisx/provider/SchemaProvider.java
+Import: Add {module} input file import
+Pattern: Follow existing schema provider patterns
+
+Step 7: Database Operations - Create Input View
+File: /irisx-config/view-creation/child-input-{module}-{feature}.sql
+View: child_input_{module}_{feature}
+Pattern: Follow existing input view patterns
+
+Step 8: Database Operations - Create Output View
+File: /irisx-config/view-creation/child-output-{module}-{feature}.sql
+View: child_output_{module}_{feature}
+Pattern: Follow existing output view patterns
+
+Step 9: Database Operations - Setup Sync
+File: /irisx-config/sync/{module}-{feature}-sync.yaml
+Config: Sync configuration for data flow
+Pattern: Follow existing sync configuration patterns
+
+Step 10: Database Operations - Setup Export
+File: /irisx-config/export/{module}-{feature}-export.yaml
+Config: Export configuration for data delivery
+Pattern: Follow existing export configuration patterns
+
+Step 11: Database Operations - Create Template Queries
+File: /irisx-config/template-queries/{module}-{feature}-queries.sql
+Queries: Reusable parameterized queries
+Pattern: Follow existing template query patterns
+
+Step 12: Database Operations - Update Schema
+File: /irisx-config/migrations/add_{module}_{feature}.sql
+Schema: Database schema modifications
+Pattern: Follow existing migration patterns
+
+Step 13: Database Operations - Update Module Output Configuration
+File: /irisx-config/module_output.json
+Output: output_{module}_{feature_name}
+Pattern: Follow existing output configuration patterns
+
+Step 14: Database Operations - Update Upload Files Configuration
+File: /irisx-config/upload-files.json
+Config: File upload configuration for new feature
+Pattern: Follow existing upload files configuration patterns
+
+Step 15: Update Module Data Class
+File: /irisx-algo/src/main/java/com/increff/irisx/data/{ModuleName}Data.java
+Fields: Add new fields based on requirement
+Pattern: Follow existing module data patterns
+
+Step 16: Update Module Implementation
+File: /irisx-algo/src/main/java/com/increff/irisx/module/{module}/{ModuleName}Module.java
+Logic: Implement business logic for new feature
+Pattern: Follow existing module implementation patterns
+
+Step 17: Update Module Data Row
+File: /irisx-algo/src/main/java/com/increff/irisx/row/{module}/{ModuleName}DataRow.java
+Fields: Add new fields for data processing
+Pattern: Follow existing module data row patterns
+
+Step 18: Create Validation Rules
+File: /irisx-algo/src/main/java/com/increff/irisx/module/validation/{ModuleName}Validation.java
+Rules: Business validation rules for new feature
+Pattern: Follow existing validation patterns
+
+Step 19: Update Constants
+File: /irisx-algo/src/main/java/com/increff/irisx/constants/{ModuleName}Constants.java
+Constants: Add new constants for the feature
+Pattern: Follow existing constants patterns
+
+Step 20: Create Tests
+File: /irisx-algo/src/test/java/com/increff/irisx/module/{module}/{ModuleName}ModuleTest.java
+Tests: Unit tests for new functionality
+Pattern: Follow existing test patterns
+```
+
+**CRITICAL**: Always output ALL 20 steps in the implementation plan. Do not skip any steps. Each step must include the file path, purpose, and pattern reference.
+
 ### 8. Validation
 
 1. **Module Correctness**: Verify identified modules are correct for the requirement
