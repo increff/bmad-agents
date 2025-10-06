@@ -44,18 +44,18 @@ A single comprehensive list of all possible implementation steps across all requ
 
 ### 5. **LoadAPI Operations**
 
-- [ ] **Create New LoadAPI Directory**: Create new LoadAPI module directory
-- [ ] **Create Main LoadAPI Class**: Create main LoadAPI class (e.g., `{Module}LoadApi.py`)
-- [ ] **Create Input LoadAPI Class**: Create input LoadAPI class (e.g., `{Module}InputLoadApi.py`)
-- [ ] **Create Output LoadAPI Class**: Create output LoadAPI class (e.g., `{Module}OutputLoadApi.py`)
+- [ ] **Create New LoadAPI Directory**: Create new LoadAPI module directory (e.g., `{module}/`)
+- [ ] **Create Main LoadAPI Class**: Create main LoadAPI class extending `LoadApi` (e.g., `{Module}LoadApi.py`)
+- [ ] **Create Integration LoadAPI Class**: Create integration LoadAPI class extending `IntegrationLoadApi` (e.g., `{System}IntegrationApi.py`)
 - [ ] **Update Existing LoadAPI Classes**: Modify existing LoadAPI classes with new logic
-- [ ] **Register LoadAPI Classes**: Update `__init__.py` files to register new LoadAPI classes
-- [ ] **Create Integration LoadAPI Classes**: Create integration LoadAPI classes (e.g., `{system}_integration_api.py`)
-- [ ] **Create Common LoadAPI Classes**: Create common LoadAPI classes in `common/` directory
-- [ ] **Create Constant LoadAPI Classes**: Create constant LoadAPI classes in `constant/` directory
-- [ ] **Create Master Config LoadAPI Classes**: Create master config LoadAPI classes in `master_config/` directory
-- [ ] **Create WSSI LoadAPI Classes**: Create WSSI (Warehouse Store Stock Integration) LoadAPI classes
-- [ ] **Create Transactional LoadAPI Classes**: Create transactional LoadAPI classes for data transactions
+- [ ] **Register LoadAPI Classes**: Update `__init__.py` files to register new LoadAPI classes (import statements)
+- [ ] **Update LoadAPI Provider**: Add new LoadAPI to `loadapi_provider.py` with import_id mapping
+- [ ] **Create LoadAPI Constants**: Create module-specific constants in `constant/{Module}Constants.py`
+- [ ] **Update MsgErrors**: Add new error messages to `MsgErrors.py` (English/Spanish pairs)
+- [ ] **Create LoadAPI Headers**: Define TSV_HEADER and DB_HEADER constants in LoadAPI class
+- [ ] **Implement Validation**: Add `pre_validate_initializer()` and `validate_row()` methods
+- [ ] **Implement Data Processing**: Add data transformation methods (e.g., `__get_{data_type}()`)
+- [ ] **Update Common Imports**: Import from `loadapi.common` (LoadApi, ValidationUtil, ObjectMaps, ConversionUtil)
 
 ### 6. **Configuration Operations**
 
@@ -218,6 +218,9 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **SQL View Patterns**: Follow child-input, child-output, parent-input, interim naming patterns with OPENROWSET structure
 - **Template Patterns**: TSV templates with headers and sample data, following export*{module}*{type}\_template.tsv naming
 - **JSON Configuration**: Update module_input.json (sync/download), module_output.json (module arrays), upload-files.json (file metadata)
+- **LoadAPI Registration**: New LoadAPIs must be registered in `__init__.py`, `loadapi_provider.py`, and `loadapi_provider.py` with import_id mapping
+- **LoadAPI Structure**: Extend LoadApi/IntegrationLoadApi, define TSV_HEADER/DB_HEADER, implement validation and data processing methods
+- **LoadAPI Constants**: Create module-specific constants and update MsgErrors.py with English/Spanish error message pairs
 
 ### **Pattern Recognition**
 

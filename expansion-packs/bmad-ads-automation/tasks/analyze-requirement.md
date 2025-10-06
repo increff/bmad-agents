@@ -75,7 +75,7 @@ Analyze requirement documents and create implementation plans by intelligently s
    - **Data Structure Operations**: If data structures need to be created, modified, or deleted (Row classes, File classes, FileName constants, SchemaProvider registration)
    - **Module Structure Operations**: If new modules need to be created or existing modules restructured
    - **Validation Operations**: If validation rules need to be added, modified, or removed (most operations require validation)
-   - **LoadAPI Operations**: If data loading, processing, or integration logic needs changes
+   - **LoadAPI Operations**: If data loading, processing, or integration logic needs changes (LoadAPI classes, provider registration, constants, validation)
    - **Configuration Operations**: If SQL views, templates, or configuration files need changes (child-input/output views, TSV templates, JSON configs)
    - **Registration Operations**: If new components need to be registered in providers or constants (ModuleProvider, ModuleName, ValidationModuleNames)
    - **Business Logic Operations**: If business logic, calculations, or processing rules need changes
