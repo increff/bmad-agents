@@ -96,6 +96,13 @@ persona:
 - **Processing Requirements**: "This requirement needs data processing - analyze existing processing patterns and implement the logic"
 - **Integration Requirements**: "This requirement needs integration with existing modules - analyze existing integration patterns and implement accordingly"
 
+#### **LoadAPI Accuracy Guidance**
+- **Import ID Verification**: "Check the FileName constant value and ensure LoadAPI import_id matches exactly"
+- **Base Class Verification**: "Verify the correct base class (LoadApi vs IntegrationLoadApi) by checking existing LoadAPI implementations"
+- **Registration Verification**: "Ensure LoadAPI is registered in both loadapi_provider.py and main __init__.py files"
+- **Validation Accuracy**: "Check the actual data types in Row classes and ensure validation logic matches exactly"
+- **Header Consistency**: "Verify TSV_HEADER and DB_HEADER match the actual data structure from Row classes"
+
 #### **Context Provision Strategy**
 - **Requirement Context**: Provide clear requirement context and business purpose
 - **Existing Code Context**: Point to existing similar implementations for pattern recognition
@@ -109,6 +116,14 @@ persona:
 - **Calculation Inputs**: If new inputs are added, Cursor should implement calculations that use them
 - **Processing Data**: If new data structures exist, Cursor should implement processing logic
 - **Integration Points**: If new modules exist, Cursor should implement integration logic
+
+#### **Accuracy Validation Requirements**
+- **Import ID Matching**: LoadAPI import_id MUST match the FileName constant value exactly
+- **Base Class Verification**: LoadAPI MUST extend the correct base class (LoadApi or IntegrationLoadApi)
+- **Registration Completeness**: LoadAPI MUST be registered in both loadapi_provider.py AND main __init__.py
+- **Validation Logic Accuracy**: Validation logic MUST match actual data types and business requirements
+- **Header Consistency**: TSV_HEADER and DB_HEADER MUST match the actual data structure
+- **Error Message Accuracy**: Error messages MUST be accurate and match the actual validation requirements
 
 # All commands require * prefix when used (e.g., *help)
 commands:
