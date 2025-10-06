@@ -24,7 +24,7 @@ Execute the complete development workflow for implementing a requirement across 
 2. Parse requirement ID, title, description, and technical requirements
 3. Identify the type of change required (new column, new input, formula change, new module, etc.)
 
-**Step 1.5: Module Identification**
+**Step 1.5: Module Identification and Pattern Analysis**
 
 1. **Load Module Abbreviations**: Reference `module-abbreviations.md` for module mapping
 2. **Keyword Matching**: Match requirement keywords to module abbreviations
@@ -33,6 +33,9 @@ Execute the complete development workflow for implementing a requirement across 
 5. **Secondary Modules**: Identify any additional modules that might be affected
 6. **Validate Module Choice**: Prevent incorrect targeting (e.g., ISS vs Distribution)
 7. **Document Module Selection**: Record why specific modules were chosen
+8. **Pattern Recognition**: Identify existing patterns in ModuleProvider, SchemaProvider, FileName, LoadAPI providers
+9. **Registration Analysis**: Analyze what needs to be registered across all three repositories
+10. **Cross-Repository Impact**: Assess impact on Algorithm, LoadAPI, and Config repositories
 
 **Step 2: Use @analyst.md for Analysis**
 
@@ -63,13 +66,31 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 2. Pattern Analysis and Requirement Enhancement
 
-**Step 3: Pattern Discovery and Classification**
+**Step 3: Comprehensive Pattern Discovery and Classification**
 
-1. **Structural Patterns**: Analyze file organization, naming conventions, directory structures
-2. **Code Patterns**: Identify coding patterns, design patterns, architectural patterns
-3. **Data Patterns**: Analyze data flow patterns, schema patterns, transformation patterns
-4. **Configuration Patterns**: Identify configuration patterns, parameter patterns, environment patterns
-5. **Validation Patterns**: Analyze validation patterns, error handling patterns, testing patterns
+1. **Algorithm Repository Patterns**:
+   - Module registration patterns (ModuleProvider, ModuleName, ValidationModuleNames)
+   - File registration patterns (FileName, SchemaProvider)
+   - Data structure patterns (Row classes, File classes, validation patterns)
+   - Business logic patterns (GroupModule, AbstractUtilModuleGroup)
+
+2. **LoadAPI Repository Patterns**:
+   - LoadAPI registration patterns (**init**.py, loadapi_provider.py)
+   - LoadAPI structure patterns (LoadApi, IntegrationLoadApi inheritance)
+   - Validation patterns (pre_validate_initializer, validate_row methods)
+   - Constants patterns (MsgErrors, module-specific constants)
+
+3. **Configuration Repository Patterns**:
+   - SQL view patterns (child-input, child-output, parent-input, interim)
+   - Template patterns (TSV format, export naming conventions)
+   - JSON configuration patterns (module_input.json, module_output.json, upload-files.json)
+   - Database operation patterns (OPENROWSET, BULK file reading)
+
+4. **Cross-Repository Integration Patterns**:
+   - Data flow patterns between repositories
+   - Registration dependencies across repositories
+   - Naming convention consistency patterns
+   - Error handling and validation patterns
 
 **Step 4: Requirement Enhancement**
 

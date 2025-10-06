@@ -13,12 +13,17 @@ Create and execute basic unit tests for static methods and new functionality imp
    - New data classes and their getters/setters
    - New LoadAPI methods
    - New calculation logic and formulas
+   - Module registration and validation logic
+   - File registration and schema validation
+   - LoadAPI registration and provider logic
 
 2. **Determine Test Scope**:
    - **Unit Tests**: Test individual methods and classes
    - **Static Method Tests**: Focus on pure functions and utilities
    - **Data Validation Tests**: Test new data structures
    - **Formula Tests**: Test calculation logic (e.g., coverDays = inv/ros)
+   - **Registration Tests**: Test module, file, and LoadAPI registration
+   - **Pattern Validation Tests**: Test adherence to established patterns
 
 ### 2. Java Unit Tests (irisx-algo)
 

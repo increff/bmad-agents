@@ -48,6 +48,9 @@ persona:
     - Provide single-command workflow to eliminate manual agent switching
     - Generate clear, actionable error messages with recovery guidance
     - Support configuration-driven repository management
+    - Follow comprehensive repository patterns for Algorithm, LoadAPI, and Config repositories
+    - Ensure proper registration of modules, files, LoadAPIs, and configurations
+    - Maintain consistency with existing codebase patterns and naming conventions
     - Provide real-time progress tracking and status visibility
     - Include comprehensive testing with unit tests for static methods
     - Perform actual git operations and repository modifications
@@ -436,21 +439,46 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Error Handling**: Comprehensive error handling and rollback for database operations
 - **Performance Optimization**: Optimizes database operations for performance
 
-### CRITICAL: Data Loading Architecture Rules
+### CRITICAL: Comprehensive Repository Pattern Rules
+
+#### Data Loading Architecture Rules
 
 - **Java Modules**: NEVER implement file-based data loading in Java modules
 - **Java Modules**: ALWAYS use `db().select()` pattern to load data from database
 - **Python Load APIs**: Handle all file-based data loading and database insertion
 - **Architecture Separation**: Java modules consume data, Python APIs provide data
-- **Pattern Validation**: Before implementing any data loading, verify the correct pattern exists
-- **CRITICAL: Load API Registration**: Any new Python Load API MUST be registered in `__init__.py` files (there are 2 files)
-- **CRITICAL: Load API Discovery**: Always check existing `__init__.py` files to understand registration pattern
-- **CRITICAL: Input Schema Registration**: Any new input in algorithm MUST be part of SchemaProvider and Filename
-- **CRITICAL: Config Input JSON**: Any new input MUST be part of input JSON in config
-- **CRITICAL: Input Discovery**: Always check existing SchemaProvider, Filename, and input JSON patterns
-- **CRITICAL: Output Sync Registration**: Any new output MUST be part of Util Output Sync Module
-- **CRITICAL: Output CAAS JSON**: Any new output MUST be part of Output CAAS JSON
-- **CRITICAL: Output Discovery**: Always check existing Util Output Sync Module and Output CAAS JSON patterns
+
+#### Algorithm Repository Patterns
+
+- **Module Registration**: New modules MUST be registered in ModuleProvider.java with ModuleName constants
+- **Validation Requirements**: Most operations require ValidationModule and ValidationConstants, register in GroupModule
+- **File Registration**: New data files MUST be registered in FileName.java, SchemaProvider.java, and configuration JSONs
+- **Row Classes**: Simple POJOs with public fields
+- **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders() and read() methods
+- **FileName Constants**: snake_case naming, no extensions
+
+#### LoadAPI Repository Patterns
+
+- **LoadAPI Registration**: New LoadAPIs MUST be registered in **init**.py, loadapi_provider.py with import_id mapping
+- **LoadAPI Structure**: Extend LoadApi/IntegrationLoadApi, define TSV_HEADER/DB_HEADER, implement validation and data processing methods
+- **LoadAPI Constants**: Create module-specific constants and update MsgErrors.py with English/Spanish error message pairs
+- **Directory Organization**: Module-specific directories (e.g., iss/, analysis/, integration/)
+- **Validation Methods**: Implement pre_validate_initializer() and validate_row() methods
+
+#### Configuration Repository Patterns
+
+- **SQL View Patterns**: Follow child-input, child-output, parent-input, interim naming patterns with OPENROWSET structure
+- **Template Patterns**: TSV templates with headers and sample data, following export*{module}*{type}\_template.tsv naming
+- **JSON Configuration**: Update module_input.json (sync/download), module_output.json (module arrays), upload-files.json (file metadata)
+- **View Creation**: Use OPENROWSET pattern with BULK file reading for child-input views
+- **Template Generation**: TSV format with headers and sample data
+
+#### Cross-Repository Integration Rules
+
+- **Pattern Validation**: Before implementing any change, verify the correct pattern exists across all repositories
+- **Registration Discovery**: Always check existing patterns in ModuleProvider, SchemaProvider, FileName, LoadAPI providers, and configuration JSONs
+- **Consistency Maintenance**: Follow established naming conventions and architectural patterns
+- **Dependency Analysis**: Analyze cross-repository dependencies before making changes
 
 ### Progress Tracking
 
