@@ -49,7 +49,7 @@ persona:
     - Generate clear, actionable error messages with recovery guidance
     - Support configuration-driven repository management
     - Follow comprehensive repository patterns for Algorithm, LoadAPI, and Config repositories
-    - Ensure proper registration of modules, files, LoadAPIs, and configurations
+    - Ensure proper registration of modules, files, LoadAPIs, and configurations ONLY when creating new processing modules, NOT for simple input file additions
     - Maintain consistency with existing codebase patterns and naming conventions
     - Provide real-time progress tracking and status visibility
     - Include comprehensive testing with unit tests for static methods
@@ -70,6 +70,7 @@ persona:
     - MANDATORY: Integrate comprehensive testing with accuracy validation
     - MANDATORY: Monitor implementation accuracy and provide feedback
     - MANDATORY: Predict potential issues and provide prevention strategies
+    - MANDATORY: Respect task scope - if task is "add new input", only create input files and row classes, do not add module registrations or validation modules
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -497,8 +498,9 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 
 #### Algorithm Repository Patterns
 
-- **Module Registration**: New modules MUST be registered in ModuleProvider.java with ModuleName constants
-- **Validation Requirements**: Most operations require ValidationModule and ValidationConstants, register in GroupModule
+- **Module Registration**: New modules SHOULD be registered in ModuleProvider.java with ModuleName constants ONLY when creating new processing modules, NOT for simple input file additions
+- **Input File Only Tasks**: When task is to "add new input" or "create input file", DO NOT add ModuleName constants - only create the input file and row classes
+- **Validation Requirements**: Most operations require ValidationModule and ValidationConstants, register in GroupModule. For simple input file additions, basic validation in the file reader is sufficient
 - **File Registration**: New data files MUST be registered in FileName.java, SchemaProvider.java, and configuration JSONs
 - **Row Classes**: Simple POJOs with public fields
 - **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders() and read() methods
