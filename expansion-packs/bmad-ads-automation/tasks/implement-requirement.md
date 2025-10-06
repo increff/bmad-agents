@@ -10,13 +10,13 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 1. Initial Setup and Analysis
 
-**CRITICAL:** This task implements the complete BMAD ADS Automation workflow as defined in the PRD.
+**CRITICAL:** This task implements the complete BMAD ADS Automation workflow as defined in the PRD using BMAD personas.
 
 **Prerequisites:**
 
 - Requirement document must be provided
 - All three repositories must be accessible
-- BMAD core agents must be available
+- BMAD core agents must be available (@analyst.md, @dev.md, @qa.md)
 
 **Step 1: Load Requirement Document**
 
@@ -34,7 +34,14 @@ Execute the complete development workflow for implementing a requirement across 
 6. **Validate Module Choice**: Prevent incorrect targeting (e.g., ISS vs Distribution)
 7. **Document Module Selection**: Record why specific modules were chosen
 
-**Step 2: Repository Crawling - Stage 1 (Analysis Phase)**
+**Step 2: Use @analyst.md for Analysis**
+
+1. **Activate @analyst.md**: Use the analyst persona to analyze the requirement
+2. **Create User Stories**: Generate user stories based on the requirement
+3. **Define Acceptance Criteria**: Create clear acceptance criteria for the implementation
+4. **Update Requirement Document**: Add user stories and acceptance criteria to the requirement document
+
+**Step 3: Repository Crawling - Stage 1 (Analysis Phase)**
 
 1. **Crawl irisx-algo repository:**
    - Analyze Java modules, abstract classes, data structures, constants
@@ -120,15 +127,25 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 7. Implementation
 
-**Step 10: Code Implementation**
+**Step 10: Use @dev.md for Code Implementation**
 
-1. **Use Dev Agent**: Transform to Dev agent using `*agent dev`
+1. **Activate @dev.md**: Use the developer persona to implement changes
 2. **Execute Develop Story**: Use `*develop-story` command
 3. **Follow Patterns**: Implement changes following discovered patterns
 4. **Template-Based Generation**: Use existing templates for code generation
 5. **Make Actual File Changes**: Modify actual repository files (Java, Python, Config)
 6. **Commit Changes**: Use `*git-commit` to commit changes to feature branches
 7. **Update Requirement Document**: Add implementation details and code changes to requirement document
+
+**Step 10.5: Use @qa.md for Basic Testing**
+
+1. **Activate @qa.md**: Use the QA persona to create and execute basic tests
+2. **Create Unit Tests**: Generate unit tests for static methods and new functionality
+3. **Test New Data Classes**: Create tests for new data structures and their methods
+4. **Test Static Methods**: Create tests for calculation logic and utility methods
+5. **Test LoadAPI Methods**: Create tests for new LoadAPI functionality
+6. **Execute Tests**: Run basic unit tests to validate implementation
+7. **Document Test Results**: Include test results in the final documentation
 
 **Implementation Details:**
 
