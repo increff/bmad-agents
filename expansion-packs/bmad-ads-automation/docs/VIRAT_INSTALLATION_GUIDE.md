@@ -1,83 +1,57 @@
-# VIRAT Agent - Quick Start Guide
-
-## 🚀 **Install VIRAT in 2 Minutes**
+# VIRAT Agent - Quick Setup Guide
 
 VIRAT (Virtual Intelligent Repository Automation Tool) automates development workflows across multiple repositories.
 
-## 📋 **Prerequisites**
+## Prerequisites
 
-- **Node.js** (Version 16+) - [Download here](https://nodejs.org/)
-- **Git** - [Download here](https://git-scm.com/downloads)
-- **Cursor IDE** or **Claude Desktop** - For AI-powered development
+- **Node.js** (Version 16+)
+- **Git** (Version 2.30+)
+- **Java** (Version 11+) and **Maven** (Version 3.6+)
+- **Python** (Version 3.8+)
 
----
+## Installation
 
-## 🛠️ **Installation**
-
-### **Quick Install (Recommended)**
+### Quick Setup (Recommended)
 
 ```bash
-# Install VIRAT
+# Install and run VIRAT using NPX
 npx bmad-method install
 ```
 
-### **Set Repository Paths**
+### Manual Setup
 
 ```bash
-# Set your repository paths
+# Clone repository
+git clone https://github.com/increff/bmad-agents.git
+cd bmad-agents
+git checkout bmad-ads-automation-clean-implementation
+
+# Install dependencies
+npm install
+```
+
+## Configuration
+
+Set up your repository paths in `config.yaml`:
+
+```yaml
+repositories:
+  irisx-algo: '/path/to/your/irisx-algo'
+  ms-loadapis-ril-final: '/path/to/your/ms-loadapis-ril-final'
+  irisx-config: '/path/to/your/irisx-config'
+```
+
+Or use environment variables:
+
+```bash
 export IRISX_ALGO_PATH="/path/to/your/irisx-algo"
 export LOADAPI_PATH="/path/to/your/ms-loadapis-ril-final"
 export CONFIG_PATH="/path/to/your/irisx-config"
 ```
 
-### **Clone Required Repositories**
+## Usage
 
-```bash
-# Clone the algorithm repository (main repository)
-git clone https://github.com/increff/irisx-algo.git
-cd irisx-algo
-git checkout main  # or your working branch
-
-# Clone other required repositories
-git clone https://github.com/increff/ms-loadapis-ril-final.git
-git clone https://github.com/increff/irisx-config.git
-```
-
-That's it! VIRAT is ready to use.
-
----
-
-## 🎯 **Usage with Cursor/Claude**
-
-### **Method 1: Using Cursor IDE**
-
-1. **Open Cursor IDE** and navigate to your project directory
-2. **Create a requirement file** (e.g., `my-requirement.md`)
-3. **Use Cursor's AI chat** to run VIRAT:
-   ```
-   @virat Please analyze and implement this requirement: [paste your requirement]
-   ```
-
-### **Method 2: Using Claude Desktop**
-
-1. **Open Claude Desktop** application
-2. **Upload your requirement file** or paste the content
-3. **Use this prompt**:
-   ```
-   I'm using the VIRAT agent for automated development. Please help me implement this requirement using the VIRAT workflow.
-   ```
-
-### **Method 3: Command Line**
-
-```bash
-# Run VIRAT with your requirement
-npx bmad-method run virat --requirement my-requirement.md
-
-# Or use interactive mode
-npx bmad-method run virat --interactive
-```
-
-### **Sample Requirement**
+### Create a Requirement
 
 Create a file like `my-requirement.md`:
 
@@ -86,140 +60,84 @@ Create a file like `my-requirement.md`:
 
 ## Business Context
 
-We need to add a new input mechanism to store Store-SKU level ROS (Rate of Sale) overrides in the distribution module.
+We need to add a new input mechanism to store Store-SKU level ROS overrides.
 
 ## Technical Requirements
 
 - Create new data structure for Store-SKU ROS Override
 - Add LoadAPI for data ingestion
 - Update configuration files
-- Create SQL views and templates
 
 ## Acceptance Criteria
 
 - New input can be loaded via LoadAPI
 - Data is properly stored and accessible
-- Configuration is updated across all repositories
 ```
 
-### **Common Commands**
+### Run VIRAT
+
+```bash
+# Using NPX (recommended)
+npx bmad-method run virat --requirement my-requirement.md
+
+# Or interactive mode
+npx bmad-method run virat --interactive
+```
+
+## Supported Requirement Types
+
+1. **NEW TABLE**: `# ADD a new input in distribution to store STORE SKU LEVEL ROS OVERRIDE`
+2. **NEW COLUMN**: `# ADD A NEW COLUMN COVER DAYS IN INTERIM DIST FAQ, FORMULA IS INV/ROS`
+3. **MODIFY**: `# UPDATE existing distribution logic to handle new business rules`
+4. **DELETE**: `# REMOVE deprecated fields from distribution module`
+
+## Troubleshooting
+
+### Common Issues
+
+**Repository path not found:**
+
+- Verify paths in `config.yaml` or environment variables
+- Ensure repositories are cloned and accessible
+
+**Authentication failed:**
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+**Java/Maven issues:**
+
+- Install Java 11+ and Maven
+- Set JAVA_HOME environment variable
+
+**Debug mode:**
+
+```bash
+export VIRAT_DEBUG=true
+npm run dev -- --verbose
+```
+
+## Quick Start Checklist
+
+- [ ] Install Node.js and prerequisites
+- [ ] Run `npx bmad-method install` (or manual setup)
+- [ ] Set repository paths
+- [ ] Create your first requirement document
+- [ ] Run VIRAT with your requirement
+
+## Getting Help
 
 ```bash
 # List available agents
 npx bmad-method list
 
-# Get help
+# Get VIRAT help
 npx bmad-method help virat
 
 # Check status
 npx bmad-method status virat
 ```
 
----
-
-## 🔧 **Troubleshooting**
-
-### **Common Issues**
-
-**Repository path not found?**
-
-- Check your environment variables are set correctly
-- Ensure repositories are cloned and accessible
-
-**Git authentication issues?**
-
-- Set up SSH keys or personal access tokens
-- Configure Git credentials: `git config --global user.name "Your Name"`
-
-**Need help?**
-
-- Run `npx bmad-method help virat`
-- Check the logs for detailed error messages
-
----
-
-## 🧪 **Basic Testing with VIRAT**
-
-### **Testing Overview**
-
-VIRAT includes basic testing capabilities focused on static methods and utility functions:
-
-#### **Test Types Supported**
-
-- **Unit Tests**: Basic unit tests for static methods
-- **Static Method Tests**: Tests for utility functions and helper methods
-- **Configuration Tests**: Basic validation of configuration files
-- **Code Quality Tests**: Basic code style and quality checks
-
-#### **Running Basic Tests**
-
-**Using NPX Installation:**
-
-```bash
-# Run basic unit tests
-npx bmad-method run virat --test --type unit
-
-# Run static method tests
-npx bmad-method run virat --test --type static
-
-# Generate test report
-npx bmad-method run virat --test --report
-```
-
-### **Test Case Examples**
-
-#### **Java Static Method Test Example**
-
-```java
-@Test
-public void testCalculateCoverDays() {
-    // Arrange
-    double inventory = 100.0;
-    double ros = 10.0;
-
-    // Act
-    double result = DistributionUtil.calculateCoverDays(inventory, ros);
-
-    // Assert
-    assertEquals(10.0, result, 0.01);
-}
-```
-
-#### **Python Static Function Test Example**
-
-```python
-def test_validate_input_data():
-    # Arrange
-    input_data = {"store": 123, "sku": 456}
-
-    # Act
-    result = ValidationUtil.validate_input_data(input_data)
-
-    # Assert
-    assert result is True
-    assert "store" in input_data
-    assert "sku" in input_data
-```
-
-### **Test Reports**
-
-VIRAT generates basic test reports including:
-
-- **Test Results**: Pass/fail status for all tests
-- **Coverage Analysis**: Basic test coverage metrics
-- **Quality Metrics**: Code quality and style compliance
-- **Issue Tracking**: Test failures and recommendations
-
----
-
-## 🚀 **Quick Start Checklist**
-
-- [ ] Install Node.js
-- [ ] Run `npx bmad-method install`
-- [ ] Set repository paths
-- [ ] Create a requirement file
-- [ ] Run `npx bmad-method run virat --requirement your-file.md`
-- [ ] Run basic tests: `npx bmad-method run virat --test`
-- [ ] Review test reports
-
-**🎉 You're ready to use VIRAT with basic testing capabilities!**
+**Ready to automate your development workflow!**
