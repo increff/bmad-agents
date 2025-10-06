@@ -46,6 +46,12 @@ A single comprehensive list of all possible implementation steps across all requ
 - [ ] **Create Output LoadAPI Class**: Create output LoadAPI class (e.g., `{Module}OutputLoadApi.py`)
 - [ ] **Update Existing LoadAPI Classes**: Modify existing LoadAPI classes with new logic
 - [ ] **Register LoadAPI Classes**: Update `__init__.py` files to register new LoadAPI classes
+- [ ] **Create Integration LoadAPI Classes**: Create integration LoadAPI classes (e.g., `{system}_integration_api.py`)
+- [ ] **Create Common LoadAPI Classes**: Create common LoadAPI classes in `common/` directory
+- [ ] **Create Constant LoadAPI Classes**: Create constant LoadAPI classes in `constant/` directory
+- [ ] **Create Master Config LoadAPI Classes**: Create master config LoadAPI classes in `master_config/` directory
+- [ ] **Create WSSI LoadAPI Classes**: Create WSSI (Warehouse Store Stock Integration) LoadAPI classes
+- [ ] **Create Transactional LoadAPI Classes**: Create transactional LoadAPI classes for data transactions
 
 ### 6. **Configuration Operations**
 
@@ -57,6 +63,13 @@ A single comprehensive list of all possible implementation steps across all requ
 - [ ] **Update Existing Sync Files**: Modify existing sync files
 - [ ] **Create New Export Files**: Create new export SQL files in `export/`
 - [ ] **Update Existing Export Files**: Modify existing export files
+- [ ] **Update Module Input JSON**: Update `module_input.json` with new input schemas
+- [ ] **Update Module Output JSON**: Update `module_output.json` with new output schemas
+- [ ] **Update Upload Files JSON**: Update `upload-files.json` with new file configurations
+- [ ] **Create Child Input Views**: Create child input SQL views (e.g., `child-input-{module}_{table}.sql`)
+- [ ] **Create Child Output Views**: Create child output SQL views (e.g., `child-output-{module}_{table}.sql`)
+- [ ] **Create Parent Input Views**: Create parent input SQL views (e.g., `parent-input-{table}.sql`)
+- [ ] **Create Interim Views**: Create interim calculation views (e.g., `interim_{module}_{calculation}.sql`)
 
 ### 7. **Registration Operations**
 
@@ -66,6 +79,13 @@ A single comprehensive list of all possible implementation steps across all requ
 - [ ] **Update SchemaProvider.java**: Register new module inputs/outputs
 - [ ] **Update FileName.java**: Add new module file names
 - [ ] **Update Main Application**: Register new module in Spring context
+- [ ] **Update ContextProvider.java**: Register new context providers if needed
+- [ ] **Update DependentOutputProvider.java**: Register new dependent outputs if needed
+- [ ] **Update DbSyncProvider.java**: Register new database sync providers if needed
+- [ ] **Update LocalDateProvider.java**: Register new date providers if needed
+- [ ] **Create Module Constants**: Create new module-specific constants in `constants/{module}/`
+- [ ] **Update AbstractConstants.java**: Add new abstract constants if needed
+- [ ] **Update GenericConstants.java**: Add new generic constants if needed
 
 ### 8. **Business Logic Operations**
 
@@ -162,12 +182,18 @@ The AI will analyze each requirement and intelligently select which steps are ne
 - **NEW COLUMN/FIELD**: Steps 1, 2, 6, 8, 14, 15
 - **MODIFY EXISTING**: Steps 1, 2, 3, 5, 6, 8, 14, 15
 - **DELETE/REMOVE**: Steps 1, 13, 14, 15
-- **INTEGRATION**: Steps 1, 9, 14, 15
+- **INTEGRATION**: Steps 1, 5, 9, 14, 15
 - **PERFORMANCE**: Steps 1, 10, 14, 15
 - **VALIDATION**: Steps 1, 4, 14, 15
 - **REPORTING**: Steps 1, 11, 14, 15
 - **CONFIGURATION**: Steps 1, 6, 14, 15
 - **TESTING**: Steps 1, 12, 14, 15
+- **CONSTANTS/CONFIGURATION**: Steps 1, 7, 14, 15
+- **PROVIDER/UTILITY**: Steps 1, 7, 14, 15
+- **VIEW/TEMPLATE**: Steps 1, 6, 14, 15
+- **MASTER DATA**: Steps 1, 2, 5, 6, 7, 14, 15
+- **TRANSACTIONAL DATA**: Steps 1, 2, 5, 6, 7, 14, 15
+- **ANALYSIS/REPORTING**: Steps 1, 2, 5, 6, 11, 14, 15
 
 ### **Context Analysis**
 

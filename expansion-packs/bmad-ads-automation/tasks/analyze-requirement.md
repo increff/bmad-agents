@@ -41,18 +41,24 @@ Analyze requirement documents and create implementation plans by intelligently s
 
 **Determine the primary implementation type from these options:**
 
-- **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
-- **NEW MODULE/SUBMODULE**: Create entirely new modules with complete structure
-- **UPDATE EXISTING LOGIC**: Modify existing business logic, formulas, calculations without creating new files
-- **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
-- **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
-- **DELETE/REMOVE**: Remove files or functionality
-- **INTEGRATION**: Cross-module or system integration requirements
-- **PERFORMANCE**: Optimization and scalability requirements
-- **VALIDATION**: Input/output validation requirements
-- **REPORTING**: Report generation and export requirements
-- **CONFIGURATION**: System and business configuration requirements
-- **TESTING**: Unit, integration, and end-to-end testing requirements
+       - **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
+       - **NEW MODULE/SUBMODULE**: Create entirely new modules with complete structure
+       - **UPDATE EXISTING LOGIC**: Modify existing business logic, formulas, calculations without creating new files
+       - **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
+       - **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
+       - **DELETE/REMOVE**: Remove files or functionality
+       - **INTEGRATION**: Cross-module or system integration requirements
+       - **PERFORMANCE**: Optimization and scalability requirements
+       - **VALIDATION**: Input/output validation requirements
+       - **REPORTING**: Report generation and export requirements
+       - **CONFIGURATION**: System and business configuration requirements
+       - **TESTING**: Unit, integration, and end-to-end testing requirements
+       - **CONSTANTS/CONFIGURATION**: Module constants, system configurations, configuration files
+       - **PROVIDER/UTILITY**: Provider classes, utility functions, context management
+       - **VIEW/TEMPLATE**: SQL views, export templates, interim calculations
+       - **MASTER DATA**: Master data structures, reference data, lookup tables
+       - **TRANSACTIONAL DATA**: Transaction data, sales data, inventory data
+       - **ANALYSIS/REPORTING**: Analysis data structures, reporting outputs, business intelligence
 
 ### 4. Step Selection from Comprehensive List
 

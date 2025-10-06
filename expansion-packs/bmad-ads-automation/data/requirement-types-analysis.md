@@ -48,6 +48,122 @@
 
 - **Cover Days**: `INV/ROS` calculation for inventory coverage
 - **Fill Rate**: Allocation success rate calculations
+- **Depth Calculations**: Style and SKU depth calculations
+- **Size Calculations**: Size-wise allocation calculations
+- **Performance Metrics**: KPI and performance calculations
+
+### 3. **CONSTANTS/CONFIGURATION Requirements**
+
+#### **Module Constants**
+
+- **Module-Specific Constants**: Constants for specific modules
+  - `ApConstants.java` - AP module constants
+  - `DistributionConstants.java` - Distribution module constants
+  - `DiscountConstants.java` - Dynamic discounting constants
+  - `StoryWiseAllocationValidationConstants.java` - Story-wise allocation validation constants
+
+- **Generic Constants**: System-wide constants
+  - `AbstractConstants.java` - Abstract base constants
+  - `GenericConstants.java` - Generic system constants
+
+#### **Configuration Files**
+
+- **Module Configuration**: Module-specific configurations
+  - `module_input.json` - Module input configurations
+  - `module_output.json` - Module output configurations
+  - `upload-files.json` - File upload configurations
+
+### 4. **PROVIDER/UTILITY Requirements**
+
+#### **Provider Classes**
+
+- **Context Providers**: Context management providers
+  - `ContextProvider.java` - Context management
+  - `LocalDateProvider.java` - Date management
+  - `DbSyncProvider.java` - Database synchronization
+
+- **Data Providers**: Data access providers
+  - `SchemaProvider.java` - Schema management
+  - `ModuleProvider.java` - Module management
+  - `DependentOutputProvider.java` - Dependent output management
+
+#### **Utility Classes**
+
+- **Utility Functions**: Common utility functions
+  - `ValidationUtil.java` - Validation utilities
+  - `StringUtil.java` - String utilities
+  - `MathUtil.java` - Mathematical utilities
+  - `FileClientUtil.java` - File client utilities
+
+### 5. **VIEW/TEMPLATE Requirements**
+
+#### **SQL Views**
+
+- **Child Views**: Child-level SQL views
+  - `child-input-{module}_{table}.sql` - Child input views
+  - `child-output-{module}_{table}.sql` - Child output views
+
+- **Parent Views**: Parent-level SQL views
+  - `parent-input-{table}.sql` - Parent input views
+
+- **Interim Views**: Interim calculation views
+  - `interim_{module}_{calculation}.sql` - Interim calculation views
+
+#### **Templates**
+
+- **Export Templates**: Export file templates
+  - `export_{module}_input_{table}_template.tsv` - Input export templates
+  - `export_{module}_output_{table}_template.tsv` - Output export templates
+
+### 6. **MASTER DATA Requirements**
+
+#### **Master Data Structures**
+
+- **Style Master**: Style master data
+  - `StyleMasterRow` - Style master data
+  - `StyleMasterFile` - Style master file handling
+
+- **Category Master**: Category master data
+  - `CategoryMasterRow` - Category master data
+  - `CategoryMasterFile` - Category master file handling
+
+- **Size Master**: Size master data
+  - `SizeMasterRow` - Size master data
+  - `SizeMasterFile` - Size master file handling
+
+### 7. **TRANSACTIONAL DATA Requirements**
+
+#### **Transactional Data Structures**
+
+- **Sales Data**: Sales transaction data
+  - `SalesRow` - Sales transaction data
+  - `SalesFile` - Sales file handling
+
+- **Inventory Data**: Inventory transaction data
+  - `InventoryRow` - Inventory transaction data
+  - `InventoryFile` - Inventory file handling
+
+- **Purchase Data**: Purchase transaction data
+  - `PurchaseRow` - Purchase transaction data
+  - `PurchaseFile` - Purchase file handling
+
+### 8. **ANALYSIS/REPORTING Requirements**
+
+#### **Analysis Data Structures**
+
+- **Gap Analysis**: Gap analysis data
+  - `GapAnalysisRow` - Gap analysis data
+  - `GapAnalysisFile` - Gap analysis file handling
+
+- **Impact Analysis**: Impact analysis data
+  - `ImpactAnalysisRow` - Impact analysis data
+  - `ImpactAnalysisFile` - Impact analysis file handling
+
+#### **Reporting Data Structures**
+
+- **Report Outputs**: Report generation data
+  - `ReportOutputRow` - Report output data
+  - `ReportOutputFile` - Report output file handling
 - **Overstocking**: Overstock analysis fields
 - **Understocking**: Understock analysis fields
 
