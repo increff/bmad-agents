@@ -67,7 +67,8 @@ Analyze requirement documents to identify correct modules, create implementation
 
 2. **Determine Implementation Type**:
    - **NEW TABLE/DATA STRUCTURE**: Create new data classes, LoadAPIs, SQL views, templates
-   - **MODIFY EXISTING**: Edit existing files to add fields or functionality
+   - **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
+   - **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
    - **DELETE/REMOVE**: Remove files or functionality
 
 3. **For NEW TABLE/DATA STRUCTURE Requirements**:
@@ -75,7 +76,12 @@ Analyze requirement documents to identify correct modules, create implementation
    - **LoadAPI Repository**: Create new LoadAPI classes AND register them
    - **Config Repository**: Create new SQL views, templates, sync, export files
 
-4. **Impact Analysis**: Check dependencies and references
+4. **For NEW COLUMN/FIELD Requirements**:
+   - **Algorithm Repository**: Edit existing data classes to add new fields AND update calculation logic
+   - **LoadAPI Repository**: Update existing LoadAPI schemas if needed
+   - **Config Repository**: Update existing SQL views, templates, export files
+
+5. **Impact Analysis**: Check dependencies and references
    ```bash
    # Check for references to files being modified
    for file in $(find $REPO_PATH $LOADAPI_PATH $CONFIG_PATH -name "*{MODULE_NAME}*" -type f); do
@@ -83,7 +89,7 @@ Analyze requirement documents to identify correct modules, create implementation
    done
    ```
 
-### 5. Database Operations Planning (Conditional)
+### 6. Database Operations Planning (Conditional)
 
 **ONLY required when changing input/output files or data structures:**
 
@@ -109,7 +115,7 @@ Analyze requirement documents to identify correct modules, create implementation
 4. **Export Operations**: Create/modify `export/export_{module}_{type}_{component}.sql`
 5. **Configuration Updates**: Update `module_input.json`, `module_output.json`, `upload-files.json`
 
-### 6. Implementation Plan Creation
+### 7. Implementation Plan Creation
 
 1. **File Operation Mapping**: Map requirements to specific file operations (edit/add/delete)
 2. **File Identification**: Identify specific files to modify, create, or remove
@@ -140,7 +146,27 @@ Analyze requirement documents to identify correct modules, create implementation
 - **CREATE**: New export files (e.g., `export_dist_input_store_sku_ros_override.sql` in `export/`)
 - **EDIT**: Configuration files (`module_input.json`, `module_output.json`)
 
-### 7. Validation
+#### For NEW COLUMN/FIELD Requirements:
+
+**Algorithm Repository Operations:**
+
+- **EDIT**: Existing data classes (e.g., `DistFaqOutputRow.java` - add new field like `coverDays`)
+- **EDIT**: Existing file classes (e.g., `DistFaqOutputFile.java` - add new column handling)
+- **EDIT**: Module classes to calculate new field (e.g., `DistributionAllocationModule.java` - add formula logic)
+
+**LoadAPI Repository Operations:**
+
+- **EDIT**: Existing LoadAPI classes if schema changes needed
+- **EDIT**: Registration files if new imports needed
+
+**Config Repository Operations:**
+
+- **EDIT**: Existing SQL views (e.g., update `child-output-dist_faq.sql` to include new column)
+- **EDIT**: Existing templates (e.g., update `export_dist_output_faq_template.tsv`)
+- **EDIT**: Existing export files (e.g., update `export_dist_output_faq.sql`)
+- **EDIT**: Configuration files (`module_output.json` - add new output field)
+
+### 8. Validation
 
 1. **Module Correctness**: Verify identified modules are correct for the requirement
 2. **File Existence**: Confirm target files exist in repositories
@@ -156,8 +182,9 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] Patterns identified for consistent implementation
 - [ ] Validation completed successfully
 - [ ] No incorrect module targeting (e.g., ISS vs Distribution)
-- [ ] **Implementation type identified** - NEW TABLE vs MODIFY EXISTING vs DELETE
+- [ ] **Implementation type identified** - NEW TABLE vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE
 - [ ] **For NEW TABLE: Usage analysis completed** - Module classes identified to USE new data
+- [ ] **For NEW COLUMN/FIELD: Formula analysis completed** - Calculation logic identified for new field
 - [ ] **CONDITIONAL: Database operations planned** - ONLY if input/output changes
 - [ ] **CRITICAL: Data loading architecture validated** - Java modules use `db().select()`, Python APIs handle file loading
 - [ ] **CRITICAL: Load API registration validated** - Any new Load API registered in `__init__.py` files
@@ -167,9 +194,10 @@ Analyze requirement documents to identify correct modules, create implementation
 ## Output
 
 - **Identified Modules**: List of primary and secondary modules
-- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs MODIFY EXISTING vs DELETE
+- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE
 - **Target Files**: Specific files to modify, create, or delete in each module
 - **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED
+- **Formula Analysis**: For NEW COLUMN/FIELD requirements, identify calculation logic and dependencies
 - **Implementation Plan**: Step-by-step implementation approach
 - **Pattern References**: Existing patterns to follow
 - **Validation Results**: Confirmation of module and file selection
