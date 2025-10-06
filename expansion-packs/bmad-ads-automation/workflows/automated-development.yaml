@@ -119,6 +119,22 @@ workflow:
           creates: quality monitoring reports and automated code review results
           notes: "Continuous quality monitoring with automated code reviews and quality gates"
 
+    - phase: advanced_documentation_knowledge_management
+      agent: virat
+      steps:
+        - step: intelligent_documentation
+          action: automatically generate comprehensive documentation with AI insights
+          creates: auto-generated documentation, interactive documentation, and version-controlled documentation
+          notes: "Generate comprehensive documentation with AI insights, interactive examples, and version control"
+        - step: knowledge_management
+          action: implement comprehensive knowledge management system
+          creates: pattern library, best practices database, expert knowledge capture, and learning management
+          notes: "Create comprehensive knowledge management with pattern library, best practices, expert knowledge, and learning management"
+        - step: searchable_knowledge_base
+          action: create searchable knowledge base with AI-powered search
+          creates: searchable knowledge base with AI-powered search capabilities
+          notes: "Create searchable knowledge base with AI-powered search for easy knowledge discovery and retrieval"
+
   success_criteria:
     - All three repositories have feature branches created
     - All required code changes implemented following existing patterns

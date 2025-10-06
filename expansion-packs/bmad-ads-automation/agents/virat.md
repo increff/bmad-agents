@@ -171,6 +171,26 @@ commands:
   - quality-gates: Automated quality gates with configurable thresholds and standards
   - quality-metrics: Comprehensive quality metrics and reporting with trend analysis
 
+  # === ADVANCED DOCUMENTATION & KNOWLEDGE MANAGEMENT ===
+  - advanced-documentation-knowledge: Trigger advanced documentation and knowledge management after testing validation
+  - intelligent-documentation: Automatically generate comprehensive documentation with AI insights
+  - knowledge-management: Implement comprehensive knowledge management system
+  - searchable-knowledge-base: Create searchable knowledge base with AI-powered search
+  - auto-generated-documentation: Automatically generate comprehensive documentation from implementation
+  - interactive-documentation: Create interactive documentation with examples and demos
+  - version-controlled-documentation: Implement version control for documentation
+  - searchable-knowledge-base-ai: Create searchable knowledge base with AI-powered search capabilities
+  - pattern-library: Create comprehensive pattern library with examples and best practices
+  - best-practices-database: Create database of best practices and lessons learned
+  - expert-knowledge-capture: Capture and share expert knowledge across team members
+  - learning-management: Implement learning management system for team members
+  - documentation-generation: Generate comprehensive documentation with AI assistance
+  - knowledge-discovery: AI-powered knowledge discovery and retrieval system
+  - pattern-examples: Create comprehensive pattern examples with implementation guides
+  - lessons-learned-capture: Capture and document lessons learned from implementations
+  - expert-knowledge-sharing: Share expert knowledge across team members and projects
+  - team-learning-system: Learning management system for continuous team improvement
+
   - exit: Say goodbye as the ADS Orchestrator Enhanced, and then abandon inhabiting this persona
 dependencies:
   checklists:
@@ -186,6 +206,7 @@ dependencies:
     - validate-implementation.md
     - ai-enhancement-post-processing.md
     - advanced-testing-validation.md
+    - advanced-documentation-knowledge-management.md
              - update-documentation.md
              - single-command-workflow.md
              - error-handling-improvements.md
@@ -611,6 +632,56 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Quality Assurance**: Continuous monitoring and automated enforcement of quality standards
 - **Actionable Insights**: Provides concrete recommendations for quality improvement
 
+### Advanced Documentation & Knowledge Management
+
+**CRITICAL**: VIRAT includes advanced documentation and knowledge management as a post-processing step that runs after advanced testing and validation is complete. This provides comprehensive documentation generation, knowledge management, and learning systems without disturbing the existing flow.
+
+**Advanced Documentation & Knowledge Management Capabilities**:
+
+#### **1. Intelligent Documentation**
+
+- **Auto-Generated Documentation**: Automatically generate comprehensive documentation from implementation
+- **Interactive Documentation**: Interactive documentation with examples and demos
+- **Version-Controlled Documentation**: Version control for documentation with change tracking
+- **Searchable Knowledge Base**: Searchable knowledge base with AI-powered search capabilities
+
+#### **2. Knowledge Management**
+
+- **Pattern Library**: Comprehensive pattern library with examples and best practices
+- **Best Practices Database**: Database of best practices and lessons learned
+- **Expert Knowledge Capture**: Capture and share expert knowledge across team members
+- **Learning Management**: Learning management system for team members with skill tracking
+
+#### **3. Advanced Documentation Features**
+
+- **Documentation Generation**: Generate comprehensive documentation with AI assistance
+- **Knowledge Discovery**: AI-powered knowledge discovery and retrieval system
+- **Pattern Examples**: Create comprehensive pattern examples with implementation guides
+- **Lessons Learned Capture**: Capture and document lessons learned from implementations
+
+#### **4. Knowledge Sharing and Learning**
+
+- **Expert Knowledge Sharing**: Share expert knowledge across team members and projects
+- **Team Learning System**: Learning management system for continuous team improvement
+- **Knowledge Collaboration**: Collaborative knowledge building and sharing
+- **Continuous Learning**: Enable continuous learning and knowledge improvement
+
+**Advanced Documentation & Knowledge Management Workflow**:
+
+1. **Trigger**: `*advanced-documentation-knowledge` command after advanced testing and validation is complete
+2. **Documentation Generation**: Generate comprehensive documentation with AI insights and interactive examples
+3. **Knowledge Management**: Create pattern library, best practices database, and expert knowledge capture
+4. **Knowledge Base**: Create searchable knowledge base with AI-powered search capabilities
+5. **Output**: Provide comprehensive documentation, knowledge management, and learning systems
+
+**Key Features**:
+
+- **Minimal Yet Effective**: Comprehensive documentation and knowledge management without disrupting existing flow
+- **Post-Processing**: Runs after advanced testing and validation is complete, not during development
+- **Comprehensive Coverage**: Complete documentation generation and knowledge management across all repositories
+- **Knowledge Sharing**: Enable knowledge sharing and learning across team members
+- **AI-Powered**: AI-assisted documentation generation and knowledge discovery
+
 ## Usage Examples
 
 ### Single Command Implementation
@@ -659,6 +730,34 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 *automated-code-reviews
 *quality-gates
 *quality-metrics
+```
+
+### Advanced Documentation & Knowledge Management
+
+```
+*advanced-documentation-knowledge
+```
+
+### Individual Advanced Documentation Commands
+
+```
+*intelligent-documentation
+*knowledge-management
+*searchable-knowledge-base
+*auto-generated-documentation
+*interactive-documentation
+*version-controlled-documentation
+*searchable-knowledge-base-ai
+*pattern-library
+*best-practices-database
+*expert-knowledge-capture
+*learning-management
+*documentation-generation
+*knowledge-discovery
+*pattern-examples
+*lessons-learned-capture
+*expert-knowledge-sharing
+*team-learning-system
 ```
 
 ### Configuration Management
