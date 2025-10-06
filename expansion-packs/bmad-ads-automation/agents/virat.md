@@ -103,6 +103,39 @@ persona:
 - **Validation Accuracy**: "Check the actual data types in Row classes and ensure validation logic matches exactly"
 - **Header Consistency**: "Verify TSV_HEADER and DB_HEADER match the actual data structure from Row classes"
 
+#### **Pattern Reference Guidance**
+- **LoadAPI Pattern**: "Find existing LoadAPI classes in loadapi/ directory and follow their exact structure and patterns"
+- **Row Class Pattern**: "Find existing Row classes in row/input/{module}/ directory and copy their exact structure (fields, constructors, toString)"
+- **File Class Pattern**: "Find existing File classes in file/input/{module}/ directory and copy their exact structure (extends AbstractTSVFile, getHeaders, read methods)"
+- **FileName Pattern**: "Find existing FileName constants in FileName.java and follow their exact naming pattern"
+- **SchemaProvider Pattern**: "Find existing SchemaProvider entries and follow their exact schema definition pattern"
+- **ModuleProvider Pattern**: "Find existing ModuleProvider entries and follow their exact registration pattern"
+- **ModuleName Pattern**: "Find existing ModuleName constants and follow their exact naming pattern"
+- **Validation Pattern**: "Find existing ValidationModuleNames entries and follow their exact validation pattern"
+- **GroupModule Pattern**: "Find existing GroupModule entries and follow their exact group registration pattern"
+
+#### **Existing Code Reference Commands**
+- **Find LoadAPI Examples**: "Search for existing LoadAPI classes in loadapi/ directory to understand structure and patterns"
+- **Find Row Class Examples**: "Search for existing Row classes in row/input/ directory to understand field structure and patterns"
+- **Find File Class Examples**: "Search for existing File classes in file/input/ directory to understand AbstractTSVFile patterns"
+- **Find FileName Examples**: "Search for existing FileName constants to understand naming patterns and conventions"
+- **Find SchemaProvider Examples**: "Search for existing SchemaProvider entries to understand schema definition patterns"
+- **Find ModuleProvider Examples**: "Search for existing ModuleProvider entries to understand module registration patterns"
+- **Find ModuleName Examples**: "Search for existing ModuleName constants to understand naming patterns"
+- **Find Validation Examples**: "Search for existing ValidationModuleNames entries to understand validation patterns"
+- **Find GroupModule Examples**: "Search for existing GroupModule entries to understand group registration patterns"
+
+#### **Specific Search Commands for Cursor**
+- **LoadAPI Search**: "Find existing LoadAPI classes: `find loadapi/ -name '*LoadApi.py' | head -5`"
+- **Row Class Search**: "Find existing Row classes: `find row/input/ -name '*Row.java' | head -5`"
+- **File Class Search**: "Find existing File classes: `find file/input/ -name '*File.java' | head -5`"
+- **FileName Search**: "Find existing FileName constants: `grep -r 'public static final String' FileName.java | head -10`"
+- **SchemaProvider Search**: "Find existing SchemaProvider entries: `grep -r 'SchemaProvider' src/main/java/ | head -10`"
+- **ModuleProvider Search**: "Find existing ModuleProvider entries: `grep -r 'ModuleProvider' src/main/java/ | head -10`"
+- **ModuleName Search**: "Find existing ModuleName constants: `grep -r 'public static final String' ModuleName.java | head -10`"
+- **Validation Search**: "Find existing ValidationModuleNames: `grep -r 'ValidationModuleNames' src/main/java/ | head -10`"
+- **GroupModule Search**: "Find existing GroupModule entries: `grep -r 'GroupModule' src/main/java/ | head -10`"
+
 #### **Context Provision Strategy**
 - **Requirement Context**: Provide clear requirement context and business purpose
 - **Existing Code Context**: Point to existing similar implementations for pattern recognition
