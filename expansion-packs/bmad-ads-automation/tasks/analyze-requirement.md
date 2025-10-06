@@ -70,22 +70,30 @@ Analyze requirement documents and create implementation plans by intelligently s
    - What data structures are affected?
    - What business logic needs to be implemented?
 
-2. **Select Relevant Steps**:
+2. **Select Relevant Steps Based on Actual Impact**:
    - **Module Analysis & Identification**: Always needed
-   - **Data Structure Operations**: If data structures are involved
-   - **Module Structure Operations**: If modules are involved
-   - **Validation Operations**: If validation is needed
-   - **LoadAPI Operations**: If LoadAPIs are involved
-   - **Configuration Operations**: If configuration changes are needed
-   - **Registration Operations**: If new components need registration
-   - **Business Logic Operations**: If business logic is involved
-   - **Integration Operations**: If integration is needed
-   - **Performance Operations**: If performance optimization is needed
-   - **Reporting Operations**: If reporting is needed
-   - **Testing Operations**: If testing is needed
-   - **Cleanup Operations**: If cleanup is needed
+   - **Data Structure Operations**: If data structures need to be created, modified, or deleted
+   - **Module Structure Operations**: If new modules need to be created or existing modules restructured
+   - **Validation Operations**: If validation rules need to be added, modified, or removed
+   - **LoadAPI Operations**: If data loading, processing, or integration logic needs changes
+   - **Configuration Operations**: If SQL views, templates, or configuration files need changes
+   - **Registration Operations**: If new components need to be registered in providers or constants
+   - **Business Logic Operations**: If business logic, calculations, or processing rules need changes
+   - **Integration Operations**: If cross-module or external system integration is needed
+   - **Performance Operations**: If performance optimization or monitoring is needed
+   - **Reporting Operations**: If reporting functionality needs to be added or modified
+   - **Testing Operations**: If new tests need to be created or existing tests modified
+   - **Cleanup Operations**: If obsolete files, configurations, or code need to be removed
    - **Validation & Testing**: Always needed
    - **Documentation Operations**: Always needed
+
+3. **Context-Driven Selection Examples**:
+   - **"Add new field to existing table"**: Steps 1, 2, 6, 8, 14, 15
+   - **"Update calculation formula"**: Steps 1, 8, 14, 15
+   - **"Add new input file"**: Steps 1, 2, 5, 6, 7, 14, 15
+   - **"Create new module"**: Steps 1, 2, 3, 4, 5, 6, 7, 14, 15
+   - **"Update existing logic"**: Steps 1, 8, 14, 15 (plus others based on what actually changes)
+   - **"Remove obsolete functionality"**: Steps 1, 13, 14, 15
 
 ### 5. File Impact Analysis
 
@@ -160,20 +168,36 @@ Analyze requirement documents and create implementation plans by intelligently s
 
 The AI will:
 
-1. **Analyze the requirement** to understand what needs to be implemented
-2. **Determine the implementation type** based on the requirement content
-3. **Select relevant steps** from comprehensive-implementation-steps.md based on:
-   - Implementation type
-   - File existence (create vs update)
-   - Module dependencies
-   - Data flow requirements
-   - Business logic requirements
-4. **Create a specific implementation plan** with:
+1. **Analyze the Complete Requirement Context**:
+   - What specific changes are needed?
+   - Which files/modules are affected?
+   - What data structures are involved?
+   - What business logic needs modification?
+   - Are there any cross-repository dependencies?
+
+2. **Determine Impact Scope**:
+   - **Algorithm Repository**: Does the change affect Java classes, data structures, business logic?
+   - **LoadAPI Repository**: Does the change require new data loading, processing, or integration?
+   - **Configuration Repository**: Does the change require new views, templates, or configurations?
+
+3. **Select Steps Based on Actual Impact**:
+   - **Always Include**: Module Analysis, Validation & Testing, Documentation
+   - **Conditionally Include**: All other steps based on what actually needs to be changed
+   - **No Hardcoded Mappings**: Each requirement is analyzed individually
+
+4. **Create a Specific Implementation Plan** with:
    - Exact file paths
    - Specific class names
    - Specific method names
    - Specific configuration updates
-5. **Skip irrelevant steps** to avoid unnecessary work
-6. **Follow existing patterns** for consistency
 
-This approach eliminates duplication while providing comprehensive coverage of all possible implementation scenarios.
+5. **Adapt Based on Context**:
+   - File existence (create vs update)
+   - Module dependencies
+   - Data flow requirements
+   - Business logic requirements
+   - Cross-repository impact
+
+6. **Follow Existing Patterns** for consistency
+
+**Key Principle**: The AI should focus on **understanding the complete requirement context** and then intelligently select steps based on what actually needs to be changed, rather than following predetermined step mappings.

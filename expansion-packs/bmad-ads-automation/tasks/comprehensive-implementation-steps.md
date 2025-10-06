@@ -174,26 +174,38 @@ A single comprehensive list of all possible implementation steps across all requ
 
 The AI will analyze each requirement and intelligently select which steps are needed based on:
 
-### **Requirement Type Analysis**
+### **Intelligent Step Selection Logic**
 
-- **NEW TABLE/DATA STRUCTURE**: Steps 1, 2, 5, 6, 7, 14, 15
-- **NEW MODULE/SUBMODULE**: Steps 1, 2, 3, 4, 5, 6, 7, 14, 15
-- **UPDATE EXISTING LOGIC**: Steps 1, 8, 14, 15
-- **NEW COLUMN/FIELD**: Steps 1, 2, 6, 8, 14, 15
-- **MODIFY EXISTING**: Steps 1, 2, 3, 5, 6, 8, 14, 15
-- **DELETE/REMOVE**: Steps 1, 13, 14, 15
-- **INTEGRATION**: Steps 1, 5, 9, 14, 15
-- **PERFORMANCE**: Steps 1, 10, 14, 15
-- **VALIDATION**: Steps 1, 4, 14, 15
-- **REPORTING**: Steps 1, 11, 14, 15
-- **CONFIGURATION**: Steps 1, 6, 14, 15
-- **TESTING**: Steps 1, 12, 14, 15
-- **CONSTANTS/CONFIGURATION**: Steps 1, 7, 14, 15
-- **PROVIDER/UTILITY**: Steps 1, 7, 14, 15
-- **VIEW/TEMPLATE**: Steps 1, 6, 14, 15
-- **MASTER DATA**: Steps 1, 2, 5, 6, 7, 14, 15
-- **TRANSACTIONAL DATA**: Steps 1, 2, 5, 6, 7, 14, 15
-- **ANALYSIS/REPORTING**: Steps 1, 2, 5, 6, 11, 14, 15
+**The AI should NOT use hardcoded step mappings. Instead, it should:**
+
+1. **Analyze the Complete Requirement Context**:
+   - What specific changes are needed?
+   - Which files/modules are affected?
+   - What data structures are involved?
+   - What business logic needs modification?
+   - Are there any cross-repository dependencies?
+
+2. **Determine Impact Scope**:
+   - **Algorithm Repository**: Does the change affect Java classes, data structures, business logic?
+   - **LoadAPI Repository**: Does the change require new data loading, processing, or integration?
+   - **Configuration Repository**: Does the change require new views, templates, or configurations?
+
+3. **Select Steps Based on Actual Impact**:
+   - **Always Include**: Steps 1 (Module Analysis), 14 (Validation & Testing), 15 (Documentation)
+   - **Conditionally Include**: All other steps based on what actually needs to be changed
+   - **Example**: "UPDATE EXISTING LOGIC" might need:
+     - Step 2 (Data Structure Operations) - if data structures change
+     - Step 5 (LoadAPI Operations) - if data loading changes
+     - Step 6 (Configuration Operations) - if views/templates change
+     - Step 8 (Business Logic Operations) - if business logic changes
+     - Step 7 (Registration Operations) - if new components need registration
+
+4. **Context-Driven Selection Examples**:
+   - **Simple Logic Update**: Steps 1, 8, 14, 15
+   - **Logic Update + New Data Field**: Steps 1, 2, 6, 8, 14, 15
+   - **Logic Update + New LoadAPI**: Steps 1, 5, 8, 14, 15
+   - **Logic Update + New Views**: Steps 1, 6, 8, 14, 15
+   - **Logic Update + New Module**: Steps 1, 2, 3, 4, 5, 6, 7, 8, 14, 15
 
 ### **Context Analysis**
 
