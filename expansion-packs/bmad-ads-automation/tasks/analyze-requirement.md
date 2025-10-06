@@ -41,9 +41,9 @@ Analyze requirement documents to identify correct modules, create implementation
 1. **Get Repository Paths**: Load paths from configuration
 
    ```bash
-   REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
-   LOADAPI_PATH=$(grep -A 5 "ms-loadapis-ril-final:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
-   CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+   REPO_PATH=$(grep "irisx-algo:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+   LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+   CONFIG_PATH=$(grep "irisx-config:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
    ```
 
 2. **Find Related Files**: Discover files related to the requirement
@@ -123,17 +123,21 @@ Analyze requirement documents to identify correct modules, create implementation
 **Algorithm Repository Operations:**
 
 - **CREATE**: New data classes (e.g., `StoreSkuRosOverrideData.java`, `StoreSkuRosOverrideRow.java`)
-- **EDIT**: Registration files (`SchemaProvider.java`, `Filename.java`)
-- **EDIT**: Module classes to USE new data (`{Module}Module.java`, `{Module}Service.java`, `{Module}Controller.java`)
+- **CREATE**: New file classes (e.g., `StoreSkuRosOverrideFile.java` in `file/input/distribution/`)
+- **EDIT**: Registration files (`provider/SchemaProvider.java`, file classes in `file/input/`)
+- **EDIT**: Module classes to USE new data (`module/distribution/DistributionAllocationModule.java`, etc.)
 
 **LoadAPI Repository Operations:**
 
-- **CREATE**: New LoadAPI classes (e.g., `StoreSkuRosOverrideLoadApi.py`)
-- **EDIT**: Registration files (`__init__.py` files)
+- **CREATE**: New LoadAPI classes (e.g., `StoreSkuRosOverrideLoadApi.py` in `loadapi/distribution/`)
+- **EDIT**: Registration files (`loadapi/__init__.py`, `loadapi/distribution/__init__.py`)
 
 **Config Repository Operations:**
 
-- **CREATE**: New SQL views, templates, sync, export files
+- **CREATE**: New SQL views (e.g., `child-input-input_dist_store_sku_ros_override.sql` in `view-creation/`)
+- **CREATE**: New templates (e.g., `export_dist_input_store_sku_ros_override_template.tsv` in `template/`)
+- **CREATE**: New sync files (e.g., `dist_store_sku_ros_override.sql` in `sync/`)
+- **CREATE**: New export files (e.g., `export_dist_input_store_sku_ros_override.sql` in `export/`)
 - **EDIT**: Configuration files (`module_input.json`, `module_output.json`)
 
 ### 7. Validation

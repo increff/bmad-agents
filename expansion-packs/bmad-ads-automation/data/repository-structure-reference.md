@@ -8,9 +8,9 @@ This document provides a comprehensive reference of all three repository structu
 
 ```bash
 # Get repository paths from configuration
-REPO_PATH=$(grep -A 5 "irisx-algo:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
-LOADAPI_PATH=$(grep -A 5 "ms-loadapis-ril-final:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
-CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "path:" | cut -d'"' -f2)
+REPO_PATH=$(grep "irisx-algo:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+CONFIG_PATH=$(grep "irisx-config:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
 ```
 
 ## irisx-algo Repository Structure
@@ -19,30 +19,37 @@ CONFIG_PATH=$(grep -A 5 "irisx-config:" config/ads-orchestrator.yaml | grep "pat
 
 ```
 $REPO_PATH/src/main/java/com/increff/irisx/
-├── module/                    # Core business logic modules
-│   ├── distribution/          # Distribution allocation logic
-│   ├── depletion/            # Depletion calculation logic
+├── module/                    # Core business logic modules (59 files)
+│   ├── distribution/          # Distribution allocation logic (23 files)
 │   ├── distributionCommons/  # Shared distribution components
-│   ├── validation/           # 25+ validation modules
-│   ├── iss/                  # Ideal Size Set module
-│   ├── otb/                  # Open To Buy module
-│   ├── eoss/                 # End of Season Sale module
-│   ├── bi/                   # Business Intelligence module
+│   ├── iss/                  # Ideal Size Set module (11 files)
+│   ├── otb/                  # Open To Buy module (10 files)
+│   ├── eoss/                 # End of Season Sale module (21 files)
+│   ├── bi/                   # Business Intelligence module (8 files)
 │   └── [other modules]/      # Additional modules
+├── file/                     # File handling classes
+│   ├── input/               # Input file classes (18 directories)
+│   │   ├── distribution/    # Distribution input files (22 files)
+│   │   ├── iss/             # ISS input files
+│   │   ├── otb/             # OTB input files
+│   │   └── [other modules]/ # Additional module input files
+│   └── output/              # Output file classes (22 directories)
 ├── row/                      # Data row classes
 │   ├── input/               # Input data structures
 │   └── output/              # Output data structures
 ├── constants/               # Application constants
 ├── helper/                  # Utility classes
-└── provider/                # Service providers
+├── provider/                # Service providers (SchemaProvider.java)
+└── util/                    # Utility classes
 ```
 
 ### Key Module Files
 
-- **Distribution**: `DistributionAllocationModule.java`, `BaseDistributionData.java`
+- **Distribution**: `DistributionAllocationModule.java`, `DistributionHelper.java`, `DistributionIterationRunner.java`
 - **ISS**: `ISSTaggingModule.java`, `ISSData.java`, `ISSModuleData.java`
 - **OTB**: `OtbHelper.java`, `OtbDataInputModule.java`
-- **Validation**: 25+ validation modules in `validation/` directory
+- **File Classes**: `DistributionStoreFile.java`, `ExclusionFile.java`, `InclusionFile.java`
+- **SchemaProvider**: `provider/SchemaProvider.java` (NOT in constants!)
 
 ## ms-loadapis-ril-final Repository Structure
 
@@ -50,11 +57,16 @@ $REPO_PATH/src/main/java/com/increff/irisx/
 
 ```
 $LOADAPI_PATH/
-├── loadapi/                     # Load API implementations
+├── loadapi/                     # Load API implementations (28 directories)
 │   ├── common/                  # Base classes and utilities
 │   │   ├── abstract_loadapi.py  # Base LoadAPI class
 │   │   └── [utilities]/         # Common utilities
-│   ├── distribution/            # Distribution-specific load APIs
+│   ├── distribution/            # Distribution-specific load APIs (25+ files)
+│   │   ├── DistributionStoreLoadApi.py
+│   │   ├── DistributionChannelStyleOverrideLoadApi.py
+│   │   ├── ExclusionLoadApi.py
+│   │   ├── InclusionsLoadApi.py
+│   │   └── [other distribution APIs]
 │   ├── iss/                     # ISS-specific load APIs
 │   ├── otb/                     # OTB-specific load APIs
 │   ├── eoss/                    # EOSS-specific load APIs
@@ -77,10 +89,18 @@ $LOADAPI_PATH/
 
 ```
 $CONFIG_PATH/
-├── template/                    # TSV input templates (108 files)
-├── view-creation/               # SQL view definitions (319 files)
-├── sync/                        # Synchronization logic (156 files)
-├── export/                      # Export configurations (223 files)
+├── template/                    # TSV input templates (110+ files)
+│   ├── export_dist_input_store_template.tsv
+│   ├── export_dist_input_exclusions_list_template.tsv
+│   ├── export_dist_input_inclusions_list_template.tsv
+│   └── [other templates]
+├── view-creation/               # SQL view definitions (322+ files)
+│   ├── child-input-input_dist_channel_style_override.sql
+│   ├── child-input-input_dist_git.sql
+│   ├── child-input-input_dist_max_sku_depth.sql
+│   └── [other views]
+├── sync/                        # Synchronization logic (159+ files)
+├── export/                      # Export configurations (226+ files)
 ├── module_input.json            # Input configuration (250KB)
 ├── module_output.json           # Output configuration (20KB)
 └── upload-files.json            # File upload configuration (60KB)
@@ -88,11 +108,14 @@ $CONFIG_PATH/
 
 ### File Naming Patterns
 
-#### Templates (108 files)
+#### Templates (110+ files)
 
 - **Pattern**: `export_{module}_input_{component}_template.tsv`
 - **Examples**:
   - `export_dist_input_store_template.tsv`
+  - `export_dist_input_exclusions_list_template.tsv`
+  - `export_dist_input_inclusions_list_template.tsv`
+  - `export_dist_input_max_sku_depth_template.tsv`
   - `export_iss_input_tagging_template.tsv`
   - `export_otb_input_buying_template.tsv`
 
