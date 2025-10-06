@@ -66,6 +66,12 @@ commands:
   - test: Use @qa.md to create and execute basic unit tests for static methods
   - create-module: Create entirely new modules/submodules with complete structure across all repositories
   - update-logic: Update existing business logic, formulas, calculations without creating new files
+  - integrate: Handle cross-module or system integration requirements
+  - optimize: Handle performance optimization and scalability requirements
+  - validate-data: Handle input/output validation requirements
+  - report: Handle report generation and export requirements
+  - configure: Handle system and business configuration requirements
+  - test-comprehensive: Handle unit, integration, and end-to-end testing requirements
   - crawl: Crawl repositories to understand current state and patterns
   - validate: Validate implementation against existing patterns and tests
   - document: Update requirement document with consolidated implementation results (branch URLs, changelog, test cases, PRD updates)

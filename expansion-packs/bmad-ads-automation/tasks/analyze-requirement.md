@@ -72,6 +72,12 @@ Analyze requirement documents to identify correct modules, create implementation
    - **MODIFY EXISTING**: Edit existing files to add fields, columns, or functionality
    - **NEW COLUMN/FIELD**: Add new fields to existing data structures with formulas/calculations
    - **DELETE/REMOVE**: Remove files or functionality
+   - **INTEGRATION**: Cross-module or system integration requirements
+   - **PERFORMANCE**: Optimization and scalability requirements
+   - **VALIDATION**: Input/output validation requirements
+   - **REPORTING**: Report generation and export requirements
+   - **CONFIGURATION**: System and business configuration requirements
+   - **TESTING**: Unit, integration, and end-to-end testing requirements
 
 3. **For NEW TABLE/DATA STRUCTURE Requirements**:
    - **Algorithm Repository**: Create new data classes AND edit module classes to USE them
@@ -232,6 +238,121 @@ Analyze requirement documents to identify correct modules, create implementation
 - **EDIT**: Existing export files (e.g., update `export_dist_output_faq.sql`)
 - **EDIT**: Configuration files (`module_output.json` - add new output field)
 
+#### For INTEGRATION Requirements:
+
+**Algorithm Repository Operations:**
+
+- **EDIT**: Existing module classes to add integration logic
+- **EDIT**: Existing helper classes to add integration utilities
+- **EDIT**: Existing data classes to add integration fields
+- **CREATE**: New integration classes if needed
+
+**LoadAPI Repository Operations:**
+
+- **EDIT**: Existing LoadAPI classes to add integration endpoints
+- **EDIT**: Existing validation methods to add integration validation
+- **CREATE**: New integration LoadAPI classes if needed
+
+**Config Repository Operations:**
+
+- **EDIT**: Existing SQL views to add integration queries
+- **EDIT**: Existing configurations to add integration settings
+- **CREATE**: New integration templates if needed
+
+#### For PERFORMANCE Requirements:
+
+**Algorithm Repository Operations:**
+
+- **EDIT**: Existing module classes to optimize performance
+- **EDIT**: Existing helper classes to optimize calculations
+- **EDIT**: Existing data classes to optimize data structures
+- **CREATE**: New performance monitoring classes if needed
+
+**LoadAPI Repository Operations:**
+
+- **EDIT**: Existing LoadAPI classes to optimize data loading
+- **EDIT**: Existing validation methods to optimize validation
+- **CREATE**: New performance monitoring LoadAPI classes if needed
+
+**Config Repository Operations:**
+
+- **EDIT**: Existing SQL views to optimize queries
+- **EDIT**: Existing configurations to add performance settings
+- **CREATE**: New performance monitoring templates if needed
+
+#### For VALIDATION Requirements:
+
+**Algorithm Repository Operations:**
+
+- **EDIT**: Existing validation modules to add new validation rules
+- **EDIT**: Existing data classes to add validation methods
+- **CREATE**: New validation classes if needed
+
+**LoadAPI Repository Operations:**
+
+- **EDIT**: Existing LoadAPI classes to add validation logic
+- **EDIT**: Existing validation methods to add new rules
+- **CREATE**: New validation LoadAPI classes if needed
+
+**Config Repository Operations:**
+
+- **EDIT**: Existing configurations to add validation settings
+- **CREATE**: New validation templates if needed
+
+#### For REPORTING Requirements:
+
+**Algorithm Repository Operations:**
+
+- **CREATE**: New report generation classes
+- **EDIT**: Existing output modules to add report functionality
+- **CREATE**: New report data classes
+
+**LoadAPI Repository Operations:**
+
+- **CREATE**: New report LoadAPI classes
+- **EDIT**: Existing output LoadAPI classes to add report endpoints
+
+**Config Repository Operations:**
+
+- **CREATE**: New report templates
+- **CREATE**: New report SQL views
+- **EDIT**: Existing configurations to add report settings
+
+#### For CONFIGURATION Requirements:
+
+**Algorithm Repository Operations:**
+
+- **EDIT**: Existing configuration classes to add new settings
+- **CREATE**: New configuration classes if needed
+
+**LoadAPI Repository Operations:**
+
+- **EDIT**: Existing LoadAPI classes to add configuration endpoints
+- **CREATE**: New configuration LoadAPI classes if needed
+
+**Config Repository Operations:**
+
+- **EDIT**: Existing configuration files to add new settings
+- **CREATE**: New configuration templates if needed
+
+#### For TESTING Requirements:
+
+**Algorithm Repository Operations:**
+
+- **CREATE**: New test classes for modules
+- **CREATE**: New test data classes
+- **EDIT**: Existing test classes to add new test cases
+
+**LoadAPI Repository Operations:**
+
+- **CREATE**: New test LoadAPI classes
+- **EDIT**: Existing test LoadAPI classes to add new test cases
+
+**Config Repository Operations:**
+
+- **CREATE**: New test configuration files
+- **CREATE**: New test templates
+
 ### 10. Validation
 
 1. **Module Correctness**: Verify identified modules are correct for the requirement
@@ -248,11 +369,17 @@ Analyze requirement documents to identify correct modules, create implementation
 - [ ] Patterns identified for consistent implementation
 - [ ] Validation completed successfully
 - [ ] No incorrect module targeting (e.g., ISS vs Distribution)
-- [ ] **Implementation type identified** - NEW TABLE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE
+- [ ] **Implementation type identified** - NEW TABLE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE vs INTEGRATION vs PERFORMANCE vs VALIDATION vs REPORTING vs CONFIGURATION vs TESTING
 - [ ] **For NEW TABLE: Usage analysis completed** - Module classes identified to USE new data
 - [ ] **For NEW MODULE/SUBMODULE: Module structure analysis completed** - Complete module structure identified
 - [ ] **For UPDATE EXISTING LOGIC: Logic analysis completed** - Existing logic identified for modification
 - [ ] **For NEW COLUMN/FIELD: Formula analysis completed** - Calculation logic identified for new field
+- [ ] **For INTEGRATION: Integration analysis completed** - Integration points and dependencies identified
+- [ ] **For PERFORMANCE: Performance analysis completed** - Performance bottlenecks and optimization opportunities identified
+- [ ] **For VALIDATION: Validation analysis completed** - Validation rules and requirements identified
+- [ ] **For REPORTING: Reporting analysis completed** - Report structure and data requirements identified
+- [ ] **For CONFIGURATION: Configuration analysis completed** - Configuration settings and requirements identified
+- [ ] **For TESTING: Testing analysis completed** - Test scenarios and requirements identified
 - [ ] **CONDITIONAL: Database operations planned** - ONLY if input/output changes
 - [ ] **CRITICAL: Data loading architecture validated** - Java modules use `db().select()`, Python APIs handle file loading
 - [ ] **CRITICAL: Load API registration validated** - Any new Load API registered in `__init__.py` files
@@ -262,12 +389,18 @@ Analyze requirement documents to identify correct modules, create implementation
 ## Output
 
 - **Identified Modules**: List of primary and secondary modules
-- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE
+- **Implementation Type**: NEW TABLE/DATA STRUCTURE vs NEW MODULE/SUBMODULE vs UPDATE EXISTING LOGIC vs NEW COLUMN/FIELD vs MODIFY EXISTING vs DELETE vs INTEGRATION vs PERFORMANCE vs VALIDATION vs REPORTING vs CONFIGURATION vs TESTING
 - **Target Files**: Specific files to modify, create, or delete in each module
 - **Usage Analysis**: For NEW TABLE requirements, identify where new data will be USED
 - **Module Structure Analysis**: For NEW MODULE/SUBMODULE requirements, identify complete module structure
 - **Logic Analysis**: For UPDATE EXISTING LOGIC requirements, identify existing logic to modify
 - **Formula Analysis**: For NEW COLUMN/FIELD requirements, identify calculation logic and dependencies
+- **Integration Analysis**: For INTEGRATION requirements, identify integration points and dependencies
+- **Performance Analysis**: For PERFORMANCE requirements, identify bottlenecks and optimization opportunities
+- **Validation Analysis**: For VALIDATION requirements, identify validation rules and requirements
+- **Reporting Analysis**: For REPORTING requirements, identify report structure and data requirements
+- **Configuration Analysis**: For CONFIGURATION requirements, identify configuration settings and requirements
+- **Testing Analysis**: For TESTING requirements, identify test scenarios and requirements
 - **Implementation Plan**: Step-by-step implementation approach
 - **Pattern References**: Existing patterns to follow
 - **Validation Results**: Confirmation of module and file selection
