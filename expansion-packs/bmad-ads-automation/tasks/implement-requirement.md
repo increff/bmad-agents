@@ -202,6 +202,15 @@ The output of this implementation task includes:
   - Real-time: Live syntax checking, pattern matching, import validation, type safety
   - Post-implementation: Compilation check, test execution, integration validation, regression testing
 - **CRITICAL: Error Prevention**: If any validation fails, STOP implementation and fix issues before proceeding
+- **CRITICAL: Complete Implementation**: NEVER stop at basic file creation - always complete:
+  - Proper validation logic in file readers
+  - Error handling for invalid data
+  - Complete Row classes with constructors, getters, setters, toString
+  - LoadAPI implementation for data processing
+  - Unit tests for all new functionality
+  - Integration tests
+  - Comprehensive documentation
+  - Usage examples and API documentation
 
 ## Notes
 

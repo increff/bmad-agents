@@ -75,6 +75,8 @@ persona:
     - MANDATORY: Pre-validate all changes - syntax check, dependency validation, pattern compliance, and naming convention validation before any implementation
     - MANDATORY: Real-time validation - validate code as it's being written with live syntax checking and pattern matching
     - MANDATORY: Post-implementation validation - compilation check, test execution, and integration validation immediately after changes
+    - MANDATORY: Complete full workflow - never stop at basic file creation, always complete testing, documentation, and validation
+    - MANDATORY: Create comprehensive implementations - include proper validation, error handling, constructors, getters, setters, and toString methods
 # All commands require * prefix when used (e.g., *help)
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -516,8 +518,8 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 - **Input File Only Tasks**: When task is to "add new input" or "create input file", DO NOT add ModuleName constants - only create the input file and row classes
 - **Validation Requirements**: Most operations require ValidationModule and ValidationConstants, register in GroupModule. For simple input file additions, basic validation in the file reader is sufficient
 - **File Registration**: New data files for processing modules MUST be registered in FileName.java, SchemaProvider.java, and configuration JSONs. For simple input file additions, basic file creation is sufficient
-- **Row Classes**: Simple POJOs with public fields
-- **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders() and read() methods
+- **Row Classes**: Complete POJOs with public fields, constructors, getters, setters, toString() method, and proper validation
+- **File Classes**: Extend AbstractTSVFile<RowClass> with getHeaders(), read() methods, proper validation logic, and error handling
 - **FileName Constants**: snake_case naming, no extensions
 
 #### File Creation Guidance - Reference Existing Files
@@ -548,6 +550,7 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
 
 - **LoadAPI Registration**: New LoadAPIs MUST be registered in **init**.py, loadapi_provider.py with import_id mapping
 - **LoadAPI Structure**: Extend LoadApi/IntegrationLoadApi, define TSV_HEADER/DB_HEADER, implement validation and data processing methods
+- **LoadAPI Implementation**: ALWAYS create LoadAPI classes for new inputs to handle data validation, processing, and database operations
 - **LoadAPI Constants**: Create module-specific constants and update MsgErrors.py with English/Spanish error message pairs
 - **Directory Organization**: Module-specific directories (e.g., iss/, analysis/, integration/)
 
@@ -575,6 +578,18 @@ The enhanced orchestrator provides a streamlined `*implement` command that autom
    - ✅ **Integration Validation**: Check cross-repository integration
    - ✅ **Performance Impact**: Assess performance impact of changes
    - ✅ **Regression Testing**: Ensure no existing functionality is broken
+
+4. **Testing Requirements:**
+   - ✅ **Unit Tests**: Create unit tests for all new Row and File classes
+   - ✅ **Integration Tests**: Create integration tests for LoadAPI functionality
+   - ✅ **Validation Tests**: Test data validation and error handling
+   - ✅ **End-to-End Tests**: Test complete data flow from input to processing
+
+5. **Documentation Requirements:**
+   - ✅ **API Documentation**: Document all new classes and methods
+   - ✅ **Usage Examples**: Provide usage examples for new functionality
+   - ✅ **Implementation Notes**: Document implementation decisions and patterns
+   - ✅ **Testing Documentation**: Document test cases and expected behavior
 
 - **Validation Methods**: Implement pre_validate_initializer() and validate_row() methods
 
