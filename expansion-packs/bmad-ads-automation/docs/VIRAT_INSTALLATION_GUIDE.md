@@ -24,7 +24,7 @@ npx bmad-method install
 # Clone repository
 git clone https://github.com/increff/bmad-agents.git
 cd bmad-agents
-git checkout bmad-ads-automation-clean-implementation
+git checkout virat-transformation-clean-implementation
 
 # Install dependencies
 npm install

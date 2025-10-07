@@ -1,7 +1,7 @@
-# BMAD ADS Automation Extension Pack Configuration
-name: bmad-ads-automation
+# VIRAT Transformation System Extension Pack Configuration
+name: virat-transformation-system
 version: 1.0.0
-description: "Automated Development System for multi-repository development workflows"
+description: "VIRAT Transformation System for multi-repository development workflows"
 author: "BMAD Team"
 license: "MIT"
 

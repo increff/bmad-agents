@@ -1,8 +1,8 @@
-# BMAD ADS Automation Extension Pack
+# VIRAT Transformation System Extension Pack
 
 ## Overview
 
-The BMAD ADS (Automated Development System) is a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
+The VIRAT (Virtual Intelligence Repository Analysis & Transformation) system is a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
 
 ## Features
 
@@ -47,7 +47,7 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 
 ## Agents
 
-### ADS Orchestrator
+### VIRAT Orchestrator
 
 - **Role**: Master Orchestrator for Multi-Repository Development Automation
 - **Commands**: `*implement`, `*analyze`, `*crawl`, `*validate`, `*document`
@@ -103,7 +103,7 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 
 ### Basic Usage
 
-1. **Activate ADS Orchestrator**:
+1. **Activate VIRAT Orchestrator**:
 
    ```
    @ads-orchestrator
@@ -191,7 +191,7 @@ repositories:
 
 ## Notes
 
-- This extension pack implements the complete BMAD ADS Automation system
+- This extension pack implements the complete VIRAT Transformation System
 - Follows BMAD agent specialization rules strictly
 - Performs actual git operations and repository modifications
 - Uses multi-stage repository crawling for accuracy

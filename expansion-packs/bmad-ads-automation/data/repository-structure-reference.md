@@ -8,9 +8,9 @@ This document provides a comprehensive reference of all three repository structu
 
 ```bash
 # Get repository paths from configuration
-REPO_PATH=$(grep "irisx-algo:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
-LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
-CONFIG_PATH=$(grep "irisx-config:" expansion-packs/bmad-ads-automation/config.yaml | cut -d'"' -f2)
+REPO_PATH=$(grep "irisx-algo:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
+LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
+CONFIG_PATH=$(grep "irisx-config:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
 ```
 
 ## irisx-algo Repository Structure
