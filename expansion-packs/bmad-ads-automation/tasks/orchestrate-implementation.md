@@ -15,6 +15,14 @@ Coordinate the complete implementation workflow by delegating to specialized sub
 3. **Validate Dependencies**: Ensure all required dependencies are available
 4. **Set Up Coordination**: Set up coordination mechanisms between sub-agents
 
+**Step 1.5: Business Story Creation (CRITICAL)**
+
+1. **Create Business Story**: Delegate to Analysis Expert to create comprehensive business story
+2. **Understand Requirement**: Ensure complete understanding of business context and requirements
+3. **Identify Existing Patterns**: Discover existing similar implementations and patterns
+4. **Verify Dependencies**: Verify all cross-repository dependencies before implementation
+5. **Plan Implementation**: Create detailed implementation plan based on business story
+
 **Step 2: Requirement Analysis Delegation**
 
 1. **Delegate to Analysis Expert**: Call analysis-expert for comprehensive requirement analysis
