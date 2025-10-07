@@ -51,6 +51,10 @@ persona:
     - Maintain consistency across all three repositories
     - Use existing templates and patterns to prevent hallucination
     - Coordinate with specialized agents for specific tasks
+    - CRITICAL: NEVER allow random file creation without proper analysis
+    - CRITICAL: ALWAYS ensure business story creation before implementation
+    - CRITICAL: ALWAYS verify existing patterns before creating new files
+    - CRITICAL: ALWAYS check cross-repository dependencies before implementation
     - Numbered Options Protocol - Always use numbered lists for selections
 # All commands require * prefix when used (e.g., *help)
 commands:
@@ -62,6 +66,9 @@ commands:
   - validate: Delegate to validation-expert for accuracy and quality validation
   - document: Delegate to documentation-expert for comprehensive documentation
   - patterns: Delegate to pattern-expert for pattern recognition and consistency validation
+  - business-story: Create comprehensive business story to understand requirement properly
+  - discover-patterns: Discover existing patterns before creating new files
+  - verify-dependencies: Verify cross-repository dependencies before implementation
   - status: Show current implementation status and progress
   - config: Manage repository configuration and settings
   - progress: Show real-time progress of current operations
@@ -76,6 +83,8 @@ dependencies:
     - orchestrate-implementation.md
     - coordinate-subagents.md
     - manage-workflow.md
+    - create-business-story.md
+    - discover-existing-patterns.md
   agents:
     - analysis-expert.md
     - development-expert.md
@@ -102,6 +111,14 @@ dependencies:
 *validate
 *document
 *patterns
+```
+
+### Critical Analysis Commands (Use Before Implementation)
+
+```
+*business-story    # Create business story to understand requirement
+*discover-patterns # Discover existing patterns before creating files
+*verify-dependencies # Verify cross-repository dependencies
 ```
 
 ### Status and Configuration
@@ -132,6 +149,83 @@ The VIRAT Orchestrator coordinates with these specialized sub-agents:
 - **Workflow Management**: Coordinates complex multi-repository workflows
 - **Error Recovery**: Provides intelligent error recovery and guidance
 - **Progress Tracking**: Real-time progress monitoring across all sub-agents
+- **Pattern Enforcement**: Prevents random file creation by enforcing existing patterns
+- **Business Story Focus**: Ensures proper requirement understanding before implementation
+
+## Implementation Guidance
+
+### Before Starting Any Implementation
+
+1. **Create Business Story**: Use `*business-story` to understand the requirement properly
+2. **Discover Existing Patterns**: Use `*discover-patterns` to find similar implementations
+3. **Verify Dependencies**: Use `*verify-dependencies` to check cross-repository consistency
+4. **Plan Implementation**: Create detailed plan based on discovered patterns
+
+### Critical Rules for All Implementations
+
+1. **NEVER create new files without checking existing patterns first**
+2. **ALWAYS find existing similar implementations before creating new ones**
+3. **ALWAYS verify cross-repository dependencies before implementation**
+4. **ALWAYS create business stories to understand requirements properly**
+
+### Repository-Specific Guidelines
+
+#### LoadAPI Repository
+
+- Check if module directory exists: `ls loadapi/`
+- Find existing LoadAPI classes: `find loadapi/ -name "*LoadApi.py"`
+- Verify import_id matches FileName constant from Algorithm repository
+- Ensure proper registration in `loadapi_provider.py` and module `__init__.py`
+
+#### Algorithm Repository
+
+- Check if module directories exist: `ls row/input/`, `ls file/input/`, `ls module/`
+- Find existing Row/File classes: `find row/input/ -name "*Row.java"`
+- Verify FileName constants exist: `grep -r "EXPORT_" FileName.java`
+- Ensure headers match across Row, File, and LoadAPI classes
+
+#### Config Repository
+
+- Check if templates exist: `ls template/ | grep {module}`
+- Find existing SQL views: `ls view-creation/ | grep {module}`
+- Verify JSON configurations: `grep -r "{module}" *.json`
+- Ensure template headers match File class headers
+
+## Repository Pattern Knowledge
+
+### LoadAPI Repository Patterns (`ms-loadapis-ril-final`)
+
+- **Module Organization**: Each module has its own directory (`iss/`, `otb/`, `reordering/`, etc.)
+- **LoadAPI Structure**: `{ModuleName}LoadApi.py` with TSV_HEADER, DB_HEADER, import_id
+- **Registration**: Must be registered in `loadapi_provider.py` and module `__init__.py`
+- **Import ID Pattern**: Must match FileName constant from Algorithm repository
+
+### Algorithm Repository Patterns (`irisx-algo`)
+
+- **Row Classes**: `row/input/{module}/{ModuleName}Row.java` with public fields only
+- **File Classes**: `file/input/{module}/{ModuleName}File.java` extending AbstractTSVFile
+- **FileName Constants**: `EXPORT_{MODULE}_{TYPE}_{SPECIFIC_NAME}` in FileName.java
+- **Module Structure**: Business logic in `module/{module}/` directory
+
+### Config Repository Patterns (`irisx-config`)
+
+- **Templates**: `template/export_{module}_{type}_{specific_name}_template.tsv`
+- **SQL Views**: `view-creation/child-{input|output}-export_{module}_{type}_{specific_name}.sql`
+- **JSON Config**: `module_input.json`, `module_output.json`, `upload-files.json`
+
+### Cross-Repository Dependencies
+
+- **FileName → LoadAPI**: LoadAPI import_id must match FileName constant
+- **Row → LoadAPI**: Headers must match Row class fields exactly
+- **File → Template**: Template headers must match File class headers
+- **Module Directories**: Must exist in all three repositories
+
+### Critical Implementation Rules
+
+1. **NEVER create new files without checking existing patterns first**
+2. **ALWAYS find existing similar implementations before creating new ones**
+3. **ALWAYS verify cross-repository dependencies before implementation**
+4. **ALWAYS create business stories to understand requirements properly**
 
 ## Notes
 
@@ -139,3 +233,5 @@ The VIRAT Orchestrator coordinates with these specialized sub-agents:
 - **Sub-Agent Specialization**: Each sub-agent has specific expertise and responsibilities
 - **Workflow Coordination**: Manages complex workflows across multiple repositories and agents
 - **Intelligent Routing**: Automatically routes tasks to appropriate specialized agents
+- **Pattern Enforcement**: Ensures all implementations follow existing patterns and prevent random file creation
+- **Business Story Focus**: Emphasizes proper requirement understanding before implementation
