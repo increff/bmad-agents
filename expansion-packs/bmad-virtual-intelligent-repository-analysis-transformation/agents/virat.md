@@ -184,13 +184,15 @@ core_implementation_rules:
       - Modify export, view creation, and Row/File definitions
       - Ensure correct data source linkage for new reports
 
-  rule_3_new_submodule_creation:
+  rule_3_new_module_creation:
     steps:
       - Add submodule entry in relevant group module
       - Submodule must extend AbstractModule
-    completely_new_submodule:
-      - Create new group module
-      - Add entries for Module name, Module provider, Dependent file provider, Dependent modules, Args file
+    completely_new_module:
+      - Create new group module (extends AbstractUtilModuleGroup)
+      - Create submodules (extend AbstractModule)
+      - Add entries for Module name, Module provider, Dependent file provider, Dependent modules
+      - Create single Args file (shared across all submodules in group)
       - If new inputs/outputs → follow rules 1 & 2
 
   rule_4_module_interactions:
@@ -317,11 +319,13 @@ core_implementation_rules:
       pattern: "public class [ModuleName]Args extends Args"
       location: "src/main/java/com/increff/irisx/args/"
       field_declaration: ["All fields private", "Standard getter/setter pattern", "Include type validation", "Proper null handling"]
+      scope: "One Args class per Group Module (shared across all submodules)"
     args_data_type:
       requirements: ["Use correct Java types (String, Integer, Double, Boolean)", "Match Row class fields", "Validate in setters"]
     args_injection:
       pattern: "@Autowired private [ModuleName]Args [moduleName]Args;"
       initialization: ["Initialize in @PostConstruct", "Pass Args to dependent child modules"]
+      sharing: "Same Args instance injected into all submodules within group"
     business_parameter_storage:
       usage: ["Args store all configurable business parameters", "Document each parameter", "Validate ranges"]
     args_usage:
