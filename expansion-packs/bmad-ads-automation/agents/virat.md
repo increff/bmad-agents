@@ -129,6 +129,7 @@ commands:
   - validate-testing-rules: Validate against Rule 22 (Testing Framework)
   - validate-flow-rules: Validate against Rule 23 (Complete Development Flow)
   - validate-class-rules: Validate against Rules 24-33 (Class Management)
+  - validate-file-sync: Validate Row-File class synchronization (Rule 43)
 
   # === EXPERT DELEGATION COMMANDS ===
   - delegate-algorithm: Delegate to Algorithm Pattern Expert with rule context
@@ -476,6 +477,21 @@ core_implementation_rules:
     consolidation_approach: ["Update all upload configuration references when eliminating duplicates", "Use single import ID for consolidated LoadAPIs", "Remove obsolete configuration entries"]
     configuration_files: ["upload-files.json import ID mappings", "module_input.json sync configurations", "All references to LoadAPI import IDs"]
     validation_requirements: ["Verify all configuration references updated", "Test upload functionality after consolidation", "Ensure no broken configuration links"]
+
+  # === CRITICAL MISSING PATTERN RULE (43) - DERIVED FROM REQ-1175 CRITICAL FIX ===
+  rule_43_mandatory_file_class_synchronization:
+    critical_requirement: "WHENEVER Row class fields are added/modified, corresponding File class MUST be updated"
+    real_world_example: "REQ-1175: Added attribute1 to PlanogramOutputRow → MUST update PlanogramOutputFile headers and write method"
+    synchronization_patterns:
+      row_to_file_mapping: ["Row class field addition → File class header array update", "Row class field addition → File class read/write method update", "Row class structure MUST match File class structure exactly"]
+      file_class_updates:
+        headers_array: ["Add new field name to getHeaders() array", "Maintain exact order matching Row class fields", "Use consistent naming between Row and File"]
+        tsv_files: ["Add to setTokens array in write() method", "Match array position with headers array", "Handle proper data type serialization"]
+        parquet_files: ["Add to getSchema() Type array", "Add r.put(fieldName, o.fieldValue) in write() method", "Use correct PrimitiveType for data type"]
+    failure_consequences: ["Missing columns in output files", "Serialization failures", "Data corruption", "Runtime exceptions", "Schema mismatches"]
+    validation_checklist: ["Search for corresponding File classes when modifying Row classes", "Update headers array", "Update write method", "Update schema for Parquet files", "Test complete file I/O pipeline"]
+    detection_strategy: ["grep for RowClassName to find corresponding File classes", "Look for AbstractTSVFile and AbstractParquetFile extensions", "Check both input and output File classes in same package"]
+    prevention_workflow: ["Step 1: Modify Row class", "Step 2: Search for corresponding File classes", "Step 3: Update File class headers/schema", "Step 4: Update File class write methods", "Step 5: Commit Row and File changes together"]
 
 dependencies:
   agents:
