@@ -1290,13 +1290,9 @@ class Installer {
           // Add expansion pack specific replacements if available
           if (config.expansionPackAnswers && config.expansionPackAnswers[packId]) {
             const answers = config.expansionPackAnswers[packId];
-            console.log(`DEBUG: Found answers for ${packId}:`, answers);
             if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
             if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
             if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
-            console.log(`DEBUG: Replacements for ${packId}:`, replacements);
-          } else {
-            console.log(`DEBUG: No expansion pack answers found for ${packId}. Config:`, config.expansionPackAnswers);
           }
           
           if (await fileManager.copyFileWithReplacements(configPath, configDestinationPath, replacements)) {
