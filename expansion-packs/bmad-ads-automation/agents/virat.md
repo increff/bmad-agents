@@ -220,6 +220,73 @@ core_implementation_rules:
     objectmaps_integration:
       use_objectmaps: ["get_store_to_store_id_map(db)", "get_sku_to_sku_id_map(db)", "get_style_code_to_style_id_map(db)", "get_wh_to_wh_id_map(db)"]
       critical: "Never custom-denormalize — always use maps"
+
+  rule_7_duplicate_loadapi_elimination:
+    critical_discovery: "Check for DUPLICATE LoadAPIs serving the same business purpose"
+    pattern: "Multiple LoadAPIs may exist for same table but serve DIFFERENT purposes vs DUPLICATE functionality"
+    elimination_strategy:
+      - "Identify LoadAPIs with identical functionality (same headers, same processing logic)"
+      - "Keep the LoadAPI with better naming/clearer purpose as single source of truth"
+      - "Update all references to point to the retained LoadAPI"
+      - "Remove duplicate LoadAPI and its associated configs"
+    example: "DistributionStoreLoadApi vs IstStoreLoadApi - eliminated duplicate, kept IstStoreLoadApi"
+    validation: "Ensure no functionality is lost during duplicate elimination"
+
+  rule_8_utility_class_extraction:
+    pattern: "Extract complex parsing/encoding logic into dedicated utility classes"
+    when_to_create: ["Complex string parsing logic", "Flag encoding/decoding", "Data transformation logic", "Reusable business logic"]
+    naming_convention: "{Domain}Util.java (e.g., PlanogramFlagUtil.java)"
+    structure:
+      - "Static methods for stateless operations"
+      - "Inner classes for data structures (e.g., DistributionFlags)"
+      - "Clear javadoc with format specifications"
+    example: "PlanogramFlagUtil.java for parsing 'enabled:1,inward:1,outward:0' format"
+    benefits: ["Centralized logic", "Reusable across modules", "Easier testing", "Clear separation of concerns"]
+
+  rule_9_data_migration_strategy:
+    prefer_defaults_over_migration: "Use COALESCE defaults in sync queries instead of data migration scripts"
+    pattern: "COALESCE(column_name, default_value) in sync queries for new columns"
+    example: "COALESCE(enabled, 0) for new planogram flags"
+    benefits: ["No migration scripts needed", "Automatic handling of existing data", "Safer deployment"]
+    when_migration_required: ["Data type changes", "Complex data transformations", "Business logic changes"]
+
+  rule_10_deployment_order_management:
+    critical_order: "Configuration → LoadAPI → Algorithm (dependency order)"
+    rationale: "Deploy dependencies before dependents to prevent runtime errors"
+    validation_steps:
+      - "Configuration: Update SQL views and sync queries first"
+      - "LoadAPI: Update data processing logic second"
+      - "Algorithm: Update business logic last"
+    rollback_order: "Reverse order: Algorithm → LoadAPI → Configuration"
+    coordination: "Coordinate deployment across all three repositories simultaneously"
+
+  rule_11_export_compatibility_maintenance:
+    principle: "Preserve existing export formats even when internal structure changes"
+    techniques:
+      - "Use subquery aggregation to maintain export format"
+      - "Create compatibility views for existing export queries"
+      - "Maintain template column order and naming"
+    example: "Aggregate planogram flags back to store level for distribution store exports"
+    critical: "Never break existing downstream consumers of exports"
+
+  rule_12_data_consistency_structure:
+    header_consistency:
+      loadapi: "MASTER_HEADER (denormalized) → DB_HEADER (normalized)"
+      algorithm: "getHeaders() → File class headers"
+      config: "sync query SELECT → template headers"
+    denormalization_cycle:
+      critical: "Never mix normalized & denormalized data in the same layer"
+      stages:
+        user_upload: "Denormalized (style_code, store_code)"
+        loadapi: "Normalize → style_id, store_id"
+        algorithm: "Normalized only"
+        config_export: "Denormalized (style_code, store_code)"
+    loadapi_registration:
+      mandatory_files: ["LoadAPI Class", "Module __init__.py", "Main __init__.py", "loadapi_provider.py"]
+      import_id_format: "import_{module}_{input/output}_{descriptive_name}"
+    objectmaps_integration:
+      use_objectmaps: ["get_store_to_store_id_map(db)", "get_sku_to_sku_id_map(db)", "get_style_code_to_style_id_map(db)", "get_wh_to_wh_id_map(db)"]
+      critical: "Never custom-denormalize — always use maps"
   
   rule_8_validation_naming:
     validation_module:
