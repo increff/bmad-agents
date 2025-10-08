@@ -1,5 +1,5 @@
-# BMAD Repository Intelligence Extension Pack Configuration
-name: bmad-repository-intelligence
+# BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION Extension Pack Configuration
+name: bmad-virtual-intelligent-repository-analysis-transformation
 version: 1.0.0
 description: "VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION for multi-repository development workflows"
 author: "BMAD Team"
