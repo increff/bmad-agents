@@ -524,22 +524,36 @@ core_implementation_rules:
 
   # === POST DEPLOYMENT PARAMETER RULE (45) - NEW ALGO ARGS REQUIREMENT ===
   rule_45_post_deployment_parameter_registration:
-    critical_requirement: "WHENEVER new algorithm parameters (Args fields) are added, they MUST be registered in post_deployment.sql"
+    critical_requirement: "WHENEVER new algorithm parameters (Args fields) are added, they MUST be registered in post_deployment.sql AND documented in master.a_description"
     config_repository_location: "irisx-config/export/post_deployment.sql"
     parameter_registration_pattern:
-      sql_insert_format: "INSERT ignore INTO `a_input` (name, project_id, value, favourite) VALUES ('parameter_name','${project_id}','default_value','0')"
+      a_input_insert: "INSERT ignore INTO `a_input` (name, project_id, value, favourite) VALUES ('parameter_name','${project_id}','default_value','0')"
       naming_convention: ["Use snake_case for parameter names", "Match exactly with Args class field names", "Use descriptive parameter names"]
       default_values: ["Provide sensible default values", "Use string format for all values", "Consider business impact of defaults"]
       favourite_flag: ["Set to '1' for critical parameters", "Set to '0' for optional parameters", "Consider user experience in parameter selection"]
+    documentation_requirement:
+      master_description_inserts: "MUST add 2 INSERT statements per parameter (English + Spanish locales)"
+      english_locale_format: "INSERT INTO master.a_description (id, category, dataType, description, locale, module, name, priority, short_description) VALUES ('unique_id', 'Category', 'DATA_TYPE', 'Full description', 'en', 'module_list', 'parameter_name', 'priority_number', 'Short description');"
+      spanish_locale_format: "INSERT INTO master.a_description (id, category, dataType, description, locale, module, name, priority, short_description) VALUES ('unique_id+1', 'Configuración', 'DATA_TYPE', 'Spanish description', 'en-mx', 'module_list', 'parameter_name', 'priority_number', 'Spanish short description');"
+      documentation_fields:
+        id: ["Use sequential unique ID", "English locale uses base ID", "Spanish locale uses base ID + 1"]
+        category: ["Use appropriate business category", "Spanish uses 'Configuración' for configuration parameters"]
+        dataType: ["BOOLEAN, INTEGER, DOUBLE, STRING based on Args field type", "Must match Java type exactly"]
+        description: ["Comprehensive business description", "Explain parameter purpose and impact"]
+        locale: ["'en' for English", "'en-mx' for Spanish/Mexican"]
+        module: ["Comma-separated list of applicable modules", "Include all modules that use this parameter"]
+        name: ["Exact parameter name matching Args field", "Must be identical to a_input name"]
+        priority: ["Sequential priority number", "Maintain ordering consistency"]
+        short_description: ["Brief user-friendly description", "Question format preferred (e.g., 'Should X be Y?')"]
     implementation_steps:
-      args_analysis: ["Identify all new fields in Args classes", "Determine appropriate default values", "Classify parameter importance (favourite flag)"]
-      sql_generation: ["Generate INSERT statements for each new parameter", "Follow exact SQL format pattern", "Maintain alphabetical ordering where possible"]
-      validation: ["Verify parameter names match Args fields exactly", "Test default values in algorithm execution", "Ensure no duplicate parameter names"]
+      args_analysis: ["Identify all new fields in Args classes", "Determine appropriate default values", "Classify parameter importance (favourite flag)", "Determine applicable modules for parameter"]
+      sql_generation: ["Generate a_input INSERT statement", "Generate English a_description INSERT", "Generate Spanish a_description INSERT", "Assign unique sequential IDs", "Follow exact SQL format patterns"]
+      validation: ["Verify parameter names match Args fields exactly", "Test default values in algorithm execution", "Ensure no duplicate parameter names", "Validate unique ID assignment", "Check module list accuracy"]
     integration_points:
       algorithm_repository: ["Args class field definitions", "Parameter usage in module logic", "Validation and type checking"]
-      config_repository: ["post_deployment.sql parameter registration", "Parameter documentation", "Default value justification"]
-    failure_consequences: ["Algorithm fails due to missing parameters", "Runtime exceptions in parameter lookup", "Inconsistent parameter availability across environments", "Manual parameter setup required"]
-    validation_checklist: ["Check all new Args fields have corresponding post_deployment entries", "Verify parameter names match exactly", "Test algorithm execution with default values", "Validate SQL syntax and format"]
+      config_repository: ["post_deployment.sql parameter registration", "master.a_description documentation", "Default value justification"]
+    failure_consequences: ["Algorithm fails due to missing parameters", "Runtime exceptions in parameter lookup", "Inconsistent parameter availability across environments", "Manual parameter setup required", "Missing parameter documentation", "UI parameter display issues"]
+    validation_checklist: ["Check all new Args fields have corresponding post_deployment entries", "Verify parameter names match exactly", "Test algorithm execution with default values", "Validate SQL syntax and format", "Ensure both English and Spanish documentation exists", "Verify unique ID assignment", "Check module applicability"]
 
 dependencies:
   agents:
