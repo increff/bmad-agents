@@ -649,6 +649,59 @@ async function promptInstallation() {
 
   answers.includeWebBundles = includeWebBundles;
 
+  // Ask expansion pack specific questions
+  if (answers.expansionPacks && answers.expansionPacks.length > 0) {
+    const configLoader = require('../lib/config-loader');
+    const loader = new configLoader();
+    const availableExpansionPacks = await loader.getAvailableExpansionPacks();
+    
+    answers.expansionPackAnswers = {};
+    
+    for (const packId of answers.expansionPacks) {
+      const pack = availableExpansionPacks.find(p => p.id === packId);
+      if (pack && pack.packPath) {
+        const configPath = path.join(pack.packPath, 'config.yaml');
+        try {
+          const configContent = await fs.readFile(configPath, 'utf8');
+          const config = yaml.load(configContent);
+          
+          if (config.installation_questions && config.installation_questions.length > 0) {
+            console.log(chalk.cyan(`\n📋 ${pack.name || packId} Configuration`));
+            console.log(chalk.dim(`Configure settings for the ${pack.name || packId} expansion pack.\n`));
+            
+            answers.expansionPackAnswers[packId] = {};
+            
+            for (const question of config.installation_questions) {
+              const promptConfig = {
+                type: question.type || 'input',
+                name: question.name,
+                message: question.message,
+              };
+              
+              if (question.default !== undefined) {
+                promptConfig.default = question.default;
+              }
+              
+              if (question.validate === 'required') {
+                promptConfig.validate = (input) => {
+                  if (!input || !input.trim()) {
+                    return 'This field is required';
+                  }
+                  return true;
+                };
+              }
+              
+              const response = await inquirer.prompt([promptConfig]);
+              answers.expansionPackAnswers[packId][question.name] = response[question.name];
+            }
+          }
+        } catch (error) {
+          console.log(chalk.yellow(`⚠️  Could not load questions for ${packId}: ${error.message}`));
+        }
+      }
+    }
+  }
+
   return answers;
 }
 

@@ -299,6 +299,10 @@ class FileManager {
   }
 
   async copyFileWithRootReplacement(source, destination, rootValue) {
+    return this.copyFileWithReplacements(source, destination, { '{root}': rootValue });
+  }
+
+  async copyFileWithReplacements(source, destination, replacements = {}) {
     try {
       // Check file size to determine if we should stream
       const stats = await fs.stat(source);
@@ -309,7 +313,10 @@ class FileManager {
         const { Transform } = require('node:stream');
         const replaceStream = new Transform({
           transform(chunk, encoding, callback) {
-            const modified = chunk.toString().replaceAll('{root}', rootValue);
+            let modified = chunk.toString();
+            for (const [placeholder, value] of Object.entries(replacements)) {
+              modified = modified.replaceAll(placeholder, value);
+            }
             callback(null, modified);
           },
         });
@@ -323,14 +330,17 @@ class FileManager {
       } else {
         // Regular approach for smaller files
         const content = await fsPromises.readFile(source, 'utf8');
-        const updatedContent = content.replaceAll('{root}', rootValue);
+        let updatedContent = content;
+        for (const [placeholder, value] of Object.entries(replacements)) {
+          updatedContent = updatedContent.replaceAll(placeholder, value);
+        }
         await this.ensureDirectory(path.dirname(destination));
         await fsPromises.writeFile(destination, updatedContent, 'utf8');
       }
 
       return true;
     } catch (error) {
-      console.error(chalk.red(`Failed to copy ${source} with root replacement:`), error.message);
+      console.error(chalk.red(`Failed to copy ${source} with replacements:`), error.message);
       return false;
     }
   }

@@ -1246,18 +1246,31 @@ class Installer {
               nodir: true,
             });
 
-            // Copy each file to the expansion pack's dot folder with {root} replacement
+            // Copy each file to the expansion pack's dot folder with replacements
             for (const file of files) {
               const sourcePath = path.join(sourceFolder, file);
               const destinationPath = path.join(expansionDotFolder, folder, file);
 
-              const needsRootReplacement =
+              const needsReplacement =
                 file.endsWith('.md') || file.endsWith('.yaml') || file.endsWith('.yml');
               let success = false;
 
-              success = await (needsRootReplacement
-                ? fileManager.copyFileWithRootReplacement(sourcePath, destinationPath, `.${packId}`)
-                : fileManager.copyFile(sourcePath, destinationPath));
+              if (needsReplacement) {
+                // Prepare replacements including root and expansion pack answers
+                const replacements = { '{root}': `.${packId}` };
+                
+                // Add expansion pack specific replacements if available
+                if (config.expansionPackAnswers && config.expansionPackAnswers[packId]) {
+                  const answers = config.expansionPackAnswers[packId];
+                  if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
+                  if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
+                  if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+                }
+                
+                success = await fileManager.copyFileWithReplacements(sourcePath, destinationPath, replacements);
+              } else {
+                success = await fileManager.copyFile(sourcePath, destinationPath);
+              }
 
               if (success) {
                 installedFiles.push(path.join(`.${packId}`, folder, file));
@@ -1266,32 +1279,44 @@ class Installer {
           }
         }
 
-        // Copy config.yaml with {root} replacement
+        // Copy config.yaml with replacements
         const configPath = path.join(expansionPackDir, 'config.yaml');
         if (await fileManager.pathExists(configPath)) {
           const configDestinationPath = path.join(expansionDotFolder, 'config.yaml');
-          if (
-            await fileManager.copyFileWithRootReplacement(
-              configPath,
-              configDestinationPath,
-              `.${packId}`,
-            )
-          ) {
+          
+          // Prepare replacements including root and expansion pack answers
+          const replacements = { '{root}': `.${packId}` };
+          
+          // Add expansion pack specific replacements if available
+          if (config.expansionPackAnswers && config.expansionPackAnswers[packId]) {
+            const answers = config.expansionPackAnswers[packId];
+            if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
+            if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
+            if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+          }
+          
+          if (await fileManager.copyFileWithReplacements(configPath, configDestinationPath, replacements)) {
             installedFiles.push(path.join(`.${packId}`, 'config.yaml'));
           }
         }
 
-        // Copy README if it exists with {root} replacement
+        // Copy README if it exists with replacements
         const readmePath = path.join(expansionPackDir, 'README.md');
         if (await fileManager.pathExists(readmePath)) {
           const readmeDestinationPath = path.join(expansionDotFolder, 'README.md');
-          if (
-            await fileManager.copyFileWithRootReplacement(
-              readmePath,
-              readmeDestinationPath,
-              `.${packId}`,
-            )
-          ) {
+          
+          // Prepare replacements including root and expansion pack answers
+          const replacements = { '{root}': `.${packId}` };
+          
+          // Add expansion pack specific replacements if available
+          if (config.expansionPackAnswers && config.expansionPackAnswers[packId]) {
+            const answers = config.expansionPackAnswers[packId];
+            if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
+            if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
+            if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+          }
+          
+          if (await fileManager.copyFileWithReplacements(readmePath, readmeDestinationPath, replacements)) {
             installedFiles.push(path.join(`.${packId}`, 'README.md'));
           }
         }
