@@ -7,8 +7,8 @@ This document outlines the complete development flow using the research-based VI
 ## Repository Base Branches
 
 - **Algorithm Repository (`irisx-algo`)**: `caas-release`
-- **LoadAPI Repository (`ms-loadapis-ril-final`)**: `release-optimised`
-- **Configuration Repository (`irisx-config`)**: `caas-staging-fixed`
+- **LoadAPI Repository (`ms-loadapis-ril-final`)**: `release_optimised`
+- **Configuration Repository (`irisx-config`)**: `caas-staging_fix`
 
 ## Complete Development Flow
 
@@ -31,8 +31,8 @@ This document outlines the complete development flow using the research-based VI
 **Actions**:
 - **CRITICAL**: Switch branches in the ACTUAL repositories, NOT in the BMAD project
 - **Algorithm Repository (`irisx-algo`)**: Switch to `caas-release` branch
-- **LoadAPI Repository (`ms-loadapis-ril-final`)**: Switch to `release-optimised` branch
-- **Configuration Repository (`irisx-config`)**: Switch to `caas-staging-fixed` branch
+- **LoadAPI Repository (`ms-loadapis-ril-final`)**: Switch to `release_optimised` branch
+- **Configuration Repository (`irisx-config`)**: Switch to `caas-staging_fix` branch
 - Pull latest changes from remote for each base branch
 - Verify working directory is clean (no uncommitted changes)
 **Output**: 
@@ -94,8 +94,8 @@ This document outlines the complete development flow using the research-based VI
 - **Load BMAD Analyst Persona**: Continue with `@bmad-core/agents/analyst.md` for systematic crawling
 - **Systematic Repository Analysis**: Methodically analyze all base branches:
   - `caas-release` (Algorithm Repository) - Focus on module patterns, Row/File classes
-  - `release-optimised` (LoadAPI Repository) - Focus on LoadAPI patterns, denormalization
-  - `caas-staging-fixed` (Configuration Repository) - Focus on SQL views, templates, JSON configs
+  - `release_optimised` (LoadAPI Repository) - Focus on LoadAPI patterns, denormalization
+  - `caas-staging_fix` (Configuration Repository) - Focus on SQL views, templates, JSON configs
 - **Pattern Discovery**: Identify existing similar implementations using analyst methodology
 - **Code Structure Analysis**: Analyze current code structures, naming conventions, and patterns
 - **Dependency Mapping**: Map existing cross-repository dependencies with analyst precision
@@ -224,8 +224,8 @@ This document outlines the complete development flow using the research-based VI
 ```
 **Actions**:
 - Create feature branch from `caas-release` (Algorithm Repository)
-- Create feature branch from `release-optimised` (LoadAPI Repository)
-- Create feature branch from `caas-staging-fixed` (Configuration Repository)
+- Create feature branch from `release_optimised` (LoadAPI Repository)
+- Create feature branch from `caas-staging_fix` (Configuration Repository)
 **Naming Convention**: `feature/{req-id}-{descriptive-name}`
 
 ### Step 12: Brownfield Development with BMAD Dev

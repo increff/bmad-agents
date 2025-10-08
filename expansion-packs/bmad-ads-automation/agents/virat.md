@@ -269,9 +269,9 @@ core_implementation_rules:
     branch_management:
       rules: ["Branch from correct base branches", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
       base_branches:
-        algorithm_repo_irisx_algo: "caas-release"
-        loadapi_repo_ms_loadapis_ril_final: "release-optimised"
-        config_repo_irisx_config: "caas-staging-fixed"
+        algorithm: "caas-release"
+        loadapi: "release_optimised"
+        config: "caas-staging_fix"
     commit_message:
       format: "[REQ-{id}] {repository}: {description}"
       requirements: ["Cross-Repo: Reference related commits", "Each commit = atomic, working change"]
@@ -478,8 +478,8 @@ dependencies:
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
 1. **Switch to Base Branches**: ALWAYS switch ACTUAL REPOSITORIES to correct base branches BEFORE any analysis
    - Algorithm Repository (`irisx-algo`) → `caas-release`
-   - LoadAPI Repository (`ms-loadapis-ril-final`) → `release-optimised`
-   - Configuration Repository (`irisx-config`) → `caas-staging-fixed`
+   - LoadAPI Repository (`ms-loadapis-ril-final`) → `release_optimised`
+   - Configuration Repository (`irisx-config`) → `caas-staging_fix`
    - **CRITICAL**: Switch branches in the ACTUAL repositories, NOT in the BMAD project
 2. **Verify Repository State**: Ensure clean working directories and latest code
 
