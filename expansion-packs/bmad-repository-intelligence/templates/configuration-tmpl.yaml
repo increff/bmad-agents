@@ -12,13 +12,13 @@ repositories:
     type: "java"
     branch: "caas-release"
     access: "git"
-  
+
   ms-loadapis-ril-final:
     path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
     type: "python"
     branch: "caas-release"
     access: "git"
-  
+
   irisx-config:
     path: "/Users/viratbansal/IdeaProjects/irisx-config"
     type: "config"
@@ -31,12 +31,12 @@ patterns:
     module_path: "src/main/java/com/increff/irisx/module"
     template_path: "templates/java"
     naming_convention: "camelCase"
-  
+
   python:
     module_path: "loadapi"
     template_path: "templates/python"
     naming_convention: "snake_case"
-  
+
   config:
     template_path: "template"
     sql_path: "view-creation"
@@ -52,7 +52,7 @@ environments:
         path: "/dev/ms-loadapis-ril-final"
       irisx-config:
         path: "/dev/irisx-config"
-  
+
   staging:
     repositories:
       irisx-algo:
@@ -71,6 +71,7 @@ preferences:
 
 ## Pattern Configuration Template
 
+---
 # Custom Pattern Definitions
 patterns:
   allocation_module:
@@ -81,14 +82,14 @@ patterns:
       - "must_extend_AbstractAllocationModule"
       - "must_have_Component_annotation"
       - "must_follow_naming_convention"
-  
+
   data_class:
     java_template: "DataClass.java.template"
     validation_rules:
       - "must_have_getters_and_setters"
       - "must_follow_naming_convention"
       - "must_implement_serializable"
-  
+
   load_api:
     python_template: "LoadApi.py.template"
     validation_rules:
@@ -97,7 +98,7 @@ patterns:
       - "must_follow_naming_convention"
 
 ## Environment Configuration Template
-yaml
+---
 # Environment-Specific Configuration
 environments:
   development:
@@ -111,7 +112,7 @@ environments:
       irisx-config:
         path: "/dev/irisx-config"
         branch: "caas-release"
-  
+
   staging:
     repositories:
       irisx-algo:
@@ -123,7 +124,7 @@ environments:
       irisx-config:
         path: "/staging/irisx-config"
         branch: "caas-release"
-  
+
   production:
     repositories:
       irisx-algo:
@@ -137,30 +138,30 @@ environments:
         branch: "caas-release"
 
 ## User Preferences Template
-yaml
+---
 # User Preferences Configuration
 preferences:
   # Default environment to use
   default_environment: "development"
-  
+
   # Auto-confirm operations (true/false)
   auto_confirm: false
-  
+
   # Display progress indicators (true/false)
   progress_display: true
-  
+
   # Error recovery mode (interactive/automatic/manual)
   error_recovery: "interactive"
-  
+
   # Logging level (debug/info/warn/error)
   log_level: "info"
-  
+
   # Maximum operation timeout in minutes
   operation_timeout: 60
-  
+
   # Backup configuration before operations (true/false)
   auto_backup: true
-  
+
   # Notification preferences
   notifications:
     email: false
@@ -168,7 +169,7 @@ preferences:
     sound: false
 
 ## Configuration Schema Template
-yaml
+---
 # Configuration Schema Definition
 schema:
   repositories:
@@ -191,7 +192,7 @@ schema:
         type: "string"
         enum: ["git", "local"]
         description: "Access method"
-  
+
   patterns:
     type: "object"
     required: ["template_path", "naming_convention"]
@@ -203,14 +204,14 @@ schema:
         type: "string"
         enum: ["camelCase", "snake_case", "kebab-case"]
         description: "Naming convention for generated code"
-  
+
   environments:
     type: "object"
     properties:
       repositories:
         type: "object"
         description: "Environment-specific repository overrides"
-  
+
   preferences:
     type: "object"
     properties:
@@ -231,7 +232,7 @@ schema:
 ## Configuration Examples
 
 ### Minimal Configuration
-yaml
+---
 version: "1.0"
 repositories:
   irisx-algo:
@@ -241,7 +242,7 @@ preferences:
   default_environment: "development"
 
 ### Full Configuration
-yaml
+---
 version: "1.0"
 repositories:
   irisx-algo:

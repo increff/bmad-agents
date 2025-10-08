@@ -7,6 +7,7 @@ This document provides the brownfield architecture reference for the three inter
 ## Repository Architecture
 
 ### irisx-algo (Java/Spring Boot)
+
 - **Purpose**: Core business logic and algorithms
 - **Technology**: Java 1.8, Spring Boot, Maven
 - **Key Components**:
@@ -17,6 +18,7 @@ This document provides the brownfield architecture reference for the three inter
   - Abstract classes and shared components
 
 ### ms-loadapis-ril-final (Python)
+
 - **Purpose**: Data ingestion and load APIs
 - **Technology**: Python 3.8+, Azure integration
 - **Key Components**:
@@ -26,6 +28,7 @@ This document provides the brownfield architecture reference for the three inter
   - Constants and error handling
 
 ### irisx-config (Configuration/SQL)
+
 - **Purpose**: Configuration, SQL views, and templates
 - **Technology**: JSON, TSV, SQL
 - **Key Components**:
@@ -43,16 +46,19 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 ## Key Technical Debt
 
 ### Shared Abstract Classes
+
 - **AbstractAllocationModule**: Extended by 6+ modules
 - **BaseIterationRunner**: Used by multiple modules
 - **BaseDistributionData**: 100+ fields, core data structure
 
 ### Configuration Complexity
+
 - **Large JSON configs**: Deep nesting and complex structures
 - **TSV Processing**: All input data in TSV format
 - **SQL View Dependencies**: 200+ views with complex dependencies
 
 ### Integration Constraints
+
 - **Azure Integration**: All data processing through Azure SQL
 - **Spring Dependency Injection**: Heavy use of @Autowired and @Qualifier
 - **Schema Synchronization**: Must maintain consistency across Java, Python, and SQL
@@ -60,6 +66,7 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 ## Critical Implementation Notes
 
 ### For BMAD ADS Automation System
+
 1. **Repository Coordination**: Must handle three repositories simultaneously
 2. **Pattern Recognition**: Must identify existing patterns before making changes
 3. **Dependency Analysis**: Must understand shared class impacts
@@ -69,6 +76,7 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 7. **Template Management**: Must follow existing TSV and SQL view patterns
 
 ### Success Factors
+
 - Understanding the shared abstract class hierarchy
 - Maintaining configuration consistency across repositories
 - Following existing naming and structural patterns

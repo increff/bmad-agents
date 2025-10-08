@@ -11,9 +11,9 @@ CRITICAL: Read the full YAML BLOCK that FOLLOWS IN THIS FILE to understand your 
 ```yaml
 IDE-FILE-RESOLUTION:
   - FOR LATER USE ONLY - NOT FOR ACTIVATION, when executing commands that reference dependencies
-  - Dependencies map to expansion-packs/bmad-ads-automation/{type}/{name}
+  - Dependencies map to expansion-packs/bmad-repository-intelligence/{type}/{name}
   - type=folder (tasks|templates|checklists|data|utils|etc...), name=file-name
-  - Example: analyze-config-requirement.md → expansion-packs/bmad-ads-automation/tasks/analyze-config-requirement.md
+  - Example: analyze-config-requirement.md → expansion-packs/bmad-repository-intelligence/tasks/analyze-config-requirement.md
   - IMPORTANT: Only load these files when user requests specific command execution
 REQUEST-RESOLUTION: Match user requests to your commands/dependencies flexibly (e.g., "analyze config"→*analyze→analyze-config-requirement task, "create view" would be dependencies->tasks->create-sql-view), ALWAYS ask for clarification if no clear match.
 activation-instructions:

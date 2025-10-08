@@ -13,6 +13,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 **CRITICAL:** This task implements the multi-stage repository crawling strategy defined in the PRD.
 
 **Three-Stage Crawling Process:**
+
 1. **Stage 1: Initial Repository Crawling (Analysis Phase)**
 2. **Stage 2: Pre-Implementation Crawling (Implementation Phase)**
 3. **Stage 3: Validation Crawling (Validation Phase)**
@@ -27,6 +28,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 **Target Directory**: `/Users/viratbansal/IdeaProjects/irisx-algo`
 
 **What to Crawl:**
+
 1. **Java Module Structure**:
    - `src/main/java/com/increff/irisx/module/` - All module directories
    - `src/main/java/com/increff/irisx/module/distribution/` - Distribution modules
@@ -56,6 +58,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 **Target Directory**: `/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final`
 
 **What to Crawl:**
+
 1. **Load API Structure**:
    - `loadapi/common/` - Base classes and utilities
    - `loadapi/distribution/` - Distribution-specific load APIs
@@ -84,6 +87,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 **Target Directory**: `/Users/viratbansal/IdeaProjects/irisx-config`
 
 **What to Crawl:**
+
 1. **TSV Templates**:
    - `template/` directory - All 100+ TSV templates
    - `template/export_dist_*_template.tsv` - Distribution templates
@@ -119,6 +123,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 **Target**: Modules identified for changes in Stage 1
 
 **What to Crawl:**
+
 1. **Specific Module Files**:
    - Exact files that need modification
    - Current implementation patterns
@@ -147,6 +152,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 #### 4.1 Crawl Validation Patterns
 
 **What to Crawl:**
+
 1. **Validation Modules**:
    - `irisx-algo/src/main/java/com/increff/irisx/module/validation/` - All validation modules
    - Validation patterns and structures
@@ -170,30 +176,35 @@ Perform comprehensive repository crawling across three interconnected repositori
 ### 5. Pattern Analysis and Classification
 
 #### 5.1 Structural Patterns
+
 - File organization patterns
 - Naming convention patterns
 - Directory structure patterns
 - Module organization patterns
 
 #### 5.2 Code Patterns
+
 - Java coding patterns
 - Python coding patterns
 - Design pattern usage
 - Architectural patterns
 
 #### 5.3 Data Patterns
+
 - Data flow patterns
 - Schema patterns
 - Transformation patterns
 - Validation patterns
 
 #### 5.4 Configuration Patterns
+
 - Configuration file patterns
 - Parameter patterns
 - Environment patterns
 - Integration patterns
 
 #### 5.5 Validation Patterns
+
 - Validation rule patterns
 - Error handling patterns
 - Testing patterns
@@ -202,12 +213,14 @@ Perform comprehensive repository crawling across three interconnected repositori
 ### 6. Output Generation
 
 #### 6.1 Repository State Map
+
 - Current state of all three repositories
 - All existing patterns and templates
 - Dependencies and relationships
 - Configuration structures
 
 #### 6.2 Pattern Classification
+
 - Structural patterns identified
 - Code patterns identified
 - Data patterns identified
@@ -215,6 +228,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 - Validation patterns identified
 
 #### 6.3 Implementation Guidance
+
 - Specific patterns to follow
 - Templates to use
 - Dependencies to consider

@@ -1,7 +1,7 @@
-# BMAD ADS Automation Extension Pack Configuration
-name: bmad-ads-automation
+# BMAD Repository Intelligence Extension Pack Configuration
+name: bmad-repository-intelligence
 version: 1.0.0
-description: "Automated Development System for multi-repository development workflows"
+description: "VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION for multi-repository development workflows"
 author: "BMAD Team"
 license: "MIT"
 

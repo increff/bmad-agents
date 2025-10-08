@@ -51,7 +51,7 @@ module_mapping:
 ```bash
 # STEP 2: Repository-Specific Pattern Discovery
 1. DELEGATE TO ALGORITHM EXPERT for Java pattern analysis
-2. DELEGATE TO LOADAPI EXPERT for Python pattern analysis  
+2. DELEGATE TO LOADAPI EXPERT for Python pattern analysis
 3. DELEGATE TO CONFIG EXPERT for configuration pattern analysis
 4. AGGREGATE EXPERT FINDINGS into comprehensive pattern analysis
 5. VALIDATE PATTERN CONSISTENCY across all repositories
@@ -86,22 +86,22 @@ def intelligent_dependency_mapping(requirement_analysis):
     filename_constant = discover_filename_constant(requirement_analysis)
     row_class_fields = analyze_row_class_structure(requirement_analysis)
     file_class_headers = extract_file_class_headers(requirement_analysis)
-    
+
     # LoadAPI Analysis
     import_id = extract_import_id_intelligently(filename_constant)
     loadapi_headers = generate_loadapi_headers(row_class_fields)
     validation_logic = design_validation_logic(row_class_fields)
-    
+
     # Config Analysis
     template_name = generate_template_name(filename_constant)
     template_headers = extract_template_headers(row_class_fields)
     sql_views = generate_sql_view_names(template_name)
     json_config = design_json_configuration(import_id)
-    
+
     # Consistency Validation
     validate_header_consistency([file_class_headers, loadapi_headers, template_headers])
     validate_naming_consistency([filename_constant, import_id, template_name])
-    
+
     return dependency_map
 ```
 
@@ -151,10 +151,10 @@ def validate_pattern_consistency(discovered_patterns):
         'structure_consistency': validate_structure(discovered_patterns),
         'dependency_consistency': validate_dependencies(discovered_patterns)
     }
-    
+
     # CRITICAL VALIDATIONS:
     assert all(validation_results.values()), "Pattern consistency validation failed"
-    
+
     return validation_results
 
 # HEADER CONSISTENCY VALIDATION
@@ -162,7 +162,7 @@ def validate_headers(patterns):
     algorithm_headers = patterns['algorithm']['file_class_headers']
     loadapi_headers = patterns['loadapi']['tsv_headers']
     config_headers = patterns['config']['template_headers']
-    
+
     return algorithm_headers == loadapi_headers == config_headers
 ```
 
@@ -179,7 +179,7 @@ def prevent_duplicate_implementations(requirement_analysis, discovered_patterns)
         'loadapi_duplicates': check_loadapi_duplicates(discovered_patterns),
         'config_duplicates': check_config_duplicates(discovered_patterns)
     }
-    
+
     if any(duplication_check.values()):
         return {
             'action': 'enhance_existing',
@@ -206,28 +206,29 @@ discovery_report:
     primary_module: 'iss'
     complexity_level: 'medium'
     cross_module_impacts: []
-  
+
   discovered_patterns:
     algorithm_patterns:
-      existing_files: ['StoreCategoryPivotalTagOverrideRow.java', 'StoreCategoryPivotalTagOverrideFile.java']
+      existing_files:
+        ['StoreCategoryPivotalTagOverrideRow.java', 'StoreCategoryPivotalTagOverrideFile.java']
       filename_constant: 'EXPORT_ISS_INPUT_STORE_CATEGORY_PIVOTAL_TAG_OVERRIDE'
       headers: ['store', 'category', 'pivotaltag']
-    
+
     loadapi_patterns:
       existing_files: ['StoreCategoryPivotalTagOverrideLoadApi.py']
       import_id: 'store_category_pivotal_tag_override'
       validation_logic: 'int store > 0, String category not empty, pivotaltag in enum'
-    
+
     config_patterns:
       template_name: 'export_iss_input_store_category_pivotal_tag_override_template.tsv'
       sql_views: ['child-input-store_category_pivotal_tag_override.sql']
       json_config: 'store_category_pivotal_tag_override in module_input.json'
-  
+
   consistency_validation:
     header_consistency: true
     naming_consistency: true
     dependency_consistency: true
-  
+
   implementation_recommendation:
     action: 'enhance_existing'
     reason: 'All required files already exist'
@@ -240,20 +241,24 @@ discovery_report:
 # INTELLIGENT IMPLEMENTATION GUIDANCE
 
 ## Discovery Summary
+
 - **Requirement**: ADD PIVOTAL TAG OVERRIDE IN IDEAL SIZE AT STORE CAT LEVEL
 - **Primary Module**: ISS (Ideal Size Set)
 - **Complexity**: Medium (existing implementations found)
 
 ## Pattern Analysis Results
+
 ✅ **Algorithm Files**: StoreCategoryPivotalTagOverrideRow.java, StoreCategoryPivotalTagOverrideFile.java
 ✅ **LoadAPI Files**: StoreCategoryPivotalTagOverrideLoadApi.py
 ✅ **Config Files**: Template and views may need creation/validation
 
 ## Implementation Recommendation
+
 **Action**: ENHANCE EXISTING IMPLEMENTATION
 **Reason**: Core files already exist, enhancement may be needed
 
 ## Step-by-Step Implementation Plan
+
 1. **Validate Existing Implementation**: Check current pivotal tag override logic
 2. **Analyze Enhancement Requirements**: Determine what specific enhancement is needed
 3. **Update Business Logic**: Modify ISS module business logic if required
@@ -261,6 +266,7 @@ discovery_report:
 5. **Test Implementation**: Run validation modules and tests
 
 ## Quality Assurance Checklist
+
 - [ ] Header consistency validated across repositories
 - [ ] Naming conventions followed
 - [ ] No duplicate implementations created

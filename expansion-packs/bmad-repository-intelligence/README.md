@@ -1,8 +1,8 @@
-# BMAD ADS Automation Extension Pack
+# BMAD Repository Intelligence Extension Pack
 
 ## Overview
 
-The BMAD ADS (Automated Development System) is a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
+The BMAD Repository Intelligence system features VIRAT (VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION) - a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
 
 ## Features
 
@@ -263,7 +263,7 @@ repositories:
 
 ## Notes
 
-- This extension pack implements the complete BMAD ADS Automation system with enhanced intelligence
+- This extension pack implements the complete BMAD Repository Intelligence system with enhanced intelligence
 - Follows BMAD agent specialization rules strictly with mandatory enforcement
 - Performs actual git operations and repository modifications with comprehensive validation
 - Uses multi-stage repository crawling for accuracy with pattern recognition
@@ -343,7 +343,7 @@ repositories:
 1. **Clone the BMAD-METHOD repository**
 2. **Navigate to the expansion pack**
    ```bash
-   cd expansion-packs/bmad-ads-automation
+   cd expansion-packs/bmad-repository-intelligence
    ```
 3. **Configure repository paths** in `config.yaml`
 4. **Activate VIRAT agent**

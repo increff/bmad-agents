@@ -92,6 +92,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Pattern Configuration File (config/patterns.yaml):**
+
    ```yaml
    # Custom Pattern Definitions
    patterns:
@@ -181,6 +182,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Path Validation:**
+
    ```python
    def validate_repository_path(path):
        """Validate that repository path exists and is accessible"""
@@ -221,6 +223,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Environment Validation:**
+
    ```python
    def validate_environment(environment):
        """Validate environment configuration"""
@@ -264,6 +267,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Pattern Validation:**
+
    ```python
    def validate_pattern_config(pattern_config):
        """Validate pattern configuration"""
@@ -304,6 +308,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Pattern Resolution:**
+
    ```python
    def resolve_pattern(pattern_name):
        """Resolve pattern with inheritance"""
@@ -351,6 +356,7 @@ Implement comprehensive configuration management system including YAML-based con
    ```
 
 2. **Configuration Validation:**
+
    ```python
    def validate_configuration():
        """Validate entire configuration"""

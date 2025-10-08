@@ -7,11 +7,13 @@ The `*implement` command is the ultimate single-command solution for complete en
 ## Command Usage
 
 ### Basic Usage
+
 ```bash
 *implement REQ-1234.md
 ```
 
 ### Advanced Usage with Options
+
 ```bash
 *implement REQ-1234.md --dry-run        # Preview implementation plan only
 *implement REQ-1234.md --auto-commit    # Auto-commit and push changes
@@ -23,6 +25,7 @@ The `*implement` command is the ultimate single-command solution for complete en
 ## Complete Execution Flow
 
 ### Phase 0: Repository Preparation (Automatic)
+
 1. **Switch to Base Branches**: Automatically switch all repositories to correct base branches
    - Algorithm Repository → `caas-release`
    - LoadAPI Repository → `release-optimised`
@@ -30,6 +33,7 @@ The `*implement` command is the ultimate single-command solution for complete en
 2. **Verify Repository State**: Ensure clean working directories and latest code
 
 ### Phase 1: Intelligent Analysis (Automatic)
+
 3. **Deep Requirement Analysis with BMAD Analyst**: Load analyst persona and analyze requirement
 4. **Systematic Repository Crawling**: Crawl all repositories for existing patterns
 5. **Expert Pattern Analysis**: Delegate to all expert agents in parallel
@@ -37,6 +41,7 @@ The `*implement` command is the ultimate single-command solution for complete en
 7. **Dependency Mapping**: Map cross-module dependencies and impacts
 
 ### Phase 2: Implementation Planning (Automatic)
+
 8. **Implementation Plan Creation**: Create detailed implementation plan
 9. **Plan Validation with BMAD PM**: Use PM persona for thorough validation
 10. **Risk Analysis**: Analyze implementation risks and mitigation strategies
@@ -44,6 +49,7 @@ The `*implement` command is the ultimate single-command solution for complete en
 12. **Rollback Strategy**: Prepare rollback procedures
 
 ### Phase 3: Development Execution (Automatic)
+
 13. **Feature Branch Creation**: Create feature branches from correct base branches
 14. **Brownfield Development with BMAD Dev**: Execute implementation using dev persona
 15. **Implementation Validation**: Validate against all 33 integrated rules
@@ -51,6 +57,7 @@ The `*implement` command is the ultimate single-command solution for complete en
 17. **Implementation Documentation**: Document all changes and decisions
 
 ### Phase 4: Quality Assurance & Deployment (Automatic)
+
 18. **Quality Check**: Perform comprehensive quality validation
 19. **Deployment Validation**: Validate deployment readiness
 20. **Git Operations**: Commit changes and push feature branches
@@ -60,12 +67,14 @@ The `*implement` command is the ultimate single-command solution for complete en
 ## Key Features
 
 ### 🚀 **Complete Automation**
+
 - **22 Automated Steps**: From analysis to deployment
 - **4 Phases**: Repository preparation, analysis, planning, execution, and QA
 - **Zero Manual Intervention**: Fully automated workflow execution
 - **BMAD Persona Integration**: Leverages analyst, PM, and dev personas
 
 ### 📊 **Real-Time Progress Tracking**
+
 - ✅ **Phase Completion**: Clear indication of completed phases
 - 🔄 **Current Step**: Real-time display of current execution step
 - ⚠️ **Issues Found**: Immediate notification of any issues or conflicts
@@ -73,12 +82,14 @@ The `*implement` command is the ultimate single-command solution for complete en
 - 🎯 **Success Criteria**: Validation against all success criteria
 
 ### 🛡️ **Error Handling & Recovery**
+
 - **Automatic Rollback**: On critical failures, automatically rollback to safe state
 - **Issue Resolution**: Provide specific guidance for resolving identified issues
 - **Partial Recovery**: Resume from last successful checkpoint on retry
 - **Manual Intervention**: Clear guidance when manual intervention is required
 
 ### 📋 **Comprehensive Documentation**
+
 - **Complete Implementation Report**: Comprehensive report of all changes made
 - **Cross-Repository Impact Analysis**: Detailed analysis of changes across all repositories
 - **Testing Results**: Complete testing results and coverage reports
@@ -88,19 +99,20 @@ The `*implement` command is the ultimate single-command solution for complete en
 
 ## Command Options
 
-| Option | Description | Use Case |
-|--------|-------------|----------|
-| `--dry-run` | Preview the complete implementation plan without making changes | Planning and validation |
-| `--skip-tests` | Skip the testing phase (not recommended for production) | Development environments |
-| `--auto-commit` | Automatically commit and push changes without manual confirmation | CI/CD pipelines |
-| `--verbose` | Show detailed progress information for each step | Debugging and monitoring |
-| `--parallel` | Execute independent steps in parallel for faster completion | Performance optimization |
+| Option          | Description                                                       | Use Case                 |
+| --------------- | ----------------------------------------------------------------- | ------------------------ |
+| `--dry-run`     | Preview the complete implementation plan without making changes   | Planning and validation  |
+| `--skip-tests`  | Skip the testing phase (not recommended for production)           | Development environments |
+| `--auto-commit` | Automatically commit and push changes without manual confirmation | CI/CD pipelines          |
+| `--verbose`     | Show detailed progress information for each step                  | Debugging and monitoring |
+| `--parallel`    | Execute independent steps in parallel for faster completion       | Performance optimization |
 
 ## Success Criteria Validation
 
 The command validates against comprehensive success criteria:
 
 ### Technical Success
+
 - ✅ All 33 integrated rules followed
 - ✅ All repositories updated consistently
 - ✅ All tests passing
@@ -108,6 +120,7 @@ The command validates against comprehensive success criteria:
 - ✅ Performance impact acceptable
 
 ### Process Success
+
 - ✅ Complete traceability maintained
 - ✅ All quality gates passed
 - ✅ Documentation complete and accurate
@@ -115,6 +128,7 @@ The command validates against comprehensive success criteria:
 - ✅ Monitoring and alerting configured
 
 ### Business Success
+
 - ✅ Requirement fully implemented
 - ✅ Business logic validated
 - ✅ User acceptance criteria met
@@ -173,16 +187,19 @@ Phase 4: Quality Assurance & Deployment 🔄
 ## Integration with BMAD Framework
 
 ### BMAD Persona Usage
+
 - **Phase 1**: `@bmad-core/agents/analyst.md` for deep requirement analysis and systematic repository crawling
 - **Phase 2**: `@bmad-core/agents/pm.md` for thorough plan validation against requirements and constraints
 - **Phase 3**: `@bmad-core/agents/dev.md` for brownfield development with continuous rule validation
 
 ### Rule Integration
+
 - **All 33 Rules**: Integrated directly into VIRAT agent (no external dependencies)
 - **Rule Categories**: Core implementation, repository coordination, pattern management, error handling, testing, development flow, and class management
 - **Continuous Validation**: Every step validated against applicable rules
 
 ### Expert Agent Delegation
+
 - **Algorithm Pattern Expert**: For algorithm-specific pattern analysis
 - **LoadAPI Pattern Expert**: For LoadAPI pattern analysis and denormalization
 - **Configuration Pattern Expert**: For configuration pattern analysis and SQL views
@@ -190,24 +207,28 @@ Phase 4: Quality Assurance & Deployment 🔄
 ## Benefits
 
 ### 🎯 **Efficiency**
+
 - **Single Command**: Complete implementation with one command
 - **Time Savings**: Reduces implementation time from hours to minutes
 - **Consistency**: Ensures consistent implementation across all requirements
 - **Automation**: Eliminates manual errors and oversight
 
 ### 🛡️ **Quality Assurance**
+
 - **Rule Compliance**: Validates against all 33 integrated rules
 - **Pattern Adherence**: Ensures adherence to discovered patterns
 - **Cross-Repository Consistency**: Maintains consistency across all repositories
 - **Comprehensive Testing**: Includes unit, integration, and cross-dependency testing
 
 ### 📊 **Traceability**
+
 - **Complete Documentation**: Every decision and change documented
 - **Git Integration**: All commits and branches tracked
 - **Quality Metrics**: Comprehensive quality and compliance metrics
 - **Rollback Procedures**: Complete rollback instructions available
 
 ### 🚀 **Scalability**
+
 - **Multi-Repository**: Handles complex multi-repository implementations
 - **Parallel Execution**: Optimizes performance through parallel processing
 - **Error Recovery**: Robust error handling and recovery mechanisms
@@ -215,16 +236,16 @@ Phase 4: Quality Assurance & Deployment 🔄
 
 ## Comparison: Manual vs Automated
 
-| Aspect | Manual Process | `*implement` Command |
-|--------|----------------|---------------------|
-| **Time Required** | 4-8 hours | 30-60 minutes |
-| **Steps** | 25+ manual steps | 1 command |
-| **Error Prone** | High risk of human error | Automated validation |
-| **Consistency** | Varies by developer | 100% consistent |
-| **Documentation** | Often incomplete | Always complete |
-| **Rule Compliance** | Manual checking | Automatic validation |
-| **Testing** | Often skipped/incomplete | Always comprehensive |
-| **Rollback** | Manual procedures | Automated rollback |
+| Aspect              | Manual Process           | `*implement` Command |
+| ------------------- | ------------------------ | -------------------- |
+| **Time Required**   | 4-8 hours                | 30-60 minutes        |
+| **Steps**           | 25+ manual steps         | 1 command            |
+| **Error Prone**     | High risk of human error | Automated validation |
+| **Consistency**     | Varies by developer      | 100% consistent      |
+| **Documentation**   | Often incomplete         | Always complete      |
+| **Rule Compliance** | Manual checking          | Automatic validation |
+| **Testing**         | Often skipped/incomplete | Always comprehensive |
+| **Rollback**        | Manual procedures        | Automated rollback   |
 
 ## Conclusion
 
