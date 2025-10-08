@@ -222,6 +222,13 @@ The VIRAT Orchestrator coordinates with these specialized sub-agents:
 - **File → Template**: Template headers must match File class headers
 - **Module Directories**: Must exist in all three repositories
 
+### Repository Base Branches
+
+- **Algorithm Repository** (`irisx-algo`): Use `caas-release` branch as base
+- **LoadAPI Repository** (`ms-loadapis-ril-final`): Use `release-optimised` branch as base
+- **Config Repository** (`irisx-config`): Use `caas-release-fixed` branch as base
+- **Branch Strategy**: Always create feature branches from these release-optimized base branches
+
 ### Critical Implementation Rules
 
 1. **NEVER create new files without checking existing patterns first**

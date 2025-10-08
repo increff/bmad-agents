@@ -5,11 +5,17 @@ description: "VIRAT Transformation System for multi-repository development workf
 author: "BMAD Team"
 license: "MIT"
 
-# Repository paths for the three interconnected repositories
+# Repository paths and base branches for the three interconnected repositories
 repositories:
-  irisx-algo: "/Users/viratbansal/IdeaProjects/irisx-algo"
-  ms-loadapis-ril-final: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
-  irisx-config: "/Users/viratbansal/IdeaProjects/irisx-config"
+  irisx-algo:
+    path: "/Users/viratbansal/IdeaProjects/irisx-algo"
+    base_branch: "caas-release"
+  ms-loadapis-ril-final:
+    path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+    base_branch: "release-optimised"
+  irisx-config:
+    path: "/Users/viratbansal/IdeaProjects/irisx-config"
+    base_branch: "caas-release-fixed"
 
 # Target completion time in hours
 target_completion_time: 2

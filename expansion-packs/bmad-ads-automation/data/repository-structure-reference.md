@@ -8,9 +8,50 @@ This document provides a comprehensive reference of all three repository structu
 
 ```bash
 # Get repository paths from configuration
-REPO_PATH=$(grep "irisx-algo:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
-LOADAPI_PATH=$(grep "ms-loadapis-ril-final:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
-CONFIG_PATH=$(grep "irisx-config:" expansion-packs/virat-transformation-system/config.yaml | cut -d'"' -f2)
+REPO_PATH=$(grep -A1 "irisx-algo:" expansion-packs/virat-transformation-system/config.yaml | grep "path:" | cut -d'"' -f2)
+LOADAPI_PATH=$(grep -A1 "ms-loadapis-ril-final:" expansion-packs/virat-transformation-system/config.yaml | grep "path:" | cut -d'"' -f2)
+CONFIG_PATH=$(grep -A1 "irisx-config:" expansion-packs/virat-transformation-system/config.yaml | grep "path:" | cut -d'"' -f2)
+
+# Base branches for each repository
+ALGO_BASE_BRANCH="caas-release"
+LOADAPI_BASE_BRANCH="release-optimised"
+CONFIG_BASE_BRANCH="caas-release-fixed"
+```
+
+## Base Branch Strategy
+
+### Repository-Specific Base Branches
+
+- **Algorithm Repository** (`irisx-algo`): `caas-release`
+  - Contains stable, release-ready algorithm modules
+  - Use for creating new algorithm features and modules
+- **LoadAPI Repository** (`ms-loadapis-ril-final`): `release-optimised`
+  - Contains optimized LoadAPI implementations
+  - Use for creating new LoadAPI classes and optimizations
+- **Config Repository** (`irisx-config`): `caas-release-fixed`
+  - Contains fixed and stable configuration templates
+  - Use for creating new configuration templates and SQL views
+
+### Branch Creation Workflow
+
+```bash
+# For Algorithm changes
+cd $REPO_PATH
+git checkout $ALGO_BASE_BRANCH
+git pull origin $ALGO_BASE_BRANCH
+git checkout -b feature/requirement-name
+
+# For LoadAPI changes
+cd $LOADAPI_PATH
+git checkout $LOADAPI_BASE_BRANCH
+git pull origin $LOADAPI_BASE_BRANCH
+git checkout -b feature/requirement-name
+
+# For Config changes
+cd $CONFIG_PATH
+git checkout $CONFIG_BASE_BRANCH
+git pull origin $CONFIG_BASE_BRANCH
+git checkout -b feature/requirement-name
 ```
 
 ## irisx-algo Repository Structure
