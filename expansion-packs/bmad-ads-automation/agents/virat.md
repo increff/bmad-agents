@@ -158,7 +158,7 @@ core_implementation_rules:
       - Match file headers with sync queries
       - For new columns → update LoadAPI, sync query, view, export, and template
       - Ensure algorithm consumes new input correctly
-  
+
   rule_2_new_output_integration:
     steps:
       - Update export queries, view creation, and output JSON in config
@@ -167,7 +167,7 @@ core_implementation_rules:
     new_columns:
       - Modify export, view creation, and Row/File definitions
       - Ensure correct data source linkage for new reports
-  
+
   rule_3_new_submodule_creation:
     steps:
       - Add submodule entry in relevant group module
@@ -176,22 +176,22 @@ core_implementation_rules:
       - Create new group module
       - Add entries for Module name, Module provider, Dependent file provider, Dependent modules, Args file
       - If new inputs/outputs → follow rules 1 & 2
-  
+
   rule_4_module_interactions:
     communication_rules:
       - Between submodules → use common data classes
       - Between modules → Module A saves intermediate files, Module B reads them
-  
+
   rule_5_shared_infrastructure:
     utility_shared_resources:
       - Cache Class for multi-module or multi-view data
       - Helper Class for reusable common methods
-  
+
   rule_6_multiple_loadapis_per_table:
     critical_learning: "A SINGLE TABLE can have MULTIPLE LoadAPIs, exports, and templates"
     discovery_pattern: "ALWAYS search for ALL LoadAPIs/exports/templates for a table, not just one"
     examples:
-      - "planogram table → PlanogramLoadApi AND PlanogramDistributionLoadApi"  
+      - "planogram table → PlanogramLoadApi AND PlanogramDistributionLoadApi"
       - "distribution_store table → DistributionStoreLoadApi AND multiple export templates"
       - "Each LoadAPI serves different business purposes for the same underlying table"
     implementation_rules:
@@ -221,73 +221,6 @@ core_implementation_rules:
       use_objectmaps: ["get_store_to_store_id_map(db)", "get_sku_to_sku_id_map(db)", "get_style_code_to_style_id_map(db)", "get_wh_to_wh_id_map(db)"]
       critical: "Never custom-denormalize — always use maps"
 
-  rule_7_duplicate_loadapi_elimination:
-    critical_discovery: "Check for DUPLICATE LoadAPIs serving the same business purpose"
-    pattern: "Multiple LoadAPIs may exist for same table but serve DIFFERENT purposes vs DUPLICATE functionality"
-    elimination_strategy:
-      - "Identify LoadAPIs with identical functionality (same headers, same processing logic)"
-      - "Keep the LoadAPI with better naming/clearer purpose as single source of truth"
-      - "Update all references to point to the retained LoadAPI"
-      - "Remove duplicate LoadAPI and its associated configs"
-    example: "DistributionStoreLoadApi vs IstStoreLoadApi - eliminated duplicate, kept IstStoreLoadApi"
-    validation: "Ensure no functionality is lost during duplicate elimination"
-
-  rule_8_utility_class_extraction:
-    pattern: "Extract complex parsing/encoding logic into dedicated utility classes"
-    when_to_create: ["Complex string parsing logic", "Flag encoding/decoding", "Data transformation logic", "Reusable business logic"]
-    naming_convention: "{Domain}Util.java (e.g., PlanogramFlagUtil.java)"
-    structure:
-      - "Static methods for stateless operations"
-      - "Inner classes for data structures (e.g., DistributionFlags)"
-      - "Clear javadoc with format specifications"
-    example: "PlanogramFlagUtil.java for parsing 'enabled:1,inward:1,outward:0' format"
-    benefits: ["Centralized logic", "Reusable across modules", "Easier testing", "Clear separation of concerns"]
-
-  rule_9_data_migration_strategy:
-    prefer_defaults_over_migration: "Use COALESCE defaults in sync queries instead of data migration scripts"
-    pattern: "COALESCE(column_name, default_value) in sync queries for new columns"
-    example: "COALESCE(enabled, 0) for new planogram flags"
-    benefits: ["No migration scripts needed", "Automatic handling of existing data", "Safer deployment"]
-    when_migration_required: ["Data type changes", "Complex data transformations", "Business logic changes"]
-
-  rule_10_deployment_order_management:
-    critical_order: "Configuration → LoadAPI → Algorithm (dependency order)"
-    rationale: "Deploy dependencies before dependents to prevent runtime errors"
-    validation_steps:
-      - "Configuration: Update SQL views and sync queries first"
-      - "LoadAPI: Update data processing logic second"
-      - "Algorithm: Update business logic last"
-    rollback_order: "Reverse order: Algorithm → LoadAPI → Configuration"
-    coordination: "Coordinate deployment across all three repositories simultaneously"
-
-  rule_11_export_compatibility_maintenance:
-    principle: "Preserve existing export formats even when internal structure changes"
-    techniques:
-      - "Use subquery aggregation to maintain export format"
-      - "Create compatibility views for existing export queries"
-      - "Maintain template column order and naming"
-    example: "Aggregate planogram flags back to store level for distribution store exports"
-    critical: "Never break existing downstream consumers of exports"
-
-  rule_12_data_consistency_structure:
-    header_consistency:
-      loadapi: "MASTER_HEADER (denormalized) → DB_HEADER (normalized)"
-      algorithm: "getHeaders() → File class headers"
-      config: "sync query SELECT → template headers"
-    denormalization_cycle:
-      critical: "Never mix normalized & denormalized data in the same layer"
-      stages:
-        user_upload: "Denormalized (style_code, store_code)"
-        loadapi: "Normalize → style_id, store_id"
-        algorithm: "Normalized only"
-        config_export: "Denormalized (style_code, store_code)"
-    loadapi_registration:
-      mandatory_files: ["LoadAPI Class", "Module __init__.py", "Main __init__.py", "loadapi_provider.py"]
-      import_id_format: "import_{module}_{input/output}_{descriptive_name}"
-    objectmaps_integration:
-      use_objectmaps: ["get_store_to_store_id_map(db)", "get_sku_to_sku_id_map(db)", "get_style_code_to_style_id_map(db)", "get_wh_to_wh_id_map(db)"]
-      critical: "Never custom-denormalize — always use maps"
-  
   rule_8_validation_naming:
     validation_module:
       requirements: ["Must extend AbstractValidationModule", "Must have @Component annotation", "Implement validate() method", "Register in ValidationModuleNames"]
@@ -297,7 +230,7 @@ core_implementation_rules:
       file_class: "PascalCase + File (StorePerformanceFile)"
       loadapi: "PascalCase + LoadApi (StorePerformanceLoadApi)"
       module: "PascalCase + Module (StorePerformanceModule)"
-  
+
   rule_9_framework_config:
     spring_framework:
       annotations: ["Use @Component (not @Service/@Repository)", "Use @Autowired for DI", "Use @PostConstruct for initialization"]
@@ -305,7 +238,7 @@ core_implementation_rules:
     config_json_updates:
       update_together: ["module_input.json → new sync input config", "module_output.json → new output tables", "upload-files.json → import ID mappings"]
       critical: "Ensure import IDs match LoadAPI & Config"
-  
+
   rule_10_sql_template_rules:
     sql_view_creation:
       pattern: ["Use OPENROWSET for bulk reads", "Define all columns in WITH clause", "Use {{child}} / {{parent}} variables"]
@@ -325,20 +258,49 @@ core_implementation_rules:
       sql: "WITH clause types match Java/Python"
       template: "Sample reflects correct type"
       critical: "Never mix types (String ↔ Integer)"
-  
+
   rule_12_performance_documentation:
     performance:
       guidelines: ["Use Cache class for shared data", "Process in batches (not per-row)", "Use lazy loading", "Clear memory post-use", "Optimize SQL"]
     documentation:
       requirements: ["Update requirement & change docs", "Add JavaDocs for all public methods", "Maintain changelogs", "Update pattern documentation", "Add cross-repo relationships"]
-  
+
   rule_13_error_handling_testing:
     exception_handling_standards:
       loadapi_requirements: ["All LoadAPI classes must implement exception handling in validate_row() and __get_normalized_data()", "Use self._add_errors() for validation errors", "Rollback failed operations", "Log all exceptions with context"]
     unit_testing:
       requirements: ["All static utility methods → mandatory unit tests", "Minimum 80% coverage for new modules", "Naming: {ModuleName}Test.java", "Location: src/test/java (mirror structure)"]
-  
-  rule_14_branch_commit_merge:
+
+  rule_14_compilation_validation:
+    mandatory_pre_commit_checks: "ALWAYS validate compilation before committing code"
+    validation_sequence:
+      algorithm_repository:
+        - "Run: mvn clean compile -DskipTests (Java compilation check)"
+        - "Verify: No compilation errors in console output"
+        - "Check: All imports resolved, no missing dependencies"
+        - "Validate: New classes compile without errors"
+      loadapi_repository:
+        - "Run: python -m py_compile on all modified .py files"
+        - "Check: No syntax errors or import issues"
+        - "Validate: All imports can be resolved"
+        - "Test: Basic import validation (import loadapi.module.NewClass)"
+      config_repository:
+        - "Validate: SQL syntax in all .sql files"
+        - "Check: Template headers match expected format"
+        - "Verify: JSON files are valid JSON format"
+        - "Test: No syntax errors in configuration files"
+    error_handling:
+      compilation_failure: "NEVER commit if compilation fails - fix errors first"
+      import_errors: "Resolve all import issues before committing"
+      syntax_errors: "Fix all syntax errors in any language (Java/Python/SQL)"
+    automation_commands:
+      algorithm: "cd irisx-algo && mvn clean compile -DskipTests"
+      loadapi: "cd ms-loadapis-ril-final && python -c 'import loadapi.{modified_module}'"
+      config: "Validate SQL syntax and JSON format"
+    commit_prevention: "Use git hooks or manual validation to prevent broken commits"
+    rollback_strategy: "If compilation errors discovered post-commit, immediately create hotfix"
+
+  rule_15_branch_commit_merge:
     branch_management:
       rules: ["Branch from correct base branches", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
       base_branches:
@@ -350,7 +312,7 @@ core_implementation_rules:
       requirements: ["Cross-Repo: Reference related commits", "Each commit = atomic, working change"]
     merge_conflict_resolution:
       rules: ["Never force-push shared branches", "Use merge commits to preserve history", "Run full test suite before merging", "Document manual conflict resolutions"]
-  
+
   rule_15_business_data_quality:
     business_rule_validation:
       requirements: ["All business rules = documented + testable", "Ensure consistency across modules", "Validate against historical data", "Perform downstream impact analysis"]
@@ -379,7 +341,7 @@ core_implementation_rules:
       system_wide_constant: "Args"
       user_configurable: "Input Table"
       developer_controlled: "Args"
-  
+
   rule_17_18_19_20_pattern_management:
     pattern_discovery: "Research existing patterns before implementation"
     pattern_validation: "Validate new patterns against existing ones"
@@ -392,7 +354,7 @@ core_implementation_rules:
     multi_level_error_handling: "Implement error handling at all levels"
     rollback_procedures: "Plan rollback strategy for all operations"
     error_recovery: "Implement automatic error recovery where possible"
-  
+
   rule_22_testing_framework:
     comprehensive_testing: "Implement testing at all levels (unit, integration, end-to-end)"
     test_coverage: "Maintain minimum test coverage requirements"
@@ -439,32 +401,32 @@ core_implementation_rules:
     when_to_create: ["Common mathematical calculations", "Data transformation logic shared across modules", "File I/O operations that are repeated", "String manipulation functions", "Date/time processing utilities"]
     patterns: ["Static methods only", "Clear, descriptive method names", "Comprehensive JavaDoc documentation", "Unit tests for all public methods", "Located in appropriate package structure"]
     modification_triggers: ["New common functionality needed", "Existing utility method needs enhancement", "Performance optimization required", "Bug fixes in shared logic"]
-  
+
   rule_25_objectmaps_usage:
     when_to_use: ["Converting between Row classes and business objects", "Mapping database results to domain objects", "Transforming input data structures", "Converting between different API formats"]
     patterns: ["One-to-one mapping methods", "Clear source and target type definitions", "Null safety handling", "Validation during mapping", "Consistent naming conventions (mapXToY)"]
     modification_rules: ["Update when Row class structure changes", "Modify when business object fields change", "Enhance when new validation rules added", "Fix when data type mismatches occur"]
-  
+
   rule_26_basedata_class:
     characteristics: ["Core data fields that multiple modules depend on", "Common properties shared across business objects", "Base validation rules", "Standard serialization/deserialization", "Immutable or controlled mutability"]
     modification_triggers: ["New common fields needed across modules", "Validation rules change", "Serialization requirements change", "Performance optimization needed"]
     impact_analysis_required: ["All classes extending BaseData", "All modules using BaseData fields", "Serialization/deserialization logic", "Database schema alignment"]
-  
+
   rule_27_utiloutputsyncmodule_registration:
     registration_requirements: ["Register in ModuleProvider", "Update SchemaProvider if schema changes", "Configure in application context", "Add to module dependency graph", "Update documentation"]
     when_to_modify: ["New output format requirements", "Synchronization logic changes", "Performance optimization needed", "Error handling improvements"]
     validation_checklist: ["All dependent modules still function", "Output format consistency maintained", "Synchronization timing preserved", "Error propagation works correctly"]
-  
+
   rule_28_abstract_class_modification:
     modification_impact: ["ALL implementing classes must be reviewed", "Method signature changes affect all subclasses", "New abstract methods require implementation everywhere", "Behavior changes can break existing functionality"]
     safe_modification_practices: ["Add new methods with default implementations", "Use @Deprecated before removing methods", "Provide migration path for breaking changes", "Update all implementations simultaneously"]
     testing_requirements: ["Test all implementing classes", "Verify contract compliance", "Check polymorphic behavior", "Validate inheritance hierarchy"]
-  
+
   rule_29_cache_class_usage:
     implementation_patterns: ["Thread-safe access patterns", "Appropriate eviction policies", "Memory usage monitoring", "Cache hit/miss metrics", "Proper invalidation strategies"]
     when_to_modify: ["Performance bottlenecks identified", "Memory usage optimization needed", "Cache invalidation logic changes", "New caching requirements"]
     safety_rules: ["Never cache mutable objects directly", "Implement proper synchronization", "Handle cache failures gracefully", "Monitor cache effectiveness", "Document cache behavior clearly"]
-  
+
   rule_30_helper_vs_utility_class_decision:
     utility_classes: ["Pure functions with no state", "Mathematical calculations", "Data format conversions", "String/date manipulations", "Static methods only"]
     helper_classes: ["Stateful operations", "Complex business logic assistance", "Multi-step processes", "Context-dependent operations", "May have instance variables"]
@@ -473,17 +435,17 @@ core_implementation_rules:
       requires_configuration: "Helper Class"
       pure_computation: "Utility Class"
       business_context_needed: "Helper Class"
-  
+
   rule_31_constants_error_message_management:
     constants_organization: ["Group related constants in dedicated classes", "Use meaningful names and documentation", "Avoid magic numbers in code", "Maintain version compatibility", "Follow naming conventions"]
     error_message_patterns: ["Centralized error message constants", "Consistent message formatting", "Internationalization support", "Error code standardization", "Context-specific error details"]
     modification_rules: ["Update constants when business rules change", "Maintain backward compatibility for public constants", "Update error messages for clarity", "Coordinate changes across repositories"]
-  
+
   rule_32_interim_temporary_data_structure:
     usage: ["Processing intermediate results", "Multi-stage calculations", "Data transformation pipelines", "Caching intermediate states", "Performance optimization"]
     lifecycle_management: ["Clear creation and cleanup patterns", "Memory usage monitoring", "Proper disposal mechanisms", "Thread safety considerations", "Documentation of lifecycle"]
     modification_triggers: ["Processing logic changes", "Performance optimization needs", "Memory usage concerns", "Data structure evolution"]
-  
+
   rule_33_cross_module_communication:
     communication_patterns: ["Event-driven messaging", "Shared data structures", "Interface-based contracts", "Dependency injection", "Observer patterns"]
     modification_impact: ["Changes affect all communicating modules", "Interface changes require coordination", "Message format changes need versioning", "Timing changes can break workflows"]
@@ -537,7 +499,8 @@ dependencies:
 
 **Purpose**: Execute the complete end-to-end development flow with ACTUAL CODE CHANGES (NOT A SIMULATION)
 
-**Usage**: 
+**Usage**:
+
 ```bash
 *implement REQ-1234.md
 *implement /path/to/requirement-document.md
@@ -549,6 +512,7 @@ dependencies:
 **Complete Execution Flow**:
 
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
+
 1. **Switch to Base Branches**: ALWAYS switch ACTUAL REPOSITORIES to correct base branches BEFORE any analysis
    - Algorithm Repository (`irisx-algo`) → `caas-release`
    - LoadAPI Repository (`ms-loadapis-ril-final`) → `release_optimised`
@@ -557,6 +521,7 @@ dependencies:
 2. **Verify Repository State**: Ensure clean working directories and latest code
 
 #### **Phase 1: Intelligent Analysis (AUTOMATIC)**
+
 3. **Deep Requirement Analysis with BMAD Analyst**: Load analyst persona and analyze requirement with smart classification
    - **Intelligent Classification**: Automatically classify requirement type:
      - **Config-Only**: Template changes, SQL view updates, JSON config modifications
@@ -570,6 +535,7 @@ dependencies:
 7. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
 
 #### **Phase 2: Implementation Planning (Automatic)**
+
 8. **Implementation Plan Creation**: Create detailed implementation plan
 9. **Plan Validation with BMAD PM**: Use PM persona for thorough validation
 10. **Risk Analysis**: Analyze implementation risks and mitigation strategies
@@ -577,6 +543,7 @@ dependencies:
 12. **Rollback Strategy**: Prepare rollback procedures
 
 #### **Phase 3: Development Execution (Automatic)**
+
 13. **Feature Branch Creation**: Create feature branches from correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
 14. **Brownfield Development with BMAD Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
 15. **Implementation Validation**: Validate against all 33 integrated rules
@@ -584,6 +551,7 @@ dependencies:
 17. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
+
 18. **Quality Check**: Perform comprehensive quality validation
 19. **Deployment Validation**: Validate deployment readiness
 20. **Git Operations**: Commit changes and push feature branches
@@ -591,6 +559,7 @@ dependencies:
 22. **Post-Deployment Validation**: Final validation and sign-off
 
 **Real-Time Progress Tracking**:
+
 - ✅ **Phase Completion**: Clear indication of completed phases
 - 🔄 **Current Step**: Real-time display of current execution step
 - ⚠️ **Issues Found**: Immediate notification of any issues or conflicts
@@ -598,12 +567,14 @@ dependencies:
 - 🎯 **Success Criteria**: Validation against all success criteria
 
 **Error Handling & Recovery**:
+
 - **Automatic Rollback**: On critical failures, automatically rollback to safe state
 - **Issue Resolution**: Provide specific guidance for resolving identified issues
 - **Partial Recovery**: Resume from last successful checkpoint on retry
 - **Manual Intervention**: Clear guidance when manual intervention is required
 
 **Output Documentation**:
+
 - **CRITICAL**: ALL documentation goes into the ORIGINAL requirement document (no separate files)
 - **Implementation Details**: Complete implementation details added to requirement document
 - **Cross-Repository Impact**: Analysis added to requirement document
@@ -613,6 +584,7 @@ dependencies:
 - **Rollback Procedures**: Rollback instructions added to requirement document
 
 **Command Options**:
+
 - `--dry-run`: Preview the complete implementation plan without making changes (SIMULATION ONLY)
 - `--skip-tests`: Skip the testing phase (not recommended for production)
 - `--auto-commit`: Automatically commit and push changes without manual confirmation
@@ -622,6 +594,7 @@ dependencies:
 **CRITICAL**: By default, `*implement` makes ACTUAL CODE CHANGES. Use `--dry-run` only for previewing.
 
 **Success Criteria Validation**:
+
 - ✅ All 33 integrated rules followed
 - ✅ All repositories updated consistently
 - ✅ All tests passing
@@ -631,6 +604,7 @@ dependencies:
 - ✅ Documentation complete and accurate
 
 **Key Features**:
+
 - **Intelligent Classification**: Automatically determines scope (Config-only, LoadAPI-only, Algorithm-only, Cross-repository)
 - **Scope Limitation**: Only modifies repositories that are actually affected
 - **Base Branch First**: Always switches to correct base branches before analysis
@@ -655,6 +629,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 ### The 33 Rules Framework Integration
 
 #### Core Implementation Rules (Rules 1-10)
+
 - **Rule 1**: Repository Structure Integrity - Always validate repository structure before changes
 - **Rule 2**: Pattern Consistency - Ensure all implementations follow established patterns
 - **Rule 3**: Cross-Repository Coordination - Coordinate changes across all three repositories
@@ -667,6 +642,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 - **Rule 10**: Performance Considerations - Consider performance impact of all changes
 
 #### Repository Coordination Rules (Rules 11-15)
+
 - **Rule 11**: Algorithm Repository Patterns - Follow established algorithm patterns
 - **Rule 12**: LoadAPI Repository Patterns - Follow established LoadAPI patterns
 - **Rule 13**: Configuration Repository Patterns - Follow established configuration patterns
@@ -674,6 +650,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 - **Rule 15**: Integration Testing - Test integration across all repositories
 
 #### Pattern Management Rules (Rules 16-20)
+
 - **Rule 16**: Pattern Discovery - Research existing patterns before implementation
 - **Rule 17**: Pattern Validation - Validate new patterns against existing ones
 - **Rule 18**: Pattern Evolution - Manage pattern changes systematically
@@ -681,13 +658,16 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 - **Rule 20**: Pattern Documentation - Document all patterns comprehensively
 
 #### Error Handling & Testing Rules (Rules 21-22)
+
 - **Rule 21**: Comprehensive Error Handling - Implement multi-level error handling
 - **Rule 22**: Testing Framework - Implement comprehensive testing at all levels
 
 #### Complete Development Flow (Rule 23)
+
 - **Rule 23**: 10-step, 4-phase development process with mandatory checkpoints
 
 #### Class Management Rules (Rules 24-33)
+
 - **Rule 24**: Utility Class Management - Proper utility class patterns
 - **Rule 25**: ObjectMaps Usage - Data transformation patterns
 - **Rule 26**: BaseData Class Rules - Fundamental data structure patterns
@@ -702,24 +682,28 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 ### Research-First Methodology
 
 #### Phase 1: Comprehensive Research
+
 1. **Pattern Discovery**: Research existing implementations in base branches (caas-release for algo, release-optimised for loadapis, caas-staging-fixed for config)
 2. **Rule Analysis**: Identify applicable rules from the 33-rule framework
 3. **Expert Consultation**: Delegate specialized analysis to expert agents
 4. **Impact Assessment**: Analyze cross-repository and cross-module impacts
 
 #### Phase 2: Rule-Based Planning
+
 1. **Rule Validation**: Validate plans against all applicable rules
 2. **Risk Assessment**: Identify risks using rule-based criteria
 3. **Testing Strategy**: Plan testing following Rule 22 requirements
 4. **Rollback Planning**: Plan rollback strategy following Rule 21
 
 #### Phase 3: Guided Implementation
+
 1. **Continuous Validation**: Validate each step against applicable rules
 2. **Pattern Compliance**: Ensure implementation follows discovered patterns
 3. **Expert Oversight**: Maintain expert agent oversight throughout implementation
 4. **Quality Gates**: Implement quality checkpoints at each stage
 
 #### Phase 4: Comprehensive Validation
+
 1. **Rule Compliance Check**: Final validation against all 33 rules
 2. **Cross-Repository Testing**: Test integration across all repositories
 3. **Performance Validation**: Validate performance against Rule 10 criteria
@@ -757,6 +741,7 @@ VIRAT continuously improves through:
 ## Usage Examples
 
 ### Research-Based Implementation
+
 ```
 *research requirement-123.md
 *validate-rules
@@ -764,6 +749,7 @@ VIRAT continuously improves through:
 ```
 
 ### Rule-Specific Validation
+
 ```
 *validate-core-rules
 *validate-repo-rules
@@ -771,6 +757,7 @@ VIRAT continuously improves through:
 ```
 
 ### Expert Delegation
+
 ```
 *delegate-algorithm
 *delegate-loadapi
@@ -778,6 +765,7 @@ VIRAT continuously improves through:
 ```
 
 ### Quality Assurance
+
 ```*quality-check
 *monitor-compliance
 *track-quality
@@ -786,4 +774,3 @@ VIRAT continuously improves through:
 ## Backward Compatibility
 
 All existing functionality is preserved while adding the research-based, rule-driven approach as the primary methodology. Users can still access individual commands, but the recommended approach is to use the research-based workflows for optimal results.
-
