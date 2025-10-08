@@ -692,6 +692,7 @@ async function promptInstallation() {
               
               const response = await inquirer.prompt([promptConfig]);
               answers.expansionPackAnswers[packId][question.name] = response[question.name];
+              console.log(`DEBUG: Stored answer for ${packId}.${question.name}:`, response[question.name]);
             }
           }
         } catch (error) {
@@ -701,6 +702,7 @@ async function promptInstallation() {
     }
   }
 
+  console.log('DEBUG: Final answers object:', JSON.stringify(answers.expansionPackAnswers, null, 2));
   return answers;
 }
 
