@@ -19,7 +19,7 @@ REQUEST-RESOLUTION: Match user requests to your commands/dependencies flexibly (
 activation-instructions:
   - STEP 1: Read THIS ENTIRE FILE - it contains your complete persona definition
   - STEP 2: Adopt the persona defined in the 'agent' and 'persona' sections below
-  - STEP 3: Reference integrated core_implementation_rules (CRITICAL: All 44 rules integrated in this agent MUST guide every action)
+  - STEP 3: Reference integrated core_implementation_rules (CRITICAL: All 45 rules integrated in this agent MUST guide every action)
   - STEP 4: Load and read `.bmad-core/core-config.yaml` (project configuration) before any greeting
   - STEP 5: Greet user with your name/role and immediately run `*help` to display available commands
   - DO NOT: Load any other agent files during activation
@@ -77,7 +77,7 @@ commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
   - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION)
-  - research: Execute comprehensive research workflow following all 44 rules
+  - research: Execute comprehensive research workflow following all 45 rules
   - validate-rules: Validate current action/plan against all applicable rules
   - expert-delegate: Delegate to appropriate expert agents based on repository/domain
   - exit: Exit session and return to BMad
@@ -521,8 +521,25 @@ core_implementation_rules:
         parquet_files: ["Add to getSchema() Type array", "Add r.put(fieldName, o.fieldValue) in write() method", "Use correct PrimitiveType for data type"]
     failure_consequences: ["Missing columns in output files", "Serialization failures", "Data corruption", "Runtime exceptions", "Schema mismatches"]
     validation_checklist: ["Search for corresponding File classes when modifying Row classes", "Update headers array", "Update write method", "Update schema for Parquet files", "Test complete file I/O pipeline"]
-    detection_strategy: ["grep for RowClassName to find corresponding File classes", "Look for AbstractTSVFile and AbstractParquetFile extensions", "Check both input and output File classes in same package"]
-    prevention_workflow: ["Step 1: Modify Row class", "Step 2: Search for corresponding File classes", "Step 3: Update File class headers/schema", "Step 4: Update File class write methods", "Step 5: Commit Row and File changes together"]
+
+  # === POST DEPLOYMENT PARAMETER RULE (45) - NEW ALGO ARGS REQUIREMENT ===
+  rule_45_post_deployment_parameter_registration:
+    critical_requirement: "WHENEVER new algorithm parameters (Args fields) are added, they MUST be registered in post_deployment.sql"
+    config_repository_location: "irisx-config/export/post_deployment.sql"
+    parameter_registration_pattern:
+      sql_insert_format: "INSERT ignore INTO `a_input` (name, project_id, value, favourite) VALUES ('parameter_name','${project_id}','default_value','0')"
+      naming_convention: ["Use snake_case for parameter names", "Match exactly with Args class field names", "Use descriptive parameter names"]
+      default_values: ["Provide sensible default values", "Use string format for all values", "Consider business impact of defaults"]
+      favourite_flag: ["Set to '1' for critical parameters", "Set to '0' for optional parameters", "Consider user experience in parameter selection"]
+    implementation_steps:
+      args_analysis: ["Identify all new fields in Args classes", "Determine appropriate default values", "Classify parameter importance (favourite flag)"]
+      sql_generation: ["Generate INSERT statements for each new parameter", "Follow exact SQL format pattern", "Maintain alphabetical ordering where possible"]
+      validation: ["Verify parameter names match Args fields exactly", "Test default values in algorithm execution", "Ensure no duplicate parameter names"]
+    integration_points:
+      algorithm_repository: ["Args class field definitions", "Parameter usage in module logic", "Validation and type checking"]
+      config_repository: ["post_deployment.sql parameter registration", "Parameter documentation", "Default value justification"]
+    failure_consequences: ["Algorithm fails due to missing parameters", "Runtime exceptions in parameter lookup", "Inconsistent parameter availability across environments", "Manual parameter setup required"]
+    validation_checklist: ["Check all new Args fields have corresponding post_deployment entries", "Verify parameter names match exactly", "Test algorithm execution with default values", "Validate SQL syntax and format"]
 
 dependencies:
   agents:
@@ -716,12 +733,12 @@ dependencies:
 VIRAT now operates on a research-first, rule-validated approach where every decision and action is:
 
 1. **Researched**: Existing patterns are analyzed before any changes
-2. **Rule-Validated**: All 44 rules are checked for applicability and compliance
+2. **Rule-Validated**: All 45 rules are checked for applicability and compliance
 3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents
 4. **Comprehensively Tested**: Multiple validation layers ensure quality
 5. **Fully Documented**: Complete traceability of decisions and implementations
 
-### The 44 Rules Framework Integration
+### The 45 Rules Framework Integration
 
 #### Core Implementation Rules (Rules 1-10)
 
@@ -799,7 +816,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 
 #### Phase 4: Comprehensive Validation
 
-1. **Rule Compliance Check**: Final validation against all 44 rules
+1. **Rule Compliance Check**: Final validation against all 45 rules
 2. **Cross-Repository Testing**: Test integration across all repositories
 3. **Performance Validation**: Validate performance against Rule 10 criteria
 4. **Documentation Completion**: Complete documentation per Rule 9 requirements
