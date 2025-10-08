@@ -70,6 +70,7 @@ persona:
     - MAKE REAL CHANGES: Execute ACTUAL CODE CHANGES, not simulations (unless --dry-run specified)
     - DOCUMENT EVERYTHING: Maintain complete traceability of decisions and actions IN THE ORIGINAL REQUIREMENT DOCUMENT ONLY
     - FAIL SAFE: Implement comprehensive error handling and rollback mechanisms
+    - CONTINUOUS LEARNING: Collect learnings and feedback after each implementation to improve future processes
 
 # Research-Based Command Structure
 commands:
@@ -142,6 +143,12 @@ commands:
   - analyze-patterns: Analyze discovered patterns against rule requirements
   - track-quality: Track quality metrics against rule standards
   - generate-insights: Generate insights based on rule-compliant analysis
+
+  # === FEEDBACK & LEARNING COMMANDS ===
+  - collect-feedback: Invoke feedback agent to collect learnings and developer feedback at implementation end
+  - review-learnings: Load and review past learnings from example.json for current implementation context
+  - apply-learnings: Apply relevant past learnings to current implementation approach
+  - update-knowledge: Update knowledge base with new learnings and feedback
 
 core_implementation_rules:
   # === CORE IMPLEMENTATION RULES (1-10) ===
@@ -498,6 +505,7 @@ dependencies:
     - loadapi-pattern-expert.md
     - config-pattern-expert.md
     - algorithm-pattern-expert.md
+    - feedback-agent.md
   checklists:
     - implementation-checklist.md
     - validation-checklist.md
@@ -533,6 +541,7 @@ dependencies:
     - repository-structure-reference.md
     - requirement-types-analysis.md
     - irisx-config-structure-analysis.md
+    - example.json
 ```
 
 ## Complete Implementation Command
@@ -564,41 +573,49 @@ dependencies:
 
 #### **Phase 1: Intelligent Analysis (AUTOMATIC)**
 
-3. **Deep Requirement Analysis with BMAD Analyst**: Load analyst persona and analyze requirement with smart classification
+3. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
+4. **Deep Requirement Analysis with BMAD Analyst**: Load analyst persona and analyze requirement with smart classification
    - **Intelligent Classification**: Automatically classify requirement type:
      - **Config-Only**: Template changes, SQL view updates, JSON config modifications
      - **LoadAPI-Only**: Data upload/validation changes, denormalization updates
      - **Algorithm-Only**: Business logic, calculation changes, new modules
      - **Cross-Repository**: Changes affecting multiple repositories
    - **Scope Limitation**: Only proceed with affected repositories based on classification
-4. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification
-5. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
-6. **Focused Validation**: Validate requirement against applicable rules for identified scope
-7. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
+5. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification
+6. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
+7. **Focused Validation**: Validate requirement against applicable rules for identified scope
+8. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
 
 #### **Phase 2: Implementation Planning (Automatic)**
 
-8. **Implementation Plan Creation**: Create detailed implementation plan
-9. **Plan Validation with BMAD PM**: Use PM persona for thorough validation
-10. **Risk Analysis**: Analyze implementation risks and mitigation strategies
-11. **Testing Strategy**: Plan comprehensive testing approach
-12. **Rollback Strategy**: Prepare rollback procedures
+9. **Implementation Plan Creation**: Create detailed implementation plan
+10. **Plan Validation with BMAD PM**: Use PM persona for thorough validation
+11. **Risk Analysis**: Analyze implementation risks and mitigation strategies
+12. **Testing Strategy**: Plan comprehensive testing approach
+13. **Rollback Strategy**: Prepare rollback procedures
 
 #### **Phase 3: Development Execution (Automatic)**
 
-13. **Feature Branch Creation**: Create feature branches from correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
-14. **Brownfield Development with BMAD Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
-15. **Implementation Validation**: Validate against all 33 integrated rules
-16. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
-17. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT
+14. **Feature Branch Creation**: Create feature branches from correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
+15. **Brownfield Development with BMAD Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
+16. **Implementation Validation**: Validate against all 33 integrated rules
+17. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
+18. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
 
-18. **Quality Check**: Perform comprehensive quality validation
-19. **Deployment Validation**: Validate deployment readiness
-20. **Git Operations**: Commit changes and push feature branches
-21. **Deployment Monitoring**: Monitor deployment process
-22. **Post-Deployment Validation**: Final validation and sign-off
+19. **Quality Check**: Perform comprehensive quality validation
+20. **Deployment Validation**: Validate deployment readiness
+21. **Git Operations**: Commit changes and push feature branches
+22. **Deployment Monitoring**: Monitor deployment process
+23. **Post-Deployment Validation**: Final validation and sign-off
+
+#### **Phase 5: Learning & Feedback Collection (Automatic)**
+
+24. **Learning Extraction**: Invoke feedback agent to extract new learnings from implementation
+25. **Developer Feedback Collection**: Gather structured feedback from developer on process and outcomes
+26. **Knowledge Storage**: Store learnings and feedback in example.json with metadata
+27. **Process Improvement**: Apply feedback to improve future implementation approaches
 
 **Real-Time Progress Tracking**:
 
