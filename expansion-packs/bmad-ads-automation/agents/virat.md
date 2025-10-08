@@ -271,36 +271,7 @@ core_implementation_rules:
     unit_testing:
       requirements: ["All static utility methods → mandatory unit tests", "Minimum 80% coverage for new modules", "Naming: {ModuleName}Test.java", "Location: src/test/java (mirror structure)"]
 
-  rule_14_compilation_validation:
-    mandatory_pre_commit_checks: "ALWAYS validate compilation before committing code"
-    validation_sequence:
-      algorithm_repository:
-        - "Run: mvn clean compile -DskipTests (Java compilation check)"
-        - "Verify: No compilation errors in console output"
-        - "Check: All imports resolved, no missing dependencies"
-        - "Validate: New classes compile without errors"
-      loadapi_repository:
-        - "Run: python -m py_compile on all modified .py files"
-        - "Check: No syntax errors or import issues"
-        - "Validate: All imports can be resolved"
-        - "Test: Basic import validation (import loadapi.module.NewClass)"
-      config_repository:
-        - "Validate: SQL syntax in all .sql files"
-        - "Check: Template headers match expected format"
-        - "Verify: JSON files are valid JSON format"
-        - "Test: No syntax errors in configuration files"
-    error_handling:
-      compilation_failure: "NEVER commit if compilation fails - fix errors first"
-      import_errors: "Resolve all import issues before committing"
-      syntax_errors: "Fix all syntax errors in any language (Java/Python/SQL)"
-    automation_commands:
-      algorithm: "cd irisx-algo && mvn clean compile -DskipTests"
-      loadapi: "cd ms-loadapis-ril-final && python -c 'import loadapi.{modified_module}'"
-      config: "Validate SQL syntax and JSON format"
-    commit_prevention: "Use git hooks or manual validation to prevent broken commits"
-    rollback_strategy: "If compilation errors discovered post-commit, immediately create hotfix"
-
-  rule_15_branch_commit_merge:
+  rule_14_branch_commit_merge:
     branch_management:
       rules: ["Branch from correct base branches", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
       base_branches:
@@ -312,6 +283,11 @@ core_implementation_rules:
       requirements: ["Cross-Repo: Reference related commits", "Each commit = atomic, working change"]
     merge_conflict_resolution:
       rules: ["Never force-push shared branches", "Use merge commits to preserve history", "Run full test suite before merging", "Document manual conflict resolutions"]
+    dependency_driven_implementation:
+      root_cause_analysis: ["Analyze WHY compilation fails - usually dependency issues", "Identify missing imports, unresolved classes, or circular dependencies", "Trace dependency chains to understand impact", "Research existing dependency patterns before implementing"]
+      dependency_implementation_strategy: ["Implement missing dependencies following established patterns", "Add required imports and class references", "Ensure proper module registration and wiring", "Validate dependency injection configurations", "Check cross-repository dependency alignment"]
+      proper_implementation_approach: ["Never just 'fix' compile errors - understand the business need", "Research existing similar implementations for dependency patterns", "Follow Rule 33 (Cross-Module Communication) for proper dependency management", "Implement complete dependency chain, not just immediate fixes", "Validate that new dependencies align with existing architecture"]
+      validation_requirements: ["Compile successfully across all 3 repositories", "Verify all dependencies are properly resolved and registered", "Test dependency injection works correctly", "Ensure no circular dependencies introduced", "Validate cross-repository dependency consistency"]
 
   rule_15_business_data_quality:
     business_rule_validation:
@@ -450,6 +426,56 @@ core_implementation_rules:
     communication_patterns: ["Event-driven messaging", "Shared data structures", "Interface-based contracts", "Dependency injection", "Observer patterns"]
     modification_impact: ["Changes affect all communicating modules", "Interface changes require coordination", "Message format changes need versioning", "Timing changes can break workflows"]
     validation_requirements: ["Test all communication paths", "Verify message delivery", "Check error propagation", "Validate data consistency", "Monitor performance impact"]
+
+  # === ADVANCED PATTERN RULES (34-42) - DERIVED FROM REQ-1150 LEARNINGS ===
+  rule_34_cross_repository_data_migration:
+    systematic_approach:
+      phase_1: "Remove from source (identify all references to source fields)"
+      phase_2: "Add to destination with proper validation and processing"
+      phase_3: "Update all business logic to use new data source"
+      phase_4: "Update all dependent systems (exports, templates, SQL views)"
+    data_flow_mapping: ["Map complete flow: user upload → LoadAPI → database → algorithm → exports", "Identify all touch points before starting implementation", "Document data transformation at each stage"]
+    critical_validation: ["Trace complete dependency chain before implementation", "Validate data consistency across all stages", "Ensure backward compatibility through aggregation views"]
+
+  rule_35_duplicate_loadapi_elimination:
+    detection_strategy: ["Search for ALL LoadAPIs related to a table before making changes", "Identify LoadAPIs serving same business purpose", "Look for similar import IDs and table targets"]
+    elimination_process: ["Establish single source of truth", "Consolidate functionality into primary LoadAPI", "Update all configuration references", "Remove duplicate LoadAPI files"]
+    prevention_measures: ["Document LoadAPI purposes clearly", "Maintain LoadAPI registry", "Review for duplicates during code reviews"]
+
+  rule_36_entity_specific_flag_integration:
+    integration_pattern: ["Store flags at entity level where they're used, not at global level", "Add flags to business entity classes (e.g., StoreStyle)", "Provide entity-specific flag access methods"]
+    implementation_approach: ["Integrate flags during entity creation", "Use flags for entity-specific business logic", "Avoid separate flag lookup structures"]
+    performance_optimization: ["Cache flags at most granular level needed", "Provide aggregated access methods for performance", "Initialize flag cache during module startup"]
+
+  rule_37_validation_module_comprehensive_update:
+    systematic_audit: ["Search for ALL validation modules that reference changed fields", "Update validation logic to use new data source", "Remove obsolete field assignments and validations"]
+    update_pattern: ["Remove field assignments from removed fields", "Update validation logic to use new data patterns", "Ensure validation consistency across modules"]
+    testing_requirements: ["Test all validation modules after field changes", "Verify validation logic works with new data source", "Ensure no validation gaps introduced"]
+
+  rule_38_header_consistency_validation:
+    consistency_requirements: ["Headers must match across LoadAPI → SQL view → Export query → Template", "Maintain header order consistency", "Ensure data type consistency across all stages"]
+    validation_checklist: ["LoadAPI MASTER_HEADER matches template headers", "SQL view columns match export query SELECT", "Export query headers match template structure"]
+    maintenance_approach: ["Create header consistency validation tools", "Document header dependencies", "Automate header consistency checks"]
+
+  rule_39_business_logic_abstraction:
+    utility_creation: ["Create utility classes for complex business logic parsing", "Encapsulate parsing logic in reusable utilities", "Provide clear documentation and examples"]
+    abstraction_patterns: ["Static utility methods for stateless operations", "Clear input/output contracts", "Comprehensive error handling and validation"]
+    implementation_example: ["PlanogramFlagUtil for parsing distribution flags", "Utility classes for complex field parsing", "Reusable business logic components"]
+
+  rule_40_backward_compatibility_aggregation:
+    compatibility_strategy: ["Maintain export compatibility by aggregating granular data", "Provide aggregation views for backward compatibility", "Document compatibility approach"]
+    implementation_approach: ["Export queries aggregate granular data to original format", "Maintain same output structure for existing consumers", "Provide migration path for new granular access"]
+    validation_requirements: ["Test backward compatibility thoroughly", "Verify existing consumers continue to work", "Document any breaking changes clearly"]
+
+  rule_41_coordinated_deployment_management:
+    deployment_order: ["Configuration → LoadAPI → Algorithm (dependency order)", "Database schema changes first, then data processing, then business logic"]
+    coordination_requirements: ["Consistent feature branch naming across repositories", "Coordinated deployment timing", "Rollback procedures for each repository"]
+    branch_management: ["feature/{req-id}-{description} across all repositories", "Coordinate branch creation and merging", "Document cross-repository dependencies"]
+
+  rule_42_upload_configuration_consolidation:
+    consolidation_approach: ["Update all upload configuration references when eliminating duplicates", "Use single import ID for consolidated LoadAPIs", "Remove obsolete configuration entries"]
+    configuration_files: ["upload-files.json import ID mappings", "module_input.json sync configurations", "All references to LoadAPI import IDs"]
+    validation_requirements: ["Verify all configuration references updated", "Test upload functionality after consolidation", "Ensure no broken configuration links"]
 
 dependencies:
   agents:
