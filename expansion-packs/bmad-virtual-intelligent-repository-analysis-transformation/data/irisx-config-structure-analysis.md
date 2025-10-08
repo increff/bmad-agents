@@ -140,43 +140,43 @@ Based on file analysis, the following module abbreviations are identified:
 
 ```bash
 # Count template files
-ls /Users/viratbansal/IdeaProjects/irisx-config/template/ | wc -l
+ls {CONFIG_REPO_PATH}/template/ | wc -l
 
 # List template files by module
-ls /Users/viratbansal/IdeaProjects/irisx-config/template/ | grep -E "export_(.*)_input_.*_template\.tsv" | sed 's/export_\(.*\)_input_.*/\1/' | sort | uniq -c
+ls {CONFIG_REPO_PATH}/template/ | grep -E "export_(.*)_input_.*_template\.tsv" | sed 's/export_\(.*\)_input_.*/\1/' | sort | uniq -c
 ```
 
 ### View Discovery
 
 ```bash
 # Count view files
-ls /Users/viratbansal/IdeaProjects/irisx-config/view-creation/ | wc -l
+ls {CONFIG_REPO_PATH}/view-creation/ | wc -l
 
 # List input views
-ls /Users/viratbansal/IdeaProjects/irisx-config/view-creation/ | grep -E "child-input-.*\.sql"
+ls {CONFIG_REPO_PATH}/view-creation/ | grep -E "child-input-.*\.sql"
 
 # List output views
-ls /Users/viratbansal/IdeaProjects/irisx-config/view-creation/ | grep -E "child-output-.*\.sql"
+ls {CONFIG_REPO_PATH}/view-creation/ | grep -E "child-output-.*\.sql"
 ```
 
 ### Sync Discovery
 
 ```bash
 # Count sync files
-ls /Users/viratbansal/IdeaProjects/irisx-config/sync/ | wc -l
+ls {CONFIG_REPO_PATH}/sync/ | wc -l
 
 # List sync files by module
-ls /Users/viratbansal/IdeaProjects/irisx-config/sync/ | sed 's/\(.*\)_.*/\1/' | sort | uniq -c
+ls {CONFIG_REPO_PATH}/sync/ | sed 's/\(.*\)_.*/\1/' | sort | uniq -c
 ```
 
 ### Export Discovery
 
 ```bash
 # Count export files
-ls /Users/viratbansal/IdeaProjects/irisx-config/export/ | wc -l
+ls {CONFIG_REPO_PATH}/export/ | wc -l
 
 # List export files by module
-ls /Users/viratbansal/IdeaProjects/irisx-config/export/ | grep -E "export_(.*)_" | sed 's/export_\(.*\)_.*/\1/' | sort | uniq -c
+ls {CONFIG_REPO_PATH}/export/ | grep -E "export_(.*)_" | sed 's/export_\(.*\)_.*/\1/' | sort | uniq -c
 ```
 
 ## Implementation Implications

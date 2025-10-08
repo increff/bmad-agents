@@ -29,19 +29,19 @@ Implement comprehensive configuration management system including YAML-based con
    # Repository Configuration
    repositories:
      irisx-algo:
-       path: '/Users/viratbansal/IdeaProjects/irisx-algo'
+       path: '{ALGO_REPO_PATH}'
        type: 'java'
        branch: 'caas-release'
        access: 'git'
 
      ms-loadapis-ril-final:
-       path: '/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final'
+       path: '{LOADAPIS_REPO_PATH}'
        type: 'python'
        branch: 'caas-release'
        access: 'git'
 
      irisx-config:
-       path: '/Users/viratbansal/IdeaProjects/irisx-config'
+       path: '{CONFIG_REPO_PATH}'
        type: 'config'
        branch: 'caas-release'
        access: 'git'

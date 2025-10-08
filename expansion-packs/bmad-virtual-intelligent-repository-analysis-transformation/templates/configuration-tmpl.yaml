@@ -8,19 +8,19 @@ version: "1.0"
 # Repository Configuration
 repositories:
   irisx-algo:
-    path: "/Users/viratbansal/IdeaProjects/irisx-algo"
+    path: "{ALGO_REPO_PATH}"
     type: "java"
     branch: "caas-release"
     access: "git"
 
   ms-loadapis-ril-final:
-    path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+    path: "{LOADAPIS_REPO_PATH}"
     type: "python"
     branch: "caas-release"
     access: "git"
 
   irisx-config:
-    path: "/Users/viratbansal/IdeaProjects/irisx-config"
+    path: "{CONFIG_REPO_PATH}"
     type: "config"
     branch: "caas-release"
     access: "git"
@@ -246,17 +246,17 @@ preferences:
 version: "1.0"
 repositories:
   irisx-algo:
-    path: "/Users/viratbansal/IdeaProjects/irisx-algo"
+    path: "{ALGO_REPO_PATH}"
     type: "java"
     branch: "main"
     access: "git"
   ms-loadapis-ril-final:
-    path: "/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final"
+    path: "{LOADAPIS_REPO_PATH}"
     type: "python"
     branch: "main"
     access: "git"
   irisx-config:
-    path: "/Users/viratbansal/IdeaProjects/irisx-config"
+    path: "{CONFIG_REPO_PATH}"
     type: "config"
     branch: "main"
     access: "git"

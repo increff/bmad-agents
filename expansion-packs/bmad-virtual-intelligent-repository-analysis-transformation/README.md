@@ -235,9 +235,9 @@ Input Data → Load APIs (Python) → Database → Business Logic (Java) → Out
 
 ```yaml
 repositories:
-  irisx-algo: '/Users/viratbansal/IdeaProjects/irisx-algo'
-  ms-loadapis-ril-final: '/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final'
-  irisx-config: '/Users/viratbansal/IdeaProjects/irisx-config'
+  irisx-algo: '{ALGO_REPO_PATH}'
+  ms-loadapis-ril-final: '{LOADAPIS_REPO_PATH}'
+  irisx-config: '{CONFIG_REPO_PATH}'
 ```
 
 ### Target Completion Time
@@ -361,9 +361,9 @@ repositories:
 
 ```yaml
 repositories:
-  irisx-algo: '/Users/viratbansal/IdeaProjects/irisx-algo'
-  ms-loadapis-ril-final: '/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final'
-  irisx-config: '/Users/viratbansal/IdeaProjects/irisx-config'
+  irisx-algo: '{ALGO_REPO_PATH}'
+  ms-loadapis-ril-final: '{LOADAPIS_REPO_PATH}'
+  irisx-config: '{CONFIG_REPO_PATH}'
 ```
 
 #### Target Completion Time

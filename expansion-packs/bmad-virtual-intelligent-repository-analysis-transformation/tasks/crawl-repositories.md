@@ -25,7 +25,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 
 #### 2.1 Crawl irisx-algo Repository
 
-**Target Directory**: `/Users/viratbansal/IdeaProjects/irisx-algo`
+**Target Directory**: `{ALGO_REPO_PATH}`
 
 **What to Crawl:**
 
@@ -55,7 +55,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 
 #### 2.2 Crawl ms-loadapis-ril-final Repository
 
-**Target Directory**: `/Users/viratbansal/IdeaProjects/ms-loadapis-ril-final`
+**Target Directory**: `{LOADAPIS_REPO_PATH}`
 
 **What to Crawl:**
 
@@ -84,7 +84,7 @@ Perform comprehensive repository crawling across three interconnected repositori
 
 #### 2.3 Crawl irisx-config Repository
 
-**Target Directory**: `/Users/viratbansal/IdeaProjects/irisx-config`
+**Target Directory**: `{CONFIG_REPO_PATH}`
 
 **What to Crawl:**
 
