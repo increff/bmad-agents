@@ -8,19 +8,21 @@ license: "MIT"
 
 # Installation Questions
 installation_questions:
-  - name: "prdShared"
-    type: "confirm"
-    message: "Will the PRD (Product Requirements Document) be shared across repositories?"
-    default: true
-  - name: "repositoryAddresses"
+  - name: "algoRepoPath"
     type: "input"
-    message: "Enter the base repository addresses (comma-separated, e.g., github.com/org, gitlab.com/company):"
-    default: "github.com/increff"
+    message: "Enter the local path to your Algorithm repository (irisx-algo):"
+    default: "../irisx-algo"
     validate: "required"
-  - name: "multiRepoWorkflow"
-    type: "confirm"
-    message: "Will you be working with multiple interconnected repositories (Algorithm, LoadAPI, Config)?"
-    default: true
+  - name: "configRepoPath"
+    type: "input"
+    message: "Enter the local path to your Config repository (irisx-config):"
+    default: "../irisx-config"
+    validate: "required"
+  - name: "loadapisRepoPath"
+    type: "input"
+    message: "Enter the local path to your LoadAPIs repository (ms-loadapis-ril-final):"
+    default: "../ms-loadapis-ril-final"
+    validate: "required"
 
 # Repository paths for the three interconnected repositories
 repositories:
