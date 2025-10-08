@@ -652,8 +652,7 @@ async function promptInstallation() {
   // Ask expansion pack specific questions
   if (answers.expansionPacks && answers.expansionPacks.length > 0) {
     const configLoader = require('../lib/config-loader');
-    const loader = new configLoader();
-    const availableExpansionPacks = await loader.getAvailableExpansionPacks();
+    const availableExpansionPacks = await configLoader.getAvailableExpansionPacks();
     
     answers.expansionPackAnswers = {};
     
