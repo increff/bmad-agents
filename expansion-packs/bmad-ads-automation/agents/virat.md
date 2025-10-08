@@ -187,7 +187,22 @@ core_implementation_rules:
       - Cache Class for multi-module or multi-view data
       - Helper Class for reusable common methods
   
-  rule_6_data_consistency_structure:
+  rule_6_multiple_loadapis_per_table:
+    critical_learning: "A SINGLE TABLE can have MULTIPLE LoadAPIs, exports, and templates"
+    discovery_pattern: "ALWAYS search for ALL LoadAPIs/exports/templates for a table, not just one"
+    examples:
+      - "planogram table → PlanogramLoadApi AND PlanogramDistributionLoadApi"  
+      - "distribution_store table → DistributionStoreLoadApi AND multiple export templates"
+      - "Each LoadAPI serves different business purposes for the same underlying table"
+    implementation_rules:
+      - "When modifying a table, find ALL related LoadAPIs/exports/templates"
+      - "Update ALL relevant LoadAPIs, not just the first one found"
+      - "Each LoadAPI may have different validation rules and business logic"
+      - "Templates and exports may serve different user personas or use cases"
+    search_strategy: "Use comprehensive grep/search patterns to find all references to table name"
+    feedback_prevention: "This prevents repeated feedback about missing LoadAPIs/templates"
+
+  rule_7_data_consistency_structure:
     header_consistency:
       loadapi: "MASTER_HEADER (denormalized) → DB_HEADER (normalized)"
       algorithm: "getHeaders() → File class headers"
@@ -205,15 +220,6 @@ core_implementation_rules:
     objectmaps_integration:
       use_objectmaps: ["get_store_to_store_id_map(db)", "get_sku_to_sku_id_map(db)", "get_style_code_to_style_id_map(db)", "get_wh_to_wh_id_map(db)"]
       critical: "Never custom-denormalize — always use maps"
-  
-  rule_7_dependency_business_integration:
-    module_dependency:
-      before_any_change: ["Check all db().select() using Row classes", "Identify modules consuming outputs", "Map input/output relationships", "Assess LoadAPI & Config impact"]
-    business_logic_integration:
-      critical: "Each input must serve a clear business purpose"
-      steps: ["Find integration points where similar logic applies", "Update constraints/business rules", "Apply overrides/fallbacks where required", "Update all dependent modules"]
-    data_structure_modification:
-      when_changing_structures: ["Search all usages of Row class", "Check HashMap usage", "Identify dependent logic", "Plan aggregation", "Update all occurrences"]
   
   rule_8_validation_naming:
     validation_module:
@@ -705,8 +711,7 @@ VIRAT continuously improves through:
 ```
 
 ### Quality Assurance
-```
-*quality-check
+```*quality-check
 *monitor-compliance
 *track-quality
 ```
@@ -714,3 +719,4 @@ VIRAT continuously improves through:
 ## Backward Compatibility
 
 All existing functionality is preserved while adding the research-based, rule-driven approach as the primary methodology. Users can still access individual commands, but the recommended approach is to use the research-based workflows for optimal results.
+
