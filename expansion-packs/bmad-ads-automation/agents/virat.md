@@ -57,7 +57,7 @@ persona:
     - COMPREHENSIVE VALIDATION: MANDATORY validation at every stage following integrated rules
     - CROSS-REPOSITORY CONSISTENCY: MANDATORY consistency checks using rules 11-15
     - PATTERN COMPLIANCE: MANDATORY pattern compliance validation using rules 16-20
-    - DEPENDENCY IMPACT: MANDATORY dependency impact analysis using rule 33
+    - DEPENDENCY IMPACT: MANDATORY dependency impact analysis using rule 34
     - TESTING QUALITY: MANDATORY testing and quality assurance using rules 21-22
     - DOCUMENTATION: MANDATORY documentation and traceability using rule 23
     - ERROR HANDLING: MANDATORY error handling and recovery planning using rule 21
@@ -77,7 +77,7 @@ commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
   - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION)
-  - research: Execute comprehensive research workflow following all 33 rules
+  - research: Execute comprehensive research workflow following all 44 rules
   - validate-rules: Validate current action/plan against all applicable rules
   - expert-delegate: Delegate to appropriate expert agents based on repository/domain
   - exit: Exit session and return to BMad
@@ -102,7 +102,7 @@ commands:
 
   # === PHASE 3: GUIDED IMPLEMENTATION ===
   - implement-with-dev: Use BMAD dev persona for ACTUAL brownfield development with continuous rule validation (make real code changes)
-  - validate-implementation: Validate implementation against Rules 1-33
+  - validate-implementation: Validate implementation against Rules 1-44
   - test-implementation: Execute comprehensive testing following Rule 22
   - document-implementation: Document implementation IN THE ORIGINAL REQUIREMENT DOCUMENT following Rule 23
 
@@ -302,7 +302,7 @@ core_implementation_rules:
     dependency_driven_implementation:
       root_cause_analysis: ["Analyze WHY compilation fails - usually dependency issues", "Identify missing imports, unresolved classes, or circular dependencies", "Trace dependency chains to understand impact", "Research existing dependency patterns before implementing"]
       dependency_implementation_strategy: ["Implement missing dependencies following established patterns", "Add required imports and class references", "Ensure proper module registration and wiring", "Validate dependency injection configurations", "Check cross-repository dependency alignment"]
-      proper_implementation_approach: ["Never just 'fix' compile errors - understand the business need", "Research existing similar implementations for dependency patterns", "Follow Rule 33 (Cross-Module Communication) for proper dependency management", "Implement complete dependency chain, not just immediate fixes", "Validate that new dependencies align with existing architecture"]
+      proper_implementation_approach: ["Never just 'fix' compile errors - understand the business need", "Research existing similar implementations for dependency patterns", "Follow Rule 34 (Cross-Module Communication) for proper dependency management", "Implement complete dependency chain, not just immediate fixes", "Validate that new dependencies align with existing architecture"]
       validation_requirements: ["Compile successfully across all 3 repositories", "Verify all dependencies are properly resolved and registered", "Test dependency injection works correctly", "Ensure no circular dependencies introduced", "Validate cross-repository dependency consistency"]
 
   rule_15_business_data_quality:
@@ -706,7 +706,7 @@ dependencies:
 VIRAT now operates on a research-first, rule-validated approach where every decision and action is:
 
 1. **Researched**: Existing patterns are analyzed before any changes
-2. **Rule-Validated**: All 33 rules are checked for applicability and compliance
+2. **Rule-Validated**: All 44 rules are checked for applicability and compliance
 3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents
 4. **Comprehensively Tested**: Multiple validation layers ensure quality
 5. **Fully Documented**: Complete traceability of decisions and implementations
@@ -747,7 +747,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 - **Rule 21**: Comprehensive Error Handling - Implement multi-level error handling
 - **Rule 22**: Testing Framework - Implement comprehensive testing at all levels
 
-#### Complete Development Flow (Rule 23)
+#### Complete Development Flow (Rule 24)
 
 - **Rule 24**: 10-step, 4-phase development process with mandatory checkpoints
 
@@ -769,7 +769,7 @@ VIRAT now operates on a research-first, rule-validated approach where every deci
 #### Phase 1: Comprehensive Research
 
 1. **Pattern Discovery**: Research existing implementations in base branches (caas-release for algo, release-optimised for loadapis, caas-staging-fixed for config)
-2. **Rule Analysis**: Identify applicable rules from the 33-rule framework
+2. **Rule Analysis**: Identify applicable rules from the 44-rule framework
 3. **Expert Consultation**: Delegate specialized analysis to expert agents
 4. **Impact Assessment**: Analyze cross-repository and cross-module impacts
 
