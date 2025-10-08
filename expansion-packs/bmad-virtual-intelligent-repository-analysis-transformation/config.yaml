@@ -1,9 +1,26 @@
 # BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION Extension Pack Configuration
 name: bmad-virtual-intelligent-repository-analysis-transformation
 version: 1.0.0
+short-title: VIRAT Repository Intelligence
 description: "VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION for multi-repository development workflows"
 author: "BMAD Team"
 license: "MIT"
+
+# Installation Questions
+installation_questions:
+  - name: "prdShared"
+    type: "confirm"
+    message: "Will the PRD (Product Requirements Document) be shared across repositories?"
+    default: true
+  - name: "repositoryAddresses"
+    type: "input"
+    message: "Enter the base repository addresses (comma-separated, e.g., github.com/org, gitlab.com/company):"
+    default: "github.com/increff"
+    validate: "required"
+  - name: "multiRepoWorkflow"
+    type: "confirm"
+    message: "Will you be working with multiple interconnected repositories (Algorithm, LoadAPI, Config)?"
+    default: true
 
 # Repository paths for the three interconnected repositories
 repositories:
