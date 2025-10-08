@@ -121,6 +121,7 @@ commands:
   - research-cache-patterns: Research Cache usage patterns following Rule 29
   - research-constants: Research Constants management following Rule 31
   - research-interim-data: Research Interim data structures following Rule 32
+  - research-export-templates: Research export template patterns and filtering logic across related templates
 
   # === RULE-SPECIFIC VALIDATION COMMANDS ===
   - validate-core-rules: Validate against Rules 1-10 (Core Implementation)
@@ -351,7 +352,7 @@ core_implementation_rules:
         step_2: "Repository Pattern Analysis - MANDATORY: Crawl base branches FIRST, then crawl only affected repositories based on classification"
         step_3: "Cross-Dependency Impact Analysis - Find dependencies only within affected repositories"
       intelligent_classification_keywords:
-        config_only: ["template", "planogram", "export", "view", "SQL", "query", "JSON config", "configuration", "report format", "output format"]
+        config_only: ["template", "planogram", "export", "view", "SQL", "query", "JSON config", "configuration", "report format", "output format", "combinations", "filtering"]
         loadapi_only: ["upload", "validation", "denormalization", "import", "file processing", "data ingestion", "ObjectMap"]
         algorithm_only: ["business logic", "calculation", "module", "processing", "algorithm", "computation", "rules engine"]
         cross_repository: ["new input", "new output", "new module", "end-to-end", "complete workflow"]
