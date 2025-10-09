@@ -183,6 +183,10 @@ core_implementation_rules:
     new_columns:
       - Modify export, view creation, and Row/File definitions
       - Ensure correct data source linkage for new reports
+    critical_new_column_pattern:
+      - "ALGORITHM: Add field to Row class, update File class schema/write method, implement calculation in business logic"
+      - "CONFIG: Add field to view schema, update export to SELECT pre-calculated field (NO SQL calculations)"
+      - "NEVER calculate in SQL - always calculate in algorithm business logic"
 
   rule_3_new_submodule_creation:
     steps:
@@ -371,10 +375,13 @@ core_implementation_rules:
         step_2: "Repository Pattern Analysis - MANDATORY: Crawl base branches FIRST, then crawl only affected repositories based on classification"
         step_3: "Cross-Dependency Impact Analysis - Find dependencies only within affected repositories"
       intelligent_classification_keywords:
-        config_only: ["template", "planogram", "export", "view", "SQL", "query", "JSON config", "configuration", "report format", "output format", "combinations", "filtering"]
+        config_only: ["template", "planogram", "export format", "view format", "JSON config", "configuration", "report format", "output format", "combinations", "filtering"]
         loadapi_only: ["upload", "validation", "denormalization", "import", "file processing", "data ingestion", "ObjectMap"]
         algorithm_only: ["business logic", "calculation", "module", "processing", "algorithm", "computation", "rules engine"]
-        cross_repository: ["new input", "new output", "new module", "end-to-end", "complete workflow"]
+        cross_repository: ["new input", "new output", "new module", "end-to-end", "complete workflow", "new column", "add column", "new field"]
+      critical_classification_rules:
+        new_columns_always_cross_repo: "ANY request to add new columns/fields to reports requires cross-repository changes (algorithm calculation + config schema)"
+        calculation_location: "Calculations belong in algorithm business logic, NOT in SQL queries"
     phase_2_implementation_planning:
       step_4: "Create Comprehensive Change Plan - List ALL files to be modified across repositories"
       step_5: "Dependency Validation - Verify no breaking changes to existing modules"
