@@ -392,6 +392,7 @@ core_implementation_rules:
     phase_4_validation_documentation:
       step_9: "Comprehensive Testing - Unit tests for new static methods"
       step_10: "Documentation & Delivery - Update ONLY the original requirement document with complete implementation details (no separate files)"
+      step_11: "Branch Management - Push feature branches to remote repositories and add PR links to requirement document"
     critical_checkpoints:
       - "Base Branch Analysis: ALWAYS crawl correct base branches before starting"
       - "Pattern Compliance: NEVER deviate from discovered patterns without justification"
@@ -406,6 +407,8 @@ core_implementation_rules:
       - "Inconsistent header formats across repositories"
       - "Inadequate testing of shared dependencies"
       - "Missing documentation updates"
+      - "Forgetting to push feature branches for review"
+      - "Missing PR links in requirement documentation"
 
   # === CLASS MANAGEMENT RULES (25-34) ===
   rule_25_utility_class_management:
