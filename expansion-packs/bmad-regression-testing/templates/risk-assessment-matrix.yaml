@@ -1,0 +1,23 @@
+# Risk Assessment Matrix Template (edit per project)
+
+criteria:
+  complexity_weight: 0.35   # code complexity and coupling
+  change_freq_weight: 0.25  # recent commit frequency
+  dependency_weight: 0.20   # number/criticality of dependencies
+  coverage_weight: 0.15     # current test coverage
+  history_weight: 0.05      # historical failures
+
+scales:
+  complexity:    {low: 1, medium: 5, high: 9}
+  change_freq:   {low: 1, medium: 5, high: 9}
+  dependency:    {low: 1, medium: 5, high: 9}
+  coverage:      {high: 1, medium: 5, low: 9}
+  history:       {none: 1, occasional: 5, frequent: 9}
+
+examples:
+  - component: irisx-algo:distribution_modules
+    scores: {complexity: high, change_freq: medium, dependency: high, coverage: medium, history: occasional}
+  - component: irisx-config:database_migrations
+    scores: {complexity: high, change_freq: high, dependency: medium, coverage: n/a, history: occasional}
+  - component: ms-loadapis:azure_authentication
+    scores: {complexity: medium, change_freq: medium, dependency: high, coverage: medium, history: occasional}

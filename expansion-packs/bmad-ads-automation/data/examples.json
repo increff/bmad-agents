@@ -1,0 +1,59 @@
+{
+  "feedback_entries": [],
+  "learning_patterns": [],
+  "improvement_suggestions": [],
+  "metadata": {
+    "version": "1.0",
+    "created": "2024-01-15T00:00:00Z",
+    "last_updated": "2024-01-15T00:00:00Z",
+    "total_entries": 0,
+    "schema_version": "1.0"
+  },
+  "schema": {
+    "feedback_entry": {
+      "id": "string (unique identifier)",
+      "timestamp": "string (ISO 8601 format)",
+      "developer": "string (developer name)",
+      "context": {
+        "repository": "string (repository name)",
+        "module": "string (module name)",
+        "task_type": "string (analysis|development|testing|validation|documentation)",
+        "agent_used": "string (agent name)"
+      },
+      "issue": {
+        "description": "string (what went wrong)",
+        "generated_code": "string (incorrect code/plan)",
+        "error_type": "string (pattern_violation|business_logic|integration|validation|documentation)",
+        "impact": "string (high|medium|low)"
+      },
+      "solution": {
+        "correct_approach": "string (correct way to implement)",
+        "correct_code": "string (correct code/plan)",
+        "explanation": "string (why this approach is correct)",
+        "prevention_tips": "string (how to prevent this mistake)"
+      },
+      "learning": {
+        "pattern_learned": "string (pattern or rule learned)",
+        "prevention_strategy": "string (strategy to prevent similar mistakes)",
+        "improvement_suggestion": "string (suggestion for improving the agent)"
+      },
+      "status": "string (processed|pending|archived)"
+    },
+    "learning_pattern": {
+      "pattern_id": "string (unique pattern identifier)",
+      "pattern_name": "string (pattern name)",
+      "frequency": "number (how often this pattern occurs)",
+      "last_occurrence": "string (ISO 8601 format)",
+      "prevention_strategy": "string (how to prevent this pattern)",
+      "related_feedback": "array (list of related feedback IDs)"
+    },
+    "improvement_suggestion": {
+      "suggestion_id": "string (unique suggestion identifier)",
+      "suggestion": "string (improvement suggestion)",
+      "priority": "string (high|medium|low)",
+      "based_on_feedback": "array (list of feedback IDs this suggestion is based on)",
+      "implementation_status": "string (pending|in_progress|completed)"
+    }
+  }
+}
+

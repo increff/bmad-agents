@@ -1,0 +1,71 @@
+# Test Generation Templates
+
+## irisx-algo: Java Unit Test
+```java
+@Test
+@DisplayName("Test {module} {scenario}")
+public class Test{Module}{Scenario} extends AbstractTest {
+    // Test ID: {EPIC}.{STORY}-UNIT-{SEQ}
+    // Given: Initial state
+    // When: Action performed
+    // Then: Expected outcome
+    @Test
+    public void test{Module}{Scenario}() {
+        // Given: Setup test data
+        // When: Execute module logic
+        // Then: Verify expected outcome
+        assertThat(result).isEqualTo(expected);
+    }
+}
+```
+
+## irisx-algo: Java Integration Test
+```java
+@Test
+@DisplayName("Test {flow} {interaction}")
+public class Test{Flow}{Interaction} extends AbstractTest {
+    // Test ID: {EPIC}.{STORY}-INT-{SEQ}
+    // Given: System state
+    // When: Components interact
+    // Then: Integration works correctly
+    @Test
+    public void test{Flow}{Interaction}() {
+        // Given: Setup integration test data
+        // When: Execute integrated workflow
+        // Then: Verify integration works
+        assertThat(integrationResult).isEqualTo(expected);
+    }
+}
+```
+
+## irisx-config: SQL Test
+```sql
+-- Test ID: {EPIC}.{STORY}-SQL-{SEQ}
+-- Test: {component} {scenario}
+BEGIN
+    -- Given: Initial state
+    -- When: Action performed
+    -- Then: Expected outcome
+    SELECT assert_equals(actual, expected, 'Test failed');
+END;
+```
+
+## ms-loadapis: Python Unit Test
+```python
+def test_{component}_{scenario}():
+    """Test ID: {EPIC}.{STORY}-UNIT-{SEQ}"""
+    # Given: Initial state
+    # When: Action performed
+    # Then: Expected outcome
+    assert result == expected
+```
+
+## ms-loadapis: Python Integration Test
+```python
+def test_{flow}_{interaction}():
+    """Test ID: {EPIC}.{STORY}-INT-{SEQ}"""
+    # Given: System state
+    # When: Components interact
+    # Then: Integration works correctly
+    assert integration_result == expected
+```

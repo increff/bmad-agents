@@ -1,0 +1,16 @@
+# Configuration for the BMAD Regression Testing Expansion Pack
+
+# Local paths to the repositories under test.
+# These paths should be absolute paths on your local machine.
+repositories:
+  irisx-algo: "/path/to/your/irisx-algo"
+  irisx-config: "/path/to/your/irisx-config"
+  ms-loadapis: "/path/to/your/ms-loadapis-ril-final"
+
+# Configuration for test execution
+testing:
+  parallel: true
+  fail-fast: true
+  default-branch-algo: "caas-release"
+  default-branch-config: "caas-staging_fix"
+  default-branch-loadapis: "release_optimised"
