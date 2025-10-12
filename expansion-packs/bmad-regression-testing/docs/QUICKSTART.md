@@ -1,45 +1,44 @@
-# Quickstart Guide: BMAD Regression Testing
+# Quickstart Guide: BMAD Algorithm Output Regression Testing
 
 ## Installation
 1.  **Run the Installer**:
     ```bash
     npx bmad-method install
     ```
-2.  **Select the Pack**: Choose the `BMAD Regression Testing` expansion pack from the list.
-3.  **Configure Paths**: When prompted, provide the absolute local paths to your `irisx-algo`, `irisx-config`, and `ms-loadapis` repositories. The installer will save these to `expansion-packs/bmad-regression-testing/config.yaml`.
+2.  **Select the Pack**: Choose the `BMAD Algorithm Output Regression Testing` expansion pack from the list.
+3.  **Configure Path**: When prompted, provide the absolute local path to your algorithm outputs folder. The installer will save this to `expansion-packs/bmad-regression-testing/config.yaml`.
 
 ## Usage
-The primary way to use this expansion pack is through the `/regression-test` command, which is handled by the Regression Test Orchestrator.
+The primary way to use this expansion pack is through the `/test-algorithm-outputs` command, which is handled by the Algorithm Output Tester.
 
 ### Running the Full Workflow
-To run the entire regression testing workflow, simply execute the following command in your IDE:
+To run the entire algorithm output testing workflow, simply execute the following command in your IDE:
 ```
-/regression-test
+/test-algorithm-outputs
 ```
-This will trigger the five-step process:
-1.  Identify High-Risk Areas
-2.  Assess Likelihood of Failure
-3.  Prioritize Test Cases
-4.  Execute Tests
-5.  Iterate and Refine
+This will trigger the three-step process:
+1.  Analyze Algorithm Output Files
+2.  Validate Outputs for Regressions and Quality
+3.  Generate Comprehensive Report
 
 ### Scoped Test Runs
 You can control the scope of the test run using the following options:
 
--   **`--scope <full|changed>`**:
-    -   `full`: (Default) Runs the full regression suite.
-    -   `changed`: Analyzes the git history and only runs tests relevant to the changed files.
--   **`--priority <P0|P1|P2|P3>`**:
-    -   Allows you to run tests only up to a certain priority level. For example, `--priority P0` will only execute the most critical tests for a very fast feedback loop.
+-   **`--scope <all|recent>`**:
+    -   `all`: (Default) Tests all algorithm output files in the configured directory.
+    -   `recent`: Only tests files that have been modified recently.
+-   **`--validation <schema|quality|regression|performance>`**:
+    -   Allows you to run specific types of validation. For example, `--validation schema` will only perform schema validation.
 
 **Example**:
 ```
-/regression-test --scope changed --priority P0
+/test-algorithm-outputs --scope recent --validation regression
 ```
 
-### Expert Agents
-While the orchestrator manages the overall workflow, you can also interact with the expert agents directly for repository-specific tasks.
+### Validation Types
+The system supports multiple validation types:
 
--   **/run-java-tests**: For `irisx-algo`.
--   **/run-sql-tests**: For `irisx-config`.
--   **/run-python-tests**: For `ms-loadapis`.
+-   **Schema Validation**: Checks file structure, format, and required fields
+-   **Data Quality**: Validates data integrity, completeness, and consistency
+-   **Regression Detection**: Compares current outputs with baseline versions
+-   **Performance Analysis**: Analyzes file sizes, processing times, and efficiency

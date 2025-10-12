@@ -1,26 +1,24 @@
 ---
-id: prioritize-test-cases
-name: Prioritize Test Cases
-description: Creates a prioritized test execution plan based on risk and business impact.
+id: generate-report
+name: Generate Validation Report
+description: Creates a comprehensive report of algorithm output validation results and findings.
 ---
 
-# Task: Prioritize Test Cases
+# Task: Generate Validation Report
 
 ## Objective
-To create a prioritized test execution plan based on the risk assessment and business impact, categorizing tests from P0 (Critical) to P3 (Low).
+To create a comprehensive report summarizing the algorithm output validation results, including regressions found, data quality issues, and actionable recommendations.
 
 ## Actions
-1.  **Define Priority Levels**: Establish clear definitions for P0, P1, P2, and P3 priority levels for each repository.
-2.  **Map Components to Priorities**: Map the identified high-risk components to the defined priority levels.
-3.  **Apply Prioritization Rules**:
-    -   Start with business impact.
-    -   Consider the likelihood of failure.
-    -   Factor in detectability and recoverability.
-4.  **Create Test Matrix**: Generate a test priority matrix that outlines which test suites or modules fall into each priority level.
+1.  **Compile Results**: Aggregate all validation results from schema, data quality, regression, and performance checks.
+2.  **Categorize Issues**: Organize findings by severity (Critical, High, Medium, Low) and type (Schema, Data Quality, Regression, Performance).
+3.  **Generate Recommendations**: Provide specific, actionable recommendations for addressing identified issues.
+4.  **Create Summary**: Generate executive summary with key metrics and overall health status.
+5.  **Export Results**: Save detailed report in multiple formats (Markdown, JSON, CSV) for different stakeholders.
 
 ## Implementation Details
--   The test priority matrices will be stored in a YAML file or within the orchestrator's logic.
--   **`irisx-algo`**: P0 tests will target core modules like `distribution`, `otb`, and `reordering`.
--   **`irisx-config`**: P0 tests will focus on database migrations and critical export/sync queries.
--   **`ms-loadapis`**: P0 tests will cover Azure authentication and core API integration.
--   The orchestrator will use this matrix to guide the test execution phase.
+-   Compile validation results from all performed checks into a structured report.
+-   Categorize issues by severity and provide specific file locations and error details.
+-   Generate actionable recommendations for fixing identified problems.
+-   Create both detailed technical reports and executive summaries.
+-   Export results in multiple formats for different use cases and stakeholders.

@@ -1,29 +1,19 @@
-# Command Reference: BMAD Regression Testing
+# Command Reference: BMAD Algorithm Output Regression Testing
 
-## Orchestrator
-- `/regression-test` – Run end-to-end regression workflow
-  - `--scope <full|changed>` – Full suite or only changed-areas
-  - `--priority <P0|P1|P2|P3>` – Max priority to execute
-  - `--report-only` – Generate report from latest run
+## Algorithm Output Tester
+- `/test-algorithm-outputs` – Run algorithm output validation workflow
+  - `--scope <all|recent>` – Test all files or only recently modified ones
+  - `--validation <schema|quality|regression|performance>` – Specify validation type
+  - `--report-only` – Generate report from latest run without executing new tests
 
-## Java Test Expert
-- `/run-java-tests` – Execute Maven tests
-  - `--priority <P0|P1|P2|P3>` – Filter by priority mapping
-  - `--coverage` – Generate JaCoCo report
-- `/generate-java-test` – Generate JUnit file
-  - `--module <name>`
-  - `--type <unit|integration>`
-
-## SQL Test Expert
-- `/run-sql-tests` – Execute SQL tests
-  - `--type <migration|validation|regression>`
-- `/generate-sql-test` – Generate SQL test script
-  - `--component <name>`
-
-## Python Test Expert
-- `/run-python-tests` – Execute Python tests
-  - `--priority <P0|P1|P2|P3>`
-  - `--coverage` – Generate coverage report
-- `/generate-python-test` – Generate Python test file
-  - `--component <name>`
-  - `--type <unit|integration>`
+## Validation Commands
+- `/validate-schema` – Validate file schemas and structure
+  - `--file-type <csv|json|xlsx|txt|tsv>` – Specify file type to validate
+- `/check-data-quality` – Perform data quality validation
+  - `--severity <critical|high|medium|low>` – Filter by issue severity
+- `/detect-regressions` – Compare current outputs with baselines
+  - `--baseline-path <path>` – Specify baseline directory
+  - `--tolerance <percentage>` – Set regression tolerance threshold
+- `/analyze-performance` – Analyze file performance characteristics
+  - `--max-size <MB>` – Set maximum file size limit
+  - `--max-rows <number>` – Set maximum row count limit

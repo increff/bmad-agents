@@ -1,46 +1,65 @@
 ---
 id: regression-report-template
-name: Regression Test Report Template
-description: A template for generating the final regression test report.
+name: Algorithm Output Validation Report Template
+description: A template for generating the final algorithm output validation report.
 ---
 
-# Regression Test Report
+# Algorithm Output Validation Report
 
 ## Summary
 - **Date**: {{date}}
 - **Overall Status**: {{status}}
 - **Scope**: {{scope}}
-- **Total Tests Run**: {{total_tests}}
-- **Passed**: {{passed_tests}}
-- **Failed**: {{failed_tests}}
+- **Total Files Analyzed**: {{total_files}}
+- **Files Passed**: {{passed_files}}
+- **Files Failed**: {{failed_files}}
 
 ---
 
 ## High-Level Metrics
 
-| Repository      | P0 Tests (Pass/Fail) | P1 Tests (Pass/Fail) | Coverage |
-|-----------------|----------------------|----------------------|----------|
-| `irisx-algo`    | {{algo_p0_results}}  | {{algo_p1_results}}  | {{algo_coverage}}% |
-| `irisx-config`  | {{config_p0_results}}| {{config_p1_results}}| N/A      |
-| `ms-loadapis`   | {{py_p0_results}}    | {{py_p1_results}}    | {{py_coverage}}%   |
+| File Type | Files Analyzed | Schema Issues | Data Quality Issues | Regressions Detected |
+|-----------|----------------|---------------|---------------------|---------------------|
+| CSV       | {{csv_count}}  | {{csv_schema}}| {{csv_quality}}     | {{csv_regressions}}  |
+| JSON      | {{json_count}} | {{json_schema}}| {{json_quality}}    | {{json_regressions}} |
+| XLSX      | {{xlsx_count}} | {{xlsx_schema}}| {{xlsx_quality}}   | {{xlsx_regressions}} |
+| TXT       | {{txt_count}}  | {{txt_schema}}| {{txt_quality}}     | {{txt_regressions}} |
+| TSV       | {{tsv_count}}  | {{tsv_schema}}| {{tsv_quality}}     | {{tsv_regressions}} |
 
 ---
 
 ## Detailed Findings
 
-### Failures and High-Severity Issues
-{{#each failures}}
-- **Test Case**: `{{this.name}}`
-- **Repository**: `{{this.repo}}`
-- **Priority**: {{this.priority}}
-- **Error**: `{{this.error}}`
+### Critical Issues
+{{#each critical_issues}}
+- **File**: `{{this.file_path}}`
+- **Issue Type**: {{this.issue_type}}
+- **Severity**: {{this.severity}}
+- **Description**: `{{this.description}}`
 {{/each}}
 
-### Coverage Gaps
-{{#each coverage_gaps}}
-- **File**: `{{this.file}}`
-- **Repository**: `{{this.repo}}`
-- **Missing Coverage**: {{this.missing}}
+### Data Quality Issues
+{{#each data_quality_issues}}
+- **File**: `{{this.file_path}}`
+- **Issue**: {{this.issue}}
+- **Impact**: {{this.impact}}
+- **Recommendation**: {{this.recommendation}}
+{{/each}}
+
+### Regression Analysis
+{{#each regressions}}
+- **File**: `{{this.file_path}}`
+- **Baseline**: `{{this.baseline_file}}`
+- **Change Percentage**: {{this.change_percentage}}%
+- **Significance**: {{this.significance}}
+{{/each}}
+
+### Performance Analysis
+{{#each performance_issues}}
+- **File**: `{{this.file_path}}`
+- **Size**: {{this.size_mb}}MB
+- **Processing Time**: {{this.processing_time}}s
+- **Issue**: {{this.issue}}
 {{/each}}
 
 ### Recommendations
@@ -51,7 +70,7 @@ description: A template for generating the final regression test report.
 
 ---
 
-## Raw Logs
-- **`irisx-algo` Test Log**: [Link to log file]
-- **`irisx-config` Test Log**: [Link to log file]
-- **`ms-loadapis` Test Log**: [Link to log file]
+## Raw Data
+- **Validation Log**: [Link to validation log]
+- **Performance Metrics**: [Link to performance data]
+- **Regression Comparison**: [Link to comparison data]

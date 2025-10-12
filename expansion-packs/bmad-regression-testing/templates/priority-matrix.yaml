@@ -1,53 +1,38 @@
-# Priority Matrix Template (edit per project)
+# Algorithm Output Validation Priority Matrix
 
-irisx_algo_priorities:
+validation_priorities:
   p0_critical:
-    - distribution_modules
-    - otb_calculation_modules
-    - reordering_core
-    - discounting_validation
-    - spring_boot_configuration
-    - database_integration
+    - primary_output_files
+    - core_algorithm_results
+    - business_critical_data
+    - final_reports
   p1_high:
-    - file_processing_utilities
-    - validation_helpers
-    - test_data_management
+    - intermediate_outputs
+    - validation_files
+    - summary_statistics
+    - performance_metrics
   p2_medium:
-    - test_utilities
-    - configuration_files
+    - debug_outputs
+    - temporary_files
+    - log_files
   p3_low:
-    - debug_utilities
-    - experimental_features
+    - backup_files
+    - experimental_outputs
+    - test_data
 
-irisx_config_priorities:
-  p0_critical:
-    - database_migrations
-    - export_queries
-    - sync_queries
-    - regression_test_data
-  p1_high:
-    - template_queries
-    - view_creation_scripts
-    - module_configurations
-  p2_medium:
-    - documentation
-    - configuration_files
-  p3_low:
-    - backup_scripts
-    - utility_queries
-
-ms_loadapis_priorities:
-  p0_critical:
-    - azure_authentication
-    - api_integration
-    - test_orchestration
-  p1_high:
-    - test_result_processing
-    - reporting
-    - coverage_analysis
-  p2_medium:
-    - configuration_management
-    - documentation
-  p3_low:
-    - debug_utilities
-    - experimental_features
+file_type_priorities:
+  csv_files:
+    priority: p0_critical
+    validation: [schema, data_quality, regression]
+  json_files:
+    priority: p0_critical
+    validation: [schema, data_quality, regression]
+  xlsx_files:
+    priority: p1_high
+    validation: [schema, data_quality]
+  txt_files:
+    priority: p2_medium
+    validation: [data_quality]
+  tsv_files:
+    priority: p1_high
+    validation: [schema, data_quality, regression]

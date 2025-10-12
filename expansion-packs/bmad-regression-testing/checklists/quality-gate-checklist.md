@@ -1,33 +1,36 @@
 ---
 id: quality-gate-checklist
 name: Quality Gate Checklist
-description: Enforces quality gates and coverage requirements for regression testing.
+description: Enforces quality gates and validation requirements for algorithm output testing.
 ---
 
 # Quality Gate Checklist
 
 ## Gate Decision Criteria
-- **PASS**: All P0 tests pass, no high-severity issues found.
-- **CONCERNS**: Non-blocking issues are present; these should be tracked for future sprints.
-- **FAIL**: One or more P0 tests fail, or high-severity issues are present.
-- **WAIVED**: Known issues are explicitly accepted by the project owner or lead.
+- **PASS**: All critical validations pass, no high-severity data quality issues found.
+- **CONCERNS**: Non-blocking issues are present; these should be tracked for future algorithm runs.
+- **FAIL**: One or more critical validations fail, or high-severity data quality issues are present.
+- **WAIVED**: Known issues are explicitly accepted by the algorithm owner or lead.
 
-## Coverage Requirements
+## Validation Requirements
 
-### P0 (Critical)
-- **Unit Coverage**: >90%
-- **Integration Coverage**: >80%
-- **Paths Covered**: All critical execution paths.
+### P0 (Critical Files)
+- **Schema Validation**: 100% compliance with expected schema
+- **Data Quality**: No missing required fields, no null values in critical columns
+- **Regression Detection**: No significant changes from baseline (tolerance < 1%)
+- **File Integrity**: All files are readable and properly formatted
 
-### P1 (High)
-- **Unit Coverage**: >80%
-- **Integration Coverage**: >60%
-- **Paths Covered**: Main happy paths and major error conditions.
+### P1 (High Priority Files)
+- **Schema Validation**: >95% compliance with expected schema
+- **Data Quality**: <5% missing values, no critical data type mismatches
+- **Regression Detection**: Changes within acceptable tolerance (< 5%)
+- **File Integrity**: Files are readable with minor format issues
 
-### P2 (Medium)
-- **Unit Coverage**: >60%
-- **Integration Coverage**: >40%
-- **Paths Covered**: Smoke tests for primary functionality.
+### P2 (Medium Priority Files)
+- **Schema Validation**: >90% compliance with expected schema
+- **Data Quality**: <10% missing values, minor data type issues acceptable
+- **Regression Detection**: Changes within moderate tolerance (< 10%)
+- **File Integrity**: Files are readable with some format inconsistencies
 
-### P3 (Low)
-- **Coverage**: Best effort; manual testing is acceptable.
+### P3 (Low Priority Files)
+- **Validation**: Best effort; basic file integrity checks only.

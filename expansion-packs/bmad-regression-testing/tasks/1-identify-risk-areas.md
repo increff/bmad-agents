@@ -1,23 +1,23 @@
 ---
-id: identify-risk-areas
-name: Identify High-Risk Areas
-description: Systematically identifies components and features that pose the highest risk of failure.
+id: analyze-output-files
+name: Analyze Algorithm Output Files
+description: Scans and analyzes algorithm output files to understand their structure and content.
 ---
 
-# Task: Identify High-Risk Areas
+# Task: Analyze Algorithm Output Files
 
 ## Objective
-To systematically identify components and features across the `irisx-algo`, `irisx-config`, and `ms-loadapis` repositories that pose the highest risk if they fail.
+To scan and analyze all algorithm output files in the configured directory to understand their structure, format, and content patterns.
 
 ## Actions
-1.  **Analyze Codebase Structure**: Scan the directory structure of each repository to identify critical paths and core components (e.g., modules, helpers, APIs, migration scripts).
-2.  **Review Recent Changes**: Use `git log` to review recent commits (e.g., within the last week) to identify areas of active development, which may have a higher likelihood of introducing regressions.
-3.  **Identify Dependencies**: Analyze dependencies and integration points both within and between repositories.
-4.  **Map Business-Critical Functionality**: Correlate technical components with business-critical features.
-5.  **Review Historical Data**: Analyze error logs and historical failure patterns to find recurring issues.
+1.  **File Discovery**: Scan the algorithm outputs directory to identify all output files by supported file types (CSV, JSON, TXT, XLSX, TSV).
+2.  **Structure Analysis**: Analyze file structure, headers, data types, and format consistency across files.
+3.  **Content Sampling**: Sample data from each file to understand content patterns and data quality.
+4.  **Metadata Collection**: Collect file metadata including size, modification time, and creation patterns.
+5.  **Baseline Establishment**: Identify baseline files for regression comparison if available.
 
 ## Implementation Details
--   **`irisx-algo`**: Focus on core algorithmic modules (`distribution`, `otb`, `reordering`), Spring Boot configuration, and database integration points.
--   **`irisx-config`**: Pay close attention to database migration scripts, export/sync queries, and core module configurations.
--   **`ms-loadapis`**: Prioritize Azure authentication, core API integration logic, and test orchestration scripts.
--   The orchestrator will use `find` and `git log` commands to gather initial data and delegate deeper analysis to the respective expert agents.
+-   Scan the configured `algorithm_outputs_path` directory recursively for supported file types.
+-   Analyze file headers, data structure, and content patterns.
+-   Identify files that appear to be baselines or reference outputs.
+-   Generate a comprehensive inventory of all output files with their characteristics.

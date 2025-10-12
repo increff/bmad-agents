@@ -1,53 +1,41 @@
-# BMAD Regression Testing Expansion Pack
+# BMAD Algorithm Output Regression Testing Expansion Pack
 
 ## Overview
-This expansion pack provides a comprehensive, automated regression testing workflow for the Increff ecosystem. It works across the `irisx-algo`, `irisx-config`, and `ms-loadapis` repositories to ensure software quality and stability.
+This expansion pack provides automated regression testing for algorithm output files. It analyzes, validates, and tests algorithm-generated files to detect regressions, data quality issues, and ensure consistency across algorithm runs.
 
 ## Contents
 - `agents/`
-  - `regression-orchestrator.md`
-  - `java-test-expert.md`
-  - `sql-test-expert.md`
-  - `python-test-expert.md`
+  - `algorithm-output-tester.md` - Main agent for testing algorithm outputs
 - `tasks/`
-  - `1-identify-risk-areas.md`
-  - `2-assess-failure-likelihood.md`
-  - `3-prioritize-test-cases.md`
-  - `4-execute-tests.md`
-  - `5-iterate-and-refine.md`
+  - `1-analyze-output-files.md` - Analyze algorithm output files
+  - `2-validate-outputs.md` - Validate outputs for regressions and quality
+  - `3-generate-report.md` - Generate comprehensive validation reports
 - `checklists/`
-  - `quality-gate-checklist.md`
+  - `quality-gate-checklist.md` - Quality gates for output validation
 - `templates/`
-  - `test-generation-templates.yaml`
-  - `regression-report-tmpl.md`
-  - `priority-matrix.yaml` (add your priorities)
-  - `risk-assessment-matrix.yaml` (add your scoring)
+  - `output-validation-templates.yaml` - Validation templates and rules
+  - `test-generation-templates.yaml` - Code templates for validation
+  - `regression-report-tmpl.md` - Report template
+  - `priority-matrix.yaml` - File priority matrix
+  - `risk-assessment-matrix.yaml` - Risk assessment criteria
 - `docs/`
-  - `QUICKSTART.md`
-  - `WORKFLOW_DETAILS.md`
-  - `COMMAND_REFERENCE.md`
-  - `SETUP.md`
-  - `CI_EXAMPLES.md`
-- `config.yaml` – set absolute repository paths and test flags
+  - `QUICKSTART.md` - Quick start guide
+  - `COMMAND_REFERENCE.md` - Command reference
+  - `SETUP.md` - Setup instructions
+- `config.yaml` - Configure algorithm outputs path and validation settings
 
-## Agents
-- `regression-orchestrator`: runs the end-to-end workflow and enforces quality gates
-- `java-test-expert`: runs Maven/JUnit/JaCoCo
-- `sql-test-expert`: validates SQL, migrations, regression SQL
-- `python-test-expert`: runs unittest/coverage and integration checks
+## Agent
+- `algorithm-output-tester`: Analyzes and validates algorithm output files for regressions and data quality issues
 
 ## Configuration
 Edit `config.yaml`:
-- `repositories.*`: absolute paths to local repos
-- `testing.parallel` and `testing.fail-fast`
-- default branches for each repo
+- `algorithm_outputs_path`: absolute path to folder containing algorithm outputs
+- `testing.output_file_types`: supported file types (CSV, JSON, TXT, XLSX, TSV)
+- `testing.validation_methods`: validation types (schema, data_quality, regression, performance)
 
 ## Usage
-See `docs/QUICKSTART.md` for installation and `/regression-test` examples.
+See `docs/QUICKSTART.md` for installation and `/test-algorithm-outputs` examples.
 See `docs/COMMAND_REFERENCE.md` for all commands and flags.
-
-## CI/CD
-Reference snippets for Bitbucket/GitHub in `docs/CI_EXAMPLES.md`.
 
 ## Quality Gates
 Criteria are defined in `checklists/quality-gate-checklist.md`. Adjust thresholds to your needs.

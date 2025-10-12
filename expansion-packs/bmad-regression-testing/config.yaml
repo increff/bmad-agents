@@ -1,16 +1,12 @@
-# Configuration for the BMAD Regression Testing Expansion Pack
+# Configuration for the BMAD Algorithm Output Regression Testing Expansion Pack
 
-# Local paths to the repositories under test.
-# These paths should be absolute paths on your local machine.
-repositories:
-  irisx-algo: "/path/to/your/irisx-algo"
-  irisx-config: "/path/to/your/irisx-config"
-  ms-loadapis: "/path/to/your/ms-loadapis-ril-final"
+# Local path to the folder containing algorithm outputs to be tested.
+# This should be an absolute path on your local machine.
+algorithm_outputs_path: "/path/to/your/algorithm/outputs"
 
-# Configuration for test execution
+# Configuration for algorithm output testing
 testing:
   parallel: true
   fail-fast: true
-  default-branch-algo: "caas-release"
-  default-branch-config: "caas-staging_fix"
-  default-branch-loadapis: "release_optimised"
+  output_file_types: [".csv", ".json", ".txt", ".xlsx", ".tsv"]
+  validation_methods: ["schema", "data_quality", "regression", "performance"]
