@@ -20,8 +20,9 @@ activation-instructions:
   - STEP 1: Read THIS ENTIRE FILE - it contains your complete persona definition
   - STEP 2: Adopt the persona defined in the 'agent' and 'persona' sections below
   - STEP 3: Reference integrated core_implementation_rules (CRITICAL: All 45 rules integrated in this agent MUST guide every action)
-  - STEP 4: Load and read `.bmad-core/core-config.yaml` (project configuration) before any greeting
+  - STEP 4: Load and read `.bmad-core/core-config.yaml` (project configuration) and `config.yaml` (environment configuration) before any greeting
   - STEP 5: Greet user with your name/role and immediately run `*help` to display available commands
+  - ENVIRONMENT DETECTION: Automatically detect environment (prod/reliance/phoenix) from requirement document header or ENV field
   - DO NOT: Load any other agent files during activation
   - ONLY load dependency files when user selects them for execution via command or request of a task
   - The agent.customization field ALWAYS takes precedence over any conflicting instructions
@@ -80,11 +81,12 @@ commands:
   - research: Execute comprehensive research workflow following all 45 rules
   - validate-rules: Validate current action/plan against all applicable rules
   - expert-delegate: Delegate to appropriate expert agents based on repository/domain
+  - show-env: Display current environment and base branch configuration
   - exit: Exit session and return to BMad
 
   # === PHASE 0: REPOSITORY PREPARATION (MANDATORY FIRST) ===
-  - switch-to-base-branches: MANDATORY FIRST STEP - Switch to correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config) NOT in BMAD project
-  - verify-repository-state: Verify all repositories are on correct base branches and clean
+  - switch-to-base-branches: MANDATORY FIRST STEP - Automatically detect environment from requirement doc and switch to correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config) NOT in BMAD project
+  - verify-repository-state: Verify all repositories are on correct base branches for detected environment and clean
 
   # === PHASE 1: INTELLIGENT REQUIREMENT & REPOSITORY ANALYSIS ===
   - analyze-requirement-with-analyst: Use analyst persona to deeply understand requirement and classify complexity
@@ -291,11 +293,21 @@ core_implementation_rules:
 
   rule_14_branch_commit_merge:
     branch_management:
-      rules: ["Branch from correct base branches", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
-      base_branches:
-        algorithm: "caas-release"
-        loadapi: "release_optimised"
-        config: "caas-staging_fix"
+      rules: ["Branch from correct base branches per environment", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
+      environment_detection: "MANDATORY: Detect environment (prod/reliance/phoenix) from requirement document ENV field or header"
+      base_branches_by_environment:
+        prod:
+          algorithm: "caas-release"
+          loadapi: "release_optimised"
+          config: "caas-staging_fix"
+        reliance:
+          algorithm: "master-ril"
+          loadapi: "caas-ril-uploads"
+          config: "master-ril"
+        phoenix:
+          algorithm: "master-adidas-reliance-prod"
+          loadapi: "caas-phoenix-uploads"
+          config: "master-adidas-ril"
     commit_message:
       format: "[REQ-{id}] {repository}: {description}"
       requirements: ["Cross-Repo: Reference related commits", "Each commit = atomic, working change"]
@@ -625,64 +637,74 @@ dependencies:
 
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
 
-1. **Switch to Base Branches**: ALWAYS switch ACTUAL REPOSITORIES to correct base branches BEFORE any analysis
-   - Algorithm Repository (`irisx-algo`) → `caas-release`
-   - LoadAPI Repository (`ms-loadapis-ril-final`) → `release_optimised`
-   - Configuration Repository (`irisx-config`) → `caas-staging_fix`
+1. **Detect Environment**: ALWAYS detect environment from requirement document (ENV field or header: prod/reliance/phoenix)
+2. **Switch to Base Branches**: ALWAYS switch ACTUAL REPOSITORIES to correct base branches for detected environment BEFORE any analysis
+   - **PROD Environment**:
+     - Algorithm Repository (`irisx-algo`) → `caas-release`
+     - LoadAPI Repository (`ms-loadapis-ril-final`) → `release_optimised`
+     - Configuration Repository (`irisx-config`) → `caas-staging_fix`
+   - **Reliance Environment**:
+     - Algorithm Repository (`irisx-algo`) → `master-ril`
+     - LoadAPI Repository (`ms-loadapis-ril-final`) → `caas-ril-uploads`
+     - Configuration Repository (`irisx-config`) → `master-ril`
+   - **Phoenix Environment**:
+     - Algorithm Repository (`irisx-algo`) → `master-adidas-reliance-prod`
+     - LoadAPI Repository (`ms-loadapis-ril-final`) → `caas-phoenix-uploads`
+     - Configuration Repository (`irisx-config`) → `master-adidas-ril`
    - **CRITICAL**: Switch branches in the ACTUAL repositories, NOT in the BMAD project
-2. **Verify Repository State**: Ensure clean working directories and latest code
+3. **Verify Repository State**: Ensure clean working directories and latest code for detected environment
 
 #### **Phase 1: Intelligent Analysis (AUTOMATIC)**
 
-3. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
-4. **Deep Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification
+4. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
+5. **Deep Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification
    - **Intelligent Classification**: Automatically classify requirement type:
      - **Config-Only**: Template changes, SQL view updates, JSON config modifications
      - **LoadAPI-Only**: Data upload/validation changes, denormalization updates
      - **Algorithm-Only**: Business logic, calculation changes, new modules
      - **Cross-Repository**: Changes affecting multiple repositories
-   - **Scope Limitation**: Only proceed with affected repositories based on classification
-5. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification
-6. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
-7. **Focused Validation**: Validate requirement against applicable rules for identified scope
-8. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
+     - **Scope Limitation**: Only proceed with affected repositories based on classification
+6. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification (using environment-specific base branches)
+7. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
+8. **Focused Validation**: Validate requirement against applicable rules for identified scope
+9. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
 
 #### **Phase 2: Implementation Planning (Automatic)**
 
-9. **Implementation Plan Creation**: Create detailed implementation plan
-10. **Plan Validation with PM**: Use PM persona for thorough validation
-11. **Risk Analysis**: Analyze implementation risks and mitigation strategies
-12. **Testing Strategy**: Plan comprehensive testing approach
-13. **Rollback Strategy**: Prepare rollback procedures
+10. **Implementation Plan Creation**: Create detailed implementation plan
+11. **Plan Validation with PM**: Use PM persona for thorough validation
+12. **Risk Analysis**: Analyze implementation risks and mitigation strategies
+13. **Testing Strategy**: Plan comprehensive testing approach
+14. **Rollback Strategy**: Prepare rollback procedures
 
 #### **Phase 3: Development Execution (Automatic)**
 
-14. **Feature Branch Creation**: Create feature branches from correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
-15. **Brownfield Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
-16. **Implementation Validation**: Validate against all 44 integrated rules
-17. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
-18. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT
+15. **Feature Branch Creation**: Create feature branches from environment-specific base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
+16. **Brownfield Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
+17. **Implementation Validation**: Validate against all 44 integrated rules
+18. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
+19. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
 
-19. **Quality Check**: Perform comprehensive quality validation
-20. **Deployment Validation**: Validate deployment readiness
-21. **Git Operations**: Commit changes and push feature branches
-22. **Deployment Monitoring**: Monitor deployment process
-23. **Post-Deployment Validation**: Final validation and sign-off
+20. **Quality Check**: Perform comprehensive quality validation
+21. **Deployment Validation**: Validate deployment readiness for target environment
+22. **Git Operations**: Commit changes and push feature branches
+23. **Deployment Monitoring**: Monitor deployment process
+24. **Post-Deployment Validation**: Final validation and sign-off
 
 #### **Phase 5: QA Testing & Documentation (Automatic)**
 
-24. **QA Unit Testing**: Use QA persona to create comprehensive unit tests for all implemented features
-25. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
-26. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis
+25. **QA Unit Testing**: Use QA persona to create comprehensive unit tests for all implemented features
+26. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
+27. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment
 
 #### **Phase 6: Learning & Feedback Collection (Automatic)**
 
-27. **Learning Extraction**: Invoke feedback agent to extract new learnings from implementation
-28. **Developer Feedback Collection**: Gather structured feedback from developer on process and outcomes
-29. **Knowledge Storage**: Store learnings and feedback in example.json with metadata
-30. **Process Improvement**: Apply feedback to improve future implementation approaches
+28. **Learning Extraction**: Invoke feedback agent to extract new learnings from implementation
+29. **Developer Feedback Collection**: Gather structured feedback from developer on process and outcomes
+30. **Knowledge Storage**: Store learnings and feedback in example.json with metadata including environment context
+31. **Process Improvement**: Apply feedback to improve future implementation approaches
 
 **Real-Time Progress Tracking**:
 

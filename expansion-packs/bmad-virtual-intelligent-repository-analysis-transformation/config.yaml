@@ -31,6 +31,30 @@ repositories:
   ms-loadapis-ril-final: "{LOADAPIS_REPO_PATH}"
   irisx-config: "{CONFIG_REPO_PATH}"
 
+# Environment-specific base branch configurations
+# VIRAT will automatically detect environment from requirement document
+environments:
+  prod:
+    name: "Production"
+    base_branches:
+      algorithm: "caas-release"
+      loadapi: "release_optimised"
+      config: "caas-staging_fix"
+  
+  reliance:
+    name: "Reliance"
+    base_branches:
+      algorithm: "master-ril"
+      loadapi: "caas-ril-uploads"
+      config: "master-ril"
+  
+  phoenix:
+    name: "Phoenix"
+    base_branches:
+      algorithm: "master-adidas-reliance-prod"
+      loadapi: "caas-phoenix-uploads"
+      config: "master-adidas-ril"
+
 # Target completion time in hours
 target_completion_time: 2
 

@@ -1,6 +1,7 @@
 # Requirement Document: {REQUIREMENT_TITLE}
 
 **Requirement ID**: {REQUIREMENT_ID}  
+**Environment**: {ENVIRONMENT}  <!-- prod | reliance | phoenix -->
 **Status**: {STATUS}  
 **Created**: {CREATION_DATE}  
 **Last Updated**: {LAST_UPDATED}  
@@ -37,7 +38,11 @@
 
 ### Repository Access
 
-- **Base Branch**: caas-release
+- **Environment**: {ENVIRONMENT}
+- **Base Branches** (auto-detected from environment):
+  - Algorithm: {BASE_BRANCH_ALGORITHM}
+  - LoadAPI: {BASE_BRANCH_LOADAPI}
+  - Config: {BASE_BRANCH_CONFIG}
 - **Branch Creation Date**: {BRANCH_CREATION_DATE}
 - **Branch Creator**: {BRANCH_CREATOR}
 
@@ -205,9 +210,10 @@
 
 ## ✅ Completion Checklist
 
+- [ ] Environment detected and validated
 - [ ] Requirement analysis completed
 - [ ] Implementation plan created
-- [ ] Feature branches created from caas-release
+- [ ] Feature branches created from environment-specific base branches
 - [ ] Code implementation completed
 - [ ] Unit tests written and passing
 - [ ] Integration tests written and passing
