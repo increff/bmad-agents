@@ -97,7 +97,7 @@ Template showing:
 
 ## How It Works
 
-### For Users:
+### For Single Environment:
 1. **Add environment to requirement document**:
    ```markdown
    **Environment**: reliance
@@ -110,13 +110,33 @@ Template showing:
 
 3. **VIRAT automatically**:
    - Detects environment: `reliance`
-   - Switches to appropriate branches:
-     - irisx-algo → `master-ril`
-     - ms-loadapis-ril-final → `caas-ril-uploads`
-     - irisx-config → `master-ril`
-   - Creates feature branches from these base branches
+   - Switches to appropriate branches
+   - Creates feature branches
    - Implements changes
    - Documents with environment context
+
+### For Multiple Environments:
+1. **Add multiple environments (comma-separated)**:
+   ```markdown
+   **Environment**: reliance, phoenix
+   ```
+
+2. **Run VIRAT**:
+   ```bash
+   *implement REQ-1234.md
+   ```
+
+3. **VIRAT automatically**:
+   - Detects both environments: `reliance`, `phoenix`
+   - **Processes First (reliance)**:
+     - Switches to reliance branches
+     - Implements completely
+     - Pushes changes
+   - **Then Processes Second (phoenix)**:
+     - Switches to phoenix branches
+     - Implements completely
+     - Pushes changes
+   - Both environments now have the feature!
 
 ---
 

@@ -42,6 +42,7 @@ VIRAT now supports multiple environments with different base branches across the
 
 Add the `Environment` field in the requirement document header:
 
+**Single Environment:**
 ```markdown
 # Requirement Document: Add New Feature
 
@@ -53,6 +54,25 @@ Add the `Environment` field in the requirement document header:
 **Assigned To**: Dev Team
 ```
 
+**Multiple Environments (comma-separated):**
+```markdown
+# Requirement Document: Add New Feature
+
+**Requirement ID**: REQ-1234  
+**Environment**: reliance, phoenix  
+**Status**: In Progress  
+**Created**: 2025-10-13  
+**Last Updated**: 2025-10-13  
+**Assigned To**: Dev Team
+```
+
+When multiple environments are specified, VIRAT will:
+1. Complete full implementation for first environment (reliance)
+2. Push changes to repository
+3. Switch to second environment (phoenix) base branches
+4. Repeat full implementation for second environment
+5. Push changes again
+
 ### Method 2: ENV Field
 
 Alternatively, you can use an `ENV` field:
@@ -63,9 +83,15 @@ Alternatively, you can use an `ENV` field:
 
 ### Valid Environment Values
 
+**Single Environment:**
 - `prod` or `production`
 - `reliance` or `ril`
 - `phoenix` or `adidas`
+
+**Multiple Environments (comma-separated):**
+- `reliance, phoenix`
+- `prod, reliance`
+- `reliance, phoenix, prod`
 
 **Case-insensitive**: `PROD`, `Prod`, and `prod` all work.
 
@@ -76,9 +102,10 @@ Alternatively, you can use an `ENV` field:
 ### 1. Automatic Detection
 When you run `*implement` or any command, VIRAT will:
 1. Read the requirement document
-2. Extract the environment from the `Environment` or `ENV` field
-3. Load the corresponding base branch configuration from `config.yaml`
-4. Display the detected environment and branches
+2. Extract the environment(s) from the `Environment` or `ENV` field
+3. If multiple environments found (comma-separated), parse all and prepare for sequential processing
+4. Load the corresponding base branch configuration from `config.yaml`
+5. Display the detected environment(s) and branches
 
 ### 2. Branch Switching
 Before any analysis or implementation:
@@ -127,9 +154,11 @@ Verifies all repositories are on correct branches for the environment.
 
 ---
 
-## Example Workflow
+## Example Workflows
 
-### 1. Create Requirement Document
+### Single Environment Workflow
+
+#### 1. Create Requirement Document
 ```markdown
 # Requirement: Add Store Validation
 
@@ -142,12 +171,12 @@ Verifies all repositories are on correct branches for the environment.
 Add validation for store data in the Reliance environment...
 ```
 
-### 2. Run VIRAT Implementation
+#### 2. Run VIRAT Implementation
 ```bash
 *implement REQ-5678.md
 ```
 
-### 3. VIRAT Automatically:
+#### 3. VIRAT Automatically:
 - Detects environment: `reliance`
 - Switches branches:
   - irisx-algo → `master-ril`
@@ -156,6 +185,49 @@ Add validation for store data in the Reliance environment...
 - Creates feature branches: `feature/REQ-5678-add-store-validation`
 - Implements changes
 - Documents everything with environment context
+
+---
+
+### Multiple Environment Workflow
+
+#### 1. Create Requirement Document
+```markdown
+# Requirement: Add Store Validation
+
+**Requirement ID**: REQ-5678  
+**Environment**: reliance, phoenix  
+**Status**: New  
+**Created**: 2025-10-13
+
+## Description
+Add validation for store data - needed for both Reliance and Phoenix environments...
+```
+
+#### 2. Run VIRAT Implementation
+```bash
+*implement REQ-5678.md
+```
+
+#### 3. VIRAT Automatically:
+
+**For First Environment (reliance):**
+- Detects environment: `reliance`
+- Switches to reliance base branches
+- Creates feature branches: `feature/REQ-5678-add-store-validation-reliance`
+- Implements changes
+- Runs tests
+- Documents with reliance context
+- **Pushes changes to repository**
+
+**Then For Second Environment (phoenix):**
+- Switches to phoenix base branches
+- Creates feature branches: `feature/REQ-5678-add-store-validation-phoenix`
+- Implements same changes for phoenix
+- Runs tests
+- Documents with phoenix context
+- **Pushes changes to repository**
+
+Both environments now have the feature implemented!
 
 ---
 

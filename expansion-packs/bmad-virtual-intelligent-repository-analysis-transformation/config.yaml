@@ -32,7 +32,8 @@ repositories:
   irisx-config: "{CONFIG_REPO_PATH}"
 
 # Environment-specific base branch configurations
-# VIRAT will automatically detect environment from requirement document
+# VIRAT will automatically detect environment(s) from requirement document
+# Supports multiple environments (comma-separated): processes each sequentially
 environments:
   prod:
     name: "Production"
