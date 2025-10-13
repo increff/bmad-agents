@@ -6,6 +6,7 @@ The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system featu
 
 ## Features
 
+- **Multi-Environment Support**: Automatically detects and switches between prod, reliance, and phoenix environments with environment-specific base branches
 - **Multi-Repository Coordination**: Handles three interconnected repositories simultaneously
 - **Pattern-Based Development**: Analyzes existing patterns and follows them for consistency
 - **Automated Workflow**: Complete development lifecycle from requirement analysis to implementation
@@ -45,6 +46,24 @@ The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system featu
 ```
 Input Data → Load APIs (Python) → Database → Business Logic (Java) → Output Views (SQL) → Export
 ```
+
+### Environment Configuration
+
+VIRAT supports multiple environments with different base branches:
+
+| Environment | Algorithm Repo | LoadAPI Repo | Config Repo |
+|------------|----------------|--------------|-------------|
+| **prod** | `caas-release` | `release_optimised` | `caas-staging_fix` |
+| **reliance** | `master-ril` | `caas-ril-uploads` | `master-ril` |
+| **phoenix** | `master-adidas-reliance-prod` | `caas-phoenix-uploads` | `master-adidas-ril` |
+
+**How it works**: Add `Environment: reliance` (or prod/phoenix) to your requirement document header, and VIRAT automatically:
+- Detects the environment
+- Switches to correct base branches
+- Creates feature branches from appropriate bases
+- Documents environment-specific implementation details
+
+📖 **See**: [Environment Configuration Guide](docs/ENVIRONMENT_CONFIGURATION.md) for detailed usage.
 
 ## Agents
 
