@@ -58,9 +58,10 @@ VIRAT supports multiple environments with different base branches:
 | **phoenix** | `master-adidas-reliance-prod` | `caas-phoenix-uploads` | `master-adidas-ril` |
 
 **How it works**: Add `Environment: reliance` (or prod/phoenix) to your requirement document header, and VIRAT automatically:
-- Detects the environment
+- Detects the environment(s) (supports multiple: `reliance, phoenix`)
 - Switches to correct base branches
 - Creates feature branches from appropriate bases
+- For multiple environments: implements in first, pushes, then repeats for second
 - Documents environment-specific implementation details
 
 📖 **See**: [Environment Configuration Guide](docs/ENVIRONMENT_CONFIGURATION.md) for detailed usage.

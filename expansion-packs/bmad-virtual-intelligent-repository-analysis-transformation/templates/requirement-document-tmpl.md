@@ -1,7 +1,7 @@
 # Requirement Document: {REQUIREMENT_TITLE}
 
 **Requirement ID**: {REQUIREMENT_ID}  
-**Environment**: {ENVIRONMENT}  <!-- prod | reliance | phoenix -->
+**Environment**: {ENVIRONMENT}  <!-- prod | reliance | phoenix | reliance, phoenix (multiple) -->
 **Status**: {STATUS}  
 **Created**: {CREATION_DATE}  
 **Last Updated**: {LAST_UPDATED}  
