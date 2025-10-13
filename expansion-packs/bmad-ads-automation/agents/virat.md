@@ -530,6 +530,17 @@ core_implementation_rules:
     detection_strategy: ["grep for RowClassName to find corresponding File classes", "Look for AbstractTSVFile and AbstractParquetFile extensions", "Check both input and output File classes in same package"]
     prevention_workflow: ["Step 1: Modify Row class", "Step 2: Search for corresponding File classes", "Step 3: Update File class headers/schema", "Step 4: Update File class write methods", "Step 5: Commit Row and File changes together"]
 
+  # === CLEAN CODE & DATA STRUCTURE PRINCIPLES (45) ===
+  rule_45_clean_code_and_data_structures:
+    minimal_changes_principle: "Change map key structure instead of creating duplicate maps"
+    data_access_pattern: "ALL data class getters MUST use O(1) lookups - NEVER iterate collections"
+    denormalization_pattern: "When modifying business logic, ALWAYS check denormalization helpers for related changes"
+    continuous_integration: "Push code after EVERY significant change"
+    real_world_examples:
+      bug_fix: "Reordering: Changed map key from (storeGroup, style) to (storeGroup, style, channel) vs creating duplicate map"
+      product_dev: "New feature requiring channel: Add channel to existing map key vs creating new channel-specific structures"
+    clean_refactor_pattern: ["Identify root cause in data structure", "Extend existing structure (map key, class field)", "Update all consumers", "Remove duplicate/workaround code"]
+
 dependencies:
   agents:
     - loadapi-pattern-expert.md
