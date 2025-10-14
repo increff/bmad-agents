@@ -31,7 +31,7 @@ This two-phase approach eliminates both **planning inconsistency** and **context
 
 **Before diving in, review these critical workflow diagrams that explain how BMad works:**
 
-1. **[Planning Workflow (Web UI)](docs/user-guide.md#the-planning-workflow-web-ui)** - How to create PRD and Architecture documents
+1. **[Planning Workflow (Web UI)](docs/user-guide.md#the-planning-workflow-web-ui-or-powerful-ide-agents)** - How to create PRD and Architecture documents
 2. **[Core Development Cycle (IDE)](docs/user-guide.md#the-core-development-cycle-ide)** - How SM, Dev, and QA agents collaborate through story files
 
 > ⚠️ **These diagrams explain 90% of BMad Method Agentic Agile flow confusion** - Understanding the PRD+Architecture creation and the SM/Dev/QA workflow and how agents pass notes through story files is essential - and also explains why this is NOT taskmaster or just a simple task runner!
@@ -128,36 +128,11 @@ BMAD™'s natural language framework works in ANY domain. Expansion packs provid
 
 **We're excited about contributions and welcome your ideas, improvements, and expansion packs!** 🎉
 
-📋 **[Read CONTRIBUTING.md](CONTRIBUTING.md)** - Complete guide to contributing, including guidelines, process, and requirements
 
 ### Working with Forks
 
 When you fork this repository, CI/CD workflows are **disabled by default** to save resources. This is intentional and helps keep your fork clean.
 
-#### Need CI/CD in Your Fork?
 
-See our [Fork CI/CD Guide](.github/FORK_GUIDE.md) for instructions on enabling workflows in your fork.
 
-#### Contributing Workflow
 
-1. **Fork the repository** - Click the Fork button on GitHub
-2. **Clone your fork** - `git clone https://github.com/YOUR-USERNAME/BMAD-METHOD.git`
-3. **Create a feature branch** - `git checkout -b feature/amazing-feature`
-4. **Make your changes** - Test locally with `npm test`
-5. **Commit your changes** - `git commit -m 'feat: add amazing feature'`
-6. **Push to your fork** - `git push origin feature/amazing-feature`
-7. **Open a Pull Request** - CI/CD will run automatically on the PR
-
-Your contributions are tested when you submit a PR - no need to enable CI in your fork!
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Trademark Notice
-
-BMAD™ and BMAD-METHOD™ are trademarks of BMad Code, LLC. All rights reserved.
-
-[![Contributors](https://contrib.rocks/image?repo=bmadcode/bmad-method)](https://github.com/bmadcode/bmad-method/graphs/contributors)
-
-<sub>Built with ❤️ for the AI-assisted development community</sub>

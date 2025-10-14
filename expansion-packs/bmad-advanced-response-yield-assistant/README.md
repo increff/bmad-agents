@@ -15,6 +15,7 @@ The BMAD Advanced Response Yield Assistant (ARYA) system is a sophisticated mult
 - **Documentation Updates**: Updates requirement documents with implementation results
 - **MFP Specialization**: Enhanced support for Monthly Forecast Planning (ms-mfp) repository
 - **WSSI-MFP Workflow**: Specialized Phoenix environment workflow for WSSI to MFP transformation
+- **WSSI-OTB Workflow**: Specialized Reliance environment workflow for WSSI snapshot lifecycle to OTB submission
 
 ## Architecture
 
@@ -90,6 +91,34 @@ ARYA provides specialized support for the Phoenix environment's WSSI (Weekly Sal
 - `*create-mfp-snapshots`: Create MFP snapshots from WSSI data
 - `*validate-wssi-mfp-flow`: Validate complete WSSI to MFP data flow
 - `*phoenix-wssi-compliance`: Validate Phoenix-specific WSSI compliance
+
+## WSSI-OTB Workflow (Reliance Environment)
+
+ARYA provides specialized support for the Reliance environment's WSSI (Weekly Sales & Stock Intelligence) snapshot lifecycle to OTB (Open-to-Buy) workflow:
+
+### WSSI Snapshot Lifecycle Phase
+1. **Snapshot Creation**: Create WSSI snapshots with data preparation and KPI calculations
+2. **KPI Processing**: Calculate MRP, COGS, margins, ASP, discount percentages, and cover duration
+3. **Stage Management**: Manage stage transitions (NEW → DRAFT → APPROVED → SUBMITTED)
+4. **Audit Tracking**: Track all user operations and stage changes with comprehensive audit trail
+5. **Data Processing**: Handle data filtering, transformations, and view generation
+
+### OTB Implementation Phase
+1. **OTB Code Generation**: Generate unique OTB codes using business rules with budget validity
+2. **Pipeline Submission**: Submit OTB values to ETL pipeline with status monitoring
+3. **Cross-Repository Integration**: Integrate with algorithm, configuration, and LoadAPIs repositories
+4. **Reliance Compliance**: Ensure Reliance-specific business rules and constraints
+5. **Quality Validation**: Validate complete snapshot lifecycle and OTB submission process
+
+### Key Commands
+- `*wssi-otb-workflow <requirement-document.md>`: Execute complete WSSI snapshot lifecycle to OTB workflow
+- `*create-wssi-snapshot`: Create WSSI snapshot with data preparation and KPI calculations
+- `*calculate-wssi-kpis`: Calculate KPIs (MRP, COGS, margins) during snapshot processing
+- `*manage-snapshot-stages`: Manage stage transitions (NEW → DRAFT → APPROVED)
+- `*generate-otb-codes`: Generate OTB codes with budget validity calculations
+- `*submit-otb-values`: Submit OTB values to ETL pipeline with audit tracking
+- `*validate-wssi-otb-flow`: Validate complete WSSI snapshot to OTB data flow
+- `*reliance-wssi-compliance`: Validate Reliance-specific WSSI compliance
 
 ## Agents
 
@@ -217,6 +246,12 @@ Before installation, ensure you have:
 - **Validate Implementation**: `*validate-implementation`
 - **Quality Check**: `*quality-check`
 
+#### Pull Request Management
+- **Generate PR Descriptions**: `*generate-pr-descriptions`
+- **Create PR File**: `*create-pr-file`
+- **Link Related PRs**: `*link-related-prs`
+- **Validate PR Readiness**: `*validate-pr-readiness`
+
 ## Workflow
 
 ### Complete Development Workflow
@@ -232,6 +267,7 @@ Before installation, ensure you have:
 9. **Implementation**: Implement changes following existing patterns with environment compliance
 10. **Validation**: Run comprehensive tests and validations
 11. **Documentation**: Update requirement documents with results
+12. **PR Generation**: Generate comprehensive PR descriptions with environment-specific context
 
 ## Key Differences from VIRAT
 

@@ -137,7 +137,6 @@ git push origin fix/typo-in-readme
 - 💬 Ask questions in [GitHub Discussions](https://github.com/bmadcode/bmad-method/discussions)
 - 🐛 Report bugs using the [bug report template](https://github.com/bmadcode/bmad-method/issues/new?template=bug_report.md)
 - 💡 Suggest features using the [feature request template](https://github.com/bmadcode/bmad-method/issues/new?template=feature_request.md)
-- 📖 Read the full [Contributing Guidelines](../CONTRIBUTING.md)
 
 ## Example: Good vs Bad PRs
 

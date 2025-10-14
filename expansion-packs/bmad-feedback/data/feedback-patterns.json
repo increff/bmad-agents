@@ -1,0 +1,44 @@
+{
+  "patterns": [],
+  "pattern_categories": {
+    "code_generation": [],
+    "pattern_compliance": [],
+    "business_logic": [],
+    "integration": [],
+    "validation": [],
+    "documentation": []
+  },
+  "pattern_metrics": {
+    "total_patterns": 0,
+    "patterns_by_category": {},
+    "most_common_patterns": [],
+    "trending_patterns": [],
+    "resolved_patterns": []
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2024-01-15T00:00:00Z",
+    "last_updated": "2024-01-15T00:00:00Z",
+    "schema_version": "1.0"
+  },
+  "schema": {
+    "pattern": {
+      "pattern_id": "string (unique pattern identifier)",
+      "pattern_name": "string (descriptive pattern name)",
+      "category": "string (code_generation|pattern_compliance|business_logic|integration|validation|documentation)",
+      "description": "string (pattern description)",
+      "frequency": "number (how often this pattern occurs)",
+      "severity": "string (high|medium|low)",
+      "common_mistakes": "array (list of common mistakes for this pattern)",
+      "correct_approach": "string (correct approach for this pattern)",
+      "prevention_strategies": "array (list of prevention strategies)",
+      "validation_rules": "array (list of validation rules)",
+      "examples": "array (list of example feedback IDs)",
+      "last_occurrence": "string (ISO 8601 format)",
+      "resolution_status": "string (active|resolved|monitoring)",
+      "created_date": "string (ISO 8601 format)",
+      "updated_date": "string (ISO 8601 format)"
+    }
+  }
+}
+

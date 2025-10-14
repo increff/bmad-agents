@@ -1,0 +1,57 @@
+{
+  "learning_entries": [],
+  "learning_metrics": {
+    "total_learning_entries": 0,
+    "learning_by_category": {},
+    "learning_effectiveness": {},
+    "improvement_tracking": {}
+  },
+  "knowledge_base_updates": [],
+  "agent_improvements": [],
+  "metadata": {
+    "version": "1.0",
+    "created": "2024-01-15T00:00:00Z",
+    "last_updated": "2024-01-15T00:00:00Z",
+    "schema_version": "1.0"
+  },
+  "schema": {
+    "learning_entry": {
+      "id": "string (unique learning identifier)",
+      "timestamp": "string (ISO 8601 format)",
+      "mistake_type": "string (type of mistake learned from)",
+      "context": {
+        "repository": "string (repository name)",
+        "module": "string (module name)",
+        "task_type": "string (task type)",
+        "agent_used": "string (agent name)"
+      },
+      "root_cause": "string (root cause of the mistake)",
+      "pattern_violated": "string (pattern that was violated)",
+      "correct_approach": "string (correct approach)",
+      "prevention_strategy": "string (strategy to prevent similar mistakes)",
+      "learning_insights": "array (list of key learning insights)",
+      "status": "string (processed|pending|archived)"
+    },
+    "knowledge_base_update": {
+      "update_id": "string (unique update identifier)",
+      "timestamp": "string (ISO 8601 format)",
+      "update_type": "string (pattern|prevention|validation|process)",
+      "description": "string (description of the update)",
+      "based_on_learning": "array (list of learning entry IDs)",
+      "impact": "string (high|medium|low)",
+      "implementation_status": "string (pending|in_progress|completed)",
+      "effectiveness": "string (effective|partially_effective|ineffective)"
+    },
+    "agent_improvement": {
+      "improvement_id": "string (unique improvement identifier)",
+      "timestamp": "string (ISO 8601 format)",
+      "agent_name": "string (name of the improved agent)",
+      "improvement_type": "string (capability|validation|process|knowledge)",
+      "description": "string (description of the improvement)",
+      "based_on_feedback": "array (list of feedback IDs)",
+      "implementation_status": "string (pending|in_progress|completed)",
+      "effectiveness_metrics": "object (metrics measuring improvement effectiveness)"
+    }
+  }
+}
+

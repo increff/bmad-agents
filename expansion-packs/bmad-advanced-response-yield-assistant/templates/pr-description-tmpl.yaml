@@ -1,0 +1,331 @@
+# Pull Request Description Template for ARYA
+# Environment-aware PR generation for multi-repository workflows
+
+name: "pr-description-template"
+version: "1.0.0"
+description: "Template for generating PR descriptions across ARYA repositories with environment-specific context"
+
+# PR Title Format
+title_format: "{environment} | {requirement_id}: {requirement_title}"
+
+# Repository-Specific PR Descriptions
+repositories:
+  irisx-algo:
+    title_prefix: "Algorithm Repository"
+    sections:
+      - name: "Description"
+        content: "This PR implements {requirement_description} in the Algorithm repository (irisx-algo) for the {environment} environment."
+      
+      - name: "Changes"
+        subsections:
+          - name: "New Classes"
+            format: "- `{class_name}` - {description}"
+          - name: "Modified Classes"
+            format: "- `{class_name}` - {changes_summary}"
+          - name: "Business Logic"
+            format: "- {logic_description}"
+      
+      - name: "Environment Context"
+        content: |
+          - **Environment**: {environment}
+          - **Base Branch**: {base_branch}
+          - **Target Branch**: {target_branch}
+          - **Environment-Specific Rules**: {environment_rules}
+      
+      - name: "Features"
+        format: "- {feature_description}"
+      
+      - name: "Testing"
+        items:
+          - "✅ All existing tests pass"
+          - "✅ New functionality tests pass"
+          - "✅ Environment-specific validation complete"
+          - "✅ Compilation successful"
+          - "✅ No regressions detected"
+      
+      - name: "Cross-Repository Impact"
+        subsections:
+          - name: "MFP Integration"
+            format: "- {mfp_integration_details}"
+          - name: "Configuration Dependencies"
+            format: "- {config_dependency_details}"
+          - name: "LoadAPIs Dependencies"
+            format: "- {loadapis_dependency_details}"
+
+  ms-mfp:
+    title_prefix: "MFP Repository"
+    sections:
+      - name: "Description"
+        content: "This PR implements {requirement_description} in the MFP repository (ms-mfp) for the {environment} environment."
+      
+      - name: "Changes"
+        subsections:
+          - name: "New Modules"
+            format: "- `{module_name}` - {description}"
+          - name: "Modified Modules"
+            format: "- `{module_name}` - {changes_summary}"
+          - name: "Routes"
+            format: "- `{route_path}` - {route_description}"
+          - name: "Services"
+            format: "- `{service_name}` - {service_description}"
+      
+      - name: "Environment Context"
+        content: |
+          - **Environment**: {environment}
+          - **Base Branch**: {base_branch}
+          - **Target Branch**: {target_branch}
+          - **MFP-Specific Rules**: {mfp_rules}
+      
+      - name: "Features"
+        format: "- {feature_description}"
+      
+      - name: "Testing"
+        items:
+          - "✅ Python syntax validation successful"
+          - "✅ Unit tests pass"
+          - "✅ Integration with MFP framework validated"
+          - "✅ Environment-specific validation complete"
+          - "✅ Forecasting logic tested"
+      
+      - name: "Cross-Repository Impact"
+        subsections:
+          - name: "Algorithm Integration"
+            format: "- {algo_integration_details}"
+          - name: "Configuration Dependencies"
+            format: "- {config_dependency_details}"
+          - name: "LoadAPIs Dependencies"
+            format: "- {loadapis_dependency_details}"
+
+  irisx-config:
+    title_prefix: "Configuration Repository"
+    sections:
+      - name: "Description"
+        content: "This PR implements {requirement_description} in the Configuration repository (irisx-config) for the {environment} environment."
+      
+      - name: "Changes"
+        subsections:
+          - name: "New Files"
+            format: "- `{file_name}` - {description}"
+          - name: "SQL Views"
+            format: "- `{view_name}` - {view_description}"
+          - name: "Templates"
+            format: "- `{template_name}` - {template_description}"
+          - name: "JSON Configurations"
+            format: "- `{config_file}` - {config_changes}"
+      
+      - name: "Environment Context"
+        content: |
+          - **Environment**: {environment}
+          - **Base Branch**: {base_branch}
+          - **Target Branch**: {target_branch}
+          - **Configuration Rules**: {config_rules}
+      
+      - name: "Features"
+        format: "- {feature_description}"
+      
+      - name: "Testing"
+        items:
+          - "✅ SQL syntax validation"
+          - "✅ Template structure validation"
+          - "✅ JSON schema validation"
+          - "✅ Integration with existing configuration framework"
+          - "✅ Environment-specific validation complete"
+      
+      - name: "Cross-Repository Impact"
+        subsections:
+          - name: "Algorithm Dependencies"
+            format: "- {algo_dependency_details}"
+          - name: "MFP Dependencies"
+            format: "- {mfp_dependency_details}"
+          - name: "LoadAPIs Dependencies"
+            format: "- {loadapis_dependency_details}"
+
+  ms-loadapis:
+    title_prefix: "LoadAPIs Repository"
+    sections:
+      - name: "Description"
+        content: "This PR implements {requirement_description} in the LoadAPIs repository (ms-loadapis) for the {environment} environment."
+      
+      - name: "Changes"
+        subsections:
+          - name: "New Modules"
+            format: "- `{module_name}` - {description}"
+          - name: "Modified Modules"
+            format: "- `{module_name}` - {changes_summary}"
+          - name: "Routes"
+            format: "- `{route_path}` - {route_description}"
+          - name: "Services"
+            format: "- `{service_name}` - {service_description}"
+          - name: "Upload Processing"
+            format: "- `{processor_name}` - {processor_description}"
+      
+      - name: "Environment Context"
+        content: |
+          - **Environment**: {environment}
+          - **Base Branch**: {base_branch}
+          - **Target Branch**: {target_branch}
+          - **LoadAPIs-Specific Rules**: {loadapis_rules}
+      
+      - name: "Features"
+        format: "- {feature_description}"
+      
+      - name: "Testing"
+        items:
+          - "✅ Python syntax validation successful"
+          - "✅ Unit tests pass"
+          - "✅ Upload processing validated"
+          - "✅ Data validation logic tested"
+          - "✅ Environment-specific validation complete"
+      
+      - name: "Cross-Repository Impact"
+        subsections:
+          - name: "Algorithm Integration"
+            format: "- {algo_integration_details}"
+          - name: "MFP Integration"
+            format: "- {mfp_integration_details}"
+          - name: "Configuration Dependencies"
+            format: "- {config_dependency_details}"
+
+# Environment-Specific Configurations
+environments:
+  phoenix:
+    label: "Phoenix"
+    base_branches:
+      irisx-algo: "master-adidas-reliance-prod"
+      ms-mfp: "release-pheonix"
+      irisx-config: "master-adidas-ril"
+      ms-loadapis: "caas-pheonix-uploads"
+    
+    pr_notes:
+      - "⚠️ This PR targets the **Phoenix environment**"
+      - "Ensure Phoenix-specific business rules are validated"
+      - "Verify Phoenix environment compliance before merging"
+      - "Test with Phoenix data sources and configurations"
+  
+  reliance:
+    label: "Reliance"
+    base_branches:
+      irisx-algo: "master-ril"
+      ms-mfp: "release-ril"
+      irisx-config: "master-ril"
+      ms-loadapis: "caas-ril-uploads"
+    
+    pr_notes:
+      - "⚠️ This PR targets the **Reliance environment**"
+      - "Ensure Reliance-specific business rules are validated"
+      - "Verify Reliance environment compliance before merging"
+      - "Test with Reliance data sources and configurations"
+
+# Implementation Summary Section
+implementation_summary:
+  sections:
+    - name: "Requirement"
+      format: "**\"{requirement_title}\"**"
+    
+    - name: "Status"
+      format: "✅ {status}"
+    
+    - name: "Key Achievements"
+      items:
+        - "✅ Correct repository identification"
+        - "✅ Environment-specific implementation"
+        - "✅ Cross-repository integration"
+        - "✅ Comprehensive test coverage"
+        - "✅ All repositories updated consistently"
+    
+    - name: "Repository Status"
+      table:
+        headers: ["Repository", "Branch", "Environment", "Status", "Commits"]
+        format: "| {repository} | `{branch}` | {environment} | {status} | {commit_count} |"
+    
+    - name: "Next Steps"
+      items:
+        - "Create pull requests using the branch information provided"
+        - "Ensure environment-specific code review"
+        - "Merge to appropriate environment branch"
+        - "Integration testing in {environment} environment"
+        - "Environment-specific deployment validation"
+
+# PR Labels (suggested)
+labels:
+  by_environment:
+    phoenix: ["environment:phoenix", "phoenix-deployment"]
+    reliance: ["environment:reliance", "reliance-deployment"]
+  
+  by_repository:
+    irisx-algo: ["repository:algorithm", "java", "business-logic"]
+    ms-mfp: ["repository:mfp", "python", "forecasting"]
+    irisx-config: ["repository:config", "sql", "configuration"]
+    ms-loadapis: ["repository:loadapis", "python", "data-loading"]
+  
+  by_type:
+    - "type:feature"
+    - "type:enhancement"
+    - "type:bugfix"
+    - "type:refactor"
+  
+  by_workflow:
+    wssi-mfp: ["workflow:wssi-mfp", "phoenix-specific"]
+    wssi-otb: ["workflow:wssi-otb", "reliance-specific"]
+    standard: ["workflow:standard", "cross-environment"]
+
+# Review Checklist Template
+review_checklist:
+  general:
+    - "[ ] Code follows repository coding standards"
+    - "[ ] All tests pass successfully"
+    - "[ ] Documentation is updated"
+    - "[ ] No breaking changes introduced"
+    - "[ ] Commit messages are clear and descriptive"
+  
+  environment_specific:
+    - "[ ] Environment-specific rules validated"
+    - "[ ] Base branch is correct for environment"
+    - "[ ] Environment compliance verified"
+    - "[ ] Environment-specific tests pass"
+  
+  cross_repository:
+    - "[ ] Cross-repository dependencies identified"
+    - "[ ] Integration points validated"
+    - "[ ] Data flow consistency maintained"
+    - "[ ] Related PRs linked (if applicable)"
+  
+  repository_specific:
+    irisx-algo:
+      - "[ ] Java compilation successful"
+      - "[ ] Business logic validated"
+      - "[ ] Validation rules tested"
+      - "[ ] Maven build successful"
+    
+    ms-mfp:
+      - "[ ] Python syntax validated (PEP 8)"
+      - "[ ] Forecasting logic tested"
+      - "[ ] MFP routes functional"
+      - "[ ] Database integration validated"
+    
+    irisx-config:
+      - "[ ] SQL views validated"
+      - "[ ] Templates properly formatted"
+      - "[ ] JSON configuration validated"
+      - "[ ] Export definitions correct"
+    
+    ms-loadapis:
+      - "[ ] Python syntax validated (PEP 8)"
+      - "[ ] Upload processing tested"
+      - "[ ] Data validation logic verified"
+      - "[ ] API endpoints functional"
+
+# Automation Markers
+automation:
+  pr_creation:
+    enabled: true
+    auto_link_related_prs: true
+    auto_apply_labels: true
+    auto_add_reviewers: true
+  
+  validation:
+    enabled: true
+    environment_check: true
+    base_branch_check: true
+    cross_repository_check: true
+

@@ -535,7 +535,7 @@ dependencies:
     - loadapi-pattern-expert.md
     - config-pattern-expert.md
     - algorithm-pattern-expert.md
-    - feedback-agent.md
+    - ../../bmad-feedback/agents/feedback-agent.md
   personas:
     - analyst.md
     - pm.md

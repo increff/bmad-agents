@@ -1,5 +1,15 @@
 # WSSI-MFP Workflow Task
 
+## Environment Requirement
+**⚠️ CRITICAL: This task should ONLY be invoked when the environment is Phoenix (pheonix).**
+
+This task is specifically designed for the Phoenix environment and should not be used for other environments. Before proceeding, verify that:
+- The target environment is explicitly Phoenix/Pheonix
+- The requirement document specifies Phoenix environment
+- LoadAPIs data sources are from caas-pheonix-uploads branch
+
+**If the environment is NOT Phoenix, DO NOT proceed with this task.**
+
 ## Overview
 This task handles the complete WSSI (Weekly Sales & Stock Intelligence) to MFP (Monthly Forecast Planning) workflow for the Phoenix environment, including requirement analysis, data transformation, view generation, and cross-repository integration.
 
@@ -295,10 +305,12 @@ This task handles the complete WSSI (Weekly Sales & Stock Intelligence) to MFP (
 ```
 
 ## Dependencies
+- **⚠️ Phoenix Environment (MANDATORY)**: This task ONLY works with Phoenix environment - verify environment before proceeding
 - **ARYA Configuration**: Proper ARYA setup and configuration
-- **Phoenix Environment**: Valid Phoenix environment setup
-- **Repository Access**: Access to all three repositories
-- **WSSI Data**: Access to WSSI data sources
+- **Phoenix Environment Setup**: Valid Phoenix environment setup and configuration
+- **Repository Access**: Access to all three repositories (irisx-algo, irisx-config, ms-mfp)
+- **LoadAPIs Phoenix Branch**: Access to caas-pheonix-uploads branch in ms-loadapis
+- **WSSI Data**: Access to Phoenix-specific WSSI data sources
 - **MFP Modules**: Access to MFP modules and services
 - **Expert Agents**: Access to all pattern expert agents
 - **Cross-Repository Coordination**: Proper cross-repository coordination

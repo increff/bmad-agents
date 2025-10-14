@@ -93,7 +93,7 @@ Input Data → LoadAPIs Processing (Python) → MFP Processing (Python) → Data
 - `*algorithm-expert` - Delegate to Algorithm Pattern Expert
 - `*loadapis-expert` - Delegate to LoadAPIs Pattern Expert
 
-### WSSI-MFP Workflow Commands
+### WSSI-MFP Workflow Commands (Phoenix Environment)
 - `*wssi-mfp-workflow <requirement-document.md>` - Execute complete WSSI to MFP workflow
 - `*analyze-wssi-requirements` - Analyze WSSI requirements and convert to MFP format
 - `*standardize-wssi-data` - Standardize WSSI data for MFP compatibility
@@ -102,11 +102,27 @@ Input Data → LoadAPIs Processing (Python) → MFP Processing (Python) → Data
 - `*validate-wssi-mfp-flow` - Validate complete WSSI to MFP data flow
 - `*phoenix-wssi-compliance` - Validate Phoenix-specific WSSI compliance
 
+### WSSI-OTB Workflow Commands (Reliance Environment)
+- `*wssi-otb-workflow <requirement-document.md>` - Execute complete WSSI snapshot lifecycle to OTB workflow
+- `*create-wssi-snapshot` - Create WSSI snapshot with data preparation and KPI calculations
+- `*calculate-wssi-kpis` - Calculate KPIs (MRP, COGS, margins) during snapshot processing
+- `*manage-snapshot-stages` - Manage stage transitions (NEW → DRAFT → APPROVED)
+- `*generate-otb-codes` - Generate OTB codes with budget validity calculations
+- `*submit-otb-values` - Submit OTB values to ETL pipeline with audit tracking
+- `*validate-wssi-otb-flow` - Validate complete WSSI snapshot to OTB data flow
+- `*reliance-wssi-compliance` - Validate Reliance-specific WSSI compliance
+
 ### Quality Assurance
 - `*run-tests` - Execute comprehensive test suite
 - `*validate-implementation` - Validate implementation against requirements
 - `*quality-check` - Perform quality checks across repositories
 - `*generate-documentation` - Generate implementation documentation
+
+### Pull Request Management
+- `*generate-pr-descriptions` - Generate comprehensive PR descriptions for all repositories
+- `*create-pr-file` - Create PULL_REQUEST_DESCRIPTIONS.md with environment-specific context
+- `*link-related-prs` - Link related PRs across repositories
+- `*validate-pr-readiness` - Validate all repositories are ready for PR creation
 
 ## Workflow Process
 
@@ -133,6 +149,23 @@ ARYA provides specialized support for the Phoenix environment's WSSI (Weekly Sal
 4. **Phoenix Compliance**: Ensure Phoenix-specific business rules and constraints
 5. **Quality Validation**: Validate data flow and business logic compliance
 
+### WSSI-OTB Workflow (Reliance Environment)
+ARYA provides specialized support for the Reliance environment's WSSI (Weekly Sales & Stock Intelligence) snapshot lifecycle to OTB (Open-to-Buy) workflow:
+
+#### WSSI Snapshot Lifecycle Phase
+1. **Snapshot Creation**: Create WSSI snapshots with data preparation and KPI calculations
+2. **KPI Processing**: Calculate MRP, COGS, margins, ASP, discount percentages, and cover duration
+3. **Stage Management**: Manage stage transitions (NEW → DRAFT → APPROVED → SUBMITTED)
+4. **Audit Tracking**: Track all user operations and stage changes with comprehensive audit trail
+5. **Data Processing**: Handle data filtering, transformations, and view generation
+
+#### OTB Implementation Phase
+1. **OTB Code Generation**: Generate unique OTB codes using business rules with budget validity
+2. **Pipeline Submission**: Submit OTB values to ETL pipeline with status monitoring
+3. **Cross-Repository Integration**: Integrate with algorithm, configuration, and LoadAPIs repositories
+4. **Reliance Compliance**: Ensure Reliance-specific business rules and constraints
+5. **Quality Validation**: Validate complete snapshot lifecycle and OTB submission process
+
 ### 2. Requirement Analysis
 1. **Requirement Parsing**: Parse and analyze requirement documents
 2. **Environment Context**: Apply environment-specific context and constraints
@@ -156,6 +189,13 @@ ARYA provides specialized support for the Phoenix environment's WSSI (Weekly Sal
 2. **Validation**: Validate against requirements and patterns
 3. **Documentation**: Update requirement documents with results
 4. **Environment Verification**: Ensure environment-specific compliance
+
+### 6. Pull Request Preparation
+1. **PR Description Generation**: Generate comprehensive PR descriptions for all repositories
+2. **Environment Context**: Include environment-specific context (Phoenix/Reliance)
+3. **Cross-Repository Links**: Link related PRs across repositories
+4. **Review Checklists**: Include repository and environment-specific review checklists
+5. **Next Steps Documentation**: Provide clear instructions for PR creation and deployment
 
 ## Environment-Specific Operations
 
@@ -237,6 +277,27 @@ Before any operation, ARYA validates:
 *generate-mfp-views
 *create-mfp-snapshots
 *validate-wssi-mfp-flow
+```
+
+### WSSI-OTB Workflow (Reliance Environment)
+```
+@arya
+*wssi-otb-workflow wssi-otb-requirement.md
+*create-wssi-snapshot
+*calculate-wssi-kpis
+*manage-snapshot-stages
+*generate-otb-codes
+*submit-otb-values
+*validate-wssi-otb-flow
+```
+
+### Pull Request Generation
+```
+@arya
+*generate-pr-descriptions
+*create-pr-file requirement-document.md
+*validate-pr-readiness
+*link-related-prs
 ```
 
 ## Integration with BMAD Framework

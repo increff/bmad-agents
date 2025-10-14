@@ -1,5 +1,5 @@
 # ARYA Phoenix WSSI → MFP Workflow
-# Based on VIRAT Complete Development Flow but specialized for Phoenix environment
+# Complete Development Flow but specialized for Phoenix environment
 # WSSI (Weekly Sales & Stock Intelligence) → MFP (Monthly Forecast Planning) flow
 
 name: "phoenix-wssi-mfp-workflow"
