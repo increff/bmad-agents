@@ -1,0 +1,314 @@
+# Template: Notion Documentation Block
+
+template_id: notion-documentation-block
+version: 1.0.0
+description: Template for formatting documentation blocks when pushing to Notion
+
+# Block Structure for Implementation Summary
+summary_block:
+  type: toggle
+  title: "📋 Implementation Complete - {date}"
+  children:
+    - type: heading_2
+      content: "📊 Implementation Summary"
+    
+    - type: paragraph
+      content: "**Implemented**: {implementation_date}"
+    
+    - type: paragraph
+      content: "**Duration**: {duration}"
+    
+    - type: paragraph
+      content: "**Repositories Modified**: {repositories}"
+    
+    - type: divider
+    
+    - type: heading_3
+      content: "📄 Documentation Generated"
+    
+    - type: paragraph
+      content: "{file_count} files:"
+    
+    - type: bulleted_list_item
+      content: "Analysis Documents: {analysis_count}"
+    
+    - type: bulleted_list_item
+      content: "Implementation Plans: {plan_count}"
+    
+    - type: bulleted_list_item
+      content: "Change Logs: {changelog_count}"
+    
+    - type: bulleted_list_item
+      content: "README Updates: {readme_count}"
+    
+    - type: divider
+    
+    - type: heading_3
+      content: "🔧 Key Changes"
+    
+    - type: paragraph
+      content: "{changes_summary}"
+    
+    - type: divider
+    
+    - type: heading_3
+      content: "✅ Next Steps"
+    
+    - type: numbered_list_item
+      content: "{next_step_1}"
+    
+    - type: numbered_list_item
+      content: "{next_step_2}"
+    
+    - type: numbered_list_item
+      content: "{next_step_3}"
+
+# Block Structure for Documentation File
+file_block:
+  type: toggle
+  title: "📄 {filename}"
+  children:
+    - type: paragraph
+      content: "**File**: `{filepath}`"
+    
+    - type: paragraph
+      content: "**Size**: {filesize}"
+    
+    - type: paragraph
+      content: "**Modified**: {modified_date}"
+    
+    - type: divider
+    
+    # Converted markdown content blocks go here
+    # (dynamically generated from markdown)
+
+# Markdown to Notion Block Conversion Rules
+conversion_rules:
+  heading_1:
+    pattern: "^# (.+)$"
+    block_type: heading_1
+    
+  heading_2:
+    pattern: "^## (.+)$"
+    block_type: heading_2
+    
+  heading_3:
+    pattern: "^### (.+)$"
+    block_type: heading_3
+  
+  paragraph:
+    pattern: "^(?!#|\\*|-|\\d+\\.|```|>).+"
+    block_type: paragraph
+  
+  bulleted_list:
+    pattern: "^[\\*-] (.+)$"
+    block_type: bulleted_list_item
+  
+  numbered_list:
+    pattern: "^\\d+\\. (.+)$"
+    block_type: numbered_list_item
+  
+  checkbox:
+    pattern: "^- \\[([ x])\\] (.+)$"
+    block_type: to_do
+    checked: "{match_group_1} == 'x'"
+  
+  code_block:
+    pattern: "^```([a-z]*)\\n([\\s\\S]*?)\\n```$"
+    block_type: code
+    language: "{match_group_1}"
+    content: "{match_group_2}"
+  
+  quote:
+    pattern: "^> (.+)$"
+    block_type: quote
+  
+  divider:
+    pattern: "^---+$"
+    block_type: divider
+
+# Text Formatting Rules (Rich Text Annotations)
+text_formatting:
+  bold:
+    pattern: "\\*\\*(.+?)\\*\\*"
+    annotation: "bold"
+  
+  italic:
+    pattern: "\\*(.+?)\\*"
+    annotation: "italic"
+  
+  code:
+    pattern: "`(.+?)`"
+    annotation: "code"
+  
+  strikethrough:
+    pattern: "~~(.+?)~~"
+    annotation: "strikethrough"
+  
+  link:
+    pattern: "\\[(.+?)\\]\\((.+?)\\)"
+    type: "text"
+    annotation: null
+    link_url: "{match_group_2}"
+
+# Category-based Organization
+category_structure:
+  analysis:
+    title: "📊 Analysis Documents"
+    files:
+      - "*-ANALYSIS.md"
+      - "*-REVIEW.md"
+  
+  planning:
+    title: "📝 Implementation Plans"
+    files:
+      - "*-PLAN.md"
+      - "*-IMPLEMENTATION.md"
+      - "*-STRATEGY.md"
+  
+  changes:
+    title: "🔄 Changes and Updates"
+    files:
+      - "CHANGELOG.md"
+      - "*-CHANGES.md"
+      - "*-UPDATES.md"
+  
+  documentation:
+    title: "📚 Documentation"
+    files:
+      - "README*.md"
+      - "GUIDE*.md"
+      - "*.md"
+
+# Upload Strategies
+upload_strategies:
+  nested_toggles:
+    description: "Organized with category toggles and file toggles"
+    structure: |
+      📋 Implementation Complete
+      ├─ 📊 Analysis Documents
+      │  └─ ANALYSIS.md (toggle with content)
+      ├─ 📝 Implementation Plans
+      │  └─ PLAN.md (toggle with content)
+      └─ 🔄 Changes
+         └─ CHANGELOG.md (toggle with content)
+  
+  flat_list:
+    description: "Simple list of file toggles"
+    structure: |
+      📋 Implementation Complete
+      ANALYSIS.md (toggle with content)
+      PLAN.md (toggle with content)
+      CHANGELOG.md (toggle with content)
+  
+  single_block:
+    description: "All content in one toggle"
+    structure: |
+      📋 Implementation Complete (toggle with all content)
+
+# Example Notion Block JSON
+example_summary_block:
+  object: "block"
+  type: "toggle"
+  toggle:
+    rich_text:
+      - type: "text"
+        text:
+          content: "📋 Implementation Complete - Oct 14, 2025"
+        annotations:
+          bold: true
+    children:
+      - object: "block"
+        type: "heading_2"
+        heading_2:
+          rich_text:
+            - type: "text"
+              text:
+                content: "📊 Implementation Summary"
+      
+      - object: "block"
+        type: "paragraph"
+        paragraph:
+          rich_text:
+            - type: "text"
+              text:
+                content: "Implemented: "
+            - type: "text"
+              text:
+                content: "2025-10-14 12:45:00"
+              annotations:
+                code: true
+
+example_file_block:
+  object: "block"
+  type: "toggle"
+  toggle:
+    rich_text:
+      - type: "text"
+        text:
+          content: "📄 REQUIREMENT_ANALYSIS.md"
+        annotations:
+          bold: true
+    children:
+      - object: "block"
+        type: "heading_2"
+        heading_2:
+          rich_text:
+            - type: "text"
+              text:
+                content: "Requirement Analysis"
+      
+      - object: "block"
+        type: "paragraph"
+        paragraph:
+          rich_text:
+            - type: "text"
+              text:
+                content: "This document contains the comprehensive analysis..."
+
+# Configuration Options
+options:
+  # Maximum blocks per request (Notion limit: 100)
+  max_blocks_per_request: 100
+  
+  # Rate limiting (Notion limit: 3 requests/second)
+  requests_per_second: 2.5
+  delay_between_requests_ms: 400
+  
+  # Retry settings
+  max_retries: 3
+  retry_delay_ms: 1000
+  exponential_backoff: true
+  
+  # Content settings
+  truncate_long_blocks: true
+  max_block_length: 2000
+  split_large_files: true
+  max_file_size_mb: 5
+  
+  # Formatting settings
+  preserve_code_formatting: true
+  convert_tables: true
+  preserve_links: true
+  add_file_metadata: true
+
+# Property Update Template
+property_updates:
+  status:
+    property: "Status"
+    type: "select"
+    value: "Implemented"
+  
+  updated_eta:
+    property: "Updated Development ETA"
+    type: "date"
+    value: "{current_date}"
+  
+  tags:
+    property: "Tags"
+    type: "multi_select"
+    values:
+      - "Completed"
+      - "Documented"
+      - "Ready for Review"
+
