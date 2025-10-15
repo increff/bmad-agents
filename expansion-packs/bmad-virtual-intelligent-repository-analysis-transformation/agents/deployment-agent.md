@@ -493,49 +493,88 @@ workflow:
     phase_5_view_creation_update:
       component: "Azure Synapse Views (SQL Server)"
       data_source: "🔥 Read changed view SQL files from requirement document"
-      description: "Update Azure Synapse views for data lake access"
-      deployment_approach: "Incremental view update - update only changed views using viewupdate.py"
+      description: "Update Azure Synapse views ONLY for QC test project - NOT all projects"
+      deployment_approach: "Targeted incremental update - only changed views, only QC test project"
+      critical_note: "🔥 IMPORTANT: Update views ONLY for the QC test project (project_id from Phase 4), NOT all projects"
       deployment_steps:
         - step_1: "🔥 READ: Extract irisx-config feature branch name from requirement document"
         - step_2: "🔥 READ: Extract list of changed view files from requirement document (view-creation/*.sql)"
-        - step_3: "Navigate to irisx-config repository"
-        - step_4: "Checkout feature branch (from requirement doc)"
-        - step_5: "Run viewupdate.py script to update views in Azure Synapse"
-      script_location: ".cicd/viewupdate.py"
-      how_it_works:
-        detection: "Uses git diff to detect changed .sql files in view-creation/ folder"
-        process:
-          - "Script reads each changed SQL file from view-creation/ folder"
-          - "Files starting with 'parent-' or 'domain-' are parent views, others are child views"
-          - "Replaces placeholders: {{schema_name}}, {{child}}, {{parent}}, {{domain}}"
-          - "Converts 'CREATE VIEW' to 'CREATE OR ALTER VIEW' for safe updates"
-          - "Executes modified SQL against Azure Synapse workspaces"
-        views_types:
-          parent_views: "Files starting with parent-* or domain-* (executed on parent database)"
-          child_views: "All other files (executed on project databases)"
-      script_usage:
-        command: "python .cicd/viewupdate.py {client} {workspace} {username} {password} {master_host} {master_username} {master_password} {master_db} --from-commitish {base-branch}"
-        parameters:
-          client: "Client name (from master DB)"
-          workspace: "Azure Synapse workspace name"
-          username: "Azure Synapse username"
-          password: "Azure Synapse password (from deployment-credentials.yaml)"
-          master_host: "MySQL master DB host (e.g., mysql-manager-qc-02-mse.nextscm.com)"
-          master_username: "MySQL master DB username"
-          master_password: "MySQL master DB password (from deployment-credentials.yaml)"
-          master_db: "MySQL master database name (e.g., master)"
-          from_commitish: "Base branch commit to compare (e.g., caas-staging_fix) - optional"
+        - step_3: "🔥 READ: Get QC project storage_container_name from master DB using stored project_id from Phase 4"
+        - step_4: "Navigate to irisx-config repository"
+        - step_5: "Checkout feature branch (from requirement doc)"
+        - step_6: "Detect changed view files: git diff --name-only {base-branch}...{feature-branch} -- view-creation/"
+        - step_7: "For each changed view file, read SQL and process placeholders"
+        - step_8: "Execute views ONLY on QC test project database (NOT all projects)"
+      manual_view_update_approach:
+        why: "viewupdate.py updates ALL projects - we need to update ONLY the QC test project"
+        steps:
+          - "Get QC project details from master DB: SELECT id, storage_container_name FROM project WHERE jar_name='{feature-branch}.jar'"
+          - "For each changed view SQL file in view-creation/:"
+          - "  1. Read SQL file content"
+          - "  2. Replace CREATE VIEW with CREATE OR ALTER VIEW"
+          - "  3. Replace {{schema_name}} with synapse_database_name"
+          - "  4. Replace {{child}} with qc_project_storage_container_name"
+          - "  5. Replace {{parent}} with client_parent_container"
+          - "  6. Replace {{domain}} with 'domain'"
+          - "  7. Execute SQL on Azure Synapse for QC project database ONLY"
+      changed_views_detection:
+        method: "git diff --name-only {base-branch}...{feature-branch} -- view-creation/"
+        filters:
+          parent_views: "Files starting with parent-* or domain-*"
+          child_views: "All other files (child-input-*, child-output-*, child-invalid-*)"
+        execution:
+          parent_views: "Execute once on parent/client database"
+          child_views: "Execute only on QC test project database (NOT all project databases)"
+      placeholder_replacement:
+        schema_name: "Azure Synapse database/schema name"
+        child: "QC test project storage_container_name (e.g., 'qc-test-project-53')"
+        parent: "Client parent container name (from master DB client.parent_container)"
+        domain: "Always 'domain'"
+      qc_project_identification:
+        step_1: "From Phase 4, we already have the QC test project_id"
+        step_2: "Query master DB: SELECT storage_container_name FROM project WHERE id={stored_project_id}"
+        step_3: "Use this storage_container_name for {{child}} placeholder"
       authentication:
-        azure_synapse: "Load from deployment-credentials.yaml or environment variables"
-        mysql_master: "Same credentials as Phase 4 database updates"
+        azure_synapse: "Load from deployment-credentials.yaml (workspace, username, password)"
+        mysql_master: "Same credentials as Phase 4 to query project.storage_container_name"
       validation:
-        - "Verify viewupdate.py script completes without errors"
-        - "Check Azure Synapse views updated successfully"
-        - "Verify view count matches expected changed files"
+        - "Verify each changed view created/altered successfully"
+        - "Check view count matches changed files from git diff"
+        - "Test views return data correctly"
+        - "Confirm ONLY QC test project views updated, not other projects"
       rollback:
+        - "Drop views: DROP VIEW IF EXISTS [schema].[view_name]"
         - "Checkout base branch in irisx-config"
-        - "Re-run viewupdate.py with base branch to restore previous views"
-        - "Or manually drop and recreate views from base branch SQL files"
+        - "Re-execute base branch view SQL for affected views"
+      
+      implementation_example:
+        scenario: "Changed 2 views: child-input-input_dist_new.sql and child-output-export_dist_new.sql"
+        step_by_step:
+          step_1_get_qc_project_info:
+            query: "SELECT id, storage_container_name, client_id FROM project WHERE jar_name='feature-REQ-1234.jar'"
+            result: "project_id=53, storage_container_name='weighted_avg_ros_depletion', client_id=5"
+          step_2_get_client_info:
+            query: "SELECT client, parent_container FROM client WHERE id=5"
+            result: "client='increff', parent_container='increff-parent'"
+          step_3_detect_changed_views:
+            command: "cd /path/to/irisx-config && git diff --name-only caas-staging_fix...feature-REQ-1234 -- view-creation/"
+            result:
+              - "view-creation/child-input-input_dist_new.sql"
+              - "view-creation/child-output-export_dist_new.sql"
+          step_4_process_each_view:
+            view_1_processing:
+              file: "view-creation/child-input-input_dist_new.sql"
+              original_sql: "CREATE VIEW [{{schema_name}}].[input_dist_new] AS SELECT * FROM OPENROWSET(BULK '{{child}}/input/input_dist_new/**', DATA_SOURCE = '{{child}}', ...)"
+              after_placeholder_replacement: "CREATE OR ALTER VIEW [increff].[input_dist_new] AS SELECT * FROM OPENROWSET(BULK 'weighted_avg_ros_depletion/input/input_dist_new/**', DATA_SOURCE = 'weighted_avg_ros_depletion', ...)"
+              execution: "Execute on Azure Synapse: workspace=increff-qc-workspace, database=increff, for project=weighted_avg_ros_depletion"
+            view_2_processing:
+              file: "view-creation/child-output-export_dist_new.sql"
+              original_sql: "CREATE VIEW [{{schema_name}}].[export_dist_new] AS SELECT * FROM OPENROWSET(BULK '{{child}}/output/export_dist_new/**', DATA_SOURCE = '{{child}}', ...)"
+              after_placeholder_replacement: "CREATE OR ALTER VIEW [increff].[export_dist_new] AS SELECT * FROM OPENROWSET(BULK 'weighted_avg_ros_depletion/output/export_dist_new/**', DATA_SOURCE = 'weighted_avg_ros_depletion', ...)"
+              execution: "Execute on Azure Synapse: workspace=increff-qc-workspace, database=increff, for project=weighted_avg_ros_depletion"
+          step_5_validation:
+            test_query: "SELECT TOP 1 * FROM [increff].[input_dist_new]"
+            expected: "Should return data or empty result without errors"
 
     phase_6_integration_validation:
       - Run smoke tests across all components
