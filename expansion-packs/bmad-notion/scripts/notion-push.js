@@ -2,7 +2,7 @@
 
 /**
  * BMAD Notion Push Script
- * Pushes generated documentation back to Notion page (below Comments section)
+ * Pushes generated documentation back to Notion ticket's III. DEVELOPMENT section
  */
 
 const { Client } = require('@notionhq/client');
@@ -59,8 +59,8 @@ class NotionPush {
             '**/*-PLAN.md', 
             '**/*-IMPLEMENTATION.md',
             '**/*-CHANGES.md',
-            '**/CHANGELOG.md',
-            '**/README*.md'
+            '**/CHANGELOG.md'
+            // Removed README*.md - these should not be pushed to Notion
         ];
 
         const files = [];

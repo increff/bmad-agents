@@ -35,7 +35,7 @@ class NotionHelp {
                 category: 'core'
             },
             'notion_push': {
-                purpose: 'Push generated documentation to section below Comments',
+                purpose: 'Push generated documentation to III. DEVELOPMENT section',
                 usage: '*notion_push [page_url_or_id]',
                 args: [
                     { name: 'page_url_or_id', required: false, description: 'Notion page URL or requirement ID (auto-detect if not provided)' }
@@ -158,16 +158,14 @@ class NotionHelp {
         console.log('\n═'.repeat(65));
         console.log('\n📋 WHAT GETS EXTRACTED');
         console.log('• **Requirement ID** (No ID field) - to locate the page');
-        console.log('• **Page Content** - extracted from blocks below Comments section');
-        console.log('• **Preserves formatting** - headings, paragraphs, lists, etc.');
+        console.log('• **Request Description** - the ONLY content extracted');
 
         console.log('\n❌ WHAT DOES NOT GET EXTRACTED');
-        console.log('• Metadata blocks (stage indicators, "Things to keep in mind", etc.)');
-        console.log('• Main requirement sections (I. REQUIREMENT, II. SOLUTION, III. DEVELOPMENT, IV. RELEASE)');
-        console.log('• Property fields (Title, Stage, Phase, Status, Priority, Lead, etc.)');
+        console.log('• No metadata (Title, Stage, Phase, Status, Priority, Lead, etc.)');
+        console.log('• No development sections, dates, or relations');
 
         console.log('\n📤 WHERE DOCUMENTATION IS PUSHED');
-        console.log('• **Below Comments section** (same location as extraction)');
+        console.log('• **INSIDE** "III. DEVELOPMENT" section only');
         console.log('• As nested toggle blocks');
         console.log('• Does NOT update any page properties');
 
@@ -180,7 +178,7 @@ class NotionHelp {
         console.log('2. **Extract and implement:**');
         console.log('   *notion_implement REQ-994');
         console.log('');
-        console.log('3. **Documentation automatically pushed below Comments section**');
+        console.log('3. **Documentation automatically pushed to III. DEVELOPMENT**');
 
         // Setup Requirements
         console.log('\n🔧 SETUP REQUIREMENTS\n');
@@ -206,11 +204,11 @@ class NotionHelp {
         console.log('# Step 1: Extract requirement from Notion and implement');
         console.log('*notion_implement REQ-994');
         console.log('');
-        console.log('# BMAD extracts content from page blocks (below Comments):');
+        console.log('# BMAD extracts ONLY Request Description from REQ-994:');
         console.log('# 1. Multiple ROS periods & factorization');
         console.log('# 2. Closing WH stock combine in Reordering');
         console.log('# 3. MOQ bound Reorder Qty');
-        console.log('# (Stops at metadata blocks and main requirement sections)');
+        console.log('# (No other fields are extracted)');
         console.log('');
         console.log('# Step 2: VIRAT automatically:');
         console.log('# - Analyzes requirement');
@@ -219,10 +217,10 @@ class NotionHelp {
         console.log('# - Executes implementation');
         console.log('# - Generates documentation');
         console.log('');
-        console.log('# Step 3: Push documentation back to Notion (below Comments section)');
+        console.log('# Step 3: Push documentation back to Notion (inside III. DEVELOPMENT)');
         console.log('*notion_push REQ-994');
         console.log('');
-        console.log('# Uploads below Comments section (same location as extraction):');
+        console.log('# Uploads INSIDE "III. DEVELOPMENT" section:');
         console.log('# - 📋 Implementation Complete - [date]');
         console.log('#   ├─ REQUIREMENT_ANALYSIS.md');
         console.log('#   ├─ IMPLEMENTATION_PLAN.md');
@@ -320,17 +318,15 @@ class NotionHelp {
         if (commandName === 'notion_implement') {
             console.log('\n**What gets extracted:**');
             console.log('  • Requirement ID (No ID field) - to locate the page');
-            console.log('  • Page content from blocks below Comments section');
-            console.log('  • Preserves formatting (headings, paragraphs, lists, etc.)');
+            console.log('  • Request Description - the ONLY content extracted');
             console.log('\n**What does NOT get extracted:**');
-            console.log('  • Metadata blocks (stage indicators, "Things to keep in mind", etc.)');
-            console.log('  • Main requirement sections (I-IV)');
-            console.log('  • Property fields (Title, Stage, Phase, Status, Priority, Lead, etc.)');
+            console.log('  • No metadata (Title, Stage, Phase, Status, Priority, Lead, etc.)');
+            console.log('  • No development sections, dates, or relations');
         }
         
         if (commandName === 'notion_push') {
             console.log('\n**Where documentation is pushed:**');
-            console.log('  • Below Comments section (same location as extraction)');
+            console.log('  • INSIDE "III. DEVELOPMENT" section only');
             console.log('  • As nested toggle blocks');
             console.log('  • Does NOT update any page properties');
         }

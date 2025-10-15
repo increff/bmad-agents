@@ -155,8 +155,8 @@ class NotionTest {
             });
 
             const properties = dbInfo.properties;
-            const requiredFields = ['No ID'];  // Only need ID to locate page; content extracted from blocks
-            const optionalFields = [];  // Content and push location are now block-based, not property-based
+            const requiredFields = ['No ID', 'Request Description'];
+            const optionalFields = ['III. DEVELOPMENT'];
 
             console.log('  📋 Required Fields:');
             let schemaValid = true;

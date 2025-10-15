@@ -173,9 +173,9 @@ class NotionDispatcher {
     displayWelcome() {
         console.log('👋 Welcome! I\'m the Notion Integrator\n');
         console.log('I can help you:');
-        console.log('• Extract requirements from Notion (page content below Comments)');
+        console.log('• Extract requirements from Notion (Request Description only)');
         console.log('• Execute VIRAT implementation workflows');
-        console.log('• Push documentation back to the section below Comments\n');
+        console.log('• Push documentation back to III. DEVELOPMENT section\n');
         console.log('Running *notion-help for you...\n');
     }
 
