@@ -142,7 +142,7 @@ Create minimal markdown document with ONLY extracted Request Description:
 - `extraction_summary`: Summary of extracted data
   - requirement_id
   - description_items_count
-  - warnings: [list of any issues with Request Description field]
+  
 
 ## Error Handling
 

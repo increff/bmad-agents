@@ -43,11 +43,11 @@ field_mappings:
   # Primary identifier field - used to locate the page
   requirement_id: "No ID"  # Column name in Notion DB (e.g., REQ-994)
   
-  # ONLY extract Request Description - nothing else
-  request_description: "Request Description"
+  # Content extraction source - extract from page blocks below Comments section
+  content_section: "Below Comments"  # Extract from page content, not property fields
   
   # Push target section in Notion (where docs will be uploaded)
-  push_target_section: "III. DEVELOPMENT"
+  push_target_section: "Below Comments"  # Push to same location as extraction source
 
 # Documentation file patterns to push back to Notion
 documentation_patterns:

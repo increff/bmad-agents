@@ -1,0 +1,51 @@
+{
+  "name": "bmad-notion-integration",
+  "version": "1.0.0",
+  "description": "BMAD Notion Integration Handler for *notion-fetch and *notion-implement commands",
+  "main": "scripts/notion-handler.js",
+  "scripts": {
+    "test": "node scripts/notion-handler.js test",
+    "fetch": "node scripts/notion-handler.js fetch",
+    "implement": "node scripts/notion-handler.js implement",
+    "push": "node scripts/notion-push.js",
+    "status": "node scripts/notion-status.js",
+    "list": "node scripts/notion-list.js",
+    "config": "node scripts/notion-config.js",
+    "help": "node scripts/notion-help.js",
+    "dispatch": "node scripts/notion-dispatcher.js",
+    "interactive": "node scripts/notion-dispatcher.js --interactive",
+    "workflow": "node scripts/notion-workflow-runner.js",
+    "workflow:fetch": "node scripts/notion-workflow-runner.js",
+    "workflow:implement": "NOTION_USE_WORKFLOWS=true node scripts/notion-dispatcher.js notion_implement",
+    "workflow:push": "NOTION_USE_WORKFLOWS=true node scripts/notion-dispatcher.js notion_push",
+    "workflow:test": "NOTION_USE_WORKFLOWS=true node scripts/notion-dispatcher.js notion_test",
+    "workflow:list": "NOTION_USE_WORKFLOWS=true node scripts/notion-dispatcher.js notion_list",
+    "workflow:status": "NOTION_USE_WORKFLOWS=true node scripts/notion-dispatcher.js notion_status"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "dotenv": "^16.3.1",
+    "js-yaml": "^4.1.0",
+    "glob": "^8.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  },
+  "keywords": [
+    "notion",
+    "bmad",
+    "integration",
+    "api",
+    "requirements"
+  ],
+  "author": "BMAD Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "bin": {
+    "notion-handler": "./scripts/notion-handler.js",
+    "notion-dispatcher": "./scripts/notion-dispatcher.js",
+    "notion-workflow": "./scripts/notion-workflow-runner.js"
+  }
+}

@@ -2,6 +2,8 @@
 
 Seamless Notion integration for requirement extraction and documentation push-back workflow.
 
+> 📚 **[View Complete Documentation →](DOCUMENTATION.md)**
+
 ## Quick Start
 
 ```bash
@@ -35,7 +37,7 @@ Extract requirements from Notion and automatically execute the complete implemen
 
 **What it does:**
 1. Connects to Notion using credentials from `.env`
-2. Fetches ONLY the "Request Description" field from the specified ticket
+2. Extracts requirement content from page blocks (below Comments section)
 3. Converts to standard requirement format
 4. Automatically calls VIRAT's `*implement` command
 5. Executes complete implementation workflow
@@ -58,9 +60,105 @@ Push all generated documentation files back to the source Notion ticket.
 **What it does:**
 1. Identifies all `.md` documentation files generated during workflow
 2. Retrieves the original Notion page ID
-3. Finds the "III. DEVELOPMENT" section in the Notion page
-4. Uploads documentation INSIDE the III. DEVELOPMENT section as nested toggle blocks
+3. Finds the section below Comments in the Notion page
+4. Uploads documentation to the same location where content was extracted (below Comments)
 5. Does NOT update any ticket properties or metadata
+
+## JavaScript Handler Scripts
+
+This integration includes JavaScript scripts that handle the actual Notion API interactions:
+
+### 🔧 Installation & Setup
+
+1. **Install Dependencies**:
+   ```bash
+   cd expansion-packs/bmad-notion
+   ./install.sh
+   ```
+
+2. **Configure Environment**:
+   Edit the `.env` file with your Notion credentials:
+   ```env
+   NOTION_API_KEY=secret_xxxxxxxxxxxxxxxxxxxxx
+   NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   NOTION_VIEW_ID=xxxxxxxxxxxx
+   ```
+
+3. **Test Connection**:
+   ```bash
+   npm run test
+   ```
+
+### 📜 Available Scripts
+
+All scripts are now organized in the `scripts/` folder:
+
+#### Quick Commands via npm:
+```bash
+# Test API connection
+npm run test
+
+# Fetch requirement (preview only)
+npm run fetch REQ-994
+
+# Extract and prepare for implementation
+npm run implement REQ-994
+
+# Push documentation to Notion
+npm run push
+
+# Show integration status
+npm run status
+
+# List requirements from database
+npm run list
+
+# Show configuration
+npm run config
+
+# Display help
+npm run help
+
+# Interactive mode
+npm run interactive
+```
+
+#### Direct Script Execution:
+```bash
+# Main handler
+node scripts/notion-handler.js test
+node scripts/notion-handler.js fetch REQ-994
+node scripts/notion-handler.js implement REQ-994
+
+# Command dispatcher (recommended)
+node scripts/notion-dispatcher.js notion_test
+node scripts/notion-dispatcher.js notion_implement REQ-994
+
+# Individual commands
+node scripts/notion-push.js [REQ-ID]
+node scripts/notion-status.js
+node scripts/notion-list.js [options]
+node scripts/notion-config.js
+node scripts/notion-help.js
+```
+
+### 🔄 Command Flow
+
+When you use `*notion-fetch` or `*notion-implement` in BMAD:
+
+1. **Command Parsing**: `scripts/notion-command-wrapper.js` parses the command
+2. **API Interaction**: Delegates to `notion-handler.js` for Notion API calls
+3. **Data Processing**: Extracts requirement data and formats for VIRAT
+4. **File Output**: Creates `docs/.notion-extracted-data.json` and `docs/.virat-requirement.md`
+
+### 📁 Generated Files
+
+All extracted data is stored in the `docs/` folder:
+
+- `docs/.notion-extracted-data.json` - Raw extracted data from Notion
+- `docs/.virat-requirement.md` - Formatted requirement for VIRAT workflow
+- `docs/.notion-tracking.json` - Tracking data for push operations
+- `.env` - Environment variables (created from `env.example`)
 
 ## Installation
 
@@ -99,8 +197,8 @@ The integration extracts ONLY these fields:
 | Notion Property | Purpose |
 |----------------|---------|
 | No ID | Used to locate the correct page |
-| Request Description | The ONLY content field extracted |
-| III. DEVELOPMENT | Target section for pushing documentation (not extracted) |
+| Content Below Comments | Page content extracted from blocks below Comments section |
+| Below Comments | Target section for pushing documentation (same location as extraction) |
 
 ## Workflow Example
 
@@ -111,7 +209,7 @@ The integration extracts ONLY these fields:
 # Step 1: Extract requirement from Notion and implement
 *notion_implement REQ-994
 
-# BMAD extracts ONLY Request Description from REQ-994:
+# BMAD extracts content from page blocks (below Comments) from REQ-994:
 # 1. Multiple ROS periods & factorization
 # 2. Closing WH stock combine in Reordering
 # 3. MOQ bound Reorder Qty
@@ -124,10 +222,10 @@ The integration extracts ONLY these fields:
 # - Executes implementation
 # - Generates documentation
 
-# Step 3: Push documentation back to Notion (inside III. DEVELOPMENT)
+# Step 3: Push documentation back to Notion (below Comments section)
 *notion_push REQ-994
 
-# Uploads INSIDE "III. DEVELOPMENT" section:
+# Uploads to the section below Comments (same location as extraction):
 # - 📋 Implementation Complete - [date]
 #   ├─ REQUIREMENT_ANALYSIS.md
 #   ├─ IMPLEMENTATION_PLAN.md
