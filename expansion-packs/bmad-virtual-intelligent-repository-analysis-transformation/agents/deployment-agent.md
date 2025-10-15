@@ -490,21 +490,69 @@ workflow:
         - "Delete export filters: DELETE FROM module_filters WHERE report_name='export_{report_name}'"
         - "🔥 VERIFICATION: Verify rollback successful by comparing with backup"
 
-    phase_5_integration_validation:
+    phase_5_view_creation_update:
+      component: "Azure Synapse Views (SQL Server)"
+      data_source: "🔥 Read changed view SQL files from requirement document"
+      description: "Update Azure Synapse views for data lake access"
+      deployment_approach: "Incremental view update - update only changed views using viewupdate.py"
+      deployment_steps:
+        - step_1: "🔥 READ: Extract irisx-config feature branch name from requirement document"
+        - step_2: "🔥 READ: Extract list of changed view files from requirement document (view-creation/*.sql)"
+        - step_3: "Navigate to irisx-config repository"
+        - step_4: "Checkout feature branch (from requirement doc)"
+        - step_5: "Run viewupdate.py script to update views in Azure Synapse"
+      script_location: ".cicd/viewupdate.py"
+      how_it_works:
+        detection: "Uses git diff to detect changed .sql files in view-creation/ folder"
+        process:
+          - "Script reads each changed SQL file from view-creation/ folder"
+          - "Files starting with 'parent-' or 'domain-' are parent views, others are child views"
+          - "Replaces placeholders: {{schema_name}}, {{child}}, {{parent}}, {{domain}}"
+          - "Converts 'CREATE VIEW' to 'CREATE OR ALTER VIEW' for safe updates"
+          - "Executes modified SQL against Azure Synapse workspaces"
+        views_types:
+          parent_views: "Files starting with parent-* or domain-* (executed on parent database)"
+          child_views: "All other files (executed on project databases)"
+      script_usage:
+        command: "python .cicd/viewupdate.py {client} {workspace} {username} {password} {master_host} {master_username} {master_password} {master_db} --from-commitish {base-branch}"
+        parameters:
+          client: "Client name (from master DB)"
+          workspace: "Azure Synapse workspace name"
+          username: "Azure Synapse username"
+          password: "Azure Synapse password (from deployment-credentials.yaml)"
+          master_host: "MySQL master DB host (e.g., mysql-manager-qc-02-mse.nextscm.com)"
+          master_username: "MySQL master DB username"
+          master_password: "MySQL master DB password (from deployment-credentials.yaml)"
+          master_db: "MySQL master database name (e.g., master)"
+          from_commitish: "Base branch commit to compare (e.g., caas-staging_fix) - optional"
+      authentication:
+        azure_synapse: "Load from deployment-credentials.yaml or environment variables"
+        mysql_master: "Same credentials as Phase 4 database updates"
+      validation:
+        - "Verify viewupdate.py script completes without errors"
+        - "Check Azure Synapse views updated successfully"
+        - "Verify view count matches expected changed files"
+      rollback:
+        - "Checkout base branch in irisx-config"
+        - "Re-run viewupdate.py with base branch to restore previous views"
+        - "Or manually drop and recreate views from base branch SQL files"
+
+    phase_6_integration_validation:
       - Run smoke tests across all components
       - Verify cross-component communication
       - Validate data flow from LoadAPI through Algorithm to Config
       - Test end-to-end workflows with database updates
       - Verify database-driven configurations work correctly
+      - Verify Azure Synapse views accessible and returning data
       - Monitor system health metrics
 
-    phase_6_deployment_completion:
+    phase_7_deployment_completion:
       - Run smoke tests and verify all components working
       - Create test instructions for QC team
       - Notify QC team via configured channels (if configured)
       - Generate deployment summary report
 
-    phase_7_update_requirement_document:
+    phase_8_update_requirement_document:
       critical_principle: "🔥 Write all deployment details back to the requirement document"
       what_to_document:
         - "Deployment timestamp and date"
@@ -516,6 +564,7 @@ workflow:
         - "Parameters added to database (with IDs)"
         - "Input tables registered (with IDs)"
         - "Export reports registered (with IDs)"
+        - "Azure Synapse views updated (view names, count)"
         - "QC project ID used for testing"
         - "Backup table names created"
         - "Any errors or issues encountered"
@@ -556,6 +605,13 @@ workflow:
         #### LoadAPI Files (2 files uploaded to ms-loadapis/latest/)
         - loadapi/distribution_store_filtering_load_api.py
         - validation/store_filtering_validation.py
+        
+        #### Azure Synapse Views (3 views updated)
+        - child-input-input_dist_store_filtering.sql
+        - child-output-export_dist_store_filtering.sql
+        - child-output-interim_dist_store_filtering_calc.sql
+        - **Synapse Workspace**: increff-qc-workspace
+        - **Updated Database**: client-qc / project-qc-test
         
         ### Database Changes Applied
         
@@ -635,13 +691,14 @@ deployment_environments:
         deployment_target: "TBD - User will specify"
 
 deployment_order:
-  sequence: ["irisx-config", "ms-loadapis-ril-final", "irisx-algo", "mysql-database"]
-  rationale: "Configuration first, then data layer, then business logic, then database parameters"
+  sequence: ["irisx-config", "ms-loadapis-ril-final", "irisx-algo", "mysql-database", "azure-synapse-views"]
+  rationale: "Configuration first, then data layer, then business logic, then database parameters, finally view updates"
   dependency_rules:
     - "Algorithm depends on LoadAPI and Config"
     - "LoadAPI may depend on Config for schemas"
     - "Config has no dependencies"
     - "Database updates should happen after code deployment to ensure compatibility"
+    - "View updates should happen last as they may depend on new data structures"
 
 deployment_paths_summary:
   irisx_config:
