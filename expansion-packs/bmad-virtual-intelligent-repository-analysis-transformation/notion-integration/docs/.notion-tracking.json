@@ -1,0 +1,13 @@
+{
+  "REQ-1176": {
+    "page_id": "285f31dc496880f0840fdd8d76d17703",
+    "requirement_id": "REQ-1176",
+    "requirement_title": "Add attribute_b level in the Planogram Creation output, and add a parameter for the user to select if at attribute_b level the output should be generated.",
+    "notion_url": "https://www.notion.so/285f31dc496880f0840fdd8d76d17703",
+    "extracted_at": "2025-10-15T11:55:18.895Z",
+    "last_pushed": null,
+    "pushed_at": "2025-10-15T12:01:24.906Z",
+    "files_pushed": 2,
+    "status": "completed"
+  }
+}
