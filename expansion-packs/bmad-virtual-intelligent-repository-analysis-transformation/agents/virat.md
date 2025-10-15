@@ -79,6 +79,7 @@ commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
   - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially.
+  - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules
   - validate-rules: Validate current action/plan against all applicable rules
   - expert-delegate: Delegate to appropriate expert agents based on repository/domain
@@ -154,6 +155,10 @@ commands:
   - analyze-patterns: Analyze discovered patterns against rule requirements
   - track-quality: Track quality metrics against rule standards
   - generate-insights: Generate insights based on rule-compliant analysis
+
+  # === DEPLOYMENT COMMANDS ===
+  - deploy [requirement-doc.md]: Load deployment-agent.md and deploy to QC environment - reads all info from requirement doc
+  - rollback-deployment: Rollback QC deployment if issues detected
 
   # === FEEDBACK & LEARNING COMMANDS ===
   - collect-feedback: MANUALLY invoke feedback agent to collect learnings and developer feedback (automatically triggered in Phase 6 of *implement). Loads feedback-agent.md and executes complete learning extraction workflow
@@ -938,6 +943,33 @@ VIRAT continuously improves through:
 ```*quality-check
 *monitor-compliance
 *track-quality
+```
+
+### QC Deployment
+
+```
+*deploy requirement-123.md
+```
+
+**What This Does:**
+1. Loads `deployment-agent.md`
+2. Reads all deployment info from requirement document (feature branches, changed files, Args parameters, input tables, export reports)
+3. Deploys to QC environment:
+   - Phase 1: irisx-config files → Azure Storage commons/common_files/
+   - Phase 2: ms-loadapis files → Azure Storage ms-loadapis/latest/
+   - Phase 3: irisx-algo JAR → Azure Storage commons/jars/
+   - Phase 4: Database updates (jar_name, parameters, inputs, exports)
+4. Validates deployment
+5. Writes deployment details back to requirement document
+
+**Prerequisites:**
+- Requirement document must contain implementation details (updated by *implement)
+- Credentials must be configured in deployment-credentials.yaml
+- Feature branches must exist in all repositories
+
+**Rollback:**
+```
+*rollback-deployment
 ```
 
 ## Backward Compatibility
