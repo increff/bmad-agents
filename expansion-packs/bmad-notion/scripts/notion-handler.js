@@ -64,35 +64,23 @@ class NotionHandler {
 
         // If it's a URL, extract the ID
         if (input.startsWith('http')) {
-            // Remove query parameters first
-            const cleanUrl = input.split('?')[0];
-            
-            const urlParts = cleanUrl.split('/');
+            const urlParts = input.split('/');
             const lastPart = urlParts[urlParts.length - 1];
             
             // Handle URLs like: https://notion.so/workspace/REQ-994-abc123def456
-            // or https://notion.so/workspace/Title-with-dashes-abc123def456
             if (lastPart.includes('-')) {
                 const parts = lastPart.split('-');
-                // The last part after final dash should be the page ID
-                const lastSegment = parts[parts.length - 1];
-                
-                // Check if it's a valid 32-char hex ID
-                if (/^[a-f0-9]{32}$/i.test(lastSegment)) {
-                    return lastSegment;
-                }
-                
-                // If not exactly 32 chars, try to extract from the end
-                if (lastSegment.length >= 32) {
-                    const extracted = lastSegment.slice(-32);
-                    if (/^[a-f0-9]{32}$/i.test(extracted)) {
-                        return extracted;
+                if (parts.length >= 3) {
+                    // Extract the hex ID part (last 32 characters)
+                    const hexPart = parts.slice(-1)[0];
+                    if (hexPart.length >= 32) {
+                        return hexPart.slice(-32);
                     }
                 }
             }
             
-            // Fallback: try to extract any 32-character hex string from the entire URL
-            const hexMatch = cleanUrl.match(/([a-f0-9]{32})/i);
+            // Fallback: try to extract any 32-character hex string
+            const hexMatch = input.match(/([a-f0-9]{32})/i);
             if (hexMatch) {
                 return hexMatch[1];
             }
@@ -224,43 +212,6 @@ class NotionHandler {
     }
 
     /**
-     * Recursively fetch children of a block
-     */
-    async fetchBlockChildren(blockId, depth = 0, maxDepth = 3) {
-        if (depth >= maxDepth) return [];
-        
-        try {
-            const children = [];
-            let cursor = undefined;
-            
-            do {
-                const response = await this.notion.blocks.children.list({
-                    block_id: blockId,
-                    start_cursor: cursor,
-                    page_size: 100
-                });
-                
-                for (const child of response.results) {
-                    children.push(child);
-                    
-                    // If this child has children, fetch them recursively
-                    if (child.has_children) {
-                        const grandchildren = await this.fetchBlockChildren(child.id, depth + 1, maxDepth);
-                        children.push(...grandchildren);
-                    }
-                }
-                
-                cursor = response.has_more ? response.next_cursor : undefined;
-            } while (cursor);
-            
-            return children;
-        } catch (error) {
-            console.warn(`⚠️  Could not fetch children for block ${blockId}: ${error.message}`);
-            return [];
-        }
-    }
-
-    /**
      * Convert Notion blocks to plain text
      */
     blockToText(block) {
@@ -299,71 +250,58 @@ class NotionHandler {
         try {
             console.log('🔍 Extracting content below Comments section...');
             
-            const topLevelBlocks = await this.fetchPageBlocks(pageId);
+            const blocks = await this.fetchPageBlocks(pageId);
             
-            // Fetch all blocks including nested ones
-            const allBlocks = [];
-            for (const block of topLevelBlocks) {
-                allBlocks.push(block);
-                if (block.has_children) {
-                    console.log(`  📂 Fetching children of [${block.type}]...`);
-                    const children = await this.fetchBlockChildren(block.id);
-                    allBlocks.push(...children);
-                }
-            }
-            
-            const blocks = allBlocks;
-            
+            // Find the Comments section (it appears as a discussion thread)
+            // Then extract all content after it
+            let foundCommentsEnd = false;
             let contentBlocks = [];
             let skipSections = ['I. REQUIREMENT', 'II. SOLUTION', 'III. DEVELOPMENT', 'IV. RELEASE'];
             
-            // Markers that indicate we should STOP extraction (metadata/status indicators)
-            const stopMarkers = [
-                'each stage signifies',
-                'stage that has been completed',
-                'this page will be maintained',
-                'things to keep in mind',
-                'buttons provide below',
-                'prototype stage signifies'
-            ];
-            
             for (let i = 0; i < blocks.length; i++) {
                 const block = blocks[i];
-                const blockText = this.blockToText(block).toLowerCase();
+                const blockText = this.blockToText(block);
                 
-                // Skip discussion/comments blocks entirely
+                // Skip if we're in a discussion/comments block
                 if (block.type === 'discussion') {
+                    foundCommentsEnd = true;
                     continue;
                 }
                 
-                // Stop if we hit metadata/status indicator blocks
-                if (stopMarkers.some(marker => blockText.includes(marker))) {
-                    console.log(`⚠️  Stopping extraction at metadata block: "${blockText.substring(0, 50)}..."`);
-                    break;
+                // If we haven't found comments yet, look for any heading that might be comments
+                if (!foundCommentsEnd) {
+                    if (block.type === 'heading_1' || block.type === 'heading_2' || block.type === 'heading_3') {
+                        if (blockText.toLowerCase().includes('comment')) {
+                            foundCommentsEnd = true;
+                            continue;
+                        }
+                    }
+                    // Also consider that content might start right away if no comments section exists
+                    // Start collecting from first meaningful content block
+                    if (block.type === 'paragraph' || block.type === 'bulleted_list_item' || 
+                        block.type === 'numbered_list_item' || block.type === 'toggle' || 
+                        block.type === 'callout') {
+                        foundCommentsEnd = true;
+                    }
                 }
                 
-                // Stop if we hit one of the main requirement sections
-                if (block.type === 'toggle') {
-                    const toggleText = this.blockToText(block);
-                    if (skipSections.some(section => toggleText.includes(section))) {
-                        break;  // Stop before requirement sections
+                // Once we've passed comments, start collecting content
+                if (foundCommentsEnd) {
+                    // Stop if we hit one of the main requirement sections
+                    if (block.type === 'toggle') {
+                        const toggleText = this.blockToText(block);
+                        if (skipSections.some(section => toggleText.includes(section))) {
+                            break;  // Stop before requirement sections
+                        }
                     }
                     
-                    // Also stop at "Things to keep in mind" toggles
-                    if (toggleText.toLowerCase().includes('things to keep in mind')) {
-                        break;
+                    if (block.type === 'heading_1' || block.type === 'heading_2') {
+                        const headingText = this.blockToText(block);
+                        if (skipSections.some(section => headingText.includes(section))) {
+                            break;  // Stop before requirement sections
+                        }
                     }
-                }
-                
-                if (block.type === 'heading_1' || block.type === 'heading_2') {
-                    const headingText = this.blockToText(block);
-                    if (skipSections.some(section => headingText.includes(section))) {
-                        break;  // Stop before requirement sections
-                    }
-                }
-                
-                // Collect meaningful content blocks (skip empty ones)
-                if (blockText.trim()) {
+                    
                     contentBlocks.push(block);
                 }
             }
