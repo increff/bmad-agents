@@ -18,6 +18,12 @@ web-bundles/
 # Environment variables
 .env
 
+# Deployment credentials (NEVER commit actual credentials!)
+deployment-credentials.yaml
+**/deployment-credentials.yaml
+deployment-backups/
+deployment-logs/
+
 # System files
 .DS_Store
 Thumbs.db
