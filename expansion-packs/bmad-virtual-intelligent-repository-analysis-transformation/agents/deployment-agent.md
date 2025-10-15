@@ -505,14 +505,19 @@ workflow:
         - step_6: "Detect changed view files: git diff --name-only {base-branch}...{feature-branch} -- view-creation/"
         - step_7: "For each changed view file, read SQL and process placeholders"
         - step_8: "Execute views ONLY on QC test project database (NOT all projects)"
+      why_not_use_viewupdate_script:
+        issue: "viewupdate.py updates ALL projects with status='SUCCESS' - we need to update ONLY the QC test project"
+        script_behavior: "Queries 'SELECT storage_container_name FROM project WHERE client_id={client_id} AND status=\"SUCCESS\"' and loops through ALL projects"
+        qc_requirement: "For QC deployment, we only want to update views for the ONE specific project where we deployed the JAR"
       manual_view_update_approach:
-        why: "viewupdate.py updates ALL projects - we need to update ONLY the QC test project"
+        why: "Targeted update for single QC project instead of all projects"
         steps:
-          - "Get QC project details from master DB: SELECT id, storage_container_name FROM project WHERE jar_name='{feature-branch}.jar'"
+          - "Get QC project details from master DB: SELECT id, storage_container_name, client_id FROM project WHERE jar_name='{feature-branch}.jar'"
+          - "Get client info: SELECT client, parent_container FROM client WHERE id={client_id}"
           - "For each changed view SQL file in view-creation/:"
           - "  1. Read SQL file content"
           - "  2. Replace CREATE VIEW with CREATE OR ALTER VIEW"
-          - "  3. Replace {{schema_name}} with synapse_database_name"
+          - "  3. Replace {{schema_name}} with client_name (schema_name)"
           - "  4. Replace {{child}} with qc_project_storage_container_name"
           - "  5. Replace {{parent}} with client_parent_container"
           - "  6. Replace {{domain}} with 'domain'"
@@ -526,14 +531,21 @@ workflow:
           parent_views: "Execute once on parent/client database"
           child_views: "Execute only on QC test project database (NOT all project databases)"
       placeholder_replacement:
-        schema_name: "Azure Synapse database/schema name"
-        child: "QC test project storage_container_name (e.g., 'qc-test-project-53')"
+        schema_name: "Client name = Azure Synapse database/schema name (e.g., 'increff')"
+        child: "QC test project storage_container_name (e.g., 'weighted_avg_ros_depletion')"
         parent: "Client parent container name (from master DB client.parent_container)"
         domain: "Always 'domain'"
       qc_project_identification:
         step_1: "From Phase 4, we already have the QC test project_id"
-        step_2: "Query master DB: SELECT storage_container_name FROM project WHERE id={stored_project_id}"
-        step_3: "Use this storage_container_name for {{child}} placeholder"
+        step_2: "Query master DB: SELECT storage_container_name, client_id FROM project WHERE id={stored_project_id}"
+        step_3: "Query master DB: SELECT client, parent_container FROM client WHERE id={client_id}"
+        step_4: "Use storage_container_name for {{child}} placeholder"
+        step_5: "Use client for {{schema_name}} placeholder"
+        step_6: "Use parent_container for {{parent}} placeholder"
+      azure_synapse_connection:
+        driver: "ODBC Driver 17 for SQL Server"
+        connection_string: "DRIVER={ODBC Driver 17 for SQL Server};SERVER={workspace}-ondemand.sql.azuresynapse.net;DATABASE={client};UID={username};PWD={password};MARS_CONNECTION=yes"
+        execution: "csr.execute(\"SET NOCOUNT ON\"); csr.execute(processed_view_sql); csr.commit()"
       authentication:
         azure_synapse: "Load from deployment-credentials.yaml (workspace, username, password)"
         mysql_master: "Same credentials as Phase 4 to query project.storage_container_name"
