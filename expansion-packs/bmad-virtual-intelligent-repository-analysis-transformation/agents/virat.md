@@ -156,7 +156,7 @@ commands:
   - generate-insights: Generate insights based on rule-compliant analysis
 
   # === FEEDBACK & LEARNING COMMANDS ===
-  - collect-feedback: Invoke feedback agent to collect learnings and developer feedback at implementation end
+  - collect-feedback: MANUALLY invoke feedback agent to collect learnings and developer feedback (automatically triggered in Phase 6 of *implement). Loads feedback-agent.md and executes complete learning extraction workflow
   - review-learnings: Load and review past learnings from example.json for current implementation context
   - apply-learnings: Apply relevant past learnings to current implementation approach
   - update-knowledge: Update knowledge base with new learnings and feedback
@@ -705,10 +705,22 @@ dependencies:
 
 #### **Phase 6: Learning & Feedback Collection (Automatic)**
 
-29. **Learning Extraction**: Invoke feedback agent to extract new learnings from implementation
-30. **Developer Feedback Collection**: Gather structured feedback from developer on process and outcomes
-31. **Knowledge Storage**: Store learnings and feedback in example.json with metadata including environment context
+29. **Learning Extraction**: Load and invoke feedback-agent.md to extract new learnings from implementation
+    - Load feedback-agent.md using: `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/agents/feedback-agent.md`
+    - Execute `collect-learnings` command to analyze implementation artifacts
+    - Identify technical discoveries, pattern insights, and solutions found
+30. **Developer Feedback Collection**: Execute feedback agent's `gather-feedback` command
+    - Present structured feedback questionnaire to developer
+    - Collect ratings on implementation effectiveness (1-10 scale)
+    - Gather specific challenges faced and solutions applied
+    - Document suggestions for process improvements
+31. **Knowledge Storage**: Execute feedback agent's `store-knowledge` command
+    - Store learnings and feedback in `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/data/example.json`
+    - Include metadata: timestamp, requirement ID, environment, repositories affected
+    - Categorize learnings: technical_discoveries, process_improvements, business_insights, mistake_prevention
 32. **Process Improvement**: Apply feedback to improve future implementation approaches
+    - Update implementation strategies based on accumulated learnings
+    - Identify patterns for future optimization
 
 **For Multiple Environments**: After Phase 6 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
 
@@ -741,11 +753,14 @@ dependencies:
 
 - `--dry-run`: Preview the complete implementation plan without making changes (SIMULATION ONLY)
 - `--skip-tests`: Skip the testing phase (not recommended for production)
+- `--skip-feedback`: Skip the feedback collection phase (Phase 6)
 - `--auto-commit`: Automatically commit and push changes without manual confirmation
 - `--verbose`: Show detailed progress information for each step
 - `--parallel`: Execute independent steps in parallel for faster completion
 
 **CRITICAL**: By default, `*implement` makes ACTUAL CODE CHANGES. Use `--dry-run` only for previewing.
+
+**Feedback Collection**: Phase 6 automatically loads and invokes the feedback agent (`feedback-agent.md`) to collect learnings and developer feedback. Use `--skip-feedback` to bypass this phase if needed.
 
 **Success Criteria Validation**:
 
