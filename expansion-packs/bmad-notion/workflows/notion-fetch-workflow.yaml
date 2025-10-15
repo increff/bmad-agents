@@ -1,0 +1,141 @@
+name: notion-fetch-workflow
+version: 1.0.0
+description: "Automated workflow to fetch requirements from Notion using a provided link"
+
+# Workflow metadata
+metadata:
+  author: "BMAD Notion Integration"
+  category: "data-extraction"
+  tags: ["notion", "fetch", "extraction", "requirements"]
+
+# Workflow inputs
+inputs:
+  notion_link:
+    type: string
+    description: "Notion page URL or requirement ID (e.g., REQ-1141 or https://notion.so/...)"
+    required: true
+    examples:
+      - "REQ-1141"
+      - "https://www.notion.so/increff/To-merge-data-from-Altheory-Sport-to-Altheory-by-Azorte-277f31dc496880a18eadceacd882b8e2"
+      - "277f31dc496880a18eadceacd882b8e2"
+  
+  dry_run:
+    type: boolean
+    description: "Preview extraction without saving (optional)"
+    required: false
+    default: false
+
+# Environment configuration
+environment:
+  load_from: ".env"
+  required_vars:
+    - NOTION_API_KEY
+    - NOTION_DATABASE_ID
+  optional_vars:
+    - NOTION_VIEW_ID
+
+# Workflow steps
+steps:
+  - name: validate-environment
+    description: "Validate that all required environment variables are set"
+    action: validate-env
+    inputs:
+      required:
+        - NOTION_API_KEY
+        - NOTION_DATABASE_ID
+    on_error: fail
+    error_message: "Missing required environment variables. Please check .env file."
+
+  - name: parse-notion-identifier
+    description: "Parse Notion URL or ID to extract page identifier"
+    action: parse-identifier
+    inputs:
+      raw_input: "{{inputs.notion_link}}"
+    outputs:
+      page_identifier: "parsed_id"
+
+  - name: fetch-from-notion
+    description: "Execute notion-handler.js to fetch data from Notion"
+    action: execute-script
+    script: "scripts/notion-handler.js"
+    command: "fetch"
+    args:
+      - "{{steps.parse-notion-identifier.outputs.page_identifier}}"
+    flags:
+      dry-run: "{{inputs.dry_run}}"
+    on_error: retry
+    retry_count: 3
+    retry_delay: 2s
+
+  - name: validate-extraction
+    description: "Validate that data was successfully extracted"
+    action: validate-file
+    inputs:
+      file_path: "docs/.notion-extracted-data.json"
+      required_fields:
+        - pageId
+        - requirementId
+        - requirementContent
+        - contentBlocksCount
+    on_error: fail
+
+  - name: display-results
+    description: "Display extracted data to user"
+    action: display
+    inputs:
+      source: "docs/.notion-extracted-data.json"
+      format: "json"
+      fields_to_show:
+        - requirementId
+        - requirementTitle
+        - requirementContent
+        - contentBlocksCount
+        - notionUrl
+        - extractedAt
+
+# Outputs
+outputs:
+  extracted_data_file:
+    value: "docs/.notion-extracted-data.json"
+    description: "Path to extracted data JSON file"
+  
+  requirement_id:
+    value: "{{steps.validate-extraction.outputs.requirementId}}"
+    description: "Extracted requirement ID"
+  
+  page_id:
+    value: "{{steps.validate-extraction.outputs.pageId}}"
+    description: "Notion page ID"
+
+# Success criteria
+success:
+  conditions:
+    - step: validate-extraction
+      status: success
+    - file_exists: "docs/.notion-extracted-data.json"
+  message: "✅ Requirement successfully fetched from Notion!"
+
+# Failure handling
+failure:
+  actions:
+    - log_error: true
+    - cleanup_temp_files: false
+  message: "❌ Failed to fetch requirement from Notion. Check logs for details."
+
+# Post-execution actions
+post_execution:
+  - name: log-operation
+    action: append-to-file
+    file: "docs/.notion-operations.log"
+    content: "{{timestamp}} - Fetched {{outputs.requirement_id}} from Notion"
+  
+  - name: update-tracking
+    action: update-json
+    file: "docs/.notion-tracking.json"
+    updates:
+      last_fetch:
+        requirement_id: "{{outputs.requirement_id}}"
+        page_id: "{{outputs.page_id}}"
+        timestamp: "{{timestamp}}"
+        status: "success"
+

@@ -1,0 +1,147 @@
+name: notion-implement-workflow
+version: 1.0.0
+description: "Automated workflow to extract requirement from Notion and execute VIRAT implementation"
+
+# Workflow metadata
+metadata:
+  author: "BMAD Notion Integration"
+  category: "implementation"
+  tags: ["notion", "implement", "virat", "automation"]
+
+# Workflow inputs
+inputs:
+  notion_link:
+    type: string
+    description: "Notion page URL or requirement ID"
+    required: true
+    examples:
+      - "REQ-1141"
+      - "https://www.notion.so/..."
+  
+  auto_push:
+    type: boolean
+    description: "Automatically push documentation after implementation"
+    required: false
+    default: true
+  
+  dry_run:
+    type: boolean
+    description: "Preview extraction without implementing"
+    required: false
+    default: false
+
+# Environment configuration
+environment:
+  load_from: ".env"
+  required_vars:
+    - NOTION_API_KEY
+    - NOTION_DATABASE_ID
+  optional_vars:
+    - NOTION_VIEW_ID
+
+# Workflow steps
+steps:
+  - name: validate-environment
+    description: "Validate environment variables"
+    action: validate-env
+    inputs:
+      required:
+        - NOTION_API_KEY
+        - NOTION_DATABASE_ID
+    on_error: fail
+
+  - name: parse-notion-identifier
+    description: "Parse Notion URL or ID"
+    action: parse-identifier
+    inputs:
+      raw_input: "{{inputs.notion_link}}"
+    outputs:
+      page_identifier: "parsed_id"
+
+  - name: extract-requirement
+    description: "Extract requirement data from Notion"
+    action: execute-script
+    script: "scripts/notion-handler.js"
+    command: "implement"
+    args:
+      - "{{steps.parse-notion-identifier.outputs.page_identifier}}"
+    on_error: fail
+
+  - name: validate-extraction
+    description: "Validate extracted data"
+    action: validate-file
+    inputs:
+      file_path: "docs/.notion-extracted-data.json"
+      required_fields:
+        - pageId
+        - requirementId
+        - requirementContent
+        - contentBlocksCount
+    on_error: fail
+
+  - name: prepare-virat-input
+    description: "Prepare requirement for VIRAT implementation"
+    action: validate-file
+    inputs:
+      file_path: "docs/.virat-requirement.md"
+    on_error: fail
+
+  - name: execute-virat-implementation
+    description: "Execute VIRAT implementation workflow"
+    action: call-virat
+    inputs:
+      requirement_file: "docs/.virat-requirement.md"
+      requirement_id: "{{steps.validate-extraction.outputs.requirementId}}"
+    on_error: fail
+
+  - name: push-documentation
+    description: "Push generated documentation back to Notion"
+    action: execute-script
+    script: "scripts/notion-push.js"
+    args:
+      - "{{steps.validate-extraction.outputs.requirementId}}"
+    skip_if: "{{inputs.auto_push}} == false"
+    on_error: warn
+
+  - name: update-tracking
+    description: "Update tracking with implementation status"
+    action: update-json
+    file: "docs/.notion-tracking.json"
+    updates:
+      last_implementation:
+        requirement_id: "{{steps.validate-extraction.outputs.requirementId}}"
+        page_id: "{{steps.validate-extraction.outputs.pageId}}"
+        timestamp: "{{timestamp}}"
+        status: "success"
+        auto_push: "{{inputs.auto_push}}"
+
+# Outputs
+outputs:
+  requirement_id:
+    value: "{{steps.validate-extraction.outputs.requirementId}}"
+    description: "Implemented requirement ID"
+  
+  virat_requirement_file:
+    value: "docs/.virat-requirement.md"
+    description: "VIRAT requirement file"
+  
+  documentation_pushed:
+    value: "{{inputs.auto_push}}"
+    description: "Whether documentation was pushed"
+
+# Success criteria
+success:
+  conditions:
+    - step: validate-extraction
+      status: success
+    - step: execute-virat-implementation
+      status: success
+  message: "✅ Requirement implemented successfully!"
+
+# Failure handling
+failure:
+  actions:
+    - log_error: true
+    - save_state: true
+  message: "❌ Implementation failed. Check logs for details."
+

@@ -1,0 +1,146 @@
+name: notion-push-workflow
+version: 1.0.0
+description: "Automated workflow to push generated documentation back to Notion"
+
+# Workflow metadata
+metadata:
+  author: "BMAD Notion Integration"
+  category: "documentation"
+  tags: ["notion", "push", "documentation", "upload"]
+
+# Workflow inputs
+inputs:
+  notion_link:
+    type: string
+    description: "Notion page URL or requirement ID (optional, uses last implementation if not provided)"
+    required: false
+  
+  files_to_push:
+    type: array
+    description: "Specific files to push (optional, pushes all if not specified)"
+    required: false
+    examples:
+      - ["PLAN.md", "CHANGELOG.md"]
+      - ["IMPLEMENTATION.md"]
+  
+  format:
+    type: string
+    description: "Upload format: blocks or attachments"
+    required: false
+    default: "blocks"
+    enum: ["blocks", "attachments"]
+
+# Environment configuration
+environment:
+  load_from: ".env"
+  required_vars:
+    - NOTION_API_KEY
+    - NOTION_DATABASE_ID
+
+# Workflow steps
+steps:
+  - name: validate-environment
+    description: "Validate environment variables"
+    action: validate-env
+    inputs:
+      required:
+        - NOTION_API_KEY
+        - NOTION_DATABASE_ID
+    on_error: fail
+
+  - name: determine-target-page
+    description: "Determine which Notion page to push to"
+    action: get-target-page
+    inputs:
+      provided_link: "{{inputs.notion_link}}"
+      tracking_file: "docs/.notion-tracking.json"
+    outputs:
+      page_id: "target_page_id"
+      requirement_id: "target_requirement_id"
+    on_error: fail
+
+  - name: find-documentation-files
+    description: "Find all documentation files to push"
+    action: find-files
+    inputs:
+      patterns:
+        - "**/*-ANALYSIS.md"
+        - "**/*-PLAN.md"
+        - "**/*-IMPLEMENTATION.md"
+        - "**/*-CHANGES.md"
+        - "**/CHANGELOG.md"
+        - "**/README*.md"
+      filter_list: "{{inputs.files_to_push}}"
+    outputs:
+      files: "documentation_files"
+    on_error: warn
+
+  - name: validate-files
+    description: "Validate that documentation files exist"
+    action: validate-files
+    inputs:
+      files: "{{steps.find-documentation-files.outputs.files}}"
+    on_error: fail
+    error_message: "No documentation files found to push"
+
+  - name: push-to-notion
+    description: "Upload documentation to Notion (below Comments section)"
+    action: execute-script
+    script: "scripts/notion-push.js"
+    args:
+      - "{{steps.determine-target-page.outputs.requirement_id}}"
+    flags:
+      format: "{{inputs.format}}"
+    on_error: retry
+    retry_count: 3
+    retry_delay: 5s
+
+  - name: verify-upload
+    description: "Verify documentation was uploaded successfully"
+    action: verify-notion-upload
+    inputs:
+      page_id: "{{steps.determine-target-page.outputs.page_id}}"
+      section: "Below Comments"
+    on_error: warn
+
+  - name: update-tracking
+    description: "Update tracking with push status"
+    action: update-json
+    file: "docs/.notion-tracking.json"
+    updates:
+      last_push:
+        requirement_id: "{{steps.determine-target-page.outputs.requirement_id}}"
+        page_id: "{{steps.determine-target-page.outputs.page_id}}"
+        timestamp: "{{timestamp}}"
+        files_count: "{{steps.find-documentation-files.outputs.files.length}}"
+        format: "{{inputs.format}}"
+        status: "success"
+
+# Outputs
+outputs:
+  page_id:
+    value: "{{steps.determine-target-page.outputs.page_id}}"
+    description: "Notion page ID where docs were pushed"
+  
+  files_pushed:
+    value: "{{steps.find-documentation-files.outputs.files}}"
+    description: "List of files that were pushed"
+  
+  notion_url:
+    value: "https://www.notion.so/{{steps.determine-target-page.outputs.page_id}}"
+    description: "URL to the updated Notion page"
+
+# Success criteria
+success:
+  conditions:
+    - step: push-to-notion
+      status: success
+  message: "✅ Documentation pushed to Notion successfully!"
+
+# Failure handling
+failure:
+  actions:
+    - log_error: true
+    - save_failed_files: true
+  message: "❌ Failed to push documentation. Check logs for details."
+

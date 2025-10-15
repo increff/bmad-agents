@@ -1,0 +1,121 @@
+name: notion-status-workflow
+version: 1.0.0
+description: "Automated workflow to display Notion integration status"
+
+# Workflow metadata
+metadata:
+  author: "BMAD Notion Integration"
+  category: "monitoring"
+  tags: ["notion", "status", "monitoring", "health-check"]
+
+# Workflow inputs
+inputs:
+  detailed:
+    type: boolean
+    description: "Show detailed status information"
+    required: false
+    default: true
+  
+  check_connectivity:
+    type: boolean
+    description: "Test live connectivity to Notion"
+    required: false
+    default: false
+
+# Environment configuration
+environment:
+  load_from: ".env"
+  required_vars:
+    - NOTION_API_KEY
+    - NOTION_DATABASE_ID
+
+# Workflow steps
+steps:
+  - name: check-environment
+    description: "Check environment configuration"
+    action: execute-script
+    script: "scripts/notion-status.js"
+    command: "check-env"
+    on_error: warn
+
+  - name: check-file-system
+    description: "Check file system status"
+    action: execute-script
+    script: "scripts/notion-status.js"
+    command: "check-files"
+    on_error: warn
+
+  - name: load-tracking-data
+    description: "Load operation tracking data"
+    action: load-json
+    file: "docs/.notion-tracking.json"
+    on_error: warn
+    outputs:
+      tracking: "tracking_data"
+
+  - name: load-extracted-data
+    description: "Load last extracted requirement"
+    action: load-json
+    file: "docs/.notion-extracted-data.json"
+    on_error: warn
+    outputs:
+      extracted: "extracted_data"
+
+  - name: test-connectivity
+    description: "Test live Notion API connectivity"
+    action: execute-script
+    script: "scripts/notion-test.js"
+    command: "test-connection"
+    skip_if: "{{inputs.check_connectivity}} == false"
+    on_error: warn
+
+  - name: generate-status-report
+    description: "Generate comprehensive status report"
+    action: generate-report
+    inputs:
+      environment: "{{steps.check-environment.output}}"
+      filesystem: "{{steps.check-file-system.output}}"
+      tracking: "{{steps.load-tracking-data.outputs.tracking}}"
+      extracted: "{{steps.load-extracted-data.outputs.extracted}}"
+      connectivity: "{{steps.test-connectivity.output}}"
+    outputs:
+      report: "status_report"
+
+  - name: display-status
+    description: "Display status report"
+    action: display
+    inputs:
+      content: "{{steps.generate-status-report.outputs.report}}"
+      format: "formatted"
+
+# Outputs
+outputs:
+  status_report:
+    value: "{{steps.generate-status-report.outputs.report}}"
+    description: "Complete status report"
+  
+  environment_ok:
+    value: "{{steps.check-environment.status}}"
+    description: "Environment configuration status"
+  
+  last_operation:
+    value: "{{steps.load-tracking-data.outputs.tracking.last_fetch}}"
+    description: "Last operation details"
+  
+  connectivity_ok:
+    value: "{{steps.test-connectivity.status}}"
+    description: "Notion API connectivity status"
+
+# Success criteria
+success:
+  conditions:
+    - step: check-environment
+      status: success
+  message: "✅ Notion integration status retrieved successfully"
+
+# Failure handling
+failure:
+  actions:
+    - log_error: true
+  message: "⚠️  Some status checks failed. Review details above."
+
