@@ -490,17 +490,36 @@ class NotionHandler {
             fs.writeFileSync(viratFile, viratRequirement);
             
             console.log(`📄 VIRAT requirement file created: ${viratFile}`);
-            console.log('✅ Ready for VIRAT implementation workflow');
-            console.log('\n🔄 Next steps:');
-            console.log('1. The extracted requirement is now available for VIRAT');
-            console.log('2. VIRAT will process the requirement and generate implementation');
-            console.log('3. Use *notion-push to upload documentation back to Notion');
+            console.log('✅ Requirement extracted and formatted for VIRAT');
+            console.log('\n🚀 Triggering VIRAT *implement workflow...');
+            console.log('─'.repeat(70));
+            
+            console.log(`\n📋 Implementing: ${extractedData.requirementId}`);
+            console.log(`📝 Title: ${extractedData.requirementTitle}`);
+            console.log(`📍 Source: ${extractedData.notionUrl}`);
+            console.log('\n⚙️  VIRAT will now analyze and implement this requirement automatically...\n');
+            
+            // Signal to VIRAT AI to continue with implementation
+            console.log('🤖 VIRAT AI: Proceeding with *implement workflow for extracted requirement');
+            console.log('📊 Requirement content ready for analysis and implementation');
+            console.log('\n' + '═'.repeat(70));
+            console.log('🎯 VIRAT IMPLEMENTATION WORKFLOW TRIGGERED');
+            console.log('═'.repeat(70));
+            console.log('\n📝 Requirement Summary:');
+            console.log(`   • ID: ${extractedData.requirementId}`);
+            console.log(`   • Title: ${extractedData.requirementTitle}`);
+            console.log(`   • Content Length: ${extractedData.requirementContent.length} characters`);
+            console.log(`   • Source: Notion (${extractedData.notionUrl})`);
+            console.log('\n🔄 Next: VIRAT will analyze codebase and generate implementation...');
+            console.log('─'.repeat(70));
             
             return {
                 extractedData,
                 viratRequirement,
                 outputFile,
-                viratFile
+                viratFile,
+                triggerImplement: true,  // Signal to VIRAT AI to continue with implementation
+                implementPrompt: `Please implement the following requirement:\n\n${viratRequirement}`
             };
         } catch (error) {
             console.error(`❌ Notion implement failed: ${error.message}`);
@@ -591,8 +610,22 @@ async function main() {
                     throw new Error('Page identifier required for implement command');
                 }
                 
-                await handler.handleNotionImplement(pageIdentifier);
-                break;
+                {
+                    const result = await handler.handleNotionImplement(pageIdentifier);
+                    
+                    // If VIRAT implementation should be triggered
+                    if (result.triggerImplement) {
+                        console.log('\n' + '🤖 VIRAT AI CONTINUATION SIGNAL DETECTED 🤖'.padStart(50));
+                        console.log('─'.repeat(70));
+                        console.log('📋 REQUIREMENT READY FOR IMPLEMENTATION');
+                        console.log('─'.repeat(70));
+                        console.log(`\n${result.implementPrompt}`);
+                        console.log('\n' + '═'.repeat(70));
+                        console.log('🎯 VIRAT: Please proceed with *implement workflow');
+                        console.log('═'.repeat(70));
+                    }
+                    break;
+                }
                 
             case 'test':
             case 'test-connection':
