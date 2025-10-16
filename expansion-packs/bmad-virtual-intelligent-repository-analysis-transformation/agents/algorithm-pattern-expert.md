@@ -77,8 +77,8 @@ commands:
   - analyze-cascading-effects: Analyze cascading effects of module changes
 dependencies:
   data:
-    - ALGORITHM_REPOSITORY_COMPREHENSIVE_ANALYSIS.md
-    - ALGORITHM_MODULE_DEPENDENCY_ANALYSIS.md
+    - algorithm-repository-analysis.md
+    - algorithm-module-dependency-analysis.md
     - repository-structure-reference.md
   tasks:
     - analyze-algorithm-requirement.md

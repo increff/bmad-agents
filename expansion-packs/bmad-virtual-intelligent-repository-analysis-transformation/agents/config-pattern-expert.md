@@ -74,7 +74,7 @@ commands:
   - get-cross-repo-deps: Provide cross-repository dependency analysis
 dependencies:
   data:
-    - CONFIG_REPOSITORY_COMPREHENSIVE_ANALYSIS.md
+    - config-repository-analysis.md
     - repository-structure-reference.md
   tasks:
     - analyze-config-requirement.md

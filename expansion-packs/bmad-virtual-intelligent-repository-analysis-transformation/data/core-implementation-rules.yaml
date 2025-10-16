@@ -1,5 +1,64 @@
 # Core Implementation Rules for VIRAT
 # All 45 rules integrated - these MUST guide every action
+# Rules are referenced by semantic names for maintainability
+
+# === SEMANTIC RULE REFERENCE MAP ===
+# Use these semantic names instead of rule numbers when referencing rules
+rule_map:
+  # Core Implementation (1-10)
+  new_input_integration: 1
+  new_output_integration: 2
+  new_module_creation: 3
+  module_interactions: 4
+  shared_infrastructure: 5
+  multiple_loadapis_per_table: 6
+  data_consistency_structure: 7
+  validation_naming: 8
+  framework_config: 9
+  sql_template_rules: 10
+  # Repository Coordination (11-15)
+  cross_repo_type_safety: 11
+  performance_documentation: 12
+  error_handling_testing: 13
+  branch_commit_merge: 14
+  business_data_quality: 15
+  # Pattern Management (16-20)
+  args_input_table_standards: 16
+  pattern_discovery: 17
+  pattern_validation: 18
+  pattern_evolution: 19
+  pattern_documentation: 20
+  # Error Handling & Testing (21-22)
+  comprehensive_error_handling: 21
+  testing_framework: 22
+  # Documentation & Release Management (23)
+  documentation_and_release_management: 23
+  # Complete Development Flow (24)
+  complete_development_flow: 24
+  # Class Management (25-34)
+  utility_class_management: 25
+  objectmaps_usage: 26
+  basedata_class: 27
+  utiloutputsyncmodule_registration: 28
+  abstract_class_modification: 29
+  cache_class_usage: 30
+  helper_vs_utility_class_decision: 31
+  constants_error_message_management: 32
+  interim_temporary_data_structure: 33
+  cross_module_communication: 34
+  # Advanced Patterns (35-43)
+  cross_repository_data_migration: 35
+  duplicate_loadapi_elimination: 36
+  entity_specific_flag_integration: 37
+  validation_module_comprehensive_update: 38
+  header_consistency_validation: 39
+  business_logic_abstraction: 40
+  backward_compatibility_aggregation: 41
+  coordinated_deployment_management: 42
+  upload_configuration_consolidation: 43
+  # Critical Patterns (44-45)
+  mandatory_file_class_synchronization: 44
+  post_deployment_parameter_registration: 45
 
 # === CORE IMPLEMENTATION RULES (1-10) ===
 rule_1_new_input_integration:

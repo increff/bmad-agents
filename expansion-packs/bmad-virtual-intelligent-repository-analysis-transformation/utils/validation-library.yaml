@@ -1,0 +1,320 @@
+# Shared Validation Library for VIRAT
+# Common validation patterns used across agents and workflows
+# All validations reference semantic rule names from core-implementation-rules.yaml
+
+# === AUTOMATED VALIDATION PATTERNS ===
+
+validation_patterns:
+  
+  # File Class Synchronization (Rule 44)
+  row_file_sync:
+    rule: mandatory_file_class_synchronization
+    severity: CRITICAL
+    description: "Verify Row class changes have corresponding File class updates"
+    pattern: "For each modified *Row.java, verify *File.java exists and is updated"
+    detection:
+      command: "git diff --name-only | grep 'Row\\.java$'"
+      verification: "git diff --name-only | grep 'File\\.java$'"
+    checks:
+      - name: "File class exists"
+        command: "git diff --name-only | grep '{row_name_without_row}File.java'"
+      - name: "Field count matches"
+        description: "Count fields in Row class = headers in File class"
+      - name: "Header order matches"
+        description: "Field order in Row = header order in File"
+    failure_action: "BLOCK - Cannot proceed until File class is updated"
+    
+  # Header Consistency (Rule 7)
+  header_consistency:
+    rule: data_consistency_structure
+    severity: ERROR
+    description: "Validate header consistency across LoadAPI → SQL → Template"
+    pattern: "LoadAPI MASTER_HEADER == SQL view columns == Template TSV headers"
+    checks:
+      - name: "LoadAPI headers"
+        source: "LoadAPI MASTER_HEADER constant"
+        extraction: "Parse MASTER_HEADER list"
+      - name: "SQL view columns"
+        source: "SQL view creation WITH clause"
+        extraction: "Parse column definitions"
+      - name: "Template headers"
+        source: "TSV template first line"
+        extraction: "Parse tab-delimited headers"
+      - name: "Comparison"
+        validation: "loadapi_headers == sql_columns == template_headers"
+    failure_action: "FAIL - Fix header mismatch before deployment"
+    
+  # Args Parameter Registration (Rule 45)
+  args_parameter_registration:
+    rule: post_deployment_parameter_registration
+    severity: CRITICAL
+    description: "Verify new Args fields have post_deployment.sql entries"
+    pattern: "New Args fields require a_input + a_description INSERTs (English + Spanish)"
+    detection:
+      command: "git diff HEAD -- '*Args.java' | grep '^+.*private'"
+      extraction: "Extract new field names"
+    checks:
+      - name: "a_input INSERT"
+        file: "irisx-config/export/post_deployment.sql"
+        pattern: "INSERT.*INTO.*a_input.*{parameter_name}"
+        required: true
+      - name: "a_description English"
+        file: "irisx-config/export/post_deployment.sql"
+        pattern: "INSERT.*INTO.*master.a_description.*{parameter_name}.*'en'"
+        required: true
+      - name: "a_description Spanish"
+        file: "irisx-config/export/post_deployment.sql"
+        pattern: "INSERT.*INTO.*master.a_description.*{parameter_name}.*'en-mx'"
+        required: true
+    failure_action: "FAIL - Add post_deployment.sql entries"
+    
+  # Multiple LoadAPIs Detection (Rule 6)
+  all_loadapis_check:
+    rule: multiple_loadapis_per_table
+    severity: WARNING
+    description: "Find ALL LoadAPIs related to a table (one table can have multiple LoadAPIs)"
+    pattern: "Search for all LoadAPI classes referencing the table"
+    detection:
+      command: "grep -r 'class.*LoadApi.*{table_name}' ms-loadapis-ril-final/"
+      note: "Use table name from requirement analysis"
+    checks:
+      - name: "Count LoadAPIs"
+        command: "grep -c 'class.*LoadApi' {search_results}"
+      - name: "List all LoadAPIs"
+        command: "grep -o 'class [^ ]*LoadApi' {search_results}"
+      - name: "Verify all updated"
+        description: "Ensure ALL found LoadAPIs are modified in git diff"
+    failure_action: "WARN - Multiple LoadAPIs found, ensure ALL are updated"
+    
+  # Component Registration (Rule 9)
+  component_registration:
+    rule: framework_config
+    severity: ERROR
+    description: "Verify new classes have @Component annotation and JSON configs updated"
+    checks:
+      - name: "Component annotation"
+        pattern: "@Component annotation present on new classes"
+        files: ["*Module.java", "*ValidationModule.java"]
+      - name: "module_input.json"
+        file: "irisx-config/configs/module_input.json"
+        check: "New input modules registered"
+      - name: "module_output.json"
+        file: "irisx-config/configs/module_output.json"
+        check: "New output modules registered"
+      - name: "upload-files.json"
+        file: "irisx-config/configs/upload-files.json"
+        check: "Import IDs match LoadAPI and Config"
+    failure_action: "FAIL - Complete registration before deployment"
+    
+  # Commit Message Format (Rule 14)
+  commit_format:
+    rule: branch_commit_merge
+    severity: ERROR
+    description: "Verify commit messages follow standard format"
+    pattern: "[REQ-{id}] {repository}: {description}"
+    validation:
+      regex: "^\\[REQ-[0-9]+\\] (algorithm|loadapi|config): .+$"
+      examples:
+        - "[REQ-1234] algorithm: Add new validation module"
+        - "[REQ-1234] config: Update export template"
+        - "[REQ-1234] loadapi: Add new denormalization logic"
+    failure_action: "FAIL - Fix commit message format"
+    
+  # Cross-Repository Naming Consistency
+  naming_consistency:
+    rule: data_consistency_structure
+    severity: ERROR
+    description: "Verify consistent naming across repositories"
+    pattern: "Algorithm FileName.INPUT_X == LoadAPI import_input_x == Config input_x.sql"
+    checks:
+      - name: "Algorithm constant"
+        pattern: "public static final String INPUT_X"
+        normalization: "Convert to lowercase with underscores"
+      - name: "LoadAPI import ID"
+        pattern: "import_input_x in loadapi_provider.py"
+        match: "Algorithm constant (normalized)"
+      - name: "Config SQL view"
+        pattern: "input_x.sql view name"
+        match: "Algorithm constant (normalized)"
+      - name: "Config template"
+        pattern: "import_input_x_template.tsv"
+        match: "LoadAPI import ID"
+    failure_action: "FAIL - Fix naming inconsistencies"
+    
+  # Data Type Consistency
+  data_type_consistency:
+    rule: cross_repo_type_safety
+    severity: WARNING
+    description: "Verify data types match across Java → Python → SQL"
+    type_mappings:
+      java_to_python:
+        String: "str()"
+        Integer: "int()"
+        Double: "float()"
+        Boolean: "bool()"
+      java_to_sql:
+        String: "VARCHAR"
+        Integer: "INT"
+        Double: "DOUBLE"
+        Boolean: "TINYINT"
+    checks:
+      - name: "Row class field types"
+        source: "Java Row class field declarations"
+      - name: "LoadAPI validation types"
+        source: "Python LoadAPI validation methods"
+      - name: "SQL view types"
+        source: "SQL WITH clause type definitions"
+      - name: "Type consistency"
+        validation: "All types match according to mappings"
+    failure_action: "WARN - Review type mismatches"
+    
+  # Compilation Check
+  compilation:
+    rule: branch_commit_merge
+    severity: CRITICAL
+    description: "Verify code compiles successfully"
+    checks:
+      - name: "Algorithm compilation"
+        repository: "irisx-algo"
+        command: "mvn clean install -DskipTests"
+        success_code: 0
+      - name: "LoadAPI syntax check"
+        repository: "ms-loadapis-ril-final"
+        command: "python -m py_compile {modified_files}"
+        success_code: 0
+    failure_action: "FAIL - Fix compilation errors before proceeding"
+
+# === VALIDATION WORKFLOWS ===
+
+validation_workflows:
+  
+  # Pre-commit validation
+  pre_commit:
+    trigger: "Before git commit"
+    validations:
+      - commit_format
+      - compilation
+      - naming_consistency
+    blocking: true
+    
+  # Pre-deployment validation  
+  pre_deployment:
+    trigger: "Before deployment to QC"
+    validations:
+      - row_file_sync
+      - header_consistency
+      - args_parameter_registration
+      - all_loadapis_check
+      - component_registration
+      - data_type_consistency
+      - compilation
+    blocking:
+      critical: true
+      error: true
+      warning: false
+      
+  # Post-implementation validation
+  post_implementation:
+    trigger: "After code implementation"
+    validations:
+      - row_file_sync
+      - header_consistency
+      - component_registration
+      - naming_consistency
+      - compilation
+    blocking: true
+
+# === VALIDATION HELPERS ===
+
+validation_helpers:
+  
+  # Extract field names from Row class
+  extract_row_fields:
+    input: "Row class file path"
+    command: "grep 'private.*public' {file} | sed 's/.*private\\s\\+\\w\\+\\s\\+\\(\\w\\+\\);.*/\\1/'"
+    output: "List of field names"
+    
+  # Extract headers from File class
+  extract_file_headers:
+    input: "File class file path"
+    command: "grep 'getHeaders()' -A 50 {file} | grep -o '\"[^\"]*\"'"
+    output: "List of header strings"
+    
+  # Compare two lists for equality
+  compare_lists:
+    input: "Two lists to compare"
+    method: "Sort both lists and compare element by element"
+    output: "Boolean (equal/not equal) + differences"
+    
+  # Find all LoadAPIs for a table
+  find_all_loadapis:
+    input: "Table name"
+    command: "grep -r 'TABLE_NAME.*{table}' ms-loadapis-ril-final/ | grep -o '[^/]*LoadApi'"
+    output: "List of LoadAPI class names"
+    
+  # Extract Args fields from git diff
+  extract_new_args_fields:
+    input: "Git diff of Args files"
+    command: "git diff HEAD -- '*Args.java' | grep '^+.*private' | sed 's/.*private\\s\\+\\w\\+\\s\\+\\(\\w\\+\\);.*/\\1/'"
+    output: "List of new field names"
+
+# === USAGE EXAMPLES ===
+
+usage_examples:
+  
+  example_1:
+    description: "Validate Row-File synchronization"
+    command: "validate row_file_sync --file PlanogramOutputRow.java"
+    expected: "Check if PlanogramOutputFile.java exists and has matching fields"
+    
+  example_2:
+    description: "Run pre-deployment validation"
+    command: "validate workflow:pre_deployment"
+    expected: "Run all pre-deployment checks and report results"
+    
+  example_3:
+    description: "Check specific rule compliance"
+    command: "validate rule:mandatory_file_class_synchronization"
+    expected: "Run all validations associated with this rule"
+    
+  example_4:
+    description: "Validate Args parameter registration"
+    command: "validate args_parameter_registration --args-file DistributionArgs.java"
+    expected: "Check post_deployment.sql for all new Args fields"
+
+# === INTEGRATION WITH AGENTS ===
+
+agent_integration:
+  
+  virat:
+    phase_4_step_22: "Run validation_workflows.pre_deployment"
+    automated_validation: "Execute all CRITICAL and ERROR severity checks"
+    blocking_failures: "Stop workflow if any blocking validation fails"
+    
+  expert_agents:
+    pattern_validation: "Reference validation_patterns for consistency checks"
+    rule_compliance: "Use semantic rule names from validation patterns"
+    
+  deployment_agent:
+    pre_deployment: "Run validation_workflows.pre_deployment"
+    post_deployment: "Verify deployment success"
+
+# === MAINTENANCE ===
+
+maintenance:
+  adding_new_validation:
+    steps:
+      - "Add pattern to validation_patterns section"
+      - "Reference semantic rule name from core-implementation-rules.yaml"
+      - "Define severity (CRITICAL, ERROR, WARNING)"
+      - "Specify detection method and checks"
+      - "Define failure action"
+      - "Add to appropriate validation_workflow"
+  
+  updating_existing_validation:
+    steps:
+      - "Locate pattern by name or rule reference"
+      - "Update checks or detection logic"
+      - "Test validation with sample data"
+      - "Update documentation and examples"
+
