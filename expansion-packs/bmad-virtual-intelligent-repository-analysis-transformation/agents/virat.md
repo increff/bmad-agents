@@ -78,7 +78,7 @@ persona:
 commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
-  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially.
+  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules
   - validate-rules: Validate current action/plan against all applicable rules
@@ -634,14 +634,39 @@ dependencies:
 **Usage**:
 
 ```bash
+# Traditional file-based implementation
 *implement REQ-1234.md
 *implement /path/to/requirement-document.md
+
+# Notion-based implementation (extracts from Notion, implements, pushes back)
+*implement https://notion.so/workspace/REQ-1234-abc123
+*implement REQ-1234  # Searches Notion database for requirement ID
+
+# Options
 *implement requirement-document.md --dry-run  # Preview only, no changes
 *implement requirement-document.md --skip-tests  # Skip testing phase
 *implement requirement-document.md --auto-commit  # Auto-commit and push
+*implement REQ-1234 --no-notion-push  # Skip push back to Notion
 ```
 
 **Complete Execution Flow**:
+
+#### **Phase -1: Notion Extraction (OPTIONAL - if Notion URL/ID provided)**
+
+**NOTE**: This phase only runs if the input is a Notion URL or requirement ID (not a local .md file)
+
+1. **Detect Notion Input**: Check if input is Notion URL (https://notion.so/...) or requirement ID (REQ-xxxx)
+2. **Initialize Notion Integration**: Load notion-integration scripts and verify configuration
+   - Check if NOTION_API_KEY and NOTION_DATABASE_ID are configured
+   - If not configured, prompt user to set up Notion integration or provide local file
+   - Initialize Notion client from notion-integration/scripts/notion-handler.js
+3. **Extract from Notion**: Execute Notion extraction workflow
+   - Parse Notion URL or search for requirement ID in database
+   - Extract requirement content from "Below Comments" section
+   - Save extracted data to temporary file: `.virat-requirement.md`
+   - Store Notion page ID in `.notion-tracking.json` for later push-back
+4. **Format for VIRAT**: Convert extracted content to standard VIRAT requirement format
+5. **Continue with Standard Implementation**: Proceed to Phase 0 with extracted requirement
 
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
 
@@ -729,7 +754,33 @@ dependencies:
     - Update implementation strategies based on accumulated learnings
     - Identify patterns for future optimization
 
-**For Multiple Environments**: After Phase 6 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
+#### **Phase 7: Notion Documentation Push-Back (OPTIONAL - if extracted from Notion)**
+
+**NOTE**: This phase only runs if requirement was originally extracted from Notion (Phase -1 was executed)
+
+33. **Check Notion Source**: Verify if `.notion-tracking.json` exists with page ID for this requirement
+34. **Gather Documentation**: Collect all generated documentation files
+    - Search for files matching patterns: `*-ANALYSIS.md`, `*-IMPLEMENTATION.md`, `*-PLAN.md`, `CHANGELOG.md`
+    - Filter to only include files generated/modified during implementation
+35. **Convert to Notion Format**: Execute notion-push workflow
+    - Initialize Notion client from notion-integration/scripts/notion-push.js
+    - Convert markdown files to Notion blocks
+    - Create implementation summary with timestamp and file count
+36. **Push to Notion**: Upload documentation to original Notion page
+    - Append to "Below Comments" section (same location as extraction)
+    - Create toggle block: "📋 BMAD Implementation Complete - {date}"
+    - Include all documentation as nested toggles
+37. **Update Tracking**: Update `.notion-tracking.json` with push completion
+    - Record push timestamp
+    - Update status to "completed"
+    - List all files pushed
+38. **Notify User**: Display success message with Notion page link
+    - Show count of files pushed
+    - Provide link to view updated Notion page
+
+**Skip Notion Push**: Use `--no-notion-push` flag to skip this phase
+
+**For Multiple Environments**: After Phase 7 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
 
 **Real-Time Progress Tracking**:
 
@@ -761,6 +812,7 @@ dependencies:
 - `--dry-run`: Preview the complete implementation plan without making changes (SIMULATION ONLY)
 - `--skip-tests`: Skip the testing phase (not recommended for production)
 - `--skip-feedback`: Skip the feedback collection phase (Phase 6)
+- `--no-notion-push`: Skip Notion documentation push-back (Phase 7) even if extracted from Notion
 - `--auto-commit`: Automatically commit and push changes without manual confirmation
 - `--verbose`: Show detailed progress information for each step
 - `--parallel`: Execute independent steps in parallel for faster completion
@@ -768,6 +820,8 @@ dependencies:
 **CRITICAL**: By default, `*implement` makes ACTUAL CODE CHANGES. Use `--dry-run` only for previewing.
 
 **Feedback Collection**: Phase 6 automatically loads and invokes the feedback agent (`feedback-agent.md`) to collect learnings and developer feedback. Use `--skip-feedback` to bypass this phase if needed.
+
+**Notion Integration**: If a Notion URL or requirement ID is provided, Phase -1 (extraction) and Phase 7 (push-back) are automatically enabled. Use `--no-notion-push` to skip push-back.
 
 **Success Criteria Validation**:
 
@@ -789,6 +843,8 @@ dependencies:
 - **Efficiency**: Config-only changes complete in ~15 minutes vs ~45 minutes for cross-repository
 - **Single Document**: ALL documentation goes into the original requirement document (no separate files created)
 - **Real Implementation**: Makes ACTUAL CODE CHANGES by default (not simulations)
+- **Notion Integration**: Seamless extraction from Notion and automatic push-back of documentation (optional)
+- **Complete Workflow**: Notion → Extract → Implement → Push Back (all in one command)
 
 ## Research-Based Architecture
 

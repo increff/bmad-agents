@@ -1,9 +1,0 @@
-# Ignore all extracted data and tracking files
-.notion-extracted-data.json
-.virat-requirement.md
-.notion-tracking.json
-
-# But keep this README
-!README.md
-!.gitignore
-

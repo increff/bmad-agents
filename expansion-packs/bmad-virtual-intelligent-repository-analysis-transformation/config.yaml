@@ -23,6 +23,18 @@ installation_questions:
     message: "Enter the local path to your LoadAPIs repository (ms-loadapis-ril-final):"
     default: "../ms-loadapis-ril-final"
     validate: "required"
+  - name: "notionApiKey"
+    type: "password"
+    message: "Enter your Notion API Key (Integration Token) - optional, press Enter to skip:"
+    default: ""
+    validate: "optional"
+    env_var: "NOTION_API_KEY"
+  - name: "notionDatabaseId"
+    type: "input"
+    message: "Enter your Notion Database ID (for requirements) - optional, press Enter to skip:"
+    default: ""
+    validate: "optional"
+    env_var: "NOTION_DATABASE_ID"
 
 # Repository paths for the three interconnected repositories
 # These will be configured during installation via the questions above
@@ -59,9 +71,28 @@ environments:
 # Target completion time in hours
 target_completion_time: 2
 
+# Notion Integration Configuration (Optional)
+notion:
+  enabled: "{NOTION_API_KEY_EXISTS}"  # Auto-enabled if NOTION_API_KEY is set
+  api_version: "2022-06-28"
+  base_url: "https://api.notion.com/v1"
+  database_id: "{NOTION_DATABASE_ID}"
+  api_key: "{NOTION_API_KEY}"
+  field_mappings:
+    requirement_id: "No ID"  # Column name in Notion DB (e.g., REQ-994)
+    content_section: "Below Comments"  # Extract from page content below Comments
+    push_target_section: "Below Comments"  # Push documentation to same location
+  documentation_patterns:
+    - "*.md"
+    - "*-ANALYSIS.md"
+    - "*-IMPLEMENTATION.md"
+    - "*-PLAN.md"
+    - "CHANGELOG.md"
+
 # Success metrics
 success_metrics:
   development_velocity: "2 hours per requirement"
   accuracy: "95%+ success rate"
   coverage: "80% of typical business requirements"
   quality: "Maintain existing code quality standards"
+  notion_integration: "Seamless extraction and push-back to Notion"

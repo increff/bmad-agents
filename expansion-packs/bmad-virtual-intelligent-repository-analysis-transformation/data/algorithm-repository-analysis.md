@@ -436,23 +436,23 @@ public class View {
 
 ### **When Adding New Module**
 
-| **Change Type**         | **Files to Modify**               | **Pattern to Follow**           |
-| ----------------------- | --------------------------------- | ------------------------------- |
-| **Group Module**        | [ModuleName]GroupModule.java      | Extend AbstractUtilModuleGroup  |
-| **Validation Module**   | [ModuleName]ValidationModule.java | Extend AbstractValidationModule |
-| **Args Class**          | [ModuleName]Args.java             | Extend Args                     |
-| **Row Classes**         | [ModuleName]Row.java              | Simple POJO with public fields  |
-| **File Classes**        | [ModuleName]File.java             | Extend AbstractTSVFile          |
-| **Module Registration** | ModuleProvider.java               | Add @Autowired dependency       |
-| **File Registration**   | SchemaProvider.java               | Add file schema registration    |
-| **File Name Constants** | FileName.java                     | Add file name constant          |
+| **Change Type**         | **Files to Modify**                 | **Pattern to Follow**           |
+| ----------------------- | ----------------------------------- | ------------------------------- |
+| **Group Module**        | `{ModuleName}GroupModule.java`      | Extend AbstractUtilModuleGroup  |
+| **Validation Module**   | `{ModuleName}ValidationModule.java` | Extend AbstractValidationModule |
+| **Args Class**          | `{ModuleName}Args.java`             | Extend Args                     |
+| **Row Classes**         | `{ModuleName}Row.java`              | Simple POJO with public fields  |
+| **File Classes**        | `{ModuleName}File.java`             | Extend AbstractTSVFile          |
+| **Module Registration** | `ModuleProvider.java`               | Add @Autowired dependency       |
+| **File Registration**   | `SchemaProvider.java`               | Add file schema registration    |
+| **File Name Constants** | `FileName.java`                     | Add file name constant          |
 
 ### **When Adding New Data Structure**
 
 | **Change Type** | **Files to Modify**   | **Changes Required**           |
 | --------------- | --------------------- | ------------------------------ |
-| **Row Class**   | [ModuleName]Row.java  | Add new fields                 |
-| **File Class**  | [ModuleName]File.java | Update headers and read method |
+| **Row Class**   | {ModuleName}Row.java  | Add new fields                 |
+| **File Class**  | {ModuleName}File.java | Update headers and read method |
 | **File Name**   | FileName.java         | Add new file name constant     |
 | **Schema**      | SchemaProvider.java   | Add schema registration        |
 | **Validation**  | ValidationModule.java | Add validation logic           |
