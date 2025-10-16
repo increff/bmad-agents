@@ -69,7 +69,7 @@ environments:
 
 ### ✅ 4. Documentation Files Created
 
-#### `docs/guides/multi-environment-support.md`
+#### `docs/ENVIRONMENT_CONFIGURATION.md`
 Comprehensive guide covering:
 - All three environments with base branches
 - How to specify environment in requirement documents
@@ -166,9 +166,9 @@ Template showing:
 2. ✏️ `agents/virat.md` - Updated for environment support
 3. ✏️ `templates/requirement-document-tmpl.md` - Added environment field
 4. ✏️ `README.md` - Added environment documentation
-5. ➕ `docs/guides/multi-environment-support.md` - Comprehensive environment guide
+5. ➕ `docs/ENVIRONMENT_CONFIGURATION.md` - New comprehensive guide
 6. ➕ `templates/requirement-document-example.md` - New example template
-7. ➕ `docs/history/environment-feature-summary.md` - This summary
+7. ➕ `ENVIRONMENT_FEATURE_SUMMARY.md` - This summary
 
 ---
 
@@ -264,7 +264,7 @@ Base Branches:
 ## Support
 
 For issues or questions:
-1. Check `docs/guides/multi-environment-support.md` for detailed guide
+1. Check `docs/ENVIRONMENT_CONFIGURATION.md` for detailed guide
 2. Use `*show-env` command to debug environment detection
 3. Verify `Environment` field is in requirement document header
 4. Ensure environment name matches: `prod`, `reliance`, or `phoenix`

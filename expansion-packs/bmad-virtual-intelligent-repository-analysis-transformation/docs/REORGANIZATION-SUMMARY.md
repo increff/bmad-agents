@@ -159,7 +159,7 @@ bmad-virtual-intelligent-repository-analysis-transformation/
 │
 ├── docs/                              # Documentation
 │   ├── README.md
-│   ├── VIRAT_COMMAND_REFERENCE.md
+│   ├── ENVIRONMENT_CONFIGURATION.md
 │   ├── VIRAT_COMMAND_REFERENCE.md
 │   ├── guides/                        # User guides (2 files)
 │   │   ├── complete-development-flow.md
