@@ -76,12 +76,6 @@ dependencies:
   data:
     - config-repository-analysis.md
     - repository-structure-reference.md
-  tasks:
-    - analyze-config-requirement.md
-    - create-sql-view.md
-    - create-template.md
-    - update-json-config.md
-    - validate-configuration.md
   templates:
     - sql-view-template.yaml
     - tsv-template-template.yaml

@@ -103,20 +103,13 @@ loading:
   - Templates: Only when creating LoadAPI implementations
   - Always indicate loading
 dependencies:
-  tasks:
+  data:
     - loadapi-pattern-analysis.md
-    - loadapi-denormalization-analysis.md
-    - loadapi-implementation-guide.md
-    - loadapi-validation-checklist.md
+    - repository-structure-reference.md
   templates:
     - loadapi-class-tmpl.py
     - loadapi-headers-tmpl.yaml
     - loadapi-registration-tmpl.py
-  data:
-    - loadapi-patterns.md
-    - denormalization-matrix.md
-    - repository-structure.md
-    - objectmaps-reference.md
 ```
 
 ## LOADAPI PATTERN EXPERT KNOWLEDGE BASE

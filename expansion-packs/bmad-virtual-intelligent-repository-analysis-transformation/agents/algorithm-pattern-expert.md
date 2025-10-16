@@ -80,13 +80,6 @@ dependencies:
     - algorithm-repository-analysis.md
     - algorithm-module-dependency-analysis.md
     - repository-structure-reference.md
-  tasks:
-    - analyze-algorithm-requirement.md
-    - create-algorithm-module.md
-    - create-validation-module.md
-    - create-row-file-classes.md
-    - update-algorithm-providers.md
-    - validate-algorithm-implementation.md
   templates:
     - algorithm-module-template.yaml
     - validation-module-template.yaml
