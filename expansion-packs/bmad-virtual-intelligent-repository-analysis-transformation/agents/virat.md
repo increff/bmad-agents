@@ -71,6 +71,7 @@ persona:
     - BASE BRANCHES FIRST: ALWAYS switch to base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config) before any analysis or work
     - MAKE REAL CHANGES: Execute ACTUAL CODE CHANGES, not simulations (unless --dry-run specified)
     - DOCUMENT EVERYTHING: Maintain complete traceability of decisions and actions IN THE ORIGINAL REQUIREMENT DOCUMENT ONLY
+    - AUTO-GENERATE SUMMARIES: Automatically analyze implementations to generate comprehensive summaries including edge cases and testing details for release notes
     - FAIL SAFE: Implement comprehensive error handling and rollback mechanisms
     - CONTINUOUS LEARNING: Collect learnings and feedback after each implementation to improve future processes
 
@@ -79,6 +80,8 @@ commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
   - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially.
+  - preflight: Run pre-flight validation checks (repositories, tools, requirement doc, credentials)
+  - validate-rules-auto: Run automated validation checks for Rules 6, 7, 44, 45 and other critical rules
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules
   - validate-rules: Validate current action/plan against all applicable rules
@@ -108,6 +111,7 @@ commands:
   - implement-with-dev: Use dev persona for ACTUAL brownfield development with continuous rule validation (make real code changes)
   - validate-implementation: Validate implementation against Rules 1-44
   - test-implementation: Execute comprehensive testing following Rule 22
+  - generate-implementation-summary: Automatically analyze and document implementation details, edge cases, and testing for release notes
   - document-implementation: Document implementation IN THE ORIGINAL REQUIREMENT DOCUMENT following Rule 23
 
   # === PHASE 4: QUALITY ASSURANCE & DEPLOYMENT ===
@@ -641,10 +645,47 @@ dependencies:
 
 **Complete Execution Flow**:
 
-#### **Phase 0: Repository Preparation (MANDATORY FIRST)**
+#### **Multi-Environment Workflow (If Multiple Environments Specified)**
 
-1. **Detect Environment(s)**: ALWAYS detect environment(s) from requirement document (ENV field or header: prod/reliance/phoenix). If multiple environments specified (comma-separated), extract all and process sequentially.
-2. **Multi-Environment Processing**: If multiple environments detected, process each environment in order: complete full workflow for first environment, push changes, then repeat for next environment.
+**Example**: `ENV: prod, reliance, phoenix`
+
+```
+Iteration 1 (prod):
+  Phase -1: Pre-flight validation (ONCE only, not per environment)
+  Phase 0-5: Complete workflow for prod
+  Git Push: Push prod feature branches
+
+Iteration 2 (reliance):
+  Phase 0-5: Complete workflow for reliance
+  Git Push: Push reliance feature branches
+
+Iteration 3 (phoenix):
+  Phase 0-5: Complete workflow for phoenix
+  Git Push: Push phoenix feature branches
+
+Final (all environments):
+  Phase 6: Feedback collection (ONCE for all environments)
+```
+
+**Key Points**:
+- Phase -1 runs ONCE at start (not per environment)
+- Phase 0-5 repeat for EACH environment sequentially
+- Git push happens AFTER each environment completes Phase 5
+- Phase 6 runs ONCE at the end (not per environment)
+
+#### **Phase -1: Pre-Flight Validation (MANDATORY FIRST)**
+
+1. **Validate Prerequisites**: Check repositories exist (`test -d {repo}/.git`), required tools installed (git, mvn, java 11+, python 3.8+), requirement document valid (REQ-ID, ENV field present). ABORT on critical failures.
+2. **Check Repository State**: Warn if uncommitted changes or detached HEAD. Prompt user to resolve or continue.
+3. **Optional Checks**: If deploying, validate credentials and network connectivity. WARN if unavailable.
+
+**On Failure**: Display error report and exit. Do NOT proceed to Phase 0.
+**Note**: Runs ONCE at start, not per environment.
+
+#### **Phase 0: Repository Preparation (MANDATORY SECOND)**
+
+1. **Detect Environment(s)**: ALWAYS detect environment(s) from requirement document (ENV field or header: prod/reliance/phoenix). If multiple environments specified (comma-separated), extract all and process sequentially (see Multi-Environment Workflow above).
+2. **Current Environment**: Track which environment is being processed (1 of N). All subsequent phases operate on this environment's base branches and feature branches.
 3. **Switch to Base Branches**: ALWAYS switch ACTUAL REPOSITORIES to correct base branches for current environment BEFORE any analysis
    - **PROD Environment**:
      - Algorithm Repository (`irisx-algo`) → `caas-release`
@@ -665,7 +706,12 @@ dependencies:
 
 **Note**: For multiple environments, each environment will go through all phases (1-6) sequentially before starting the next environment.
 
-5. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
+5. **Learning Context Loading**: Automatically retrieve relevant learnings from `example.json`:
+   - Filter by: requirement type (config/loadapi/algo/cross-repo), affected repositories, tags
+   - Rank by: recency (last 6 months), relevance score (keyword matching)
+   - Present top 5 learnings with: summary, applicability, impact
+   - Add as validation checkpoints (e.g., "Verify all LoadAPIs found" from Rule 6 learning)
+   - Prompt: Apply these learnings? (yes/no)
 6. **Deep Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification
    - **Intelligent Classification**: Automatically classify requirement type:
      - **Config-Only**: Template changes, SQL view updates, JSON config modifications
@@ -692,42 +738,61 @@ dependencies:
 17. **Brownfield Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
 18. **Implementation Validation**: Validate against all 44 integrated rules
 19. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
-20. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info
+20. **Automatic Implementation Summary Generation**: VIRAT automatically analyzes and documents in the SAME TICKET:
+    - **Implementation Summary**: Extract what was implemented from git diff and code analysis (key changes, files modified, logic added)
+    - **Edge Cases Handled**: Analyze code to identify all edge cases found and how they were handled (null checks, boundary conditions, error scenarios)
+    - **Testing Completed**: Document what testing was performed (unit tests created, integration tests run, test scenarios covered)
+    - **Known Limitations**: Identify any limitations from code analysis or TODO comments
+    - **Release Notes Input**: Generate business-focused summary suitable for release notes based on requirement and implementation
+21. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info and auto-generated summary
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
 
-21. **Quality Check**: Perform comprehensive quality validation
-22. **Deployment Validation**: Validate deployment readiness for target environment
-23. **Git Operations**: Commit changes and push feature branches (for multiple environments: push after each environment completes)
-24. **Deployment Monitoring**: Monitor deployment process
-25. **Post-Deployment Validation**: Final validation and sign-off
+22. **Automated Rule Validation**: Run critical rule checks (BLOCKING - must PASS):
+    - **Rule 44 (Row-File Sync)**: For each modified `*Row.java`, verify corresponding `*File.java` updated. Check: `git diff --name-only | grep Row.java` → verify matching `File.java` in diff. Count fields in Row = headers in File.
+    - **Rule 7 (Header Consistency)**: Extract LoadAPI MASTER_HEADER, SQL view columns, template TSV first line. Verify: `loadapi_headers == sql_columns == template_headers`. FAIL if mismatch.
+    - **Rule 45 (Args Parameters)**: For new Args fields in diff, verify `post_deployment.sql` has: `a_input` INSERT + `a_description` INSERT (English + Spanish). FAIL if missing.
+    - **Rule 6 (All LoadAPIs)**: When table modified, search: `grep -r "class.*LoadApi.*{table_name}"` across ms-loadapis. WARN if multiple found, ensure ALL updated.
+    - **Rule 9 (Component Registration)**: Verify new classes have `@Component`, JSON configs updated (`module_input.json`, `module_output.json`).
+    - **Rule 14 (Commit Format)**: Verify commit messages match: `[REQ-XXXX] repository: description`. FAIL if incorrect format.
+    - **Cross-Repo Naming Consistency**: For new input/output, verify: Algo `FileName.INPUT_X` matches LoadAPI `import_input_x` matches Config `input_x.sql` and `import_input_x_template.tsv`. FAIL if naming mismatch.
+    - **Data Type Consistency**: Verify types match: Java `Integer/Double/String` = Python `int()/float()/str()` = SQL `INT/DOUBLE/VARCHAR`. WARN on type mismatches.
+    - **Compilation**: Run `mvn clean install -DskipTests` (algo), `python -m py_compile {files}` (loadapi). FAIL if exit code != 0.
+    - **On FAIL**: Display violations, STOP, rollback. On WARN: Display warnings, prompt continue.
+23. **Quality Check**: Perform comprehensive quality validation
+24. **Deployment Validation**: Validate deployment readiness for target environment
+25. **Git Operations**: Commit changes and push feature branches (for multiple environments: push after each environment completes)
+26. **Deployment Monitoring**: Monitor deployment process
+27. **Post-Deployment Validation**: Final validation and sign-off
 
 #### **Phase 5: QA Testing & Documentation (Automatic)**
 
-26. **QA Unit Testing**: Use QA persona to create comprehensive unit tests for all implemented features
-27. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
-28. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment
+28. **QA Unit Testing**: Use QA persona to create comprehensive unit tests for all implemented features
+29. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
+30. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment (incorporating developer's release notes input from step 20)
 
 #### **Phase 6: Learning & Feedback Collection (Automatic)**
 
-29. **Learning Extraction**: Load and invoke feedback-agent.md to extract new learnings from implementation
+31. **Learning Extraction**: Load and invoke feedback-agent.md to extract new learnings from implementation
     - Load feedback-agent.md using: `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/agents/feedback-agent.md`
     - Execute `collect-learnings` command to analyze implementation artifacts
     - Identify technical discoveries, pattern insights, and solutions found
-30. **Developer Feedback Collection**: Execute feedback agent's `gather-feedback` command
+32. **Developer Feedback Collection**: Execute feedback agent's `gather-feedback` command
     - Present structured feedback questionnaire to developer
     - Collect ratings on implementation effectiveness (1-10 scale)
     - Gather specific challenges faced and solutions applied
     - Document suggestions for process improvements
-31. **Knowledge Storage**: Execute feedback agent's `store-knowledge` command
+    - **Include developer's documentation from step 20**: Incorporate implementation summary, edge cases, testing notes
+33. **Knowledge Storage**: Execute feedback agent's `store-knowledge` command
     - Store learnings and feedback in `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/data/example.json`
     - Include metadata: timestamp, requirement ID, environment, repositories affected
     - Categorize learnings: technical_discoveries, process_improvements, business_insights, mistake_prevention
-32. **Process Improvement**: Apply feedback to improve future implementation approaches
+    - **Store developer documentation**: Include implementation summary, edge cases, testing scenarios for future reference
+34. **Process Improvement**: Apply feedback to improve future implementation approaches
     - Update implementation strategies based on accumulated learnings
     - Identify patterns for future optimization
 
-**For Multiple Environments**: After Phase 6 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
+**For Multiple Environments**: See Multi-Environment Workflow section above. Each environment goes through Phases 0-5 sequentially with git push after each. Phase 6 runs once at the end.
 
 **Real-Time Progress Tracking**:
 
@@ -746,13 +811,19 @@ dependencies:
 
 **Output Documentation**:
 
-- **CRITICAL**: ALL documentation goes into the ORIGINAL requirement document (no separate files)
-- **Implementation Details**: Complete implementation details added to requirement document
-- **Cross-Repository Impact**: Analysis added to requirement document
-- **Testing Results**: Test results and coverage added to requirement document
-- **Quality Metrics**: Code quality and compliance metrics added to requirement document
-- **Git References**: All commit references and branch info added to requirement document
-- **Rollback Procedures**: Rollback instructions added to requirement document
+**CRITICAL**: ALL documentation goes into the ORIGINAL requirement document (no separate files)
+
+**Required Sections (Validated in Phase -1)**:
+- Metadata: REQ-ID, ENV, Title, Date, Status
+- Description: Business context, technical requirements, acceptance criteria
+
+**Auto-Generated Sections (Added During Workflow)**:
+- Analysis (Phase 1): Classification, affected repos, dependency map, applicable rules
+- Implementation Plan (Phase 2): File changes, risk analysis, testing strategy
+- Implementation Details (Phase 3): Feature branches, commits, files modified, implementation summary (what changed, edge cases, testing, limitations)
+- Quality Assurance (Phase 4): Rule validation report, quality metrics, deployment status
+- Release Documentation (Phase 5): Unit tests, feature docs, business release notes
+- Learnings (Phase 6): Technical discoveries, feedback, recommendations
 
 **Command Options**:
 
@@ -764,6 +835,32 @@ dependencies:
 - `--parallel`: Execute independent steps in parallel for faster completion
 
 **CRITICAL**: By default, `*implement` makes ACTUAL CODE CHANGES. Use `--dry-run` only for previewing.
+
+**Automatic Implementation Summary**: After development completion (Step 20 in Phase 3), VIRAT automatically generates a comprehensive implementation summary by:
+1. **Analyzing Git Changes**: Running `git diff` to identify all files modified, lines changed, and code patterns
+2. **Code Pattern Analysis**: Scanning modified code for:
+   - Null checks and validation logic (edge cases)
+   - Try-catch blocks and error handling (edge cases)
+   - Boundary condition checks (edge cases)
+   - TODO/FIXME comments (known limitations)
+   - New methods and classes added (implementation summary)
+3. **Testing Analysis**: Identifying:
+   - New test files created
+   - Test methods added
+   - Test scenarios covered (from test method names and assertions)
+   - Integration tests executed
+4. **Business Impact Extraction**: Deriving business value from:
+   - Requirement document business goals
+   - Code changes mapped to business functionality
+   - User-facing changes and improvements
+5. **Structured Documentation**: Writing to the ticket:
+   - **What Changed**: List of modified files and key code changes
+   - **Edge Cases**: All edge cases found in code with explanations
+   - **Testing**: Test coverage and scenarios validated
+   - **Limitations**: Any TODOs or known issues identified
+   - **Release Notes Draft**: Business-focused summary for stakeholders
+
+This automated summary is added directly to the requirement document and used in Phase 5 (Step 29) for release notes generation.
 
 **Feedback Collection**: Phase 6 automatically loads and invokes the feedback agent (`feedback-agent.md`) to collect learnings and developer feedback. Use `--skip-feedback` to bypass this phase if needed.
 
