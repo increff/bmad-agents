@@ -62,8 +62,8 @@ This two-phase approach eliminates both **planning inconsistency** and **context
 
 **Before diving in, review these critical workflow diagrams that explain how BMad works:**
 
-1. **[Planning Workflow (Web UI)](docs/user-guide.md#the-planning-workflow-web-ui)** - How to create PRD and Architecture documents
-2. **[Core Development Cycle (IDE)](docs/user-guide.md#the-core-development-cycle-ide)** - How SM, Dev, and QA agents collaborate through story files
+1. **[Planning Workflow (Web UI)](docs/user-guide.md)** - How to create PRD and Architecture documents
+2. **[Core Development Cycle (IDE)](docs/user-guide.md)** - How SM, Dev, and QA agents collaborate through story files
 
 > ⚠️ **These diagrams explain 90% of BMad Method Agentic Agile flow confusion** - Understanding the PRD+Architecture creation and the SM/Dev/QA workflow and how agents pass notes through story files is essential - and also explains why this is NOT taskmaster or just a simple task runner!
 
@@ -74,7 +74,7 @@ This two-phase approach eliminates both **planning inconsistency** and **context
 - **[See available AI agents](/bmad-core/agents)** → Specialized roles for your team
 - **[Explore non-technical uses](#-beyond-software-development---expansion-packs)** → Creative writing, business, wellness, education
 - **[Create my own AI agents](docs/expansion-packs.md)** → Build agents for your domain
-- **[Browse ready-made expansion packs](expansion-packs/)** → Game dev, DevOps, infrastructure and get inspired with ideas and examples
+- **[Browse ready-made expansion packs](expansion-packs/README.md)** → Game dev, DevOps, infrastructure and get inspired with ideas and examples
 - **[Understand the architecture](docs/core-architecture.md)** → Technical deep dive
 - **[Join the community](https://discord.gg/gk8jAdXWmj)** → Get help and share ideas
 
@@ -167,7 +167,7 @@ When you fork this repository, CI/CD workflows are **disabled by default** to sa
 
 #### Need CI/CD in Your Fork?
 
-See our [Fork CI/CD Guide](.github/FORK_GUIDE.md) for instructions on enabling workflows in your fork.
+Workflows are disabled by default in forks. Contact us via [Discord](https://discord.gg/gk8jAdXWmj) if you need help enabling CI/CD in your fork.
 
 #### Contributing Workflow
 
