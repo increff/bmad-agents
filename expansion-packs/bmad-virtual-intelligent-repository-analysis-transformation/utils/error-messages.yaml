@@ -1,0 +1,369 @@
+# Error Messages Template for VIRAT
+# Centralized error messages with context and remediation guidance
+# All messages reference semantic rule names
+
+# === CRITICAL ERRORS ===
+
+critical_errors:
+  
+  file_sync_missing:
+    code: "VIR-001"
+    rule: mandatory_file_class_synchronization
+    severity: CRITICAL
+    message: "Row class '{row_class}' was modified but corresponding File class '{file_class}' was not updated"
+    context: |
+      When modifying Row class fields, the corresponding File class MUST be updated to maintain synchronization.
+      This ensures data can be properly serialized/deserialized.
+    details:
+      row_class: "{row_class_path}"
+      file_class: "{file_class_path}"
+      modified_fields: "{field_list}"
+    remediation:
+      steps:
+        - "Open {file_class_path}"
+        - "Update getHeaders() array to include new field names"
+        - "Update write() method to serialize new fields"
+        - "For Parquet files: Update getSchema() Type array"
+        - "Commit Row and File changes together"
+      example: |
+        // If PlanogramOutputRow.java added field 'attribute1':
+        // In PlanogramOutputFile.java:
+        
+        @Override
+        public String[] getHeaders() {
+          return new String[]{"existing_field", "attribute1"}; // Add new field
+        }
+        
+        @Override
+        public void write(PlanogramOutputRow o, Record r) {
+          r.put("attribute1", o.getAttribute1()); // Add serialization
+        }
+    
+  args_parameter_missing:
+    code: "VIR-002"
+    rule: post_deployment_parameter_registration
+    severity: CRITICAL
+    message: "New Args field '{field_name}' in '{args_class}' missing post_deployment.sql entries"
+    context: |
+      All Args parameters must be registered in post_deployment.sql for proper system configuration.
+      This includes a_input INSERT and a_description INSERTs (English + Spanish).
+    details:
+      args_class: "{args_class_path}"
+      field_name: "{field_name}"
+      field_type: "{field_type}"
+      missing:
+        - "{missing_inserts_list}"
+    remediation:
+      steps:
+        - "Open irisx-config/export/post_deployment.sql"
+        - "Add a_input INSERT with default value"
+        - "Add a_description INSERT (English locale='en')"
+        - "Add a_description INSERT (Spanish locale='en-mx')"
+      template: |
+        -- Add to post_deployment.sql:
+        
+        -- a_input registration
+        INSERT ignore INTO `a_input` (name, project_id, value, favourite) 
+        VALUES ('{field_name}','${project_id}','default_value','0');
+        
+        -- English description
+        INSERT INTO master.a_description 
+        (id, category, dataType, description, locale, module, name, priority, short_description) 
+        VALUES ({unique_id}, 'Configuration', '{DATA_TYPE}', 'Full description', 'en', 
+                '{module_list}', '{field_name}', {priority}, 'Short description');
+        
+        -- Spanish description  
+        INSERT INTO master.a_description 
+        (id, category, dataType, description, locale, module, name, priority, short_description) 
+        VALUES ({unique_id+1}, 'Configuración', '{DATA_TYPE}', 'Spanish description', 'en-mx', 
+                '{module_list}', '{field_name}', {priority}, 'Spanish short description');
+    
+  compilation_failed:
+    code: "VIR-003"
+    rule: branch_commit_merge
+    severity: CRITICAL
+    message: "Compilation failed in {repository}"
+    context: |
+      Code must compile successfully before deployment. Compilation failures indicate syntax errors,
+      missing dependencies, or incorrect imports.
+    details:
+      repository: "{repository_name}"
+      command: "{compilation_command}"
+      exit_code: "{exit_code}"
+      error_output: "{error_message}"
+    remediation:
+      steps:
+        - "Review compilation error output"
+        - "Check for missing imports or dependencies"
+        - "Verify class/method names are correct"
+        - "Ensure all dependencies are properly registered"
+        - "Run local compilation: {compilation_command}"
+
+# === ERROR LEVEL ===
+
+errors:
+  
+  header_mismatch:
+    code: "VIR-101"
+    rule: data_consistency_structure
+    severity: ERROR
+    message: "Header mismatch detected across LoadAPI → SQL → Template"
+    context: |
+      Headers must be consistent across all layers to ensure proper data flow.
+      Mismatches cause data corruption or missing columns in exports.
+    details:
+      loadapi_headers: "{loadapi_header_list}"
+      sql_columns: "{sql_column_list}"
+      template_headers: "{template_header_list}"
+      differences: "{diff_summary}"
+    remediation:
+      steps:
+        - "Identify the source of truth (usually LoadAPI MASTER_HEADER)"
+        - "Update SQL view WITH clause to match LoadAPI headers"
+        - "Update template TSV first line to match LoadAPI headers"
+        - "Maintain exact order across all three"
+      example: |
+        # LoadAPI MASTER_HEADER
+        MASTER_HEADER = ["store_code", "style_code", "quantity"]
+        
+        # SQL view (must match)
+        CREATE VIEW ... WITH (
+          store_code VARCHAR(50),
+          style_code VARCHAR(50),
+          quantity INT
+        )
+        
+        # Template (must match)
+        store_code\tstyle_code\tquantity
+    
+  component_not_registered:
+    code: "VIR-102"
+    rule: framework_config
+    severity: ERROR
+    message: "New class '{class_name}' missing @Component annotation or JSON registration"
+    context: |
+      Spring components must be properly annotated and registered for dependency injection to work.
+    details:
+      class_name: "{class_name}"
+      class_type: "{Module|ValidationModule|UtilModuleGroup}"
+      missing:
+        - "{missing_registrations}"
+    remediation:
+      steps:
+        - "Add @Component annotation to class"
+        - "For Module: Register in module_input.json or module_output.json"
+        - "For LoadAPI: Add import ID to upload-files.json"
+        - "Verify import IDs match across LoadAPI and Config"
+  
+  naming_inconsistency:
+    code: "VIR-103"
+    rule: data_consistency_structure
+    severity: ERROR
+    message: "Naming inconsistency detected across repositories"
+    context: |
+      Names must follow conventions across repositories for proper integration.
+    details:
+      algorithm_constant: "{algorithm_name}"
+      loadapi_import_id: "{loadapi_name}"
+      config_view: "{config_name}"
+      config_template: "{template_name}"
+      inconsistencies: "{diff_list}"
+    remediation:
+      steps:
+        - "Choose Algorithm constant as source of truth"
+        - "Convert to lowercase_with_underscores for LoadAPI import ID"
+        - "Use same format for Config SQL view name"
+        - "Template should be import_{name}_template.tsv"
+      example: |
+        # Algorithm
+        public static final String INPUT_STORE_PERFORMANCE = "input_store_performance";
+        
+        # LoadAPI
+        import_id = "import_input_store_performance"
+        
+        # Config
+        view_name = "input_store_performance.sql"
+        template = "import_input_store_performance_template.tsv"
+  
+  commit_format_invalid:
+    code: "VIR-104"
+    rule: branch_commit_merge
+    severity: ERROR
+    message: "Commit message does not follow required format"
+    context: |
+      Standardized commit messages enable traceability and automated tooling.
+    details:
+      actual_message: "{commit_message}"
+      required_format: "[REQ-{id}] {repository}: {description}"
+    remediation:
+      steps:
+        - "Format: [REQ-####] repository: description"
+        - "Repository must be: algorithm, loadapi, or config"
+        - "Description should be concise but descriptive"
+      examples:
+        - "[REQ-1234] algorithm: Add distribution validation module"
+        - "[REQ-1234] loadapi: Implement store performance denormalization"
+        - "[REQ-1234] config: Update planogram export template"
+
+# === WARNING LEVEL ===
+
+warnings:
+  
+  multiple_loadapis_found:
+    code: "VIR-201"
+    rule: multiple_loadapis_per_table
+    severity: WARNING
+    message: "Multiple LoadAPIs found for table '{table_name}' - ensure ALL are updated"
+    context: |
+      A single table can have multiple LoadAPIs serving different business purposes.
+      When modifying table structure, ALL related LoadAPIs must be updated.
+    details:
+      table_name: "{table_name}"
+      loadapis_found:
+        - "{loadapi_list}"
+      currently_modified:
+        - "{modified_list}"
+      potentially_missing:
+        - "{missing_list}"
+    remediation:
+      steps:
+        - "Review all found LoadAPIs for relevance"
+        - "Update each LoadAPI that uses the modified columns"
+        - "Test each LoadAPI separately"
+        - "Document which LoadAPIs were intentionally skipped"
+  
+  data_type_mismatch:
+    code: "VIR-202"
+    rule: cross_repo_type_safety
+    severity: WARNING
+    message: "Data type mismatch detected across repositories"
+    context: |
+      While not always critical, type mismatches can cause runtime errors or data corruption.
+    details:
+      field_name: "{field_name}"
+      java_type: "{java_type}"
+      python_type: "{python_type}"
+      sql_type: "{sql_type}"
+      expected_mappings: "{type_mapping}"
+    remediation:
+      steps:
+        - "Review type mappings: Java String→Python str()→SQL VARCHAR"
+        - "Consider if type conversion is intentional"
+        - "Update types to match if unintentional"
+      type_mappings: |
+        Java Integer → Python int() → SQL INT
+        Java Double → Python float() → SQL DOUBLE
+        Java String → Python str() → SQL VARCHAR
+        Java Boolean → Python bool() → SQL TINYINT
+  
+  pattern_deviation:
+    code: "VIR-203"
+    rule: pattern_discovery
+    severity: WARNING
+    message: "Implementation deviates from established patterns"
+    context: |
+      Consistency with existing patterns ensures maintainability and reduces bugs.
+    details:
+      pattern_type: "{pattern_name}"
+      expected_pattern: "{expected_implementation}"
+      actual_implementation: "{actual_implementation}"
+      deviation_points: "{deviation_list}"
+    remediation:
+      steps:
+        - "Review existing pattern documentation"
+        - "Align implementation with established patterns"
+        - "If deviation is intentional, document the reason"
+        - "Consider updating pattern documentation if this is a new valid pattern"
+
+# === INFO LEVEL ===
+
+info:
+  
+  environment_detected:
+    code: "VIR-301"
+    message: "Environment detected: {environment}"
+    details:
+      environment: "{env_name}"
+      base_branches:
+        algorithm: "{algo_branch}"
+        loadapi: "{loadapi_branch}"
+        config: "{config_branch}"
+  
+  validation_passed:
+    code: "VIR-302"
+    message: "Validation '{validation_name}' passed successfully"
+    details:
+      validation: "{validation_name}"
+      rule: "{rule_reference}"
+      checks_passed: "{checks_count}"
+  
+  feature_branch_created:
+    code: "VIR-303"
+    message: "Feature branches created for requirement {req_id}"
+    details:
+      requirement: "{req_id}"
+      branches:
+        algorithm: "{algo_branch_name}"
+        loadapi: "{loadapi_branch_name}"
+        config: "{config_branch_name}"
+
+# === ERROR MESSAGE FORMATTING ===
+
+formatting:
+  terminal_output: |
+    [❌ {severity}] {code}: {message}
+    
+    Rule: {rule_name}
+    Context: {context}
+    
+    Details:
+    {formatted_details}
+    
+    Remediation:
+    {remediation_steps}
+    
+  markdown_output: |
+    ## ❌ {severity}: {message}
+    
+    **Error Code:** {code}
+    **Rule:** {rule_name}
+    
+    ### Context
+    {context}
+    
+    ### Details
+    ```
+    {formatted_details}
+    ```
+    
+    ### How to Fix
+    {remediation_steps}
+    
+    ### Example
+    ```{language}
+    {example_code}
+    ```
+
+# === USAGE IN VIRAT ===
+
+virat_integration:
+  error_handling: |
+    When validation fails:
+    1. Look up error code in this file
+    2. Display formatted error message to user
+    3. Show remediation steps
+    4. Block or warn based on severity
+    5. Log error for feedback collection
+  
+  automated_validation: |
+    Phase 4, Step 22: Automated Rule Validation
+    - Run validation_library checks
+    - Catch errors and map to error_messages
+    - Display appropriate error with context
+    - Block on CRITICAL/ERROR, warn on WARNING
+  
+  feedback_integration: |
+    - Collect error occurrences for learning
+    - Track common errors to improve validation
+    - Update error messages based on user feedback
+

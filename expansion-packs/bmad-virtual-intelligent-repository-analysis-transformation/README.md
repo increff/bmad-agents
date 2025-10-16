@@ -4,6 +4,8 @@
 
 The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system features VIRAT - a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
 
+**Note:** This expansion pack has been recently reorganized for better maintainability. See [`docs/REORGANIZATION-SUMMARY.md`](docs/REORGANIZATION-SUMMARY.md) for details on the new structure.
+
 ## Features
 
 - **Multi-Environment Support**: Automatically detects and switches between prod, reliance, and phoenix environments with environment-specific base branches
@@ -46,6 +48,35 @@ The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system featu
 ```
 Input Data → Load APIs (Python) → Database → Business Logic (Java) → Output Views (SQL) → Export
 ```
+
+## Directory Structure
+
+This expansion pack follows a modular organization for better maintainability:
+
+```
+├── README.md, QUICKSTART.md           # Documentation
+├── config.yaml                        # Configuration
+├── agents/                            # VIRAT & expert agents (6 files)
+├── data/                              # Reference data & patterns (15+ files)
+│   └── core-implementation-rules.yaml # 45 implementation rules
+├── docs/                              # Documentation (guides, migrations, history)
+├── tasks/                             # Executable workflows (9 files)
+├── templates/                         # Document templates (10 files)
+├── checklists/                        # Validation checklists (3 files)
+├── tools/                             # Utility scripts
+└── workflows/                         # Workflow definitions
+```
+
+**Key Resources:**
+- **Getting Started**: See [`QUICKSTART.md`](QUICKSTART.md)
+- **Reorganization Details**: See [`docs/REORGANIZATION-SUMMARY.md`](docs/REORGANIZATION-SUMMARY.md)
+- **Modularity Improvements**: See [`MODULARITY-IMPROVEMENTS-SUMMARY.md`](MODULARITY-IMPROVEMENTS-SUMMARY.md)
+- **Rule Migration**: See [`docs/migrations/semantic-rule-names-migration.md`](docs/migrations/semantic-rule-names-migration.md)
+- **Development Flow**: See [`docs/guides/complete-development-flow.md`](docs/guides/complete-development-flow.md)
+- **Multi-Environment**: See [`docs/guides/multi-environment-support.md`](docs/guides/multi-environment-support.md)
+- **Agent Interactions**: See [`docs/guides/agent-interaction-patterns.md`](docs/guides/agent-interaction-patterns.md)
+- **Adding Rules**: See [`docs/guides/adding-new-rules-guide.md`](docs/guides/adding-new-rules-guide.md)
+- **Architecture**: See [`docs/architecture-diagram.md`](docs/architecture-diagram.md)
 
 ### Environment Configuration
 
