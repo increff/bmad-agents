@@ -7,7 +7,7 @@
 
 ## 🎯 Overview
 
-Three feature branches have been created across three repositories for the Planogram Dual Attribute implementation (REQ-1176). All changes have been committed and are ready for pull request creation.
+Four feature branches have been created across four repositories for the Planogram Dual Attribute implementation (REQ-1176). All changes have been committed and are ready for pull request creation.
 
 ---
 
@@ -117,7 +117,46 @@ git show db00984 --stat
 
 ---
 
-## 📦 Repository 3: bmad-agents (Documentation)
+## 📦 Repository 3: ms-loadapis (Python LoadAPI)
+
+### Branch Details
+- **Branch Name:** `feature/req-1176-planogram-dual-attribute-loadapi`
+- **Based On:** `caas-ril-uploads`
+- **Commit:** `0e71d06`
+- **Location:** `/Users/aryatupkary/ms-loadapis`
+
+### Commit Message
+```
+REQ-1176: Add attribute_b support to PlanogramLoadApi
+
+- Added attribute_b to PLANOGRAM_MASTER_HEADER for TSV input
+- Added attribute_b to PLANOGRAM_HEADER_MAP for data mapping
+- Made attribute_b optional (supports both single and dual attribute modes)
+- Updated unique key logic to include attribute_b when present
+- Ensures correct normalization for dual-attribute planogram data
+
+This allows the LoadAPI to handle planogram uploads with both
+single attribute (backward compatible) and dual attribute modes.
+```
+
+### Files Changed
+```
+1 file changed, 9 insertions(+), 2 deletions(-)
+
+Modified:
+- loadapi/master/PlanogramLoadApi.py
+```
+
+### Commands to Verify
+```bash
+cd /Users/aryatupkary/ms-loadapis
+git log feature/req-1176-planogram-dual-attribute-loadapi --oneline -1
+git show 0e71d06 --stat
+```
+
+---
+
+## 📦 Repository 4: bmad-agents (Documentation)
 
 ### Branch Details
 - **Branch Name:** `feature/req-1176-planogram-dual-attribute-docs`
@@ -198,6 +237,10 @@ git push -u origin feature/req-1176-planogram-dual-attribute-output
 cd /Users/aryatupkary/irisx-config
 git push -u origin feature/req-1176-planogram-dual-attribute-config
 
+# Push ms-loadapis branch
+cd /Users/aryatupkary/ms-loadapis
+git push -u origin feature/req-1176-planogram-dual-attribute-loadapi
+
 # Push bmad-agents branch
 cd /Users/aryatupkary/vt/bmad-agents
 git push -u origin feature/req-1176-planogram-dual-attribute-docs
@@ -271,7 +314,40 @@ Adds configuration parameters and database view updates for planogram dual attri
 https://www.notion.so/Add-attribute_b-level-in-the-Planogram-Creation-output...
 ```
 
-#### PR #3: bmad-agents
+#### PR #3: ms-loadapis
+- **Title:** REQ-1176: Add attribute_b support to PlanogramLoadApi
+- **Source:** `feature/req-1176-planogram-dual-attribute-loadapi`
+- **Target:** `caas-ril-uploads` (or staging branch)
+- **Description:**
+
+```markdown
+## Overview
+Updates LoadAPI to support planogram uploads with dual attribute (attribute_b) field.
+
+## Changes
+- ✅ Added attribute_b to input TSV header
+- ✅ Added attribute_b to header mapping
+- ✅ Made attribute_b optional for backward compatibility
+- ✅ Updated unique key logic for dual-attribute normalization
+
+## Testing
+- [ ] Single attribute planogram upload (backward compatibility)
+- [ ] Dual attribute planogram upload
+- [ ] Verify proper normalization and unique key handling
+
+## Files Changed
+1 file changed, 9 insertions(+), 2 deletions(-)
+
+## Related PRs
+- irisx-algo: [Link to algo PR]
+- irisx-config: [Link to config PR]
+- Documentation: [Link to docs PR]
+
+## Notion Link
+https://www.notion.so/Add-attribute_b-level-in-the-Planogram-Creation-output...
+```
+
+#### PR #4: bmad-agents
 - **Title:** docs: Add comprehensive planogram dual attribute feature documentation
 - **Source:** `feature/req-1176-planogram-dual-attribute-docs`
 - **Target:** `notion-integration` (or `main`)
@@ -306,6 +382,7 @@ In each PR description, add links to the other related PRs to maintain traceabil
 Assign appropriate reviewers for each repository:
 - **irisx-algo:** Java backend team, tech lead
 - **irisx-config:** DevOps, database team
+- **ms-loadapis:** Python team, API team
 - **bmad-agents:** Documentation review (optional)
 
 ---
@@ -316,8 +393,9 @@ Assign appropriate reviewers for each repository:
 |------------|--------|---------------|-------------|---------------|---------|
 | irisx-algo | feature/req-1176-planogram-dual-attribute-output | 10 | 186 | 14 | 483270d35 |
 | irisx-config | feature/req-1176-planogram-dual-attribute-config | 8 | 20 | 15 | db00984 |
+| ms-loadapis | feature/req-1176-planogram-dual-attribute-loadapi | 1 | 9 | 2 | 0e71d06 |
 | bmad-agents | feature/req-1176-planogram-dual-attribute-docs | 5 | 1,221 | 0 | dfb3b43 |
-| **TOTAL** | **3 branches** | **23 files** | **1,427 lines** | **29 lines** | **3 commits** |
+| **TOTAL** | **4 branches** | **24 files** | **1,436 lines** | **31 lines** | **4 commits** |
 
 ---
 
@@ -403,6 +481,7 @@ Assign appropriate reviewers for each repository:
 1. **Deployment Order:**
    - Deploy `irisx-algo` first (contains the core logic)
    - Deploy `irisx-config` second (adds configuration)
+   - Deploy `ms-loadapis` third (handles data uploads)
    - Documentation can be merged independently
 
 2. **Testing:**
