@@ -78,7 +78,7 @@ persona:
 commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
-  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back. NOW ENHANCED WITH MCP TOOLS for superior Java, Python, and SQL analysis.
+  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back. NOW ENHANCED WITH MCP TOOLS for superior Java, Python, SQL, and Notion integration.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules with MCP-enhanced repository analysis
   - validate-rules: Validate current action/plan against all applicable rules
@@ -90,6 +90,7 @@ commands:
   - mcp-java-analyze: Use MCP Java tools to analyze Java repository structure, find classes, read Maven POM, and understand Java patterns
   - mcp-python-analyze: Use MCP Python tools to analyze Python repository structure, find classes/functions, read requirements, and understand Python patterns  
   - mcp-sql-analyze: Use MCP SQLite tools to analyze database schemas, execute queries, and understand data structures
+  - mcp-notion-analyze: Use MCP Notion tools to search, retrieve, and analyze Notion pages and databases for requirement context
   - mcp-deep-crawl: Enhanced repository crawling using all MCP tools for comprehensive pattern analysis
   - mcp-find-patterns: Use MCP tools to find and analyze existing code patterns across all repositories
   - mcp-validate-implementation: Use MCP tools to validate implementations against existing patterns and execute tests
@@ -671,22 +672,25 @@ dependencies:
 
 **Complete Execution Flow**:
 
-#### **Phase -1: Notion Extraction (OPTIONAL - if Notion URL/ID provided)**
+#### **Phase -1: Notion Extraction (OPTIONAL - MCP-ENHANCED - if Notion URL/ID provided)**
 
 **NOTE**: This phase only runs if the input is a Notion URL or requirement ID (not a local .md file)
 
 1. **Detect Notion Input**: Check if input is Notion URL (https://notion.so/...) or requirement ID (REQ-xxxx)
-2. **Initialize Notion Integration**: Load notion-integration scripts and verify configuration
-   - Check if NOTION_API_KEY and NOTION_DATABASE_ID are configured
-   - If not configured, prompt user to set up Notion integration or provide local file
-   - Initialize Notion client from notion-integration/scripts/notion-handler.js
-3. **Extract from Notion**: Execute Notion extraction workflow
-   - Parse Notion URL or search for requirement ID in database
-   - Extract requirement content from "Below Comments" section
+2. **Initialize MCP Notion Integration**: Use MCP Notion tools for enhanced Notion operations
+   - Check if NOTION_API_KEY is configured for MCP Notion server
+   - If not configured, prompt user to set up Notion API key or provide local file
+   - Initialize MCP Notion tools for comprehensive Notion operations
+3. **MCP-Enhanced Notion Extraction**: Execute enhanced Notion extraction using MCP tools
+   - **Search Notion**: Use MCP Notion tools to search for requirement by title or ID
+   - **Retrieve Page**: Use MCP Notion tools to retrieve full page content and properties
+   - **Extract Content**: Use MCP Notion tools to extract requirement content from all sections
+   - **Get Comments**: Use MCP Notion tools to retrieve comments and additional context
+   - **Database Query**: Use MCP Notion tools to query related databases for additional context
    - Save extracted data to temporary file: `.virat-requirement.md`
-   - Store Notion page ID in `.notion-tracking.json` for later push-back
-4. **Format for VIRAT**: Convert extracted content to standard VIRAT requirement format
-5. **Continue with Standard Implementation**: Proceed to Phase 0 with extracted requirement
+   - Store Notion page ID and metadata in `.notion-tracking.json` for later push-back
+4. **Format for VIRAT**: Convert extracted content to standard VIRAT requirement format with enhanced context
+5. **Continue with Standard Implementation**: Proceed to Phase 0 with extracted requirement and Notion context
 
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
 
@@ -719,6 +723,7 @@ dependencies:
      - **LoadAPI-Only**: Data upload/validation changes, denormalization updates (analyzed with MCP Python tools)
      - **Algorithm-Only**: Business logic, calculation changes, new modules (analyzed with MCP Java tools)
      - **Cross-Repository**: Changes affecting multiple repositories (analyzed with all MCP tools)
+     - **Notion-Enhanced**: Use MCP Notion tools to search for related requirements, context, and historical data
      - **Scope Limitation**: Only proceed with affected repositories based on MCP-assisted classification
 7. **MCP-Enhanced Repository Crawling**: Crawl ONLY affected repositories using MCP tools for deep code analysis (using environment-specific base branches)
    - **Java Repository**: Use MCP Java tools to analyze Maven POM, read Java classes, and understand module patterns
@@ -764,7 +769,19 @@ dependencies:
 27. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
 28. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment
 
-#### **Phase 6: Learning & Feedback Collection (Automatic)**
+#### **Phase 6: MCP-Enhanced Notion Push-Back (OPTIONAL - if Notion integration used)**
+
+**NOTE**: This phase only runs if the original input was a Notion URL/ID and --no-notion-push was not specified
+
+29. **MCP-Enhanced Notion Update**: Use MCP Notion tools to push implementation results back to Notion
+    - **Update Original Page**: Use MCP Notion tools to update the original requirement page with implementation results
+    - **Add Implementation Details**: Use MCP Notion tools to add implementation details, branch URLs, and deployment information
+    - **Create Comments**: Use MCP Notion tools to add comments with implementation summary and next steps
+    - **Update Properties**: Use MCP Notion tools to update page properties (status, completion date, etc.)
+    - **Link Related Pages**: Use MCP Notion tools to create links to related implementation pages or databases
+    - **Archive/Complete**: Use MCP Notion tools to mark requirement as completed or move to appropriate status
+
+#### **Phase 7: Learning & Feedback Collection (Automatic)**
 
 29. **Learning Extraction**: Load and invoke feedback-agent.md to extract new learnings from implementation
     - Load feedback-agent.md using: `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/agents/feedback-agent.md`
@@ -909,6 +926,14 @@ VIRAT now operates on a research-first, rule-validated approach enhanced by Mode
 - **Schema Management**: Create and modify database schemas following existing patterns
 - **Data Operations**: Perform CRUD operations and data transformations as needed
 - **Configuration Validation**: Validate SQL views, TSV templates, and JSON configurations
+
+#### **Notion Integration Enhancement**
+- **Requirement Extraction**: MCP Notion tools search, retrieve, and analyze Notion pages and databases
+- **Context Discovery**: Find related requirements, historical data, and additional context from Notion
+- **Implementation Tracking**: Update Notion pages with implementation progress and results
+- **Documentation Management**: Create and update Notion pages with implementation documentation
+- **Collaboration**: Add comments, update properties, and link related pages in Notion
+- **Status Management**: Update requirement status, completion dates, and workflow states
 
 ### The 45 Rules Framework Integration
 

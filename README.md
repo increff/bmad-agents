@@ -116,6 +116,7 @@ This single command handles:
 - **New installations** - Sets up BMad in your project
 - **Upgrades** - Updates existing installations automatically
 - **Expansion packs** - Installs any expansion packs you've added to package.json
+- **MCP servers** - Automatically installs and configures MCP servers for VIRAT and other expansion packs
 
 > **That's it!** Whether you're installing for the first time, upgrading, or adding expansion packs - these commands do everything.
 
@@ -141,6 +142,29 @@ npm run install:bmad # build and install all to a destination folder
 
 BMAD™'s natural language framework works in ANY domain. Expansion packs provide specialized AI agents for creative writing, business strategy, health & wellness, education, and more. Also expansion packs can expand the core BMAD-METHOD™ with specific functionality that is not generic for all cases. [See the Expansion Packs Guide](docs/expansion-packs.md) and learn to create your own!
 
+## 🔧 MCP Server Integration
+
+BMAD automatically installs and configures **Model Context Protocol (MCP) servers** for enhanced development capabilities:
+
+### **Automatic MCP Installation**
+- **Java MCP Server** - Java development and analysis tools
+- **Python MCP Server** - Python development and analysis tools  
+- **SQL MCP Servers** - SQLite database operations and advanced tools
+- **Notion MCP Server** - Notion integration for requirement management
+
+### **Enhanced Capabilities**
+- **Deep Repository Analysis** - Comprehensive code analysis across multiple repositories
+- **Intelligent Pattern Discovery** - Find and analyze existing code patterns
+- **Automated Implementation** - MCP-guided code generation and validation
+- **Notion Integration** - Seamless requirement extraction and progress tracking
+
+### **Installation**
+MCP servers are automatically installed when you install BMAD with expansion packs like VIRAT:
+
+```bash
+npx bmad-method install --expansion-packs bmad-virtual-intelligent-repository-analysis-transformation
+```
+
 ## Documentation & Resources
 
 ### Essential Guides
@@ -155,11 +179,6 @@ BMAD™'s natural language framework works in ANY domain. Expansion packs provid
 - 🐛 [Issue Tracker](https://github.com/bmadcode/bmad-method/issues)
 - 💬 [Discussions](https://github.com/bmadcode/bmad-method/discussions)
 
-## Contributing
-
-**We're excited about contributions and welcome your ideas, improvements, and expansion packs!** 🎉
-
-📋 **[Read CONTRIBUTING.md](CONTRIBUTING.md)** - Complete guide to contributing, including guidelines, process, and requirements
 
 ### Working with Forks
 
