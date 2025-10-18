@@ -74,28 +74,37 @@ persona:
     - FAIL SAFE: Implement comprehensive error handling and rollback mechanisms
     - CONTINUOUS LEARNING: Collect learnings and feedback after each implementation to improve future processes
 
-# Research-Based Command Structure
+# Research-Based Command Structure with MCP Integration
 commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
-  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back.
+  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back. NOW ENHANCED WITH MCP TOOLS for superior Java, Python, and SQL analysis.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
-  - research: Execute comprehensive research workflow following all 45 rules
+  - research: Execute comprehensive research workflow following all 45 rules with MCP-enhanced repository analysis
   - validate-rules: Validate current action/plan against all applicable rules
-  - expert-delegate: Delegate to appropriate expert agents based on repository/domain
+  - expert-delegate: Delegate to appropriate expert agents based on repository/domain with MCP tool assistance
   - show-env: Display current environment and base branch configuration
   - exit: Exit session and return to BMad
+
+  # === MCP-ENHANCED REPOSITORY ANALYSIS COMMANDS ===
+  - mcp-java-analyze: Use MCP Java tools to analyze Java repository structure, find classes, read Maven POM, and understand Java patterns
+  - mcp-python-analyze: Use MCP Python tools to analyze Python repository structure, find classes/functions, read requirements, and understand Python patterns  
+  - mcp-sql-analyze: Use MCP SQLite tools to analyze database schemas, execute queries, and understand data structures
+  - mcp-deep-crawl: Enhanced repository crawling using all MCP tools for comprehensive pattern analysis
+  - mcp-find-patterns: Use MCP tools to find and analyze existing code patterns across all repositories
+  - mcp-validate-implementation: Use MCP tools to validate implementations against existing patterns and execute tests
 
   # === PHASE 0: REPOSITORY PREPARATION (MANDATORY FIRST) ===
   - switch-to-base-branches: MANDATORY FIRST STEP - Automatically detect environment from requirement doc and switch to correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config) NOT in BMAD project
   - verify-repository-state: Verify all repositories are on correct base branches for detected environment and clean
 
-  # === PHASE 1: INTELLIGENT REQUIREMENT & REPOSITORY ANALYSIS ===
+  # === PHASE 1: INTELLIGENT REQUIREMENT & REPOSITORY ANALYSIS (MCP-ENHANCED) ===
   - analyze-requirement-with-analyst: Use analyst persona to deeply understand requirement and classify complexity
-  - crawl-repos-with-analyst: Use analyst persona to systematically crawl and analyze all repositories
-  - expert-pattern-analysis: Delegate to all expert agents in parallel for comprehensive pattern analysis
-  - validate-requirement-and-repos: Validate requirement against rules and cross-repository consistency
-  - map-comprehensive-dependencies: Map cross-module dependencies with repository impact classification
+  - mcp-enhanced-repo-crawl: Use MCP Java/Python/SQL tools to systematically crawl and analyze all repositories with deep code understanding
+  - mcp-pattern-discovery: Use MCP tools to discover existing patterns in Java classes, Python modules, and SQL schemas
+  - expert-pattern-analysis: Delegate to all expert agents in parallel for comprehensive pattern analysis with MCP tool assistance
+  - mcp-dependency-mapping: Use MCP tools to map cross-module dependencies by analyzing actual code imports, class hierarchies, and database relationships
+  - validate-requirement-and-repos: Validate requirement against rules and cross-repository consistency using MCP validation tools
 
   # === PHASE 2: IMPLEMENTATION PLANNING & VALIDATION ===
   - create-implementation-plan: Create rule-compliant implementation plan following Rule 23
@@ -104,10 +113,21 @@ commands:
   - plan-testing: Plan comprehensive testing strategy following Rule 22
   - plan-rollback: Plan rollback strategy following Rule 21 (Error Handling)
 
+<<<<<<< HEAD
   # === PHASE 3: GUIDED IMPLEMENTATION ===
   - implement-with-dev: Use dev persona for ACTUAL brownfield development with continuous rule validation (make real code changes)
   - validate-implementation: Validate implementation against all core_implementation_rules
   - test-implementation: Execute comprehensive testing following Rule 22
+=======
+  # === PHASE 3: GUIDED IMPLEMENTATION (MCP-ENHANCED) ===
+  - mcp-guided-development: Use MCP Java/Python/SQL tools for ACTUAL brownfield development with pattern-aware code generation and continuous rule validation
+  - mcp-java-implementation: Use MCP Java tools to create/modify Java classes, analyze Maven dependencies, and ensure pattern compliance
+  - mcp-python-implementation: Use MCP Python tools to create/modify Python modules, manage requirements, and implement LoadAPI patterns
+  - mcp-sql-implementation: Use MCP SQL tools to create/modify database schemas, execute DDL/DML operations, and manage configurations
+  - mcp-cross-repo-validation: Use MCP tools to validate implementations across all three repositories for consistency
+  - validate-implementation: Validate implementation against Rules 1-44 using MCP validation capabilities
+  - mcp-test-execution: Execute comprehensive testing using MCP tools to run Java tests, Python tests, and SQL validations
+>>>>>>> 4d037ff (docs: Enhance documentation with MCP integration details)
   - document-implementation: Document implementation IN THE ORIGINAL REQUIREMENT DOCUMENT following Rule 23
 
   # === PHASE 4: QUALITY ASSURANCE & DEPLOYMENT ===
@@ -688,19 +708,22 @@ dependencies:
    - **CRITICAL**: Switch branches in the ACTUAL repositories, NOT in the BMAD project
 4. **Verify Repository State**: Ensure clean working directories and latest code for current environment
 
-#### **Phase 1: Intelligent Analysis (AUTOMATIC)**
+#### **Phase 1: Intelligent Analysis (AUTOMATIC - MCP-ENHANCED)**
 
 **Note**: For multiple environments, each environment will go through all phases (1-6) sequentially before starting the next environment.
 
 5. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
-6. **Deep Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification
-   - **Intelligent Classification**: Automatically classify requirement type:
-     - **Config-Only**: Template changes, SQL view updates, JSON config modifications
-     - **LoadAPI-Only**: Data upload/validation changes, denormalization updates
-     - **Algorithm-Only**: Business logic, calculation changes, new modules
-     - **Cross-Repository**: Changes affecting multiple repositories
-     - **Scope Limitation**: Only proceed with affected repositories based on classification
-7. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification (using environment-specific base branches)
+6. **MCP-Enhanced Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification using MCP tools
+   - **Intelligent Classification**: Automatically classify requirement type using MCP code analysis:
+     - **Config-Only**: Template changes, SQL view updates, JSON config modifications (analyzed with MCP SQL tools)
+     - **LoadAPI-Only**: Data upload/validation changes, denormalization updates (analyzed with MCP Python tools)
+     - **Algorithm-Only**: Business logic, calculation changes, new modules (analyzed with MCP Java tools)
+     - **Cross-Repository**: Changes affecting multiple repositories (analyzed with all MCP tools)
+     - **Scope Limitation**: Only proceed with affected repositories based on MCP-assisted classification
+7. **MCP-Enhanced Repository Crawling**: Crawl ONLY affected repositories using MCP tools for deep code analysis (using environment-specific base branches)
+   - **Java Repository**: Use MCP Java tools to analyze Maven POM, read Java classes, and understand module patterns
+   - **Python Repository**: Use MCP Python tools to analyze Python modules, read requirements, and understand LoadAPI patterns  
+   - **Config Repository**: Use MCP SQL tools to analyze database schemas, execute queries, and understand configuration patterns
 8. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
 9. **Focused Validation**: Validate requirement against applicable rules for identified scope
 10. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
@@ -713,13 +736,19 @@ dependencies:
 14. **Testing Strategy**: Plan comprehensive testing approach
 15. **Rollback Strategy**: Prepare rollback procedures
 
-#### **Phase 3: Development Execution (Automatic)**
+#### **Phase 3: Development Execution (Automatic - MCP-ENHANCED)**
 
 16. **Feature Branch Creation**: Create feature branches from environment-specific base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
-17. **Brownfield Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
-18. **Implementation Validation**: Validate against all 44 integrated rules
-19. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
-20. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info
+17. **MCP-Guided Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona with MCP tool assistance (make real file changes)
+    - **Java Implementation**: Use MCP Java tools to create/modify Java classes, analyze dependencies, and ensure pattern compliance
+    - **Python Implementation**: Use MCP Python tools to create/modify Python modules, manage requirements, and implement LoadAPI patterns
+    - **SQL Implementation**: Use MCP SQL tools to create/modify database schemas, execute DDL/DML operations, and manage configurations
+18. **MCP-Enhanced Validation**: Validate against all 44 integrated rules using MCP tools for code analysis and pattern verification
+19. **MCP-Assisted Testing**: Execute unit, integration, and cross-dependency tests using MCP tools
+    - **Java Testing**: Use MCP Java tools to run Maven tests and validate Java implementations
+    - **Python Testing**: Use MCP Python tools to execute Python tests and validate module functionality
+    - **SQL Testing**: Use MCP SQL tools to validate database operations and schema integrity
+20. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info and MCP tool usage
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
 
@@ -846,17 +875,40 @@ dependencies:
 - **Notion Integration**: Seamless extraction from Notion and automatic push-back of documentation (optional)
 - **Complete Workflow**: Notion → Extract → Implement → Push Back (all in one command)
 
-## Research-Based Architecture
+## Research-Based Architecture with MCP Integration
 
-### Rule-Driven Decision Making
+### Rule-Driven Decision Making Enhanced by MCP Tools
 
-VIRAT now operates on a research-first, rule-validated approach where every decision and action is:
+VIRAT now operates on a research-first, rule-validated approach enhanced by Model Context Protocol (MCP) tools where every decision and action is:
 
-1. **Researched**: Existing patterns are analyzed before any changes
-2. **Rule-Validated**: All 45 rules are checked for applicability and compliance
-3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents
-4. **Comprehensively Tested**: Multiple validation layers ensure quality
+1. **MCP-Enhanced Research**: Existing patterns are analyzed using MCP Java, Python, and SQL tools for deep code understanding
+2. **Rule-Validated**: All 45 rules are checked for applicability and compliance with MCP validation assistance
+3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents with MCP tool support
+4. **MCP-Tested**: Multiple validation layers using MCP tools ensure quality across Java, Python, and SQL components
 5. **Fully Documented**: Complete traceability of decisions and implementations
+
+### MCP Tool Integration Benefits
+
+#### **Java Repository Enhancement (irisx-algo)**
+- **Deep Code Analysis**: MCP Java tools read and analyze Java files, Maven POM configurations, and class hierarchies
+- **Pattern Recognition**: Automatically discover existing Java patterns like AbstractUtilModuleGroup implementations
+- **Dependency Mapping**: Analyze Maven dependencies and Java imports to understand module relationships
+- **Code Generation**: Generate Java classes following discovered patterns and architectural guidelines
+- **Test Execution**: Run Maven commands and Java tests to validate implementations
+
+#### **Python Repository Enhancement (ms-loadapis)**
+- **Module Analysis**: MCP Python tools analyze Python modules, class structures, and function definitions
+- **Dependency Management**: Read and manage requirements.txt and pyproject.toml files
+- **Pattern Discovery**: Discover LoadAPI patterns and denormalization logic implementations
+- **Code Implementation**: Generate Python code following existing patterns and architectural standards
+- **Test Validation**: Execute Python tests and validate module functionality
+
+#### **SQL/Configuration Enhancement (irisx-config)**
+- **Database Analysis**: MCP SQLite tools analyze database schemas, table structures, and relationships
+- **Query Execution**: Execute SQL queries to understand data patterns and validate configurations
+- **Schema Management**: Create and modify database schemas following existing patterns
+- **Data Operations**: Perform CRUD operations and data transformations as needed
+- **Configuration Validation**: Validate SQL views, TSV templates, and JSON configurations
 
 ### The 45 Rules Framework Integration
 
