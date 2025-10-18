@@ -436,16 +436,16 @@ public class View {
 
 ### **When Adding New Module**
 
-| **Change Type**         | **Files to Modify**                 | **Pattern to Follow**           |
-| ----------------------- | ----------------------------------- | ------------------------------- |
-| **Group Module**        | `{ModuleName}GroupModule.java`      | Extend AbstractUtilModuleGroup  |
-| **Validation Module**   | `{ModuleName}ValidationModule.java` | Extend AbstractValidationModule |
-| **Args Class**          | `{ModuleName}Args.java`             | Extend Args                     |
-| **Row Classes**         | `{ModuleName}Row.java`              | Simple POJO with public fields  |
-| **File Classes**        | `{ModuleName}File.java`             | Extend AbstractTSVFile          |
-| **Module Registration** | `ModuleProvider.java`               | Add @Autowired dependency       |
-| **File Registration**   | `SchemaProvider.java`               | Add file schema registration    |
-| **File Name Constants** | `FileName.java`                     | Add file name constant          |
+| **Change Type**         | **Files to Modify**               | **Pattern to Follow**           |
+| ----------------------- | --------------------------------- | ------------------------------- |
+| **Group Module**        | [ModuleName]GroupModule.java      | Extend AbstractUtilModuleGroup  |
+| **Validation Module**   | [ModuleName]ValidationModule.java | Extend AbstractValidationModule |
+| **Args Class**          | [ModuleName]Args.java             | Extend Args                     |
+| **Row Classes**         | [ModuleName]Row.java              | Simple POJO with public fields  |
+| **File Classes**        | [ModuleName]File.java             | Extend AbstractTSVFile          |
+| **Module Registration** | ModuleProvider.java               | Add @Autowired dependency       |
+| **File Registration**   | SchemaProvider.java               | Add file schema registration    |
+| **File Name Constants** | FileName.java                     | Add file name constant          |
 
 ### **When Adding New Data Structure**
 
