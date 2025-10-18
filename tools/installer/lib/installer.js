@@ -8,6 +8,7 @@ const configLoader = require('./config-loader');
 const ideSetup = require('./ide-setup');
 const { extractYamlFromAgent } = require('../../lib/yaml-utils');
 const resourceLocator = require('./resource-locator');
+const MCPSetup = require('../mcp-setup');
 
 class Installer {
   async getCoreVersion() {
@@ -20,6 +21,26 @@ class Installer {
       console.warn("Could not read version from package.json, using 'unknown'");
       return 'unknown';
     }
+  }
+
+  /**
+   * Determine if MCP servers should be installed
+   */
+  shouldInstallMCP(config) {
+    // Install MCP if VIRAT expansion pack is being installed
+    if (config.expansionPacks && config.expansionPacks.length > 0) {
+      return config.expansionPacks.some(pack => 
+        pack.includes('virtual-intelligent-repository-analysis-transformation') ||
+        pack.includes('virat')
+      );
+    }
+    
+    // Install MCP for full installations (includes all expansion packs)
+    if (config.installType === 'full') {
+      return true;
+    }
+    
+    return false;
   }
 
   async install(config) {
@@ -444,6 +465,19 @@ class Installer {
     if (config.installType !== 'expansion-only') {
       spinner.text = 'Creating installation manifest...';
       await fileManager.createManifest(installDir, config, files);
+    }
+
+    // Install MCP servers if VIRAT is being installed
+    if (this.shouldInstallMCP(config)) {
+      spinner.text = 'Installing MCP servers for VIRAT...';
+      try {
+        const mcpSetup = new MCPSetup(installDir);
+        await mcpSetup.installMCPServers();
+        spinner.text = 'MCP servers installed successfully!';
+      } catch (error) {
+        spinner.warn(`MCP installation failed: ${error.message}`);
+        console.log(chalk.yellow('⚠️  MCP servers can be installed manually later'));
+      }
     }
 
     spinner.succeed('Installation complete!');
