@@ -152,6 +152,20 @@ This will verify:
 - Database access is configured correctly
 - Integration can connect to Notion
 
+### Environment Verification
+
+Verify that your `.env` file is loaded correctly and overrides any shell environment variables:
+
+```bash
+node scripts/verify-env.js
+```
+
+This will check:
+- `.env` file exists and is readable
+- API key is loaded from `.env` file (not shell variables)
+- API key is not a placeholder value
+- All required environment variables are present
+
 ## Testing Connection
 
 Test your Notion connection:

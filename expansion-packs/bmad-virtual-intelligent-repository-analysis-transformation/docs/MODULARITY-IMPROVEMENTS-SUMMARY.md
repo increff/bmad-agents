@@ -484,11 +484,11 @@ These improvements significantly enhance:
 
 ## Related Documentation
 
-- [Reorganization Summary](docs/REORGANIZATION-SUMMARY.md)
-- [Semantic Rule Names Migration](docs/migrations/semantic-rule-names-migration.md)
-- [Adding Rules Guide](docs/guides/adding-new-rules-guide.md)
-- [Agent Interaction Patterns](docs/guides/agent-interaction-patterns.md)
-- [Architecture Diagram](docs/architecture-diagram.md)
+- [Reorganization Summary](REORGANIZATION-SUMMARY.md)
+- [Semantic Rule Names Migration](migrations/semantic-rule-names-migration.md)
+- [Adding Rules Guide](guides/adding-new-rules-guide.md)
+- [Agent Interaction Patterns](guides/agent-interaction-patterns.md)
+- [Architecture Diagram](architecture-diagram.md)
 
 ---
 

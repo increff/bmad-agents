@@ -10,13 +10,15 @@ This guide provides comprehensive instructions for creating feature branches and
 
 ### Base Branches
 
-VIRAT works with three repositories, each with its designated base branch:
+VIRAT works with three repositories, each with environment-specific base branches. The correct base branch is automatically selected based on the detected environment:
 
-| Repository | Base Branch | Purpose |
-|------------|-------------|---------|
-| **irisx-algo** | `caas-release` | Algorithm implementations, business logic |
-| **ms-loadapis** | `release_optimised` | Data loading APIs, file processing |
-| **irisx-config** | `caas-staging_fix` | Configuration, SQL views, templates |
+| Environment | Algorithm Branch | LoadAPI Branch | Config Branch |
+|---|---|---|---|
+| **prod** | `caas-release` | `release_optimised` | `caas-staging_fix` |
+| **reliance** | `master-ril` | `caas-ril-uploads` | `master-ril` |
+| **phoenix** | `master-adidas-reliance-prod` | `caas-phoenix-uploads` | `master-adidas-ril` |
+
+**CRITICAL:** VIRAT automatically detects the target environment from your requirement document. Feature branches are **ALWAYS** created from the environment-specific base branch (NEVER from master).
 
 ### Feature Branch Naming Convention
 
@@ -64,17 +66,18 @@ Use the guided implementation command with branch creation flag:
 ```
 
 **What This Does:**
-- ✅ Creates feature branches in all affected repositories
+- ✅ Analyzes requirement to identify which repositories need changes
+- ✅ Creates feature branches only for repositories that need modifications
 - ✅ Branches from correct base branches automatically
 - ✅ Uses standardized naming convention
-- ✅ Maintains cross-repository consistency
+- ✅ Skips repositories with no changes (optimized workflow)
 
 **Example Output:**
 ```
-Creating feature branches...
-✓ Algorithm Repository: Created feature/REQ-1234-inventory-validation from caas-release
-✓ LoadAPI Repository: Created feature/REQ-1234-inventory-validation from release_optimised
-✓ Config Repository: Created feature/REQ-1234-inventory-validation from caas-staging_fix
+Analyzing requirement for repository changes...
+✓ Algorithm Repository: Changes detected - Creating feature/REQ-1234-inventory-validation from caas-release
+✓ LoadAPI Repository: No changes required - Skipping branch creation
+✓ Config Repository: Changes detected - Creating feature/REQ-1234-inventory-validation from caas-staging_fix
 ```
 
 ### Method 2: Selective Branch Creation
@@ -97,7 +100,10 @@ If only specific repositories need changes (based on requirement analysis):
 For advanced users who prefer manual control:
 
 ```bash
-# Navigate to each repository and create branches manually
+# Example for PROD environment
+# Detect environment from requirement, then use corresponding base branches:
+
+# For PROD environment:
 cd /path/to/irisx-algo
 git checkout caas-release
 git pull origin caas-release
@@ -112,7 +118,12 @@ cd /path/to/irisx-config
 git checkout caas-staging_fix
 git pull origin caas-staging_fix
 git checkout -b feature/REQ-1234-inventory-validation
+
+# For RELIANCE environment, replace branches with: master-ril, caas-ril-uploads, master-ril
+# For PHOENIX environment, replace branches with: master-adidas-reliance-prod, caas-phoenix-uploads, master-adidas-ril
 ```
+
+**CRITICAL:** Always create feature branches from the environment-specific base branch, NOT from master.
 
 ---
 
@@ -252,7 +263,10 @@ If automatic PR creation is not configured, create PRs manually:
 
 #### Algorithm Repository PR
 
-**Target Branch:** `caas-release`
+**Target Branch:** Environment-specific base branch
+- prod: `caas-release`
+- reliance: `master-ril`
+- phoenix: `master-adidas-reliance-prod`
 
 **PR Title:**
 ```
@@ -264,6 +278,7 @@ feat(REQ-{id}): {brief-description}
 ## Requirement
 - **ID:** REQ-{id}
 - **Title:** {requirement-title}
+- **Environment:** [prod/reliance/phoenix]
 - **Type:** [Algorithm/LoadAPI/Config/Cross-Repository]
 - **Complexity:** [High/Medium/Low]
 
@@ -307,13 +322,19 @@ feat(REQ-{id}): {brief-description}
 
 #### LoadAPI Repository PR
 
-**Target Branch:** `release_optimised`
+**Target Branch:** Environment-specific base branch
+- prod: `release_optimised`
+- reliance: `caas-ril-uploads`
+- phoenix: `caas-phoenix-uploads`
 
 Use similar template as above, focusing on LoadAPI-specific details.
 
 #### Config Repository PR
 
-**Target Branch:** `caas-staging_fix`
+**Target Branch:** Environment-specific base branch
+- prod: `caas-staging_fix`
+- reliance: `master-ril`
+- phoenix: `master-adidas-ril`
 
 Use similar template as above, focusing on configuration-specific details.
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * BMAD Notion Push Script
  * Pushes generated documentation back to Notion ticket's III. DEVELOPMENT section
@@ -8,7 +6,15 @@
 const { Client } = require('@notionhq/client');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+
+// Force load .env file and override any shell environment variables
+const dotenv = require('dotenv');
+const envPath = path.join(__dirname, '..', '.env');
+const envConfig = dotenv.config({ path: envPath, override: true });
+
+if (envConfig.error) {
+    throw new Error(`❌ Error loading .env file: ${envConfig.error.message}`);
+}
 
 class NotionPush {
     constructor() {

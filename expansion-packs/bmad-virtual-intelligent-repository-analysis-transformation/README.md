@@ -137,8 +137,6 @@ VIRAT supports multiple environments with different base branches:
 - For multiple environments: implements in first, pushes, then repeats for second
 - Documents environment-specific implementation details
 
-📖 **See**: [Environment Configuration Guide](docs/ENVIRONMENT_CONFIGURATION.md) for detailed usage.
-
 ## Agents
 
 ### VIRAT (Main Orchestrator)

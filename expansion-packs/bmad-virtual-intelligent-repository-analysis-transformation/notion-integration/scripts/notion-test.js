@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * BMAD Notion Test Script
  * Tests Notion API connectivity and verifies credentials
@@ -7,7 +5,16 @@
 
 const { Client } = require('@notionhq/client');
 const fs = require('fs');
-require('dotenv').config();
+const path = require('path');
+
+// Force load .env file and override any shell environment variables
+const dotenv = require('dotenv');
+const envPath = path.join(__dirname, '..', '.env');
+const envConfig = dotenv.config({ path: envPath, override: true });
+
+if (envConfig.error) {
+    throw new Error(`❌ Error loading .env file: ${envConfig.error.message}`);
+}
 
 class NotionTest {
     constructor() {

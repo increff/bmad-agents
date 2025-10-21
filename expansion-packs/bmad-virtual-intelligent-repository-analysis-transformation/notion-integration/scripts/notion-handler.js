@@ -1,4 +1,3 @@
-
 /**
  * BMAD Notion Integration Handler
  * Handles *notion-fetch and *notion-implement commands
@@ -8,7 +7,15 @@
 const { Client } = require('@notionhq/client');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+
+// Force load .env file and override any shell environment variables
+const dotenv = require('dotenv');
+const envPath = path.join(__dirname, '..', '.env');
+const envConfig = dotenv.config({ path: envPath, override: true });
+
+if (envConfig.error) {
+    throw new Error(`❌ Error loading .env file: ${envConfig.error.message}`);
+}
 
 class NotionHandler {
     constructor() {
@@ -21,6 +28,12 @@ class NotionHandler {
      * Initialize configuration from .env and config.yaml
      */
     initializeConfig() {
+        // Verify .env file was loaded correctly
+        const apiKey = process.env.NOTION_API_KEY;
+        if (!apiKey || apiKey === 'your_notion_api_key_here' || apiKey.startsWith('your_notion')) {
+            throw new Error('❌ Invalid API key detected. Please check your .env file. Current value: ' + (apiKey ? apiKey.substring(0, 20) + '...' : 'undefined'));
+        }
+
         // Load environment variables
         const requiredEnvVars = ['NOTION_API_KEY', 'NOTION_DATABASE_ID'];
         const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -40,6 +53,7 @@ class NotionHandler {
             viewId: process.env.NOTION_VIEW_ID || null,
             fieldMappings: {
                 requirement_id: "No ID",
+                requesting_clients: "Request Client",  // Updated based on the image showing "Request Client (A..."
                 content_section: "Below Comments",  // Extract from page content below Comments
                 push_target_section: "Below Comments"  // Push to same location
             },
@@ -383,15 +397,23 @@ class NotionHandler {
 
             // Extract requesting clients field - try multiple possible field names
             const clientFieldNames = [
-                this.config.fieldMappings.requesting_clients,
-                'Requesting Client',
+                'Request Client (Auto populated)',
+                'Request Client',
+                'Requesting Client', 
+                'Requesting Clients',
                 'Client',
-                'Requesting Clients'
+                'Clients',
+                this.config.fieldMappings.requesting_clients
             ];
+
+            // Debug logging (can be removed in production)
+            // console.log('🔍 Available properties:', Object.keys(properties));
+            // console.log('🔍 Looking for client field in:', clientFieldNames);
 
             for (const fieldName of clientFieldNames) {
                 if (properties[fieldName]) {
                     const clientProperty = properties[fieldName];
+                    // console.log(`📋 Found client field "${fieldName}" with type: ${clientProperty.type}`);
 
                     if (clientProperty.type === 'rich_text') {
                         requestingClients = clientProperty.rich_text
@@ -403,9 +425,92 @@ class NotionHandler {
                         requestingClients = clientProperty.multi_select
                             .map(item => item.name)
                             .join(', ');
+                    } else if (clientProperty.type === 'title') {
+                        requestingClients = clientProperty.title
+                            .map(text => text.plain_text)
+                            .join('');
+                    } else if (clientProperty.type === 'rollup') {
+                        // Handle rollup fields - extract from rollup result
+                        if (clientProperty.rollup?.array) {
+                            requestingClients = clientProperty.rollup.array
+                                .map(item => {
+                                    if (item.type === 'title') {
+                                        return item.title.map(t => t.plain_text).join('');
+                                    } else if (item.type === 'rich_text') {
+                                        return item.rich_text.map(t => t.plain_text).join('');
+                                    } else if (item.type === 'select') {
+                                        return item.select?.name || '';
+                                    } else if (item.type === 'multi_select') {
+                                        // Handle nested multi_select in rollup
+                                        return item.multi_select
+                                            .map(selectItem => selectItem.name)
+                                            .join(', ');
+                                    }
+                                    return '';
+                                })
+                                .filter(text => text.trim())
+                                .join(', ');
+                        }
                     }
 
+                    // console.log(`📋 Extracted requesting clients: "${requestingClients}"`);
                     if (requestingClients) break;
+                }
+            }
+
+            // If still not found, try partial matches but be more specific
+            if (!requestingClients) {
+                // console.log('🔍 Trying partial field name matches...');
+                for (const [propName, propValue] of Object.entries(properties)) {
+                    // Only look for fields that specifically contain "client" in the name
+                    if (propName.toLowerCase().includes('client') && 
+                        !propName.toLowerCase().includes('description') &&
+                        !propName.toLowerCase().includes('approved')) {
+                        // console.log(`📋 Found potential client field: "${propName}" (${propValue.type})`);
+                        
+                        if (propValue.type === 'rich_text') {
+                            requestingClients = propValue.rich_text
+                                .map(text => text.plain_text)
+                                .join('');
+                        } else if (propValue.type === 'select') {
+                            requestingClients = propValue.select?.name || '';
+                        } else if (propValue.type === 'multi_select') {
+                            requestingClients = propValue.multi_select
+                                .map(item => item.name)
+                                .join(', ');
+                        } else if (propValue.type === 'title') {
+                            requestingClients = propValue.title
+                                .map(text => text.plain_text)
+                                .join('');
+                        } else if (propValue.type === 'rollup') {
+                            // Handle rollup fields - extract from rollup result
+                            if (propValue.rollup?.array) {
+                                requestingClients = propValue.rollup.array
+                                    .map(item => {
+                                        if (item.type === 'title') {
+                                            return item.title.map(t => t.plain_text).join('');
+                                        } else if (item.type === 'rich_text') {
+                                            return item.rich_text.map(t => t.plain_text).join('');
+                                        } else if (item.type === 'select') {
+                                            return item.select?.name || '';
+                                        } else if (item.type === 'multi_select') {
+                                            // Handle nested multi_select in rollup
+                                            return item.multi_select
+                                                .map(selectItem => selectItem.name)
+                                                .join(', ');
+                                        }
+                                        return '';
+                                    })
+                                    .filter(text => text.trim())
+                                    .join(', ');
+                            }
+                        }
+                        
+                        if (requestingClients) {
+                            // console.log(`📋 Found requesting clients in "${propName}": "${requestingClients}"`);
+                            break;
+                        }
+                    }
                 }
             }
 

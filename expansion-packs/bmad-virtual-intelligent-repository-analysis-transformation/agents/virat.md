@@ -320,8 +320,10 @@ core_implementation_rules:
 
   rule_14_branch_commit_merge:
     branch_management:
-      rules: ["Branch from correct base branches per environment", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
+      rules: ["Branch from correct base branches per environment", "Format: feature/{req-id}-{description}", "Create branches ONLY for repositories that need changes", "Delete feature branches after merge"]
       environment_detection: "MANDATORY: Detect environment (prod/reliance/phoenix) from requirement document ENV field or header"
+      change_detection: "MANDATORY: Analyze requirement to identify which repositories need modifications before creating branches"
+      selective_branch_creation: "OPTIMIZED: Only create feature branches for repositories with identified changes - skip repositories with no changes"
       base_branches_by_environment:
         prod:
           algorithm: "caas-release"
