@@ -372,12 +372,41 @@ class NotionHandler {
             // Extract properties (for metadata)
             const properties = page.properties;
             let requirementTitle = '';
+            let requestingClients = '';
 
             // Extract requirement title from "Requirement" field
             if (properties['Requirement'] && properties['Requirement'].type === 'title') {
                 requirementTitle = properties['Requirement'].title
                     .map(text => text.plain_text)
                     .join('');
+            }
+
+            // Extract requesting clients field - try multiple possible field names
+            const clientFieldNames = [
+                this.config.fieldMappings.requesting_clients,
+                'Requesting Client',
+                'Client',
+                'Requesting Clients'
+            ];
+
+            for (const fieldName of clientFieldNames) {
+                if (properties[fieldName]) {
+                    const clientProperty = properties[fieldName];
+
+                    if (clientProperty.type === 'rich_text') {
+                        requestingClients = clientProperty.rich_text
+                            .map(text => text.plain_text)
+                            .join('');
+                    } else if (clientProperty.type === 'select') {
+                        requestingClients = clientProperty.select?.name || '';
+                    } else if (clientProperty.type === 'multi_select') {
+                        requestingClients = clientProperty.multi_select
+                            .map(item => item.name)
+                            .join(', ');
+                    }
+
+                    if (requestingClients) break;
+                }
             }
 
             // Get requirement ID - try multiple field names
@@ -391,7 +420,7 @@ class NotionHandler {
             for (const fieldName of idFieldNames) {
                 if (properties[fieldName]) {
                     const idProperty = properties[fieldName];
-                    
+
                     if (idProperty.type === 'rich_text') {
                         requirementId = idProperty.rich_text
                             .map(text => text.plain_text)
@@ -400,7 +429,7 @@ class NotionHandler {
                         // Handle unique_id type (e.g., REQ-1141)
                         requirementId = `${idProperty.unique_id.prefix}-${idProperty.unique_id.number}`;
                     }
-                    
+
                     if (requirementId) break;
                 }
             }
@@ -414,6 +443,7 @@ class NotionHandler {
                 pageId: pageId,
                 requirementId: requirementId,
                 requirementTitle: requirementTitle,
+                requestingClients: requestingClients,
                 requirementContent: requirementContent,  // New: content from below Comments
                 contentBlocksCount: contentData.blocksCount,
                 notionUrl: `https://www.notion.so/${pageId.replace(/-/g, '')}`,
@@ -423,6 +453,7 @@ class NotionHandler {
             console.log('✅ Requirement extracted successfully');
             console.log(`📋 Requirement ID: ${extractedData.requirementId}`);
             console.log(`📄 Title: ${extractedData.requirementTitle}`);
+            console.log(`👥 Requesting Clients: ${extractedData.requestingClients || 'Not specified'}`);
             console.log(`📝 Content length: ${extractedData.requirementContent.length} characters`);
             console.log(`📦 Content blocks: ${extractedData.contentBlocksCount}`);
 
@@ -482,6 +513,7 @@ class NotionHandler {
             
             console.log('📋 Requirement extracted and ready for implementation');
             console.log(`🎯 Requirement ID: ${extractedData.requirementId}`);
+            console.log(`👥 Requesting Clients: ${extractedData.requestingClients || 'Not specified'}`);
             console.log(`📝 Content preview: ${extractedData.requirementContent.substring(0, 100)}...`);
             
             // Create a formatted requirement for VIRAT in docs folder
@@ -496,6 +528,7 @@ class NotionHandler {
             
             console.log(`\n📋 Implementing: ${extractedData.requirementId}`);
             console.log(`📝 Title: ${extractedData.requirementTitle}`);
+            console.log(`👥 Requesting Clients: ${extractedData.requestingClients || 'Not specified'}`);
             console.log(`📍 Source: ${extractedData.notionUrl}`);
             console.log('\n⚙️  VIRAT will now analyze and implement this requirement automatically...\n');
             
@@ -508,6 +541,7 @@ class NotionHandler {
             console.log('\n📝 Requirement Summary:');
             console.log(`   • ID: ${extractedData.requirementId}`);
             console.log(`   • Title: ${extractedData.requirementTitle}`);
+            console.log(`   • Requesting Clients: ${extractedData.requestingClients || 'Not specified'}`);
             console.log(`   • Content Length: ${extractedData.requirementContent.length} characters`);
             console.log(`   • Source: Notion (${extractedData.notionUrl})`);
             console.log('\n🔄 Next: VIRAT will analyze codebase and generate implementation...');
@@ -533,12 +567,14 @@ class NotionHandler {
     formatForVirat(extractedData) {
         const title = extractedData.requirementTitle || 'Notion Requirement';
         const reqId = extractedData.requirementId || 'N/A';
-        
+        const clients = extractedData.requestingClients || 'Not specified';
+
         return `# ${reqId}: ${title}
 
 ## Source
 - **Notion Page ID**: ${extractedData.pageId}
 - **Notion URL**: ${extractedData.notionUrl}
+- **Requesting Clients**: ${clients}
 - **Extracted At**: ${extractedData.extractedAt}
 - **Content Source**: Below Comments section
 

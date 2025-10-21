@@ -80,6 +80,7 @@ notion:
   api_key: "{NOTION_API_KEY}"
   field_mappings:
     requirement_id: "No ID"  # Column name in Notion DB (e.g., REQ-994)
+    requesting_clients: "Requesting Client"  # Column name for requesting clients
     content_section: "Below Comments"  # Extract from page content below Comments
     push_target_section: "Below Comments"  # Push documentation to same location
   documentation_patterns:
