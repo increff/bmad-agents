@@ -16,10 +16,13 @@ To run the entire algorithm output testing workflow, simply execute the followin
 ```
 /test-algorithm-outputs
 ```
-This will trigger the three-step process:
-1.  Analyze Algorithm Output Files
-2.  Validate Outputs for Regressions and Quality
-3.  Generate Comprehensive Report
+This **single command** automatically executes the complete validation pipeline:
+1. **Risk Assessment**: Identifies high-risk files requiring validation
+2. **Failure Analysis**: Assesses likelihood of test failures
+3. **Test Prioritization**: Prioritizes validation tasks by business impact
+4. **Comprehensive Validation**: Runs schema, data quality, regression, and performance checks
+5. **Dual Report Generation**: Creates both detailed markdown and interactive HTML reports
+6. **Quality Gate Application**: Applies quality criteria and provides pass/fail recommendations
 
 ### Scoped Test Runs
 You can control the scope of the test run using the following options:

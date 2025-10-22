@@ -71,6 +71,6 @@ description: A template for generating the final algorithm output validation rep
 ---
 
 ## Raw Data
-- **Validation Log**: [Link to validation log]
-- **Performance Metrics**: [Link to performance data]
-- **Regression Comparison**: [Link to comparison data]
+- **Validation Log**: {Link to validation log}
+- **Performance Metrics**: {Link to performance data}
+- **Regression Comparison**: {Link to comparison data}

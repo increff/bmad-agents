@@ -2,7 +2,7 @@
 
 # Local path to the folder containing algorithm outputs to be tested.
 # This should be an absolute path on your local machine.
-algorithm_outputs_path: "/path/to/your/algorithm/outputs"
+algorithm_outputs_path: "/Users/aryatupkary/Desktop/outputs"
 
 # Configuration for algorithm output testing
 testing:
@@ -10,3 +10,20 @@ testing:
   fail-fast: true
   output_file_types: [".csv", ".json", ".txt", ".xlsx", ".tsv"]
   validation_methods: ["schema", "data_quality", "regression", "performance"]
+
+# HTML Report Configuration
+html_report:
+  enabled: true
+  output_file: "algorithm-validation-report.html"
+  output_dir: "./reports"  # Directory to save HTML reports
+  include_charts: true
+  include_interactive_filters: true
+  embed_data: true  # Create self-contained HTML file
+  theme: "default"  # Options: default, dark, light
+
+# Workflow Configuration
+workflow:
+  default_scope: "all"  # Default scope for /test-algorithm-outputs
+  default_validation: "all"  # Default validation types
+  parallel_execution: true  # Run validations in parallel when possible
+  fail_fast: false  # Continue with all validations even if some fail
