@@ -15,9 +15,14 @@ This expansion pack provides automated regression testing for algorithm output f
   - `quality-gate-checklist.md` - Quality gates for output validation
 - `templates/`
   - `output-validation-templates.yaml` - Validation templates and rules
+<<<<<<< HEAD
   - `test-generation-templates.yaml` - Code templates for validation
   - `regression-report-tmpl.md` - Markdown report template
   - `error-visualization-report.html` - Interactive HTML error visualization report
+=======
+  - `test-generation-templates.md` - Code templates for validation
+  - `regression-report-tmpl.md` - Report template
+>>>>>>> 1876d91 (🔧 NEW FILES:)
   - `priority-matrix.yaml` - File priority matrix
   - `risk-assessment-matrix.yaml` - Risk assessment criteria
 - `docs/`
