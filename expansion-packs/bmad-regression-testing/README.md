@@ -16,6 +16,7 @@ This expansion pack provides automated regression testing for algorithm output f
 - `templates/`
   - `output-validation-templates.yaml` - Validation templates and rules
 <<<<<<< HEAD
+<<<<<<< HEAD
   - `test-generation-templates.yaml` - Code templates for validation
   - `regression-report-tmpl.md` - Markdown report template
   - `error-visualization-report.html` - Interactive HTML error visualization report
@@ -23,6 +24,15 @@ This expansion pack provides automated regression testing for algorithm output f
   - `test-generation-templates.md` - Code templates for validation
   - `regression-report-tmpl.md` - Report template
 >>>>>>> 1876d91 (🔧 NEW FILES:)
+=======
+  - `test-generation-templates.md` - Code templates for validation
+  - `regression-report-tmpl.md` - Report template
+=======
+  - `test-generation-templates.yaml` - Code templates for validation
+  - `regression-report-tmpl.md` - Markdown report template
+  - `error-visualization-report.html` - Interactive HTML error visualization report
+>>>>>>> 0a109ec (Enhance BMAD Regression Testing Configuration and Documentation)
+>>>>>>> 6686707 (Enhance BMAD Regression Testing Configuration and Documentation)
   - `priority-matrix.yaml` - File priority matrix
   - `risk-assessment-matrix.yaml` - Risk assessment criteria
 - `docs/`
