@@ -96,6 +96,20 @@
             font-size: 14px;
         }
 
+        .filter-controls button {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .filter-controls button:hover {
+            background: #5568d3;
+        }
+
         .error-details {
             background: white;
             border-radius: 10px;
@@ -231,27 +245,27 @@
         <div class="header">
             <h1>Algorithm Output Validation Report</h1>
             <div class="meta">
-                <div>Generated: <span id="report-date">{{date}}</span></div>
-                <div>Status: <span id="overall-status">{{status}}</span></div>
-                <div>Total Files: <span id="total-files">{{total_files}}</span></div>
+                <div>Generated: <span id="report-date"></span></div>
+                <div>Status: <span id="overall-status"></span></div>
+                <div>Total Files: <span id="total-files"></span></div>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="passed-count">{{passed_files}}</div>
+                <div class="stat-number" id="passed-count">0</div>
                 <div class="stat-label">Files Passed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="failed-count">{{failed_files}}</div>
+                <div class="stat-number" id="failed-count">0</div>
                 <div class="stat-label">Files Failed</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="error-count">{{total_errors}}</div>
+                <div class="stat-number" id="error-count">0</div>
                 <div class="stat-label">Total Errors</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="critical-count">{{critical_errors}}</div>
+                <div class="stat-number" id="critical-count">0</div>
                 <div class="stat-label">Critical Issues</div>
             </div>
         </div>
@@ -339,47 +353,67 @@
     </div>
 
     <script>
-        // Sample data - this would be populated from the actual validation results
+        // Sample data - replace with your actual validation results
         const validationData = {
-            date: "{{date}}",
-            status: "{{status}}",
-            totalFiles: {{total_files}},
-            passedFiles: {{passed_files}},
-            failedFiles: {{failed_files}},
-            totalErrors: {{total_errors}},
-            criticalErrors: {{critical_errors}},
+            date: "2024-01-15",
+            status: "Completed with Errors",
+            totalFiles: 150,
+            passedFiles: 120,
+            failedFiles: 30,
+            totalErrors: 45,
+            criticalErrors: 8,
             errors: [
-                {{#each errors}}
                 {
-                    id: "{{this.id}}",
-                    file: "{{this.file_path}}",
-                    type: "{{this.error_type}}",
-                    severity: "{{this.severity}}",
-                    description: "{{this.description}}",
-                    location: "{{this.location}}",
-                    timestamp: "{{this.timestamp}}"
+                    id: "err_001",
+                    file: "output/data_batch_001.json",
+                    type: "schema",
+                    severity: "critical",
+                    description: "Missing required field: 'timestamp'",
+                    location: "line 45",
+                    timestamp: "2024-01-15T10:23:45Z"
                 },
-                {{/each}}
+                {
+                    id: "err_002",
+                    file: "output/results_2024.csv",
+                    type: "data_quality",
+                    severity: "high",
+                    description: "Null values detected in critical column",
+                    location: "column 'score'",
+                    timestamp: "2024-01-15T10:24:12Z"
+                },
+                {
+                    id: "err_003",
+                    file: "output/model_predictions.json",
+                    type: "regression",
+                    severity: "medium",
+                    description: "Prediction accuracy below baseline threshold",
+                    location: "model output",
+                    timestamp: "2024-01-15T10:25:03Z"
+                }
             ],
             errorTypeCounts: {
-                {{#each error_type_counts}}
-                "{{@key}}": {{this}},
-                {{/each}}
+                "schema": 12,
+                "data_quality": 18,
+                "regression": 10,
+                "performance": 5
             },
             fileTypeCounts: {
-                {{#each file_type_counts}}
-                "{{@key}}": {{this}},
-                {{/each}}
+                "JSON": 25,
+                "CSV": 15,
+                "XML": 5
             },
             severityCounts: {
-                {{#each severity_counts}}
-                "{{@key}}": {{this}},
-                {{/each}}
+                "critical": 8,
+                "high": 15,
+                "medium": 12,
+                "low": 10
             },
             fileErrorCounts: [
-                {{#each file_error_counts}}
-                { file: "{{this.file}}", count: {{this.count}} },
-                {{/each}}
+                { file: "data_batch_001.json", count: 8 },
+                { file: "results_2024.csv", count: 6 },
+                { file: "model_predictions.json", count: 5 },
+                { file: "config_output.xml", count: 4 },
+                { file: "processing_log.json", count: 3 }
             ]
         };
 
@@ -404,7 +438,12 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
             });
 
@@ -424,7 +463,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true }
+                        y: { 
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
                     }
                 }
             });
@@ -442,14 +491,19 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
                 }
             });
 
             // Most Affected Files
             const fileErrorCtx = document.getElementById('fileErrorChart').getContext('2d');
             new Chart(fileErrorCtx, {
-                type: 'horizontalBar',
+                type: 'bar',
                 data: {
                     labels: validationData.fileErrorCounts.map(item => item.file),
                     datasets: [{
@@ -459,10 +513,21 @@
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { beginAtZero: true }
+                        x: { 
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
                     }
                 }
             });
@@ -475,10 +540,12 @@
                     labels: ['Schema', 'Data Quality', 'Regression', 'Performance'],
                     datasets: [{
                         label: 'Error Types',
-                        data: [validationData.errorTypeCounts.schema || 0,
-                               validationData.errorTypeCounts.data_quality || 0,
-                               validationData.errorTypeCounts.regression || 0,
-                               validationData.errorTypeCounts.performance || 0],
+                        data: [
+                            validationData.errorTypeCounts.schema || 0,
+                            validationData.errorTypeCounts.data_quality || 0,
+                            validationData.errorTypeCounts.regression || 0,
+                            validationData.errorTypeCounts.performance || 0
+                        ],
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 2
@@ -486,7 +553,15 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
                 }
             });
         }
