@@ -1,0 +1,473 @@
+# ARYA Phoenix WSSI → MFP Workflow
+# Complete Development Flow but specialized for Phoenix environment
+# WSSI (Weekly Sales & Stock Intelligence) → MFP (Monthly Forecast Planning) flow
+
+name: "phoenix-wssi-mfp-workflow"
+version: "1.0.0"
+description: "Complete WSSI to MFP workflow for Phoenix environment with environment-specific intelligence"
+
+# Environment Configuration
+environment: "phoenix"
+base_branches:
+  irisx-algo: "master-adidas-reliance-prod"
+  ms-mfp: "release-pheonix"
+  irisx-config: "master-adidas-ril"
+  ms-loadapis: "caas-pheonix-uploads"
+
+# Workflow Phases
+phases:
+  - name: "Environment Setup & Validation"
+    steps:
+      - name: "Switch to Phoenix Base Branches"
+        command: "*switch-to-base-branches"
+        description: "Switch all repositories to Phoenix environment base branches"
+        validation:
+          - "irisx-algo on master-adidas-reliance-prod"
+          - "ms-mfp on release-pheonix"
+          - "irisx-config on master-adidas-ril"
+          - "ms-loadapis on caas-pheonix-uploads"
+      
+      - name: "Validate Phoenix Environment"
+        command: "*validate-environment"
+        description: "Validate Phoenix environment configuration and access"
+        validation:
+          - "Environment-specific configurations loaded"
+          - "Repository access verified"
+          - "Phoenix-specific patterns recognized"
+
+  - name: "LoadAPIs Data Loading"
+    steps:
+      - name: "Load Data from LoadAPIs"
+        command: "*load-data-from-loadapis"
+        description: "Load data from ms-loadapis (caas-pheonix-uploads) for Phoenix environment"
+        inputs:
+          - "LoadAPIs repository access"
+          - "Phoenix environment configuration"
+          - "Data source specifications"
+        outputs:
+          - "Raw data loaded from LoadAPIs"
+          - "Data validation results"
+          - "LoadAPIs processing metrics"
+
+      - name: "Validate LoadAPIs Data"
+        command: "*validate-loadapis-data"
+        description: "Validate data loaded from LoadAPIs for quality and completeness"
+        inputs:
+          - "Raw LoadAPIs data"
+          - "Data quality standards"
+          - "Phoenix environment rules"
+        outputs:
+          - "Data quality validation"
+          - "Completeness verification"
+          - "Data format validation"
+
+  - name: "WSSI Requirements Analysis"
+    steps:
+      - name: "Analyze WSSI Requirements"
+        command: "*analyze-wssi-requirements"
+        description: "Analyze WSSI requirements and convert to MFP-compatible format"
+        inputs:
+          - "WSSI requirement document"
+          - "Phoenix environment context"
+          - "Historical WSSI data patterns"
+        outputs:
+          - "Standardized WSSI format"
+          - "MFP-compatible requirements"
+          - "Phoenix-specific constraints"
+
+      - name: "WSSI Data Structure Analysis"
+        command: "*analyze-wssi-data-structure"
+        description: "Analyze WSSI data structure and identify transformation requirements"
+        inputs:
+          - "WSSI views and snapshots"
+          - "KPI group mappings"
+          - "Subperiod configurations"
+        outputs:
+          - "Data structure mapping"
+          - "Transformation rules"
+          - "Validation requirements"
+
+  - name: "MFP Pattern Recognition"
+    steps:
+      - name: "Analyze MFP Views and Snapshots"
+        command: "*analyze-mfp-views-snapshots"
+        description: "Analyze existing MFP views and snapshots for pattern recognition"
+        inputs:
+          - "MFP view structures"
+          - "Snapshot configurations"
+          - "Phoenix-specific MFP patterns"
+        outputs:
+          - "MFP view patterns"
+          - "Snapshot patterns"
+          - "Phoenix MFP constraints"
+
+      - name: "Identify MFP Integration Points"
+        command: "*identify-mfp-integration-points"
+        description: "Identify integration points between WSSI and MFP modules"
+        inputs:
+          - "WSSI output structure"
+          - "MFP input requirements"
+          - "Phoenix environment rules"
+        outputs:
+          - "Integration mapping"
+          - "Data flow requirements"
+          - "Validation rules"
+
+  - name: "Cross-Repository Analysis"
+    steps:
+      - name: "Algorithm Repository Analysis"
+        command: "*analyze-algorithm-patterns"
+        description: "Analyze algorithm repository for business logic patterns"
+        inputs:
+          - "irisx-algo repository structure"
+          - "Phoenix-specific algorithms"
+          - "Business logic requirements"
+        outputs:
+          - "Algorithm patterns"
+          - "Business logic mapping"
+          - "Phoenix algorithm constraints"
+
+      - name: "Configuration Repository Analysis"
+        command: "*analyze-config-patterns"
+        description: "Analyze configuration repository for SQL views and templates"
+        inputs:
+          - "irisx-config repository structure"
+          - "Phoenix-specific configurations"
+          - "SQL view requirements"
+        outputs:
+          - "Configuration patterns"
+          - "SQL view mappings"
+          - "Template requirements"
+
+  - name: "WSSI to MFP Transformation Planning"
+    steps:
+      - name: "Create WSSI-MFP Transformation Plan"
+        command: "*create-wssi-mfp-transformation-plan"
+        description: "Create comprehensive transformation plan from WSSI to MFP"
+        inputs:
+          - "WSSI analysis results"
+          - "MFP pattern analysis"
+          - "Cross-repository analysis"
+        outputs:
+          - "Transformation plan"
+          - "Implementation sequence"
+          - "Validation strategy"
+
+      - name: "Validate Transformation Plan"
+        command: "*validate-transformation-plan"
+        description: "Validate transformation plan against Phoenix environment constraints"
+        inputs:
+          - "Transformation plan"
+          - "Phoenix environment rules"
+          - "Business requirements"
+        outputs:
+          - "Validation results"
+          - "Risk assessment"
+          - "Mitigation strategies"
+
+  - name: "Implementation Execution"
+    steps:
+      - name: "Create Feature Branches"
+        command: "*create-feature-branches"
+        description: "Create feature branches from Phoenix base branches"
+        inputs:
+          - "Transformation plan"
+          - "Phoenix base branches"
+          - "Feature naming conventions"
+        outputs:
+          - "Feature branches created"
+          - "Branch naming confirmed"
+          - "Base branch alignment verified"
+
+      - name: "Process LoadAPIs Data for WSSI"
+        command: "*process-loadapis-data-for-wssi"
+        description: "Process LoadAPIs data and prepare for WSSI standardization"
+        inputs:
+          - "Validated LoadAPIs data"
+          - "WSSI processing rules"
+          - "Phoenix environment constraints"
+        outputs:
+          - "Processed data for WSSI"
+          - "Data transformation logs"
+          - "Processing metrics"
+
+      - name: "Implement WSSI Standardization"
+        command: "*implement-wssi-standardization"
+        description: "Implement WSSI data standardization for MFP compatibility"
+        inputs:
+          - "Processed LoadAPIs data"
+          - "WSSI standardization rules"
+          - "Phoenix environment constraints"
+        outputs:
+          - "Standardized WSSI data"
+          - "Validation results"
+          - "Quality metrics"
+
+      - name: "Implement MFP Views and Snapshots"
+        command: "*implement-mfp-views-snapshots"
+        description: "Implement MFP views and snapshots based on WSSI data"
+        inputs:
+          - "Standardized WSSI data"
+          - "MFP view patterns"
+          - "Snapshot configurations"
+        outputs:
+          - "MFP views created"
+          - "Snapshots generated"
+          - "Data integrity verified"
+
+      - name: "Implement Cross-Repository Integration"
+        command: "*implement-cross-repository-integration"
+        description: "Implement integration between all four repositories"
+        inputs:
+          - "MFP views and snapshots"
+          - "LoadAPIs processed data"
+          - "Algorithm repository patterns"
+          - "Configuration repository patterns"
+        outputs:
+          - "Cross-repository integration"
+          - "Data flow validation"
+          - "Consistency verification"
+
+  - name: "Quality Assurance and Validation"
+    steps:
+      - name: "Validate WSSI-MFP Data Flow"
+        command: "*validate-wssi-mfp-data-flow"
+        description: "Validate complete data flow from WSSI to MFP"
+        inputs:
+          - "WSSI input data"
+          - "MFP output data"
+          - "Transformation rules"
+        outputs:
+          - "Data flow validation"
+          - "Quality metrics"
+          - "Performance metrics"
+
+      - name: "Validate Phoenix Environment Compliance"
+        command: "*validate-phoenix-compliance"
+        description: "Validate implementation against Phoenix environment requirements"
+        inputs:
+          - "Implementation results"
+          - "Phoenix environment rules"
+          - "Business requirements"
+        outputs:
+          - "Compliance validation"
+          - "Environment-specific metrics"
+          - "Business rule validation"
+
+      - name: "Run Comprehensive Tests"
+        command: "*run-comprehensive-tests"
+        description: "Run comprehensive test suite for WSSI-MFP workflow"
+        inputs:
+          - "Implementation results"
+          - "Test scenarios"
+          - "Phoenix environment data"
+        outputs:
+          - "Test results"
+          - "Coverage metrics"
+          - "Performance benchmarks"
+
+  - name: "Documentation and Deployment"
+    steps:
+      - name: "Generate WSSI-MFP Documentation"
+        command: "*generate-wssi-mfp-documentation"
+        description: "Generate comprehensive documentation for WSSI-MFP workflow"
+        inputs:
+          - "Implementation results"
+          - "Transformation rules"
+          - "Phoenix environment specifics"
+        outputs:
+          - "Technical documentation"
+          - "User guides"
+          - "API documentation"
+
+      - name: "Deploy to Phoenix Environment"
+        command: "*deploy-to-phoenix-environment"
+        description: "Deploy implementation to Phoenix environment"
+        inputs:
+          - "Validated implementation"
+          - "Phoenix environment configuration"
+          - "Deployment scripts"
+        outputs:
+          - "Deployment confirmation"
+          - "Environment validation"
+          - "Monitoring setup"
+
+# Expert Agent Delegation
+expert_delegation:
+  wssi_analysis:
+    agent: "mfp-pattern-expert"
+    commands:
+      - "*analyze-wssi-patterns"
+      - "*standardize-wssi-data"
+      - "*validate-wssi-format"
+  
+  mfp_implementation:
+    agent: "mfp-pattern-expert"
+    commands:
+      - "*create-mfp-views"
+      - "*generate-mfp-snapshots"
+      - "*validate-mfp-data"
+  
+  algorithm_integration:
+    agent: "algorithm-pattern-expert"
+    commands:
+      - "*analyze-algorithm-patterns"
+      - "*implement-business-logic"
+      - "*validate-algorithm-integration"
+  
+  configuration_management:
+    agent: "config-pattern-expert"
+    commands:
+      - "*create-sql-views"
+      - "*generate-templates"
+      - "*validate-configuration"
+  
+  loadapis_integration:
+    agent: "loadapis-pattern-expert"
+    commands:
+      - "*load-data-from-loadapis"
+      - "*validate-loadapis-data"
+      - "*process-loadapis-data-for-wssi"
+      - "*analyze-loadapis-patterns"
+      - "*validate-loadapis-integration"
+
+# Quality Gates
+quality_gates:
+  - name: "Environment Validation Gate"
+    criteria:
+      - "Phoenix environment properly configured"
+      - "All repositories on correct base branches"
+      - "Environment-specific access verified"
+  
+  - name: "LoadAPIs Data Loading Gate"
+    criteria:
+      - "Data successfully loaded from LoadAPIs"
+      - "LoadAPIs data quality validated"
+      - "Data processing completed"
+  
+  - name: "WSSI Analysis Gate"
+    criteria:
+      - "WSSI requirements fully analyzed"
+      - "Data structure mapping complete"
+      - "Transformation rules defined"
+  
+  - name: "MFP Pattern Recognition Gate"
+    criteria:
+      - "MFP patterns identified and documented"
+      - "Integration points mapped"
+      - "Phoenix-specific constraints understood"
+  
+  - name: "Transformation Planning Gate"
+    criteria:
+      - "Transformation plan complete and validated"
+      - "Implementation sequence defined"
+      - "Risk assessment completed"
+  
+  - name: "Implementation Gate"
+    criteria:
+      - "All implementations completed successfully"
+      - "Cross-repository integration working"
+      - "Data flow validated"
+  
+  - name: "Quality Assurance Gate"
+    criteria:
+      - "All tests passing"
+      - "Phoenix environment compliance verified"
+      - "Performance requirements met"
+  
+  - name: "Deployment Gate"
+    criteria:
+      - "Documentation complete"
+      - "Deployment successful"
+      - "Monitoring configured"
+
+# Success Criteria
+success_criteria:
+  technical:
+    - "WSSI data successfully transformed to MFP format"
+    - "MFP views and snapshots generated correctly"
+    - "Cross-repository integration working seamlessly"
+    - "Phoenix environment compliance maintained"
+  
+  business:
+    - "WSSI requirements fully addressed"
+    - "MFP forecasting capabilities enhanced"
+    - "Phoenix-specific business rules implemented"
+    - "User experience improved"
+  
+  quality:
+    - "All quality gates passed"
+    - "Comprehensive testing completed"
+    - "Documentation complete and accurate"
+    - "Performance requirements satisfied"
+
+# Error Handling
+error_handling:
+  environment_errors:
+    - "Invalid Phoenix environment configuration"
+    - "Repository access issues"
+    - "Base branch alignment problems"
+  
+  loadapis_errors:
+    - "LoadAPIs data loading failures"
+    - "Data quality validation issues"
+    - "LoadAPIs processing errors"
+  
+  wssi_errors:
+    - "WSSI data format issues"
+    - "Transformation rule violations"
+    - "Data validation failures"
+  
+  mfp_errors:
+    - "MFP view generation failures"
+    - "Snapshot creation issues"
+    - "Data integrity problems"
+  
+  integration_errors:
+    - "Cross-repository integration failures"
+    - "Data flow interruptions"
+    - "Consistency violations"
+
+# Recovery Procedures
+recovery_procedures:
+  environment_recovery:
+    - "Rollback to previous environment state"
+    - "Re-validate environment configuration"
+    - "Restore repository states"
+  
+  implementation_recovery:
+    - "Rollback to last successful implementation"
+    - "Re-run failed implementation steps"
+    - "Validate partial implementations"
+  
+  loadapis_recovery:
+    - "Re-run LoadAPIs data loading"
+    - "Validate LoadAPIs data quality"
+    - "Restore LoadAPIs processing state"
+  
+  data_recovery:
+    - "Restore from last known good state"
+    - "Re-run data transformations"
+    - "Validate data integrity"
+
+# Monitoring and Analytics
+monitoring:
+  performance_metrics:
+    - "LoadAPIs data loading time"
+    - "WSSI data processing time"
+    - "MFP view generation time"
+    - "Cross-repository integration time"
+    - "Overall workflow execution time"
+  
+  quality_metrics:
+    - "LoadAPIs data quality scores"
+    - "Data transformation accuracy"
+    - "MFP view quality scores"
+    - "Integration success rate"
+    - "Phoenix compliance score"
+  
+  business_metrics:
+    - "WSSI requirement coverage"
+    - "MFP forecasting improvement"
+    - "User satisfaction scores"
+    - "Business value delivered"

@@ -1,0 +1,90 @@
+# Algorithm Output Validation Templates
+
+validation_checks:
+  schema_validation:
+    csv_files:
+      - check_required_columns
+      - validate_data_types
+      - check_column_order
+    json_files:
+      - validate_json_syntax
+      - check_required_fields
+      - validate_nested_structure
+    xlsx_files:
+      - check_sheet_structure
+      - validate_cell_formats
+      - check_named_ranges
+
+  data_quality_checks:
+    completeness:
+      - check_missing_values
+      - validate_required_fields
+      - check_empty_records
+    consistency:
+      - validate_data_ranges
+      - check_format_consistency
+      - validate_business_rules
+    accuracy:
+      - check_calculation_accuracy
+      - validate_reference_data
+      - check_logical_consistency
+
+  regression_detection:
+    statistical_comparison:
+      - compare_summary_statistics
+      - check_distribution_changes
+      - validate_percentage_changes
+    structural_comparison:
+      - compare_file_structures
+      - check_schema_changes
+      - validate_format_changes
+    content_comparison:
+      - compare_key_metrics
+      - check_value_changes
+      - validate_result_consistency
+
+  performance_validation:
+    file_size_checks:
+      - check_file_size_limits
+      - validate_size_trends
+      - check_compression_ratio
+    processing_time:
+      - measure_processing_time
+      - check_time_trends
+      - validate_performance_bounds
+    resource_usage:
+      - check_memory_usage
+      - validate_cpu_usage
+      - check_disk_usage
+
+validation_rules:
+  critical_errors:
+    - missing_required_columns
+    - invalid_data_types
+    - empty_output_files
+    - schema_mismatch
+  warnings:
+    - performance_degradation
+    - minor_data_quality_issues
+    - format_inconsistencies
+  info:
+    - file_metadata_changes
+    - minor_structure_changes
+    - optimization_opportunities
+
+reporting_formats:
+  summary_report:
+    - overall_health_status
+    - critical_issues_count
+    - warnings_count
+    - recommendations
+  detailed_report:
+    - file_by_file_analysis
+    - specific_error_details
+    - performance_metrics
+    - regression_analysis
+  executive_summary:
+    - key_findings
+    - business_impact
+    - action_items
+    - next_steps

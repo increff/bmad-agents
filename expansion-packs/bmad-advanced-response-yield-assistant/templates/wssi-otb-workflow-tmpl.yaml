@@ -1,0 +1,645 @@
+# WSSI-OTB Workflow Template
+# Template for WSSI (Weekly Sales & Stock Intelligence) snapshot lifecycle to OTB (Open-to-Buy) workflow
+# Reliance environment-specific implementation
+
+name: "wssi-otb-workflow-template"
+version: "1.0.0"
+description: "Template for WSSI snapshot lifecycle to OTB workflow in Reliance environment"
+
+# Environment Configuration
+environment: "reliance"
+base_branches:
+  irisx-algo: "master-ril"
+  ms-mfp: "release-ril"
+  irisx-config: "master-ril"
+  ms-loadapis: "caas-ril-uploads"
+
+# LoadAPIs Configuration
+loadapis_config:
+  data_sources:
+    - name: "loadapis_upload_data"
+      description: "LoadAPIs upload data from caas-ril-uploads"
+      format: "csv"
+      location: "data/loadapis/uploads"
+    
+    - name: "loadapis_processing_data"
+      description: "LoadAPIs processing data"
+      format: "json"
+      location: "data/loadapis/processing"
+    
+    - name: "loadapis_validation_data"
+      description: "LoadAPIs validation data"
+      format: "csv"
+      location: "data/loadapis/validation"
+
+  data_loading:
+    - name: "upload_processing"
+      description: "Upload processing workflow"
+      steps:
+        - "data_ingestion"
+        - "data_validation"
+        - "data_transformation"
+        - "data_quality_check"
+    
+    - name: "batch_processing"
+      description: "Batch processing workflow"
+      steps:
+        - "batch_creation"
+        - "batch_validation"
+        - "batch_processing"
+        - "batch_completion"
+
+  reliance_specific:
+    - name: "reliance_upload_rules"
+      description: "Reliance-specific upload rules"
+      rules:
+        - "upload_size_limit: 100MB"
+        - "upload_format: csv, json, xlsx"
+        - "upload_validation: strict"
+    
+    - name: "reliance_processing_rules"
+      description: "Reliance-specific processing rules"
+      rules:
+        - "processing_timeout: 300 seconds"
+        - "memory_limit: 8GB"
+        - "concurrent_uploads: 10"
+
+# WSSI Configuration
+wssi_config:
+  snapshot_lifecycle:
+    stages:
+      - name: "NEW"
+        description: "Initial snapshot creation stage"
+        permissions: ["create", "view"]
+        transitions: ["DRAFT"]
+      
+      - name: "DRAFT"
+        description: "Editable snapshot stage"
+        permissions: ["edit", "view", "calculate"]
+        transitions: ["APPROVED", "NEW"]
+      
+      - name: "APPROVED"
+        description: "Final approval stage for OTB generation"
+        permissions: ["view", "submit"]
+        transitions: ["SUBMITTED"]
+      
+      - name: "SUBMITTED"
+        description: "OTB pipeline submission completed"
+        permissions: ["view"]
+        transitions: []
+
+  kpi_calculations:
+    core_kpis:
+      - name: "act_proj_asp"
+        formula: "act_proj_sales_rev / act_proj_sales_qty"
+        description: "Actual/Projected Average Selling Price"
+      
+      - name: "act_proj_mrp"
+        formula: "(act_proj_discount_val + act_proj_sales_rev) / act_proj_sales_qty"
+        description: "Actual/Projected Maximum Retail Price"
+      
+      - name: "act_proj_margins"
+        formula: "(act_proj_mrp - act_proj_cogs) * 100 / act_proj_mrp"
+        description: "Actual/Projected Margins"
+      
+      - name: "act_proj_discount_percentage"
+        formula: "(act_proj_discount_val * 100) / (act_proj_discount_val + act_proj_sales_rev)"
+        description: "Actual/Projected Discount Percentage"
+      
+      - name: "act_proj_cover_duration"
+        formula: "act_proj_inv_qty / act_proj_sales_qty"
+        description: "Actual/Projected Cover Duration"
+
+    inventory_kpis:
+      - name: "target_inv_qty"
+        formula: "sum(act_proj_sales_qty for next cover_duration_target periods)"
+        description: "Target Inventory Quantity"
+      
+      - name: "otb_inwards"
+        formula: "max(0, target_inv_qty - act_proj_inv_qty - git_inwards - forced_inwards)"
+        description: "Open-to-Buy Inwards"
+      
+      - name: "act_proj_inwards_cogs"
+        formula: "aop_cogs_value * otb_inwards_value"
+        description: "Actual/Projected Inwards COGS"
+
+    cogs_calculation:
+      optimized_method:
+        condition: "'act_proj_sales_qty_with_cogs' in kpi_values"
+        formula: "sum(act_proj_sales_qty_with_cogs) / sum(act_proj_sales_qty)"
+      
+      traditional_method:
+        condition: "fallback when optimized method unavailable"
+        formula: "filtered_cogs_df[subperiod + '_cogs'].mean()"
+
+  data_processing:
+    filters:
+      - name: "channel"
+        type: "multi_select"
+        values: ["online", "offline", "wholesale", "retail"]
+      
+      - name: "fashion_grade"
+        type: "multi_select"
+        values: ["A", "B", "C", "D"]
+      
+      - name: "brand_segment"
+        type: "multi_select"
+        values: ["premium", "mass", "value"]
+      
+      - name: "family"
+        type: "multi_select"
+        values: ["family1", "family2", "family3"]
+      
+      - name: "brand"
+        type: "multi_select"
+        values: ["brand1", "brand2", "brand3"]
+      
+      - name: "sales_channel"
+        type: "multi_select"
+        values: ["direct", "indirect", "online", "offline"]
+
+    transformations:
+      - name: "wide_to_long_format"
+        description: "Convert wide format DataFrame to long format for KPI processing"
+        method: "pandas.melt"
+      
+      - name: "long_to_wide_format"
+        description: "Convert long format to wide format for calculations"
+        method: "pandas.pivot_table"
+      
+      - name: "subperiod_year_combination"
+        description: "Combine subperiod and year into single column"
+        formula: "subperiod + '_' + year.astype(str)"
+
+# OTB Configuration
+otb_config:
+  code_generation:
+    formula: |
+      otb_code = (
+        brand_id.astype(str).str[:4] +      # Brand Id: max 4 chars
+        segment_id.astype(str).str[:2] +    # Segment code: max 2 chars
+        fashion_grade_code.astype(str).str[:4] +  # Fashion Grade: max 4 chars
+        family.astype(str).str[:4] +        # Family: max 4 chars
+        season.astype(str).str[:4] +        # Season Name: max 4 chars
+        year.astype(str).str[:4] +          # Season Year: max 4 chars
+        hit.astype(str).str[:2] +           # Hit Name: max 2 chars
+        purchase_group.astype(str).str[:3]  # Purchase Group: max 3 chars
+      )
+    
+    character_limits:
+      brand_id: 4
+      segment_id: 2
+      fashion_grade_code: 4
+      family: 4
+      season: 4
+      year: 4
+      hit: 2
+      purchase_group: 3
+
+  budget_validity:
+    calculation:
+      budget_valid_from: "datetime(int(year), drop_month, 1).strftime('%Y-%m-%d')"
+      budget_valid_till: "(datetime(int(year), drop_month + 1, 1) - timedelta(days=1)).strftime('%Y-%m-%d')"
+    
+    validation:
+      drop_month_timing: "30-60 days prior to drop start"
+      date_formats: ["DD-MM-YYYY", "YYYY-MM-DD"]
+
+  margin_calculations:
+    otb_value_assignment: "otb_code_df['otb_value'] = otb_code_df['act_proj_inwards_cogs']"
+    margin_formula: "safe_divide((mrp_sum - cogs_sum) * 100, mrp_sum)"
+    matching_criteria:
+      - "fashion_grade"
+      - "sales_channel"
+      - "brand_segment"
+      - "brand"
+      - "family"
+
+# Pipeline Configuration
+pipeline_config:
+  submission:
+    pre_validation:
+      - "version_existence_check"
+      - "approval_status_check"
+      - "pipeline_availability_check"
+      - "data_completeness_check"
+    
+    parameters:
+      - "version_name"
+      - "project_id"
+      - "user_id"
+      - "submission_timestamp"
+      - "otb_data_location"
+      - "audit_trail_id"
+    
+    status_tracking:
+      initial_status: "PROCESSING"
+      final_statuses: ["SUCCESS", "FAILED"]
+      monitoring_interval: "10 seconds"
+
+  azure_integration:
+    data_factory:
+      pipeline_name: "wssi_otb_pipeline"
+      timeout: "90 seconds"
+      retry_attempts: 3
+    
+    blob_storage:
+      container: "wssi-otb-data"
+      timeout: "90 seconds"
+      connection_string: "configured_in_environment"
+
+# Audit Configuration
+audit_config:
+  tracking_levels:
+    user_operations:
+      - "snapshot_creation"
+      - "data_editing"
+      - "stage_transitions"
+      - "otb_submission"
+    
+    stage_changes:
+      - "stage_from"
+      - "stage_to"
+      - "user_id"
+      - "timestamp"
+      - "reason"
+    
+    data_modifications:
+      - "field_name"
+      - "old_value"
+      - "new_value"
+      - "user_id"
+      - "timestamp"
+    
+    pipeline_execution:
+      - "pipeline_id"
+      - "status"
+      - "start_time"
+      - "end_time"
+      - "parameters"
+      - "error_details"
+
+  audit_tables:
+    - name: "wssi_pipeline_audit"
+      fields: ["pipeline_id", "status", "user_id", "timestamp", "parameters"]
+    
+    - name: "wssi_stage_audit"
+      fields: ["version_id", "stage_from", "stage_to", "user_id", "timestamp", "reason"]
+    
+    - name: "wssi_data_audit"
+      fields: ["version_id", "field_name", "old_value", "new_value", "user_id", "timestamp"]
+
+# Reliance Environment Configuration
+reliance_config:
+  environment_specific:
+    data_sources:
+      - name: "reliance_wssi_data"
+        description: "Reliance-specific WSSI data"
+        format: "csv"
+        location: "data/reliance/wssi"
+      
+      - name: "reliance_otb_data"
+        description: "Reliance-specific OTB data"
+        format: "csv"
+        location: "data/reliance/otb"
+    
+    business_rules:
+      - name: "reliance_kpi_calculation"
+        description: "Reliance-specific KPI calculation rules"
+        rules:
+          - "mrp_calculation: (discount_val + sales_rev) / sales_qty"
+          - "margin_calculation: (mrp - cogs) * 100 / mrp"
+          - "cover_duration: inv_qty / sales_qty"
+      
+      - name: "reliance_validation_rules"
+        description: "Reliance-specific validation rules"
+        rules:
+          - "mrp_validation: mrp > 0"
+          - "margin_validation: margin >= 0"
+          - "cover_duration_validation: cover_duration >= 0"
+    
+    constraints:
+      - name: "reliance_performance_constraints"
+        description: "Reliance-specific performance constraints"
+        constraints:
+          - "max_processing_time: 300 seconds"
+          - "max_memory_usage: 8GB"
+          - "max_concurrent_requests: 100"
+      
+      - name: "reliance_data_constraints"
+        description: "Reliance-specific data constraints"
+        constraints:
+          - "max_data_size: 1TB"
+          - "max_records_per_batch: 1000000"
+          - "max_columns_per_view: 1000"
+
+# Cross-Repository Integration Configuration
+integration_config:
+  algorithm_repository:
+    business_logic:
+      - name: "kpi_calculation_logic"
+        description: "KPI calculation business logic"
+        location: "irisx-algo/src/main/java/com/increff/irisx/module"
+        modules:
+          - "KpiCalculationModule"
+          - "InventoryCalculationModule"
+          - "MarginCalculationModule"
+    
+    calculation_modules:
+      - name: "mrp_calculation"
+        description: "MRP calculation module"
+        location: "irisx-algo/src/main/java/com/increff/irisx/module/calculation"
+        class: "MrpCalculationModule"
+      
+      - name: "cogs_calculation"
+        description: "COGS calculation module"
+        location: "irisx-algo/src/main/java/com/increff/irisx/module/calculation"
+        class: "CogsCalculationModule"
+      
+      - name: "margin_calculation"
+        description: "Margin calculation module"
+        location: "irisx-algo/src/main/java/com/increff/irisx/module/calculation"
+        class: "MarginCalculationModule"
+
+  configuration_repository:
+    sql_views:
+      - name: "wssi_snapshot_view"
+        description: "WSSI snapshot SQL view"
+        location: "irisx-config/view-creation/child-input-wssi_snapshot.sql"
+        type: "child-input"
+      
+      - name: "otb_code_view"
+        description: "OTB code SQL view"
+        location: "irisx-config/view-creation/child-output-otb_code.sql"
+        type: "child-output"
+      
+      - name: "wssi_audit_view"
+        description: "WSSI audit SQL view"
+        location: "irisx-config/view-creation/child-audit-wssi_audit.sql"
+        type: "child-audit"
+    
+    templates:
+      - name: "wssi_input_template"
+        description: "WSSI input template"
+        location: "irisx-config/template/export_wssi_input_template.tsv"
+        format: "tsv"
+      
+      - name: "otb_output_template"
+        description: "OTB output template"
+        location: "irisx-config/template/export_otb_output_template.tsv"
+        format: "tsv"
+
+  loadapis_repository:
+    routes:
+      - name: "loadapis_upload_routes"
+        description: "LoadAPIs upload routes"
+        location: "ms-loadapis/loadapis/routes/upload_routes.py"
+        endpoints:
+          - "/upload"
+          - "/upload/validate"
+          - "/upload/process"
+          - "/upload/status"
+      
+      - name: "loadapis_data_routes"
+        description: "LoadAPIs data routes"
+        location: "ms-loadapis/loadapis/routes/data_routes.py"
+        endpoints:
+          - "/data/load"
+          - "/data/validate"
+          - "/data/transform"
+          - "/data/export"
+    
+    services:
+      - name: "loadapis_upload_service"
+        description: "LoadAPIs upload service"
+        location: "ms-loadapis/loadapis/service/upload_service.py"
+        functions:
+          - "process_upload"
+          - "validate_upload"
+          - "transform_upload"
+          - "export_upload"
+
+  mfp_repository:
+    routes:
+      - name: "wssi_views_routes"
+        description: "WSSI views routes"
+        location: "ms-mfp/mfp/routes/wssi_views_routes.py"
+        endpoints:
+          - "/wssi_snapshot"
+          - "/wssi_kpis"
+          - "/otb_codes"
+          - "/pipeline_submit"
+      
+      - name: "wssi_audit_routes"
+        description: "WSSI audit routes"
+        location: "ms-mfp/mfp/routes/wssi_audit_routes.py"
+        endpoints:
+          - "/audit_trail"
+          - "/stage_history"
+          - "/user_operations"
+    
+    services:
+      - name: "wssi_views_helper"
+        description: "WSSI views helper service"
+        location: "ms-mfp/mfp/service/wssi_views_helper.py"
+        functions:
+          - "create_wssi_snapshot"
+          - "calculate_wssi_kpis"
+          - "generate_otb_codes"
+          - "submit_otb_values"
+      
+      - name: "wssi_pipeline_helper"
+        description: "WSSI pipeline helper service"
+        location: "ms-mfp/mfp/service/wssi_pipeline_helper.py"
+        functions:
+          - "trigger_wssi_pipeline"
+          - "monitor_pipeline_status"
+          - "handle_pipeline_errors"
+
+# Quality Assurance Configuration
+quality_assurance:
+  data_validation:
+    wssi_data:
+      - name: "data_completeness"
+        description: "WSSI data completeness validation"
+        rules:
+          - "all_required_columns_present"
+          - "no_null_values_in_key_columns"
+          - "data_range_validation"
+      
+      - name: "data_accuracy"
+        description: "WSSI data accuracy validation"
+        rules:
+          - "numeric_columns_are_numeric"
+          - "date_columns_are_valid_dates"
+          - "kpi_calculations_are_correct"
+      
+      - name: "data_consistency"
+        description: "WSSI data consistency validation"
+        rules:
+          - "kpi_values_are_consistent"
+          - "stage_transitions_are_valid"
+          - "audit_trail_is_complete"
+    
+    otb_data:
+      - name: "code_generation_accuracy"
+        description: "OTB code generation accuracy validation"
+        rules:
+          - "otb_codes_are_unique"
+          - "character_limits_respected"
+          - "business_rules_applied"
+      
+      - name: "budget_validity_accuracy"
+        description: "Budget validity calculation accuracy"
+        rules:
+          - "budget_dates_are_correct"
+          - "drop_month_validation_passed"
+          - "date_format_compliance"
+      
+      - name: "margin_calculation_accuracy"
+        description: "Margin calculation accuracy validation"
+        rules:
+          - "margin_formulas_applied_correctly"
+          - "matching_criteria_respected"
+          - "safe_division_handled"
+
+  integration_validation:
+    cross_repository:
+      - name: "data_flow_integrity"
+        description: "Cross-repository data flow integrity validation"
+        rules:
+          - "data_flows_correctly_between_repositories"
+          - "data_transformations_are_correct"
+          - "data_consistency_maintained"
+      
+      - name: "business_logic_integration"
+        description: "Business logic integration validation"
+        rules:
+          - "business_logic_applied_correctly"
+          - "calculation_modules_integrated"
+          - "validation_rules_applied"
+      
+      - name: "performance_integration"
+        description: "Performance integration validation"
+        rules:
+          - "integration_performance_acceptable"
+          - "scalability_requirements_met"
+          - "resource_usage_optimized"
+
+  reliance_validation:
+    environment_compliance:
+      - name: "reliance_rules_compliance"
+        description: "Reliance environment rules compliance validation"
+        rules:
+          - "reliance_business_rules_applied"
+          - "reliance_constraints_respected"
+          - "reliance_performance_requirements_met"
+      
+      - name: "reliance_data_compliance"
+        description: "Reliance data compliance validation"
+        rules:
+          - "reliance_data_formats_respected"
+          - "reliance_data_validation_rules_applied"
+          - "reliance_data_quality_standards_met"
+
+# Success Criteria Configuration
+success_criteria:
+  technical:
+    - name: "wssi_snapshot_lifecycle_success"
+      description: "WSSI snapshot lifecycle implemented correctly"
+      criteria:
+        - "snapshot_creation_working"
+        - "stage_transitions_functional"
+        - "kpi_calculations_accurate"
+        - "audit_trail_complete"
+    
+    - name: "otb_implementation_success"
+      description: "OTB code generation and submission working correctly"
+      criteria:
+        - "otb_codes_generated_correctly"
+        - "budget_validity_calculated_accurately"
+        - "pipeline_submission_functional"
+        - "status_monitoring_active"
+    
+    - name: "cross_repository_integration_success"
+      description: "Cross-repository integration working seamlessly"
+      criteria:
+        - "algorithm_repository_integrated"
+        - "configuration_repository_integrated"
+        - "mfp_repository_integrated"
+        - "loadapis_repository_integrated"
+        - "data_flow_working_correctly"
+    
+    - name: "reliance_compliance_success"
+      description: "Reliance environment compliance maintained"
+      criteria:
+        - "reliance_business_rules_applied"
+        - "reliance_constraints_respected"
+        - "reliance_performance_requirements_met"
+        - "reliance_data_quality_standards_met"
+
+  business:
+    - name: "wssi_requirements_success"
+      description: "WSSI snapshot requirements fully addressed"
+      criteria:
+        - "snapshot_lifecycle_requirements_met"
+        - "kpi_calculation_requirements_met"
+        - "stage_management_requirements_met"
+        - "audit_trail_requirements_met"
+    
+    - name: "otb_capabilities_success"
+      description: "OTB value submission capabilities enhanced"
+      criteria:
+        - "otb_code_generation_improved"
+        - "budget_validity_accuracy_improved"
+        - "pipeline_submission_reliability_improved"
+        - "status_monitoring_effectiveness_improved"
+    
+    - name: "reliance_business_rules_success"
+      description: "Reliance-specific business rules implemented"
+      criteria:
+        - "reliance_business_logic_applied"
+        - "reliance_calculation_rules_applied"
+        - "reliance_validation_rules_applied"
+        - "reliance_performance_rules_applied"
+    
+    - name: "user_experience_success"
+      description: "User experience improved"
+      criteria:
+        - "user_interface_improved"
+        - "user_workflow_improved"
+        - "user_performance_improved"
+        - "user_satisfaction_improved"
+
+  quality:
+    - name: "quality_gates_success"
+      description: "All quality gates passed"
+      criteria:
+        - "wssi_quality_gate_passed"
+        - "otb_quality_gate_passed"
+        - "integration_quality_gate_passed"
+        - "reliance_quality_gate_passed"
+    
+    - name: "testing_success"
+      description: "Comprehensive testing completed"
+      criteria:
+        - "unit_testing_completed"
+        - "integration_testing_completed"
+        - "end_to_end_testing_completed"
+        - "performance_testing_completed"
+    
+    - name: "documentation_success"
+      description: "Documentation complete and accurate"
+      criteria:
+        - "technical_documentation_complete"
+        - "user_guides_complete"
+        - "api_documentation_complete"
+        - "configuration_guides_complete"
+    
+    - name: "performance_success"
+      description: "Performance requirements satisfied"
+      criteria:
+        - "response_time_requirements_met"
+        - "throughput_requirements_met"
+        - "scalability_requirements_met"
+        - "resource_usage_requirements_met"

@@ -1,0 +1,38 @@
+# Algorithm Output Validation Priority Matrix
+
+validation_priorities:
+  p0_critical:
+    - primary_output_files
+    - core_algorithm_results
+    - business_critical_data
+    - final_reports
+  p1_high:
+    - intermediate_outputs
+    - validation_files
+    - summary_statistics
+    - performance_metrics
+  p2_medium:
+    - debug_outputs
+    - temporary_files
+    - log_files
+  p3_low:
+    - backup_files
+    - experimental_outputs
+    - test_data
+
+file_type_priorities:
+  csv_files:
+    priority: p0_critical
+    validation: [schema, data_quality, regression]
+  json_files:
+    priority: p0_critical
+    validation: [schema, data_quality, regression]
+  xlsx_files:
+    priority: p1_high
+    validation: [schema, data_quality]
+  txt_files:
+    priority: p2_medium
+    validation: [data_quality]
+  tsv_files:
+    priority: p1_high
+    validation: [schema, data_quality, regression]

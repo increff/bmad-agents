@@ -1,0 +1,23 @@
+# Algorithm Output Risk Assessment Matrix
+
+criteria:
+  file_importance_weight: 0.40   # business criticality of output files
+  data_quality_weight: 0.25     # historical data quality issues
+  change_freq_weight: 0.20       # frequency of file updates
+  size_complexity_weight: 0.10  # file size and complexity
+  baseline_availability_weight: 0.05  # availability of baseline for comparison
+
+scales:
+  file_importance: {low: 1, medium: 5, high: 9}
+  data_quality:    {excellent: 1, good: 3, fair: 5, poor: 7, critical: 9}
+  change_freq:     {rare: 1, occasional: 3, frequent: 5, very_frequent: 7, constant: 9}
+  size_complexity: {small: 1, medium: 3, large: 5, very_large: 7, massive: 9}
+  baseline_availability: {available: 1, partial: 3, limited: 5, minimal: 7, none: 9}
+
+examples:
+  - file_type: primary_results.csv
+    scores: {file_importance: high, data_quality: good, change_freq: frequent, size_complexity: large, baseline_availability: available}
+  - file_type: debug_output.txt
+    scores: {file_importance: low, data_quality: fair, change_freq: very_frequent, size_complexity: small, baseline_availability: none}
+  - file_type: summary_report.json
+    scores: {file_importance: high, data_quality: excellent, change_freq: occasional, size_complexity: medium, baseline_availability: available}
