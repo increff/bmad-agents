@@ -36,9 +36,6 @@ class MCPSetup {
       // Install SQL MCP Servers
       await this.installSQLMCPServers();
       
-      // Install Notion MCP Server
-      await this.installNotionMCPServer();
-      
       // Configure Cursor MCP settings
       await this.configureCursorMCP();
       
@@ -444,40 +441,6 @@ pathlib`;
     console.log(chalk.green('✅ SQL MCP Servers installed'));
   }
 
-  /**
-   * Install Notion MCP Server
-   */
-  async installNotionMCPServer() {
-    console.log(chalk.yellow('📝 Installing Notion MCP Server...'));
-    
-    // Notion MCP server is installed as part of SQL MCP servers
-    // Create setup instructions
-    const notionSetup = `# Notion MCP Server Setup
-
-## Prerequisites
-1. Create a Notion integration at https://notion.so/my-integrations
-2. Copy the Internal Integration Token
-3. Share your Notion pages with the integration
-
-## Environment Variable Setup
-Add to your ~/.zshrc or ~/.bashrc:
-export NOTION_API_KEY="your_notion_api_key_here"
-
-## Test Installation
-Run: echo $NOTION_API_KEY
-Should display your API key.
-
-## Restart Cursor
-After setting up the API key, restart Cursor for the MCP server to work.
-`;
-
-    fs.writeFileSync(
-      path.join(this.mcpServersDir, 'NOTION_SETUP.md'),
-      notionSetup
-    );
-    
-    console.log(chalk.green('✅ Notion MCP Server installed'));
-  }
 
   /**
    * Configure Cursor MCP settings
@@ -510,10 +473,6 @@ After setting up the API key, restart Cursor for the MCP server to work.
           command: "npx",
           args: ["-y", "mcp-sqlite-tools"]
         },
-        "notion-mcp": {
-          command: "node",
-          args: [path.join(__dirname, "notion-mcp-wrapper.js")]
-        }
       }
     };
     

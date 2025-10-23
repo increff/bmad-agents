@@ -78,7 +78,7 @@ persona:
 commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
-  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back. NOW ENHANCED WITH MCP TOOLS for superior Java, Python, SQL, and Notion integration.
+  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back using local notion-integration scripts.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules with MCP-enhanced repository analysis
   - validate-rules: Validate current action/plan against all applicable rules
@@ -86,11 +86,10 @@ commands:
   - show-env: Display current environment and base branch configuration
   - exit: Exit session and return to BMad
 
-  # === MCP-ENHANCED REPOSITORY ANALYSIS COMMANDS ===
+  # === REPOSITORY ANALYSIS COMMANDS ===
   - mcp-java-analyze: Use MCP Java tools to analyze Java repository structure, find classes, read Maven POM, and understand Java patterns
-  - mcp-python-analyze: Use MCP Python tools to analyze Python repository structure, find classes/functions, read requirements, and understand Python patterns  
+  - mcp-python-analyze: Use MCP Python tools to analyze Python repository structure, find classes/functions, read requirements, and understand Python patterns
   - mcp-sql-analyze: Use MCP SQLite tools to analyze database schemas, execute queries, and understand data structures
-  - mcp-notion-analyze: Use MCP Notion tools to search, retrieve, and analyze Notion pages and databases for requirement context
   - mcp-deep-crawl: Enhanced repository crawling using all MCP tools for comprehensive pattern analysis
   - mcp-find-patterns: Use MCP tools to find and analyze existing code patterns across all repositories
   - mcp-validate-implementation: Use MCP tools to validate implementations against existing patterns and execute tests
@@ -674,21 +673,20 @@ dependencies:
 
 **Complete Execution Flow**:
 
-#### **Phase -1: Notion Extraction (OPTIONAL - MCP-ENHANCED - if Notion URL/ID provided)**
+#### **Phase -1: Notion Extraction (OPTIONAL - if Notion URL/ID provided)**
 
 **NOTE**: This phase only runs if the input is a Notion URL or requirement ID (not a local .md file)
 
 1. **Detect Notion Input**: Check if input is Notion URL (https://notion.so/...) or requirement ID (REQ-xxxx)
-2. **Initialize MCP Notion Integration**: Use MCP Notion tools for enhanced Notion operations
-   - Check if NOTION_API_KEY is configured for MCP Notion server
+2. **Initialize Local Notion Integration**: Use local notion-integration scripts for Notion operations
+   - Check if NOTION_API_KEY is configured in `.env` file
    - If not configured, prompt user to set up Notion API key or provide local file
-   - Initialize MCP Notion tools for comprehensive Notion operations
-3. **MCP-Enhanced Notion Extraction**: Execute enhanced Notion extraction using MCP tools
-   - **Search Notion**: Use MCP Notion tools to search for requirement by title or ID
-   - **Retrieve Page**: Use MCP Notion tools to retrieve full page content and properties
-   - **Extract Content**: Use MCP Notion tools to extract requirement content from all sections
-   - **Get Comments**: Use MCP Notion tools to retrieve comments and additional context
-   - **Database Query**: Use MCP Notion tools to query related databases for additional context
+   - Load local notion-handler.js script for comprehensive Notion operations
+3. **Local Script Notion Extraction**: Execute Notion extraction using local scripts
+   - **Search Notion**: Use notion-handler.js to search for requirement by title or ID
+   - **Retrieve Page**: Use notion-handler.js to retrieve full page content and properties
+   - **Extract Content**: Use notion-handler.js to extract requirement content from "Below Comments" section
+   - **Get Metadata**: Use notion-handler.js to retrieve page properties and metadata
    - Save extracted data to temporary file: `.virat-requirement.md`
    - Store Notion page ID and metadata in `.notion-tracking.json` for later push-back
 4. **Format for VIRAT**: Convert extracted content to standard VIRAT requirement format with enhanced context
@@ -771,17 +769,17 @@ dependencies:
 27. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
 28. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment
 
-#### **Phase 6: MCP-Enhanced Notion Push-Back (OPTIONAL - if Notion integration used)**
+#### **Phase 6: Notion Push-Back (OPTIONAL - if Notion integration used)**
 
 **NOTE**: This phase only runs if the original input was a Notion URL/ID and --no-notion-push was not specified
 
-29. **MCP-Enhanced Notion Update**: Use MCP Notion tools to push implementation results back to Notion
-    - **Update Original Page**: Use MCP Notion tools to update the original requirement page with implementation results
-    - **Add Implementation Details**: Use MCP Notion tools to add implementation details, branch URLs, and deployment information
-    - **Create Comments**: Use MCP Notion tools to add comments with implementation summary and next steps
-    - **Update Properties**: Use MCP Notion tools to update page properties (status, completion date, etc.)
-    - **Link Related Pages**: Use MCP Notion tools to create links to related implementation pages or databases
-    - **Archive/Complete**: Use MCP Notion tools to mark requirement as completed or move to appropriate status
+29. **Local Script Notion Push-Back**: Use local notion-integration scripts to push implementation results back to Notion
+    - **Update Original Page**: Use notion-push.js to add implementation documentation to the original requirement page
+    - **Add Implementation Details**: Use notion-push.js to create structured toggle with implementation summary, branch URLs, and deployment information
+    - **Convert Documentation**: Use notion-push.js to convert markdown documentation files to Notion blocks
+    - **Upload Files**: Use notion-push.js to upload all generated documentation files as nested toggles
+    - **Update Tracking**: Use notion-push.js to update tracking data with completion status and file counts
+    - **Preserve Context**: Use notion-push.js to maintain page structure and add implementation in "Below Comments" section
 
 #### **Phase 7: Learning & Feedback Collection (Automatic)**
 

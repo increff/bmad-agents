@@ -22,9 +22,9 @@ VIRAT (Virtual Intelligent Repository Analysis and Transformation) has been enha
 4. **SQLite Tools MCP Server** (`sqlite-tools-mcp`)
    - **Advanced Tools**: 20+ comprehensive database tools including transactions, schema management, and bulk operations
 
-5. **Notion MCP Server** (`notion-mcp`)
-   - **Official Notion Integration**: Comprehensive Notion API integration for pages, databases, and comments
-   - **Tools**: Search, retrieve, create, update, and manage Notion content
+5. **Local Notion Integration** (`notion-integration`)
+   - **Local Scripts**: Custom Notion integration using local JavaScript scripts
+   - **Tools**: Extract requirements from Notion pages, push documentation back to Notion
 
 ## Enhanced VIRAT Capabilities
 
@@ -145,7 +145,6 @@ Use MCP Notion tools to query related databases
 - `*mcp-java-analyze`: Analyze Java repository using MCP Java tools
 - `*mcp-python-analyze`: Analyze Python repository using MCP Python tools
 - `*mcp-sql-analyze`: Analyze SQL/configuration repository using MCP SQL tools
-- `*mcp-notion-analyze`: Analyze Notion pages and databases using MCP Notion tools
 - `*mcp-deep-crawl`: Enhanced repository crawling using all MCP tools
 - `*mcp-find-patterns`: Use MCP tools to find and analyze existing code patterns
 - `*mcp-validate-implementation`: Use MCP tools to validate implementations
@@ -243,10 +242,6 @@ Ensure your `~/.cursor/mcp.json` includes:
     "sqlite-tools-mcp": {
       "command": "npx",
       "args": ["-y", "mcp-sqlite-tools"]
-    },
-    "notion-mcp": {
-      "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"]
     }
   }
 }

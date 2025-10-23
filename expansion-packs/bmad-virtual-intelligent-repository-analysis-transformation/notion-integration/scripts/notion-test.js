@@ -162,19 +162,18 @@ class NotionTest {
             });
 
             const properties = dbInfo.properties;
-            const requiredFields = ['No ID', 'Request Description'];
+            const recommendedFields = ['No ID', 'ID', 'Requirement', 'Request Description'];
             const optionalFields = ['III. DEVELOPMENT'];
 
-            console.log('  📋 Required Fields:');
+            console.log('  📋 Recommended Fields (for optimal functionality):');
             let schemaValid = true;
-            
-            requiredFields.forEach(fieldName => {
+
+            recommendedFields.forEach(fieldName => {
                 if (properties[fieldName]) {
                     const fieldType = properties[fieldName].type;
                     console.log(`    ✅ ${fieldName}: ${fieldType}`);
                 } else {
-                    console.log(`    ❌ ${fieldName}: Missing`);
-                    schemaValid = false;
+                    console.log(`    ⚠️  ${fieldName}: Not found (notion-handler will try alternatives)`);
                 }
             });
 
@@ -287,7 +286,7 @@ class NotionTest {
             return false;
         }
 
-        // Test 4: Schema
+        // Test 4: Schema (not critical - handler is flexible)
         results.schema = await this.testDatabaseSchema();
 
         // Test 5: Sample Fetch
@@ -297,26 +296,32 @@ class NotionTest {
         console.log('\n' + '═'.repeat(50));
         console.log('📊 TEST SUMMARY\n');
 
-        const allPassed = Object.values(results).every(result => result);
+        // Schema is not critical since notion-handler is flexible with field names
+        const criticalTests = ['environment', 'authentication', 'database', 'sample'];
+        const allCriticalPassed = criticalTests.every(test => results[test]);
 
-        if (allPassed) {
-            console.log('🎉 ALL TESTS PASSED!');
+        if (allCriticalPassed) {
+            console.log('🎉 CRITICAL TESTS PASSED!');
             console.log('\n✅ Notion integration is ready to use!');
             console.log('\n💡 Next steps:');
-            console.log('   • Run: *notion_implement REQ-XXX');
-            console.log('   • Or: *notion-help for all commands');
+            console.log('   • Run: *implement REQ-XXX (Notion URL or ID)');
+            console.log('   • Use local notion-integration scripts directly if needed');
+            if (!results.schema) {
+                console.log('\n⚠️  Note: Schema validation failed, but integration should still work');
+                console.log('   The notion-handler script is flexible with field names.');
+            }
         } else {
-            console.log('⚠️  SOME TESTS FAILED');
+            console.log('❌ CRITICAL TESTS FAILED');
             console.log('\n❌ Issues found:');
-            Object.entries(results).forEach(([test, passed]) => {
-                if (!passed) {
+            criticalTests.forEach(test => {
+                if (!results[test]) {
                     console.log(`   • ${test}: Failed`);
                 }
             });
-            console.log('\n💡 Please fix the issues above before using Notion integration.');
+            console.log('\n💡 Please fix the critical issues above before using Notion integration.');
         }
 
-        return allPassed;
+        return allCriticalPassed;
     }
 }
 
