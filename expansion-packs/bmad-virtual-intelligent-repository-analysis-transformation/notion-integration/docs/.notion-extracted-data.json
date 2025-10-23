@@ -1,0 +1,10 @@
+{
+  "pageId": "285f31dc496880f0840fdd8d76d17703",
+  "requirementId": "REQ-1176",
+  "requirementTitle": "Add attribute_b level in the Planogram Creation output, and add a parameter for the user to select if at attribute_b level the output should be generated. ",
+  "requestingClients": "Adidas-India, Birkenstock",
+  "requirementContent": "Detailed context for bmad\n\nIn planogram creation module we currently use only a single attribute, and calculate planogram at that level. \n\nNow we need to add one more attribute, let’s call it attribute1, should be the same column name as present in planogram input. \n\nAlso the level at which planogram needs to be computed should be based on an input parameter → just one attribute, or at 2 attribute level. \n\nThe calculations would remain, just the level at which the final output is computed changes, and wherever the computation happens at the attribute level, based on the input parameter we will need to compute at the required level. \n\n\n> Each stage signifies the stage that has been completed for eg prototype stage signifies prototype is ready\n\n\n> This page will be maintained only by EM/PM. Use buttons provide below to change the stage of requirement\n\n\n**[Toggle] 🎛️ Things to keep in mind**",
+  "contentBlocksCount": 12,
+  "notionUrl": "https://www.notion.so/285f31dc496880f0840fdd8d76d17703",
+  "extractedAt": "2025-10-21T08:29:39.769Z"
+}

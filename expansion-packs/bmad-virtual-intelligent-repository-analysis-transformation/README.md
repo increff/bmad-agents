@@ -8,18 +8,60 @@ The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system featu
 
 ## Features
 
+- **🚀 MCP-Enhanced Analysis**: Integrated Model Context Protocol tools for superior Java, Python, and SQL code analysis
 - **Multi-Environment Support**: Automatically detects and switches between prod, reliance, and phoenix environments with environment-specific base branches
-- **Multi-Repository Coordination**: Handles three interconnected repositories simultaneously
-- **Pattern-Based Development**: Analyzes existing patterns and follows them for consistency
-- **Automated Workflow**: Complete development lifecycle from requirement analysis to implementation
+- **Multi-Repository Coordination**: Handles three interconnected repositories simultaneously with MCP tool assistance
+- **🔍 Pattern-Based Development**: Analyzes existing patterns using MCP tools and follows them for consistency
+- **Automated Workflow**: Complete development lifecycle from requirement analysis to implementation with MCP-guided code generation
 - **Real Git Operations**: Performs actual branch creation, commits, and repository operations
-- **Comprehensive Validation**: Runs existing validation modules and tests
+- **🧪 MCP-Enhanced Validation**: Runs existing validation modules and tests using MCP tools for comprehensive testing
 - **Documentation Updates**: Updates requirement documents with implementation results
-- **Specialized Expert Agents**: Dedicated agents for LoadAPI, Configuration, and Algorithm patterns
-- **Comprehensive Repository Analysis**: Deep analysis of all three repositories with pattern recognition
-- **Requirement Intelligence**: Advanced requirement classification and impact prediction
-- **Module Dependency Analysis**: Understanding of cascading effects across algorithm modules
+- **Specialized Expert Agents**: Dedicated agents for LoadAPI, Configuration, and Algorithm patterns with MCP tool support
+- **🔬 Deep Repository Analysis**: MCP-powered analysis of all three repositories with actual code understanding
+- **Requirement Intelligence**: Advanced requirement classification and impact prediction using MCP code analysis
+- **📊 Module Dependency Analysis**: Understanding of cascading effects across algorithm modules using MCP dependency mapping
 - **Strict Enforcement**: Mandatory validation and comprehensive oversight to prevent skipping steps
+
+## MCP Integration
+
+### Model Context Protocol Enhancement
+
+VIRAT is now enhanced with Model Context Protocol (MCP) tools that provide superior code analysis and implementation capabilities:
+
+#### **🔧 Available MCP Tools**
+
+1. **Java MCP Server** - Deep Java code analysis and Maven integration
+   - Read and analyze Java files with full class understanding
+   - Analyze Maven POM configurations and dependencies
+   - Find Java classes and understand inheritance hierarchies
+   - Execute Maven commands for testing and validation
+
+2. **Python MCP Server** - Comprehensive Python module analysis
+   - Analyze Python modules, classes, and function structures
+   - Read and manage requirements.txt and pyproject.toml files
+   - Find Python classes and understand module relationships
+   - Execute Python commands for testing and validation
+
+3. **SQL MCP Servers** - Advanced database operations
+   - Analyze SQLite database schemas and table structures
+   - Execute SQL queries for data analysis and validation
+   - Perform CRUD operations and schema management
+   - Support for transactions and bulk operations
+
+#### **🚀 MCP-Enhanced Capabilities**
+
+- **Pattern Discovery**: Automatically discover existing code patterns across all repositories
+- **Dependency Mapping**: Analyze actual code imports and dependencies using MCP tools
+- **Code Generation**: Generate pattern-compliant code using discovered architectural patterns
+- **Validation**: Validate implementations against existing code patterns using MCP analysis
+- **Testing**: Execute comprehensive tests using appropriate tools (Maven, Python runners, SQL)
+
+#### **📈 Benefits**
+
+- **Superior Code Understanding**: Actual code analysis vs. file structure analysis
+- **Pattern Compliance**: Automatically follow discovered architectural patterns
+- **Quality Assurance**: Comprehensive validation using real code analysis
+- **Efficiency**: Reduced manual analysis time with automated pattern discovery
 
 ## Architecture
 
@@ -94,8 +136,6 @@ VIRAT supports multiple environments with different base branches:
 - Creates feature branches from appropriate bases
 - For multiple environments: implements in first, pushes, then repeats for second
 - Documents environment-specific implementation details
-
-📖 **See**: [Environment Configuration Guide](docs/ENVIRONMENT_CONFIGURATION.md) for detailed usage.
 
 ## Agents
 

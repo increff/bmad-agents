@@ -13,13 +13,35 @@ workflow:
     - brownfield-enhancement
 
   phases:
+    - phase: notion_extraction
+      agent: virat
+      condition: "input is Notion URL or requirement ID"
+      steps:
+        - step: validate_notion_environment
+          action: validate Notion API credentials and database access
+          creates: validated Notion connection
+          notes: "Check NOTION_API_KEY and NOTION_DATABASE_ID environment variables"
+        - step: parse_notion_identifier
+          action: parse Notion URL or requirement ID to extract page identifier
+          creates: parsed page identifier
+          notes: "Handle both full URLs and requirement IDs (e.g., REQ-1234)"
+        - step: extract_requirement_from_notion
+          action: extract requirement content from Notion page "Below Comments" section
+          script: "notion-integration/scripts/notion-handler.js"
+          creates: formatted requirement document (.virat-requirement.md)
+          notes: "Extract content from Below Comments section and format for VIRAT"
+        - step: store_notion_tracking
+          action: store Notion page ID and metadata for later push-back
+          creates: .notion-tracking.json with page information
+          notes: "Store page ID, URL, and extraction timestamp for documentation push-back"
+
     - phase: analysis_planning
       agent: virat
       steps:
         - step: requirement_analysis
           action: analyze requirement document and create implementation plan
           creates: implementation plan with repository mapping
-          notes: "Parse requirement document and identify affected repositories and modules"
+          notes: "Parse requirement document (from file or Notion extraction) and identify affected repositories and modules"
         - step: module_identification
           action: identify target modules and patterns from requirement
           creates: module mapping and pattern identification
@@ -108,6 +130,28 @@ workflow:
           creates: change summary and delivery documentation
           notes: "Create comprehensive summary of all changes made"
 
+    - phase: notion_push_back
+      agent: virat
+      condition: "requirement was extracted from Notion"
+      steps:
+        - step: gather_documentation_files
+          action: collect all generated documentation files for push-back
+          creates: list of documentation files to upload
+          notes: "Find *-ANALYSIS.md, *-IMPLEMENTATION.md, *-PLAN.md, CHANGELOG.md files"
+        - step: convert_to_notion_blocks
+          action: convert markdown documentation to Notion block format
+          creates: Notion-formatted blocks ready for upload
+          notes: "Convert markdown files to Notion blocks with proper formatting"
+        - step: push_to_notion
+          action: upload documentation to original Notion page "Below Comments" section
+          script: "notion-integration/scripts/notion-push.js"
+          creates: updated Notion page with implementation documentation
+          notes: "Create implementation summary toggle with all documentation as nested blocks"
+        - step: update_notion_tracking
+          action: update tracking file with push completion status
+          creates: updated .notion-tracking.json with push timestamp
+          notes: "Record push completion, file count, and final status"
+
   success_criteria:
     - All three repositories have feature branches created
     - All required code changes implemented following existing patterns
@@ -115,6 +159,7 @@ workflow:
     - Configuration files updated consistently
     - Documentation updated with complete implementation details
     - Implementation completed within 2-hour target
+    - If Notion source: Documentation successfully pushed back to original Notion page
 
   error_handling:
     - Repository access issues: Handle gracefully with fallback options
@@ -130,3 +175,5 @@ workflow:
     - Uses multi-stage repository crawling for accuracy
     - Implements pattern-based requirement enhancement
     - Maintains consistency across all three repositories
+    - Supports both file-based and Notion-based requirements seamlessly
+    - Notion integration: Extract → Implement → Push Back (all in one workflow)

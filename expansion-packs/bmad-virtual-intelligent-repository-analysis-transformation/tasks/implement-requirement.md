@@ -129,15 +129,25 @@ Execute the complete development workflow for implementing a requirement across 
 
 ### 5. Branch Creation and Repository Operations
 
-**Step 8: Create Feature Branches**
+**Step 8: Create Feature Branches (Optimized)**
 
-1. **Execute Git Operations**: Use `*git-branch` command to create actual feature branches
-2. **Branch Naming**: Use convention `feature/{req-id}-{title}`
-3. **Base Branch**: Create branches from `caas-release` branch in each repository
-4. **Multi-Repository Coordination**: Create branches in all affected repositories
-5. **Handle Existing Branches**: Switch to existing branches if they exist
-6. **Repository Status**: Ensure all repositories are on correct branches
-7. **Update Requirement Document**: Add branch URLs and repository information to requirement document
+1. **Detect Environment**: Identify target environment from requirement document (prod/reliance/phoenix)
+2. **Get Environment Base Branches**: Use following mappings:
+   - **prod**: algorithm=`caas-release`, loadapi=`release_optimised`, config=`caas-staging_fix`
+   - **reliance**: algorithm=`master-ril`, loadapi=`caas-ril-uploads`, config=`master-ril`
+   - **phoenix**: algorithm=`master-adidas-reliance-prod`, loadapi=`caas-phoenix-uploads`, config=`master-adidas-ril`
+3. **Change Detection**: Analyze which repositories actually need modifications:
+   - **Algorithm Repository**: Check if Java classes, modules, or business logic needs changes
+   - **LoadAPI Repository**: Check if Python LoadAPI classes need changes
+   - **Config Repository**: Check if SQL views, templates, or configuration needs changes
+4. **Selective Branch Creation**: Only create feature branches for repositories that need changes:
+   - ✅ **Create branch**: If repository has identified changes
+   - ❌ **Skip branch**: If repository has no changes required
+5. **Branch Naming**: Use convention `feature/{req-id}-{title}` for affected repositories only
+6. **Create from Base**: Create branches from environment-specific base branches (NOT from master)
+7. **Handle Existing Branches**: Switch to existing branches if they exist
+8. **Repository Status**: Ensure only affected repositories are on feature branches
+9. **Update Requirement Document**: Add branch URLs and repository information for affected repositories only
 
 ### 6. Pre-Implementation Crawling - Stage 2
 

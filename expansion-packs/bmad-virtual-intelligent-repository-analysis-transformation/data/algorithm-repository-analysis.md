@@ -451,8 +451,8 @@ public class View {
 
 | **Change Type** | **Files to Modify**   | **Changes Required**           |
 | --------------- | --------------------- | ------------------------------ |
-| **Row Class**   | [ModuleName]Row.java  | Add new fields                 |
-| **File Class**  | [ModuleName]File.java | Update headers and read method |
+| **Row Class**   | {ModuleName}Row.java  | Add new fields                 |
+| **File Class**  | {ModuleName}File.java | Update headers and read method |
 | **File Name**   | FileName.java         | Add new file name constant     |
 | **Schema**      | SchemaProvider.java   | Add schema registration        |
 | **Validation**  | ValidationModule.java | Add validation logic           |

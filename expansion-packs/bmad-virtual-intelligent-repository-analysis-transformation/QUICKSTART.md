@@ -19,6 +19,8 @@ VIRAT is an AI agent system that automates IRISX development workflows across yo
   - `ms-loadapis-ril-final` (Python APIs)
 - IDE: Cursor, Claude Code, or other supported IDE
 
+> **🚀 MCP Servers**: MCP servers (Java, Python, SQL, Notion) are **automatically installed and configured** during VIRAT installation. No manual setup required!
+
 ### Step-by-Step Installation
 
 #### 1. Navigate to Your Project Directory
@@ -73,6 +75,27 @@ After installation, check these directories exist:
 ```bash
 ls -la .bmad-virtual-intelligent-repository-analysis-transformation/
 # Should contain: agents/, tasks/, templates/, config.yaml
+
+# Verify MCP servers are installed (automatic)
+ls -la ~/mcp-servers/
+# Should contain: java-mcp/, python-mcp/, sql-mcp-servers/
+
+# Verify Cursor MCP configuration (automatic)
+cat ~/.cursor/mcp.json
+# Should contain MCP server configurations
+```
+
+#### 5. MCP Server Verification (Automatic)
+MCP servers are automatically installed and configured. To verify:
+```bash
+# Run verification script (created automatically)
+~/mcp-servers/verify-mcp-installation.sh
+
+# Restart Cursor to load MCP servers
+# Test VIRAT with MCP tools
+*help
+*mcp-deep-crawl
+```
 
 # For Cursor users:
 ls -la .cursor/rules/bmad/

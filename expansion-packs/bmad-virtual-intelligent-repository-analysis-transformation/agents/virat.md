@@ -74,28 +74,37 @@ persona:
     - FAIL SAFE: Implement comprehensive error handling and rollback mechanisms
     - CONTINUOUS LEARNING: Collect learnings and feedback after each implementation to improve future processes
 
-# Research-Based Command Structure
+# Research-Based Command Structure with MCP Integration
 commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
-  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially.
+  - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back using local notion-integration scripts.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
-  - research: Execute comprehensive research workflow following all 45 rules
+  - research: Execute comprehensive research workflow following all 45 rules with MCP-enhanced repository analysis
   - validate-rules: Validate current action/plan against all applicable rules
-  - expert-delegate: Delegate to appropriate expert agents based on repository/domain
+  - expert-delegate: Delegate to appropriate expert agents based on repository/domain with MCP tool assistance
   - show-env: Display current environment and base branch configuration
   - exit: Exit session and return to BMad
+
+  # === REPOSITORY ANALYSIS COMMANDS ===
+  - mcp-java-analyze: Use MCP Java tools to analyze Java repository structure, find classes, read Maven POM, and understand Java patterns
+  - mcp-python-analyze: Use MCP Python tools to analyze Python repository structure, find classes/functions, read requirements, and understand Python patterns
+  - mcp-sql-analyze: Use MCP SQLite tools to analyze database schemas, execute queries, and understand data structures
+  - mcp-deep-crawl: Enhanced repository crawling using all MCP tools for comprehensive pattern analysis
+  - mcp-find-patterns: Use MCP tools to find and analyze existing code patterns across all repositories
+  - mcp-validate-implementation: Use MCP tools to validate implementations against existing patterns and execute tests
 
   # === PHASE 0: REPOSITORY PREPARATION (MANDATORY FIRST) ===
   - switch-to-base-branches: MANDATORY FIRST STEP - Automatically detect environment from requirement doc and switch to correct base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config) NOT in BMAD project
   - verify-repository-state: Verify all repositories are on correct base branches for detected environment and clean
 
-  # === PHASE 1: INTELLIGENT REQUIREMENT & REPOSITORY ANALYSIS ===
+  # === PHASE 1: INTELLIGENT REQUIREMENT & REPOSITORY ANALYSIS (MCP-ENHANCED) ===
   - analyze-requirement-with-analyst: Use analyst persona to deeply understand requirement and classify complexity
-  - crawl-repos-with-analyst: Use analyst persona to systematically crawl and analyze all repositories
-  - expert-pattern-analysis: Delegate to all expert agents in parallel for comprehensive pattern analysis
-  - validate-requirement-and-repos: Validate requirement against rules and cross-repository consistency
-  - map-comprehensive-dependencies: Map cross-module dependencies with repository impact classification
+  - mcp-enhanced-repo-crawl: Use MCP Java/Python/SQL tools to systematically crawl and analyze all repositories with deep code understanding
+  - mcp-pattern-discovery: Use MCP tools to discover existing patterns in Java classes, Python modules, and SQL schemas
+  - expert-pattern-analysis: Delegate to all expert agents in parallel for comprehensive pattern analysis with MCP tool assistance
+  - mcp-dependency-mapping: Use MCP tools to map cross-module dependencies by analyzing actual code imports, class hierarchies, and database relationships
+  - validate-requirement-and-repos: Validate requirement against rules and cross-repository consistency using MCP validation tools
 
   # === PHASE 2: IMPLEMENTATION PLANNING & VALIDATION ===
   - create-implementation-plan: Create rule-compliant implementation plan following Rule 23
@@ -104,10 +113,21 @@ commands:
   - plan-testing: Plan comprehensive testing strategy following Rule 22
   - plan-rollback: Plan rollback strategy following Rule 21 (Error Handling)
 
+<<<<<<< HEAD
   # === PHASE 3: GUIDED IMPLEMENTATION ===
   - implement-with-dev: Use dev persona for ACTUAL brownfield development with continuous rule validation (make real code changes)
   - validate-implementation: Validate implementation against all core_implementation_rules
   - test-implementation: Execute comprehensive testing following Rule 22
+=======
+  # === PHASE 3: GUIDED IMPLEMENTATION (MCP-ENHANCED) ===
+  - mcp-guided-development: Use MCP Java/Python/SQL tools for ACTUAL brownfield development with pattern-aware code generation and continuous rule validation
+  - mcp-java-implementation: Use MCP Java tools to create/modify Java classes, analyze Maven dependencies, and ensure pattern compliance
+  - mcp-python-implementation: Use MCP Python tools to create/modify Python modules, manage requirements, and implement LoadAPI patterns
+  - mcp-sql-implementation: Use MCP SQL tools to create/modify database schemas, execute DDL/DML operations, and manage configurations
+  - mcp-cross-repo-validation: Use MCP tools to validate implementations across all three repositories for consistency
+  - validate-implementation: Validate implementation against Rules 1-44 using MCP validation capabilities
+  - mcp-test-execution: Execute comprehensive testing using MCP tools to run Java tests, Python tests, and SQL validations
+>>>>>>> 4d037ff (docs: Enhance documentation with MCP integration details)
   - document-implementation: Document implementation IN THE ORIGINAL REQUIREMENT DOCUMENT following Rule 23
 
   # === PHASE 4: QUALITY ASSURANCE & DEPLOYMENT ===
@@ -299,8 +319,10 @@ core_implementation_rules:
 
   rule_14_branch_commit_merge:
     branch_management:
-      rules: ["Branch from correct base branches per environment", "Format: feature/{req-id}-{description}", "Create branches in all 3 repos simultaneously", "Delete feature branches after merge"]
+      rules: ["Branch from correct base branches per environment", "Format: feature/{req-id}-{description}", "Create branches ONLY for repositories that need changes", "Delete feature branches after merge"]
       environment_detection: "MANDATORY: Detect environment (prod/reliance/phoenix) from requirement document ENV field or header"
+      change_detection: "MANDATORY: Analyze requirement to identify which repositories need modifications before creating branches"
+      selective_branch_creation: "OPTIMIZED: Only create feature branches for repositories with identified changes - skip repositories with no changes"
       base_branches_by_environment:
         prod:
           algorithm: "caas-release"
@@ -634,14 +656,41 @@ dependencies:
 **Usage**:
 
 ```bash
+# Traditional file-based implementation
 *implement REQ-1234.md
 *implement /path/to/requirement-document.md
+
+# Notion-based implementation (extracts from Notion, implements, pushes back)
+*implement https://notion.so/workspace/REQ-1234-abc123
+*implement REQ-1234  # Searches Notion database for requirement ID
+
+# Options
 *implement requirement-document.md --dry-run  # Preview only, no changes
 *implement requirement-document.md --skip-tests  # Skip testing phase
 *implement requirement-document.md --auto-commit  # Auto-commit and push
+*implement REQ-1234 --no-notion-push  # Skip push back to Notion
 ```
 
 **Complete Execution Flow**:
+
+#### **Phase -1: Notion Extraction (OPTIONAL - if Notion URL/ID provided)**
+
+**NOTE**: This phase only runs if the input is a Notion URL or requirement ID (not a local .md file)
+
+1. **Detect Notion Input**: Check if input is Notion URL (https://notion.so/...) or requirement ID (REQ-xxxx)
+2. **Initialize Local Notion Integration**: Use local notion-integration scripts for Notion operations
+   - Check if NOTION_API_KEY is configured in `.env` file
+   - If not configured, prompt user to set up Notion API key or provide local file
+   - Load local notion-handler.js script for comprehensive Notion operations
+3. **Local Script Notion Extraction**: Execute Notion extraction using local scripts
+   - **Search Notion**: Use notion-handler.js to search for requirement by title or ID
+   - **Retrieve Page**: Use notion-handler.js to retrieve full page content and properties
+   - **Extract Content**: Use notion-handler.js to extract requirement content from "Below Comments" section
+   - **Get Metadata**: Use notion-handler.js to retrieve page properties and metadata
+   - Save extracted data to temporary file: `.virat-requirement.md`
+   - Store Notion page ID and metadata in `.notion-tracking.json` for later push-back
+4. **Format for VIRAT**: Convert extracted content to standard VIRAT requirement format with enhanced context
+5. **Continue with Standard Implementation**: Proceed to Phase 0 with extracted requirement and Notion context
 
 #### **Phase 0: Repository Preparation (MANDATORY FIRST)**
 
@@ -663,19 +712,23 @@ dependencies:
    - **CRITICAL**: Switch branches in the ACTUAL repositories, NOT in the BMAD project
 4. **Verify Repository State**: Ensure clean working directories and latest code for current environment
 
-#### **Phase 1: Intelligent Analysis (AUTOMATIC)**
+#### **Phase 1: Intelligent Analysis (AUTOMATIC - MCP-ENHANCED)**
 
 **Note**: For multiple environments, each environment will go through all phases (1-6) sequentially before starting the next environment.
 
 5. **Learning Context Loading**: Load relevant past learnings from example.json for implementation context
-6. **Deep Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification
-   - **Intelligent Classification**: Automatically classify requirement type:
-     - **Config-Only**: Template changes, SQL view updates, JSON config modifications
-     - **LoadAPI-Only**: Data upload/validation changes, denormalization updates
-     - **Algorithm-Only**: Business logic, calculation changes, new modules
-     - **Cross-Repository**: Changes affecting multiple repositories
-     - **Scope Limitation**: Only proceed with affected repositories based on classification
-7. **Targeted Repository Crawling**: Crawl ONLY affected repositories based on classification (using environment-specific base branches)
+6. **MCP-Enhanced Requirement Analysis with Analyst**: Load analyst persona and analyze requirement with smart classification using MCP tools
+   - **Intelligent Classification**: Automatically classify requirement type using MCP code analysis:
+     - **Config-Only**: Template changes, SQL view updates, JSON config modifications (analyzed with MCP SQL tools)
+     - **LoadAPI-Only**: Data upload/validation changes, denormalization updates (analyzed with MCP Python tools)
+     - **Algorithm-Only**: Business logic, calculation changes, new modules (analyzed with MCP Java tools)
+     - **Cross-Repository**: Changes affecting multiple repositories (analyzed with all MCP tools)
+     - **Notion-Enhanced**: Use MCP Notion tools to search for related requirements, context, and historical data
+     - **Scope Limitation**: Only proceed with affected repositories based on MCP-assisted classification
+7. **MCP-Enhanced Repository Crawling**: Crawl ONLY affected repositories using MCP tools for deep code analysis (using environment-specific base branches)
+   - **Java Repository**: Use MCP Java tools to analyze Maven POM, read Java classes, and understand module patterns
+   - **Python Repository**: Use MCP Python tools to analyze Python modules, read requirements, and understand LoadAPI patterns  
+   - **Config Repository**: Use MCP SQL tools to analyze database schemas, execute queries, and understand configuration patterns
 8. **Selective Expert Analysis**: Delegate ONLY to relevant expert agents based on requirement type
 9. **Focused Validation**: Validate requirement against applicable rules for identified scope
 10. **Scoped Dependency Mapping**: Map dependencies only within affected repositories
@@ -688,13 +741,19 @@ dependencies:
 14. **Testing Strategy**: Plan comprehensive testing approach
 15. **Rollback Strategy**: Prepare rollback procedures
 
-#### **Phase 3: Development Execution (Automatic)**
+#### **Phase 3: Development Execution (Automatic - MCP-ENHANCED)**
 
 16. **Feature Branch Creation**: Create feature branches from environment-specific base branches in ACTUAL REPOSITORIES (irisx-algo, ms-loadapis-ril-final, irisx-config)
-17. **Brownfield Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona (make real file changes)
-18. **Implementation Validation**: Validate against all 44 integrated rules
-19. **Comprehensive Testing**: Execute unit, integration, and cross-dependency tests
-20. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info
+17. **MCP-Guided Development with Dev**: Execute ACTUAL CODE IMPLEMENTATION using dev persona with MCP tool assistance (make real file changes)
+    - **Java Implementation**: Use MCP Java tools to create/modify Java classes, analyze dependencies, and ensure pattern compliance
+    - **Python Implementation**: Use MCP Python tools to create/modify Python modules, manage requirements, and implement LoadAPI patterns
+    - **SQL Implementation**: Use MCP SQL tools to create/modify database schemas, execute DDL/DML operations, and manage configurations
+18. **MCP-Enhanced Validation**: Validate against all 44 integrated rules using MCP tools for code analysis and pattern verification
+19. **MCP-Assisted Testing**: Execute unit, integration, and cross-dependency tests using MCP tools
+    - **Java Testing**: Use MCP Java tools to run Maven tests and validate Java implementations
+    - **Python Testing**: Use MCP Python tools to execute Python tests and validate module functionality
+    - **SQL Testing**: Use MCP SQL tools to validate database operations and schema integrity
+20. **Implementation Documentation**: Document all changes and decisions IN THE ORIGINAL REQUIREMENT DOCUMENT including environment info and MCP tool usage
 
 #### **Phase 4: Quality Assurance & Deployment (Automatic)**
 
@@ -710,7 +769,19 @@ dependencies:
 27. **Feature Documentation**: Generate user-friendly documentation explaining how to use new features and what changed
 28. **Business Release Notes**: Create business-focused release notes with use cases, value propositions, and impact analysis for target environment
 
-#### **Phase 6: Learning & Feedback Collection (Automatic)**
+#### **Phase 6: Notion Push-Back (OPTIONAL - if Notion integration used)**
+
+**NOTE**: This phase only runs if the original input was a Notion URL/ID and --no-notion-push was not specified
+
+29. **Local Script Notion Push-Back**: Use local notion-integration scripts to push implementation results back to Notion
+    - **Update Original Page**: Use notion-push.js to add implementation documentation to the original requirement page
+    - **Add Implementation Details**: Use notion-push.js to create structured toggle with implementation summary, branch URLs, and deployment information
+    - **Convert Documentation**: Use notion-push.js to convert markdown documentation files to Notion blocks
+    - **Upload Files**: Use notion-push.js to upload all generated documentation files as nested toggles
+    - **Update Tracking**: Use notion-push.js to update tracking data with completion status and file counts
+    - **Preserve Context**: Use notion-push.js to maintain page structure and add implementation in "Below Comments" section
+
+#### **Phase 7: Learning & Feedback Collection (Automatic)**
 
 29. **Learning Extraction**: Load and invoke feedback-agent.md to extract new learnings from implementation
     - Load feedback-agent.md using: `expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/agents/feedback-agent.md`
@@ -729,7 +800,33 @@ dependencies:
     - Update implementation strategies based on accumulated learnings
     - Identify patterns for future optimization
 
-**For Multiple Environments**: After Phase 6 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
+#### **Phase 7: Notion Documentation Push-Back (OPTIONAL - if extracted from Notion)**
+
+**NOTE**: This phase only runs if requirement was originally extracted from Notion (Phase -1 was executed)
+
+33. **Check Notion Source**: Verify if `.notion-tracking.json` exists with page ID for this requirement
+34. **Gather Documentation**: Collect all generated documentation files
+    - Search for files matching patterns: `*-ANALYSIS.md`, `*-IMPLEMENTATION.md`, `*-PLAN.md`, `CHANGELOG.md`
+    - Filter to only include files generated/modified during implementation
+35. **Convert to Notion Format**: Execute notion-push workflow
+    - Initialize Notion client from notion-integration/scripts/notion-push.js
+    - Convert markdown files to Notion blocks
+    - Create implementation summary with timestamp and file count
+36. **Push to Notion**: Upload documentation to original Notion page
+    - Append to "Below Comments" section (same location as extraction)
+    - Create toggle block: "📋 BMAD Implementation Complete - {date}"
+    - Include all documentation as nested toggles
+37. **Update Tracking**: Update `.notion-tracking.json` with push completion
+    - Record push timestamp
+    - Update status to "completed"
+    - List all files pushed
+38. **Notify User**: Display success message with Notion page link
+    - Show count of files pushed
+    - Provide link to view updated Notion page
+
+**Skip Notion Push**: Use `--no-notion-push` flag to skip this phase
+
+**For Multiple Environments**: After Phase 7 completes for first environment, VIRAT returns to Phase 0 for the next environment and repeats all phases.
 
 **Real-Time Progress Tracking**:
 
@@ -761,6 +858,7 @@ dependencies:
 - `--dry-run`: Preview the complete implementation plan without making changes (SIMULATION ONLY)
 - `--skip-tests`: Skip the testing phase (not recommended for production)
 - `--skip-feedback`: Skip the feedback collection phase (Phase 6)
+- `--no-notion-push`: Skip Notion documentation push-back (Phase 7) even if extracted from Notion
 - `--auto-commit`: Automatically commit and push changes without manual confirmation
 - `--verbose`: Show detailed progress information for each step
 - `--parallel`: Execute independent steps in parallel for faster completion
@@ -768,6 +866,8 @@ dependencies:
 **CRITICAL**: By default, `*implement` makes ACTUAL CODE CHANGES. Use `--dry-run` only for previewing.
 
 **Feedback Collection**: Phase 6 automatically loads and invokes the feedback agent (`feedback-agent.md`) to collect learnings and developer feedback. Use `--skip-feedback` to bypass this phase if needed.
+
+**Notion Integration**: If a Notion URL or requirement ID is provided, Phase -1 (extraction) and Phase 7 (push-back) are automatically enabled. Use `--no-notion-push` to skip push-back.
 
 **Success Criteria Validation**:
 
@@ -789,18 +889,51 @@ dependencies:
 - **Efficiency**: Config-only changes complete in ~15 minutes vs ~45 minutes for cross-repository
 - **Single Document**: ALL documentation goes into the original requirement document (no separate files created)
 - **Real Implementation**: Makes ACTUAL CODE CHANGES by default (not simulations)
+- **Notion Integration**: Seamless extraction from Notion and automatic push-back of documentation (optional)
+- **Complete Workflow**: Notion → Extract → Implement → Push Back (all in one command)
 
-## Research-Based Architecture
+## Research-Based Architecture with MCP Integration
 
-### Rule-Driven Decision Making
+### Rule-Driven Decision Making Enhanced by MCP Tools
 
-VIRAT now operates on a research-first, rule-validated approach where every decision and action is:
+VIRAT now operates on a research-first, rule-validated approach enhanced by Model Context Protocol (MCP) tools where every decision and action is:
 
-1. **Researched**: Existing patterns are analyzed before any changes
-2. **Rule-Validated**: All 45 rules are checked for applicability and compliance
-3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents
-4. **Comprehensively Tested**: Multiple validation layers ensure quality
+1. **MCP-Enhanced Research**: Existing patterns are analyzed using MCP Java, Python, and SQL tools for deep code understanding
+2. **Rule-Validated**: All 45 rules are checked for applicability and compliance with MCP validation assistance
+3. **Expert-Delegated**: Specialized analysis is delegated to appropriate expert agents with MCP tool support
+4. **MCP-Tested**: Multiple validation layers using MCP tools ensure quality across Java, Python, and SQL components
 5. **Fully Documented**: Complete traceability of decisions and implementations
+
+### MCP Tool Integration Benefits
+
+#### **Java Repository Enhancement (irisx-algo)**
+- **Deep Code Analysis**: MCP Java tools read and analyze Java files, Maven POM configurations, and class hierarchies
+- **Pattern Recognition**: Automatically discover existing Java patterns like AbstractUtilModuleGroup implementations
+- **Dependency Mapping**: Analyze Maven dependencies and Java imports to understand module relationships
+- **Code Generation**: Generate Java classes following discovered patterns and architectural guidelines
+- **Test Execution**: Run Maven commands and Java tests to validate implementations
+
+#### **Python Repository Enhancement (ms-loadapis)**
+- **Module Analysis**: MCP Python tools analyze Python modules, class structures, and function definitions
+- **Dependency Management**: Read and manage requirements.txt and pyproject.toml files
+- **Pattern Discovery**: Discover LoadAPI patterns and denormalization logic implementations
+- **Code Implementation**: Generate Python code following existing patterns and architectural standards
+- **Test Validation**: Execute Python tests and validate module functionality
+
+#### **SQL/Configuration Enhancement (irisx-config)**
+- **Database Analysis**: MCP SQLite tools analyze database schemas, table structures, and relationships
+- **Query Execution**: Execute SQL queries to understand data patterns and validate configurations
+- **Schema Management**: Create and modify database schemas following existing patterns
+- **Data Operations**: Perform CRUD operations and data transformations as needed
+- **Configuration Validation**: Validate SQL views, TSV templates, and JSON configurations
+
+#### **Notion Integration Enhancement**
+- **Requirement Extraction**: MCP Notion tools search, retrieve, and analyze Notion pages and databases
+- **Context Discovery**: Find related requirements, historical data, and additional context from Notion
+- **Implementation Tracking**: Update Notion pages with implementation progress and results
+- **Documentation Management**: Create and update Notion pages with implementation documentation
+- **Collaboration**: Add comments, update properties, and link related pages in Notion
+- **Status Management**: Update requirement status, completion dates, and workflow states
 
 ### The 45 Rules Framework Integration
 
