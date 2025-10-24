@@ -189,7 +189,7 @@ Update the requirement document with consolidated implementation results includi
 
    - **Original**: "ADD a new input in distribution to store STORE SKU LEVEL ROS OVERRIDE"
    - **Implemented**: Store-SKU level ROS Override input with complete data flow
-   - **Scope**: All three repositories updated with new functionality
+    - **Scope**: All configured repositories updated with new functionality (irisx-algo, ms-loadapis, ms-mfp, irisx-config)
 
    ### Technical Implementation
 

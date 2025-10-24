@@ -72,6 +72,16 @@ workflow:
           action: analyze configuration-specific patterns and cross-repository coordination
           creates: Configuration pattern analysis and implementation guidance
           notes: "Delegate to Configuration Pattern Expert for configuration patterns, SQL view creation, template generation, and cross-repository coordination"
+        - step: algorithm_pattern_analysis
+          agent: algorithm-pattern-expert
+          action: analyze algorithm-specific patterns and module dependencies
+          creates: Algorithm pattern analysis and implementation guidance
+          notes: "Delegate to Algorithm Pattern Expert for algorithm patterns, module structures, validation frameworks, and module dependency analysis"
+        - step: mfp_pattern_analysis
+          agent: mfp-pattern-expert
+          action: analyze MFP-specific patterns and forecasting algorithms
+          creates: MFP pattern analysis and implementation guidance
+          notes: "Delegate to MFP Pattern Expert for MFP repository patterns, forecasting algorithms, Python pattern recognition, and environment-specific MFP logic"
         - step: template_generation
           action: generate implementation templates based on discovered patterns
           creates: implementation templates and validation patterns

@@ -98,13 +98,15 @@ dependencies:
 
 ### Repository Statistics
 
-- **Total Java Files**: 1,174 files
-- **Module Directories**: 30+ modules
-- **Group Modules**: 25+ group modules
-- **Validation Modules**: 30+ validation modules
-- **Row Classes**: 100+ row classes
-- **File Classes**: 100+ file classes
-- **Util Classes**: 50+ utility classes
+- **Total Java Files**: 1,113 files
+- **Module Directories**: 27+ modules
+- **Group Modules**: 27 group modules
+- **Validation Modules**: 25 validation modules
+- **Row Classes**: 324 row classes (162 input, 162 output)
+- **File Classes**: 324 file classes (162 input, 162 output)
+- **Args Classes**: 32 argument classes
+- **Constants Classes**: 50+ constants and enums
+- **Util/Helper Classes**: 60+ utility classes
 
 ### Core Algorithm Architecture
 
@@ -128,18 +130,18 @@ REQUIREMENT → MODULE CREATION → VALIDATION → DATA PROCESSING → CROSS-REP
 
 **Directory Organization**:
 
-- `module/` - Module implementations (59 directories)
-- `provider/` - Provider classes (7 files)
-- `args/` - Argument classes (32 files)
-- `constants/` - Constants and enums
-- `file/` - File handling classes
-- `row/` - Data row classes
-- `util/` - Utility classes
-- `helper/` - Helper classes and utilities
+- `module/` - Module implementations (27 group modules, 150+ individual modules)
+- `provider/` - Provider classes (ModuleProvider, SchemaProvider)
+- `args/` - Argument classes (32 configuration classes)
+- `constants/` - Constants and enums (50+ classes with business rules)
+- `file/` - File handling classes (324 input/output file classes)
+- `row/` - Data row classes (324 input/output row classes)
+- `util/` - Utility classes (30+ utility classes)
+- `helper/` - Helper classes (30+ helper and data processing classes)
 
 ### Module Provider Patterns
 
-#### **ModuleProvider.java (257 lines)**
+#### **ModuleProvider.java (400+ lines)**
 
 **Purpose**: Central registry for all modules and their dependencies
 **Structure**:
@@ -153,7 +155,14 @@ public class ModuleProvider extends AbstractModuleProvider {
     private InvComputationGroupModule invComputationGroupModule;
     @Autowired
     private MfpGroupModule mfpGroupModule;
-    // ... more modules
+    @Autowired
+    private DepthSuggestionGroupModule depthSuggestionGroupModule;
+    @Autowired
+    private NoosGroupModule noosGroupModule;
+    @Autowired
+    private AgGroupModule agGroupModule;
+    // ... 27+ group modules total
+    // ... 25+ validation modules
 }
 ```
 
@@ -161,54 +170,77 @@ public class ModuleProvider extends AbstractModuleProvider {
 
 - **Spring Component**: All modules are Spring-managed components
 - **Dependency Injection**: Uses @Autowired for module dependencies
-- **Module Registration**: Each module must be registered in ModuleProvider
-- **Group Module Pattern**: Modules are organized into group modules
+- **Module Registration**: Each module registered in ModuleProvider with add() method
+- **Group Module Pattern**: 27 group modules coordinate 150+ individual modules
+- **Validation Integration**: 25 validation modules ensure data integrity
+- **Multi-language Support**: Constants support English/Spanish localization
 
 ### Schema Provider Patterns
 
-#### **SchemaProvider.java (536 lines)**
+#### **SchemaProvider.java (1,000+ lines)**
 
 **Purpose**: Central registry for all file schemas and data structures
 **Structure**:
 
 ```java
+@Component
 public class SchemaProvider extends AbstractSchemaProvider {
-    // File schema registrations
-    // Input file registrations
-    // Output file registrations
+    @PostConstruct
+    public void init() {
+        // 324 file schema registrations
+        // Input files (162 classes)
+        // Output files (162 classes)
+        // Each registration: add(RowClass.class, FileClass.class, FileName.CONSTANT)
+    }
 }
 ```
 
 **Key Patterns**:
 
-- **File Registration**: All input/output files must be registered
-- **Schema Definition**: Defines data structure schemas
-- **Import Management**: Manages file imports and dependencies
-- **Type Safety**: Ensures type safety across file operations
+- **File Registration**: 324 file schema registrations (162 input + 162 output)
+- **Schema Definition**: Defines TSV file headers and data structure mappings
+- **Row-File Mapping**: Each row class paired with corresponding file class
+- **File Name Constants**: Uses FileName.java constants for database table mapping
+- **Type Safety**: Ensures type safety across all file operations
+- **Multi-Module Integration**: Supports all 27+ algorithm modules
 
 ### File Name Constants Patterns
 
-#### **FileName.java (546 lines)**
+#### **FileName.java (800+ lines)**
 
-**Purpose**: Central registry for all file name constants
+**Purpose**: Central registry for all file name constants and database table mappings
 **Structure**:
 
 ```java
 public class FileName {
-    // DATA FILES
+    // MASTER DATA FILES
     public static final String INPUTS = "a_input";
     public static final String AOP = "a_aop";
     public static final String ATTRIBUTE = "a_attribute";
     public static final String STORE = "a_store";
-    // ... more constants
+    public static final String STYLE = "a_style";
+    public static final String SKU = "a_sku_attribs";
+    // ... 200+ file name constants
+
+    // TRANSACTIONAL DATA
+    public static final String SALES = "a_sales";
+    public static final String WHSTOCK = "a_whstock";
+    public static final String OPEN_ORDERS = "input_dist_open_orders";
+
+    // OUTPUT FILES
+    public static final String DIST_OUTPUT = "output_dist";
+    public static final String OTB_OUTPUT = "output_otb";
+    // ... export and denormalized variants
 }
 ```
 
 **Key Patterns**:
 
-- **Snake Case Naming**: All file names use snake_case
-- **No Extensions**: Extensions are assumed by DBSync class
-- **Categorized Constants**: Organized by data type and purpose
+- **Snake Case Naming**: All file names use snake_case convention
+- **Database Mapping**: Each constant maps to database table name
+- **Categorized Organization**: Grouped by data type (master, transactional, output)
+- **Export Variants**: Many files have export_ and denorm_ variants
+- **Multi-language Support**: Integration with localization framework
 - **Static Final**: All constants are static final strings
 
 ### Group Module Patterns
@@ -240,14 +272,35 @@ public class [ModuleName]GroupModule extends AbstractUtilModuleGroup {
 - **Module Dependencies**: Contains module and validation module dependencies
 - **Run Method**: Implements module execution logic
 
-**Examples**:
+**Examples** (27 total):
 
-- `UtilLoadGroupModule` - Utility loading group
-- `InvComputationGroupModule` - Inventory computation group
-- `MfpGroupModule` - MFP (Monthly Forecast Planning) group
-- `NoosGroupModule` - NOOS (New Order Optimization System) group
-- `DistributionGroupModule` - Distribution group
-- `DynamicDiscountingGroupModule` - Dynamic discounting group
+- `UtilLoadGroupModule` - Utility loading and data preparation
+- `InvComputationGroupModule` - Inventory computation and analysis
+- `MfpGroupModule` - MFP (Monthly Forecast Planning)
+- `NoosGroupModule` - NOOS (New Order Optimization System)
+- `AgGroupModule` - Attribute Grouping (MCH)
+- `ApIssGroupModule` - Ideal Size Set (AP-ISS)
+- `ApOdGroupModule` - Optimum Depth (AP-OD)
+- `ApOwGroupModule` - Optimum Width (AP-OW)
+- `ApOutputGroupModule` - Assortment Plan outputs
+- `OtbGroupModule` - OTB (Open To Buy) planning
+- `OtbStyleWiseBuyGroupModule` - Style-wise OTB calculations
+- `OtbDepletionGroupModule` - OTB depletion analysis
+- `OtbReorderingGroupModule` - OTB reordering integration
+- `DistributionGroupModule` - Distribution and allocation
+- `DynamicDiscountingGroupModule` - Dynamic discounting engine
+- `GapAnalysisGroupModule` - Gap analysis and reporting
+- `ImpactAnalysisGroupModule` - Impact analysis (IST/Discounting)
+- `StyleWiseToSizeWiseGroupModule` - Style to size conversion
+- `InvCreationGroupModule` - Inventory creation
+- `PriceBucketCreationGroupModule` - Price bucket creation
+- `PlanogramCreationGroupModule` - Planogram creation
+- `BiOutputGroupModule` - Business Intelligence outputs
+- `DepthSuggestionGroupModule` - Depth suggestion algorithms
+- `EossGroupModule` - EOSS (End of Season Sale) processing
+- `ReallocationGroupModule` - Reallocation processing
+- `StoryWiseAllocationGroupModule` - Story-wise allocation
+- `StoryWiseDisplayGroupModule` - Story-wise display
 
 ### Validation Module Patterns
 
@@ -276,13 +329,32 @@ public class [ModuleName]ValidationModule extends AbstractValidationModule {
 - **Args Dependencies**: Contains argument class dependencies
 - **Validate Method**: Implements validation logic
 
-**Examples**:
+**Examples** (25 total):
 
+- `MastersInputValidationModule` - Master data validation
+- `DistributionInputValidationModule` - Distribution data validation
 - `GapAnalysisValidationModule` - Gap analysis validation
 - `MfpValidationModule` - MFP validation
 - `OdValidationModule` - OD (Optimum Depth) validation
 - `OtbValidationModule` - OTB (Open To Buy) validation
+- `OtbDepletionInputValidationModule` - OTB depletion validation
+- `OtbStyleWiseBuyInputValidationModule` - Style-wise OTB validation
+- `ReorderingInputValidationModule` - Reordering validation
 - `SizeSetPropertiesValidationModule` - Size set properties validation
+- `StyleWiseToSizeWiseInputValidationModule` - Style to size validation
+- `ApInputValidationModule` - Assortment Planning validation
+- `OwInputValidationModule` - Optimum Width validation
+- `DynamicDiscountValidationModule` - Dynamic discounting validation
+- `InvCreationValidationModule` - Inventory creation validation
+- `PriceBucketValidationModule` - Price bucket validation
+- `BiValidationModule` - Business Intelligence validation
+- `StoryWiseAllocationValidationModule` - Story allocation validation
+- `StoryWiseDisplayValidationModule` - Story display validation
+- `IstImpactAnalysisValidationModule` - IST impact analysis validation
+- `DiscountingImpactAnalysisValidationModule` - Discounting impact validation
+- `ReallocationDateValidationModule` - Date-based reallocation validation
+- `DepletionEndDateValidationModule` - Depletion date validation
+- `DistributionEndDateValidationModule` - Distribution date validation
 
 ### Row Class Patterns
 
@@ -306,13 +378,27 @@ public class [ModuleName]Row {
 - **No Methods**: Typically no methods, just data fields
 - **Package Organization**: Organized by module and input/output type
 
-**Examples**:
+**Examples** (162 input, 162 output):
 
-- `BrandGradingRow` - Brand grading data row
-- `SuggestedIstRow` - Suggested IST data row
-- `DiscAnalysisInputRow` - Discount analysis input row
-- `ImplementedIstRow` - Implemented IST data row
-- `PreStockRow` - Pre-stock data row
+**Input Row Classes**:
+- `StyleRow` - Style master data (id, styleCode, brand, category, etc.)
+- `StoreRow` - Store master data (id, store, channel, region, etc.)
+- `SalesRow` - Transactional sales data (store, sku, day, quantity, revenue)
+- `BrandGradingRow` - Brand grading analysis input
+- `SuggestedIstRow` - Suggested IST recommendations
+- `DiscAnalysisInputRow` - Discount analysis input data
+- `ImplementedIstRow` - Implemented IST data
+- `PreStockRow` - Pre-stock IST data
+- `DistributionChannelStyleOverrideRow` - Distribution overrides
+- `OtbValueRow` - OTB value planning input
+
+**Output Row Classes**:
+- `DistOutputRow` - Distribution allocation results
+- `OtbStyleBuyOutputRow` - OTB style-wise buy quantities
+- `ApOutputRow` - Assortment planning results
+- `NoosRow` - NOOS optimization results
+- `DenormDistOutputRow` - Denormalized distribution output
+- `ExportDepthSuggestionRow` - Exportable depth suggestions
 
 ### File Class Patterns
 
@@ -351,13 +437,27 @@ public class [ModuleName]File extends AbstractTSVFile<[ModuleName]Row> {
 - **Read Method**: Implements data reading logic
 - **Write Method**: Typically throws exception (read-only)
 
-**Examples**:
+**Examples** (162 input, 162 output):
 
-- `BrandGradingFile` - Brand grading file handler
+**Input File Classes**:
+- `StyleFile` - Style master data file handler
+- `StoreFile` - Store master data file handler
+- `SalesFile` - Transactional sales data file handler
+- `BrandGradingFile` - Brand grading analysis input file handler
 - `SuggestedIstFile` - Suggested IST file handler
 - `DiscAnalysisInputFile` - Discount analysis input file handler
 - `ImplementedIstFile` - Implemented IST file handler
 - `PreStockIstFile` - Pre-stock IST file handler
+- `DistributionChannelStyleOverrideFile` - Distribution overrides file handler
+- `OtbValueFile` - OTB value planning input file handler
+
+**Output File Classes**:
+- `DistOutputFile` - Distribution allocation results file handler
+- `OtbStyleBuyOutputFile` - OTB style-wise buy quantities file handler
+- `ApOutputFile` - Assortment planning results file handler
+- `NoosFile` - NOOS optimization results file handler
+- `DenormDistOutputFile` - Denormalized distribution output file handler
+- `ExportDepthSuggestionFile` - Exportable depth suggestions file handler
 
 ### Args Class Patterns
 
@@ -384,13 +484,29 @@ public class [ModuleName]Args extends Args {
 - **Getters/Setters**: Standard getter/setter pattern
 - **Configuration**: Contains module configuration parameters
 
-**Examples**:
+**Examples** (32 total):
 
-- `GapAnalysisArgs` - Gap analysis arguments
-- `MfpArgs` - MFP arguments
-- `OdArgs` - OD arguments
-- `OtbArgs` - OTB arguments
-- `ReorderingArgs` - Reordering arguments
+- `CommonArgs` - Common configuration parameters
+- `GlobalArgs` - Global system parameters
+- `DistributionArgs` - Distribution algorithm parameters
+- `GapAnalysisArgs` - Gap analysis configuration
+- `MfpArgs` - MFP (Monthly Forecast Planning) parameters
+- `OdArgs` - OD (Optimum Depth) configuration
+- `OtbArgs` - OTB (Open To Buy) parameters
+- `OtbDepletionArgs` - OTB depletion parameters
+- `OtbStyleWiseBuyArgs` - Style-wise OTB parameters
+- `ReorderingArgs` - Reordering algorithm parameters
+- `NoosArgs` - NOOS algorithm parameters
+- `DynamicDiscountingArgs` - Dynamic discounting parameters
+- `BiArgs` - Business Intelligence parameters
+- `ImpactAnalysisArgs` - Impact analysis configuration
+- `InvCreationArgs` - Inventory creation parameters
+- `PriceBucketCreationArgs` - Price bucket creation parameters
+- `DepthSuggestionArgs` - Depth suggestion parameters
+- `IstArgs` - IST (Inter Store Transfer) parameters
+- `EossArgs` - EOSS (End of Season Sale) parameters
+- `SWAArgs` - Story Wise Allocation parameters
+- `SWDArgs` - Story Wise Display parameters
 
 ### Utility Class Patterns
 
@@ -418,13 +534,24 @@ public class [ModuleName]Util {
 - **No State**: Typically no instance state
 - **Module-Specific**: Organized by module functionality
 
-**Examples**:
+**Examples** (60+ total):
 
-- `ValidationUtil` - Validation utilities
-- `StringUtil` - String manipulation utilities
-- `MathUtil` - Mathematical utilities
+- `ValidationUtil` - Validation utilities and business rules
+- `StringUtil` - String manipulation and normalization
+- `ObjectMaps` - Database mapping and object conversion utilities
+- `Cache` - Data caching and performance optimization
 - `SkuStyleConversionUtil` - SKU/Style conversion utilities
-- `FilteredStylesSkusUtil` - Filtered styles/SKUs utilities
+- `FilteredStylesSkusUtil` - Style/SKU filtering utilities
+- `MathUtil` - Mathematical and statistical utilities
+- `DenormalizedApOutputsHelper` - AP output denormalization
+- `DenormalizedDistOutputsHelper` - Distribution output denormalization
+- `DenormalizedNoosOutputsHelper` - NOOS output denormalization
+- `InventoryComputationUtil` - Inventory computation algorithms
+- `ProductSalesUtil` - Product sales analysis utilities
+- `PriceBucketHelper` - Price bucket calculation utilities
+- `AspCalculationHelper` - ASP (Average Selling Price) calculations
+- `QueryHelper` - Database query utilities
+- `View` - Database view management utilities
 
 ### Critical Module Dependency Intelligence
 
@@ -432,12 +559,17 @@ public class [ModuleName]Util {
 
 **Module Dependency Statistics**:
 
-- **Total Abstract Modules**: 85 modules
-- **Modules with Input Dependencies**: 85 modules (100%)
-- **Modules with Output Dependencies**: 85 modules (100%)
-- **Modules with Cross-Module Dependencies**: 60+ modules (70%+)
-- **Modules with LoadAPI Dependencies**: 40+ modules (47%+)
-- **Modules with Configuration Dependencies**: 85 modules (100%)
+- **Total Group Modules**: 27 modules
+- **Total Individual Modules**: 150+ modules
+- **Total Validation Modules**: 25 modules
+- **Modules with Input Dependencies**: 27 modules (100%)
+- **Modules with Output Dependencies**: 27 modules (100%)
+- **Modules with Cross-Module Dependencies**: 25+ modules (90%+)
+- **Modules with LoadAPI Dependencies**: 20+ modules (75%+)
+- **Modules with Configuration Dependencies**: 27 modules (100%)
+- **Row Classes**: 324 total (162 input + 162 output)
+- **File Classes**: 324 total (162 input + 162 output)
+- **Args Classes**: 32 configuration classes
 
 **Critical Dependency Patterns**:
 
@@ -449,9 +581,11 @@ Input Row Change → Multiple Module Updates → LoadAPI Updates → Configurati
 
 **Example**: Changing `StyleBuyRow` structure
 
-- **Algorithm Impact**: Update StyleWiseToSizeWise, ISS, AP modules
-- **LoadAPI Impact**: Update StyleBuyLoadApi processing
-- **Configuration Impact**: Update SQL views and templates
+- **Algorithm Impact**: Update StyleWiseToSizeWise, ISS, AP modules (row classes, file classes, validation)
+- **LoadAPI Impact**: Update StyleBuyLoadApi processing in ms-loadapis
+- **Configuration Impact**: Update SQL views and templates in irisx-config
+- **Cross-Module Impact**: Update all modules consuming StyleBuyRow data
+- **File Registration**: Update SchemaProvider.java registration
 
 #### **B. Cross-Module Data Dependencies**
 
@@ -494,61 +628,76 @@ Data Structure Change → Multiple Module Updates → Cross-Module Updates → L
 
 **Algorithm Impact**:
 
-- **Data Structure Changes**: New LoadAPI data structures require Algorithm row/file classes
-- **Validation Changes**: New LoadAPI validation rules require Algorithm validation modules
-- **Business Logic Changes**: New LoadAPI business rules require Algorithm utility classes
-- **Module Changes**: New LoadAPI modules require Algorithm group modules
+- **Data Structure Changes**: New LoadAPI data structures require Algorithm row/file classes (324 total mappings)
+- **Validation Changes**: New LoadAPI validation rules require Algorithm validation modules (25 modules)
+- **Business Logic Changes**: New LoadAPI business rules require Algorithm utility classes (60+ utilities)
+- **Module Changes**: New LoadAPI modules require Algorithm group modules (27 group modules)
+- **Schema Registration**: Update SchemaProvider.java with new file mappings
+- **File Constants**: Update FileName.java with new database table names
 
 **Change Patterns**:
 
-- **New LoadAPI**: Create corresponding Algorithm row/file classes
-- **New Fields**: Update Algorithm row classes and validation logic
-- **New Validation**: Update Algorithm validation modules
-- **New Business Logic**: Update Algorithm utility classes
+- **New LoadAPI**: Create corresponding Algorithm row/file classes in SchemaProvider
+- **New Fields**: Update Algorithm row classes, file classes, and validation logic
+- **New Validation**: Update Algorithm validation modules and ValidationUtil
+- **New Business Logic**: Update Algorithm utility classes and helper methods
+- **Schema Updates**: Update database schema and FileName constants
 
 #### **Configuration Repository Dependencies**
 
 **Algorithm Impact**:
 
-- **Schema Changes**: Configuration schema changes require Algorithm file class updates
+- **Schema Changes**: Configuration schema changes require Algorithm file class updates (324 mappings)
 - **View Changes**: Configuration view changes require Algorithm data structure updates
 - **Template Changes**: Configuration template changes require Algorithm validation updates
 - **Module Configuration**: Configuration module changes require Algorithm module updates
+- **SQL Migration**: Database schema changes require row class and file class updates
+- **Constants Updates**: Configuration constants require Algorithm constants updates
 
 **Change Patterns**:
 
-- **New Schema**: Update Algorithm file classes and row classes
-- **New View**: Update Algorithm data structures and validation
-- **New Template**: Update Algorithm validation and file handling
-- **New Module Config**: Update Algorithm module registration
+- **New Schema**: Update Algorithm file classes, row classes, and SchemaProvider registration
+- **New View**: Update Algorithm data structures, validation, and denormalization logic
+- **New Template**: Update Algorithm validation and file handling methods
+- **New Module Config**: Update Algorithm module registration in ModuleProvider
+- **Database Changes**: Update FileName constants and database table mappings
 
 ### Change Detection Matrix
 
-#### **When Adding New Module**
+#### **When Adding New Module** (27 total group modules)
 
 - **Group Module**: [ModuleName]GroupModule.java - Extend AbstractUtilModuleGroup
+- **Individual Modules**: 5-10 [ModuleName][Action]Module.java classes per group
 - **Validation Module**: [ModuleName]ValidationModule.java - Extend AbstractValidationModule
-- **Args Class**: [ModuleName]Args.java - Extend Args
-- **Row Classes**: [ModuleName]Row.java - Simple POJO with public fields
-- **File Classes**: [ModuleName]File.java - Extend AbstractTSVFile
-- **Module Registration**: ModuleProvider.java - Add @Autowired dependency
-- **File Registration**: SchemaProvider.java - Add file schema registration
-- **File Name Constants**: FileName.java - Add file name constant
+- **Args Class**: [ModuleName]Args.java - Extend Args with configuration parameters
+- **Row Classes**: [ModuleName]Row.java - Simple POJO with public fields (input/output variants)
+- **File Classes**: [ModuleName]File.java - Extend AbstractTSVFile (input/output variants)
+- **Module Registration**: ModuleProvider.java - Add @Autowired dependency and add() registration
+- **Schema Registration**: SchemaProvider.java - Add row/file class mappings (add() method)
+- **File Name Constants**: FileName.java - Add database table name constants
+- **Validation Registration**: Add to ValidationModuleNames.java constants
 
-#### **When Adding New Data Structure**
+#### **When Adding New Data Structure** (324 total row/file pairs)
 
-- **Row Class**: [ModuleName]Row.java - Add new fields
-- **File Class**: [ModuleName]File.java - Update headers and read method
-- **File Name**: FileName.java - Add new file name constant
-- **Schema**: SchemaProvider.java - Add schema registration
-- **Validation**: ValidationModule.java - Add validation logic
+- **Row Class**: [ModuleName]Row.java - Add new fields (both input and output variants)
+- **File Class**: [ModuleName]File.java - Update headers and read method (input/output variants)
+- **File Name**: FileName.java - Add new database table name constant
+- **Schema Registration**: SchemaProvider.java - Add row/file class mapping with add() method
+- **Validation Logic**: ValidationModule.java - Add validation rules for new fields
+- **Denormalization**: Update helper classes for data transformation logic
+- **Cross-Module Updates**: Update all consuming modules and their dependencies
 
-#### **When Modifying Existing Structure**
+#### **When Modifying Existing Structure** (Complex cascading changes)
 
-- **Field Changes**: Row.java, File.java - Update field definitions
-- **Validation Changes**: ValidationModule.java - Update validation logic
-- **Business Logic Changes**: Util.java - Update utility methods
-- **Module Changes**: GroupModule.java - Update module logic
+- **Field Changes**: Row.java, File.java - Update field definitions (input/output variants)
+- **Header Updates**: File.java - Update getHeaders() method with new columns
+- **Validation Changes**: ValidationModule.java - Update validation logic and business rules
+- **Business Logic Changes**: Util.java, Helper.java - Update utility methods and calculations
+- **Module Changes**: GroupModule.java - Update module execution logic and dependencies
+- **Schema Updates**: SchemaProvider.java - Update file mappings and registrations
+- **Cross-Module Impact**: Analyze and update all consuming modules (90%+ of modules)
+- **LoadAPI Impact**: Update corresponding LoadAPI processing in ms-loadapis
+- **Configuration Impact**: Update SQL views and templates in irisx-config
 
 ### AI Guidance Rules
 
@@ -594,58 +743,71 @@ Repository Change → Algorithm Impact:
 
 ### Implementation Examples
 
-#### **Example 1: New Store Performance Module**
+#### **Example 1: New OTB Depletion Module**
 
 ```
-Requirement: "Add new store performance module"
+Requirement: "Add OTB depletion analysis module"
 → Algorithm Changes:
-  - StorePerformanceGroupModule.java: New group module
-  - StorePerformanceValidationModule.java: New validation module
-  - StorePerformanceArgs.java: New args class
-  - StorePerformanceRow.java: New row class
-  - StorePerformanceFile.java: New file class
+  - OtbDepletionGroupModule.java: New group module (coordinates 10+ individual modules)
+  - OtbDepletionValidationModule.java: New validation module with depletion business rules
+  - OtbDepletionArgs.java: New args class with depletion parameters
+  - OtbDepletionRow.java: New row classes (input/output variants)
+  - OtbDepletionFile.java: New file classes (input/output variants)
+  - ModuleProvider.java: Add @Autowired dependency and add() registration
+  - SchemaProvider.java: Add 20+ file schema registrations
+  - FileName.java: Add 20+ database table name constants
+  - ValidationModuleNames.java: Add validation module constant
+```
+
+#### **Example 2: New Distribution Algorithm Enhancement**
+
+```
+Requirement: "Add story-wise display allocation algorithm"
+→ Algorithm Changes:
+  - StoryWiseDisplayGroupModule.java: New group module
+  - StoryWiseDisplayValidationModule.java: New validation module
+  - SWDArgs.java: New args class with story allocation parameters
+  - StoryStyleListRow.java: Input row class for story data
+  - StoryCatCombinationsRow.java: Input row class for category combinations
+  - SWDStoreStoryRankingFile.java: Output file for store rankings
   - ModuleProvider.java: Add module registration
-  - SchemaProvider.java: Add file schema registration
-  - FileName.java: Add file name constant
+  - SchemaProvider.java: Add 15+ file schema registrations
+  - DistributionConstants.java: Add story allocation business rules
 ```
 
-#### **Example 2: New SKU Analysis Data Structure**
+#### **Example 3: Enhanced Dynamic Discounting Rules**
 
 ```
-Requirement: "Add new SKU analysis data structure"
+Requirement: "Add complex discount rules engine with ROS/DOH/Health combinations"
 → Algorithm Changes:
-  - SkuAnalysisRow.java: New row class with SKU analysis fields
-  - SkuAnalysisFile.java: New file class with headers and read method
-  - FileName.java: Add SKU_ANALYSIS file name constant
-  - SchemaProvider.java: Add SKU analysis file schema
-  - ValidationModule.java: Add SKU analysis validation logic
-```
-
-#### **Example 3: New Validation Rule**
-
-```
-Requirement: "Add new validation rule for store data"
-→ Algorithm Changes:
-  - StoreValidationModule.java: Update validation logic
-  - ValidationUtil.java: Add validation utility methods
-  - StoreRow.java: Update row class if needed
-  - StoreFile.java: Update file class if needed
+  - DynamicDiscountingGroupModule.java: Enhanced group module
+  - DynamicDiscountValidationModule.java: Enhanced validation with rule combinations
+  - DiscountRulesRow.java: Row class with ROS, DOH, Health, Action fields
+  - DiscountRulesFile.java: File class with complex validation headers
+  - DiscountConstants.java: Add enum classes (RosLevel, HealthStatus, etc.)
+  - ValidationUtil.java: Add business rule validation methods
+  - SchemaProvider.java: Update discount rule schema registrations
 ```
 
 ### Success Criteria
 
-#### **Complete Algorithm Implementation Checklist**
+#### **Complete Algorithm Implementation Checklist** (27 modules, 324 file pairs)
 
-- [ ] **Group Module**: Created and registered in ModuleProvider.java
-- [ ] **Validation Module**: Created and integrated with group module
-- [ ] **Args Class**: Created with proper getters/setters
-- [ ] **Row Classes**: Created with public fields
-- [ ] **File Classes**: Created with headers and read methods
-- [ ] **File Name Constants**: Added to FileName.java
-- [ ] **Schema Registration**: Added to SchemaProvider.java
-- [ ] **Cross-Repository Consistency**: Ensured consistency with LoadAPI and Config repositories
-- [ ] **Validation Logic**: Implemented proper validation rules
-- [ ] **Business Logic**: Implemented utility methods if needed
+- [ ] **Group Module**: Created and registered in ModuleProvider.java with add() method
+- [ ] **Individual Modules**: Created 5-10 [ModuleName][Action]Module.java classes per group
+- [ ] **Validation Module**: Created and integrated with proper business rules
+- [ ] **Args Class**: Created with configuration parameters and getters/setters
+- [ ] **Row Classes**: Created with public fields (input/output variants)
+- [ ] **File Classes**: Created with headers, read methods, and proper error handling
+- [ ] **File Name Constants**: Added to FileName.java (800+ constants)
+- [ ] **Schema Registration**: Added to SchemaProvider.java (324 total registrations)
+- [ ] **Validation Registration**: Added to ValidationModuleNames.java constants
+- [ ] **Constants Integration**: Updated relevant constants classes with business rules
+- [ ] **Utility Classes**: Updated helper classes with new business logic
+- [ ] **Cross-Module Dependencies**: Analyzed and updated consuming modules (90%+ impact)
+- [ ] **LoadAPI Consistency**: Ensured consistency with ms-loadapis processing
+- [ ] **Configuration Consistency**: Ensured consistency with irisx-config views and templates
+- [ ] **Multi-language Support**: Integrated with localization framework
 
 ## Usage Examples
 

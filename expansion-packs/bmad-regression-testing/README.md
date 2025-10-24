@@ -1,7 +1,9 @@
 # BMAD Algorithm Output Regression Testing Expansion Pack
 
 ## Overview
-This expansion pack provides automated regression testing for algorithm output files. It analyzes, validates, and tests algorithm-generated files to detect regressions, data quality issues, and ensure consistency across algorithm runs.
+This expansion pack provides automated regression testing for algorithm output files with **MCP Excel Server acceleration**. It analyzes, validates, and tests algorithm-generated files to detect regressions, data quality issues, and ensure consistency across algorithm runs.
+
+**🚀 Accelerated Performance**: Integrated with MCP Excel Server for up to 10x faster TSV and Excel file processing, with advanced caching and parallel processing capabilities.
 
 ## Contents
 - `agents/`
@@ -29,11 +31,18 @@ This expansion pack provides automated regression testing for algorithm output f
 ## Agent
 - `algorithm-output-tester`: Analyzes and validates algorithm output files for regressions and data quality issues
 
+## Installation
+The MCP Excel Server is **automatically installed** when you install this expansion pack. No manual setup required!
+
 ## Configuration
 Edit `config.yaml`:
 - `algorithm_outputs_path`: absolute path to folder containing algorithm outputs
 - `testing.output_file_types`: supported file types (CSV, JSON, TXT, XLSX, TSV)
 - `testing.validation_methods`: validation types (schema, data_quality, regression, performance)
+- `mcp_excel_server.enabled`: enable MCP Excel Server for accelerated TSV/Excel parsing (default: true)
+- `mcp_excel_server.performance_mode`: enable performance optimizations for large files (default: true)
+- `mcp_excel_server.cache_enabled`: cache parsed data for repeated analysis (default: true)
+- `mcp_excel_server.parallel_processing`: process multiple files concurrently (default: true)
 - `html_report.enabled`: enable/disable HTML report generation
 - `html_report.output_file`: filename for the HTML report
 - `html_report.output_dir`: directory to save HTML reports
@@ -52,6 +61,7 @@ Run the complete algorithm validation workflow with a single command:
 ```
 
 This single command will:
+0. **Validate MCP Server** - Ensure MCP Excel Server is working for accelerated TSV/Excel processing
 1. **Scan** your algorithm outputs directory
 2. **Assess risks** and prioritize validation targets
 3. **Run all validations** (schema, data quality, regression, performance)

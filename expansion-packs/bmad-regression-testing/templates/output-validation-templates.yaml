@@ -1,4 +1,20 @@
-# Algorithm Output Validation Templates
+# Algorithm Output Validation Templates with MCP Excel Server Integration
+
+# MCP Excel Server Configuration for Enhanced Performance
+mcp_accelerated_checks:
+  enabled: true
+  tsv_excel_parsing:
+    - use_mcp_read_excel_for_tsv
+    - use_mcp_get_excel_info
+    - use_mcp_analyze_excel_for_stats
+  data_analysis:
+    - mcp_pivot_table_analysis
+    - mcp_filter_excel_queries
+    - mcp_data_summary_generation
+  performance_optimization:
+    - mcp_caching_enabled
+    - mcp_parallel_processing
+    - mcp_large_file_handling
 
 validation_checks:
   schema_validation:
@@ -20,14 +36,17 @@ validation_checks:
       - check_missing_values
       - validate_required_fields
       - check_empty_records
+      - mcp_data_summary_completeness_check
     consistency:
       - validate_data_ranges
       - check_format_consistency
       - validate_business_rules
+      - mcp_statistical_consistency_analysis
     accuracy:
       - check_calculation_accuracy
       - validate_reference_data
       - check_logical_consistency
+      - mcp_advanced_accuracy_validation
 
   regression_detection:
     statistical_comparison:
@@ -78,13 +97,35 @@ reporting_formats:
     - critical_issues_count
     - warnings_count
     - recommendations
+    - mcp_performance_metrics
   detailed_report:
     - file_by_file_analysis
     - specific_error_details
     - performance_metrics
     - regression_analysis
+    - mcp_visualization_charts
+    - mcp_data_quality_insights
   executive_summary:
     - key_findings
     - business_impact
     - action_items
     - next_steps
+    - mcp_executive_dashboards
+
+# MCP-Enhanced Reporting Templates
+mcp_reporting_templates:
+  interactive_charts:
+    - line_charts_for_trends
+    - bar_charts_for_comparisons
+    - scatter_plots_for_correlations
+    - histograms_for_distributions
+  data_insights:
+    - automated_anomaly_detection
+    - statistical_summary_tables
+    - correlation_analysis
+    - trend_analysis_reports
+  performance_dashboards:
+    - parsing_speed_metrics
+    - memory_usage_charts
+    - file_processing_timeline
+    - validation_coverage_reports

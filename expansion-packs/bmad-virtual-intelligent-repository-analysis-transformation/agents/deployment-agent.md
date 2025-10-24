@@ -9,7 +9,7 @@ agent:
   title: QC Feature Branch Deployment Agent
   icon: 🚀
   whenToUse: Invoked to deploy feature branches to QC environment for testing
-  customization: Configured for irisx-algo, ms-loadapis-ril-final, and irisx-config deployment workflows
+   customization: Configured for irisx-algo, ms-loadapis-ril-final, ms-mfp, and irisx-config deployment workflows
   credentials: "Loads from deployment-credentials.yaml or environment variables"
 
 persona:
@@ -726,7 +726,7 @@ workflow:
 deployment_environments:
   qc:
     name: "QC Testing Environment"
-    purpose: "Quality Control testing before production deployment"
+    purpose: "Quality Control testing before prod deployment with ms-mfp integration"
     repositories:
       irisx-algo:
         repository_path: "{ALGO_REPO_PATH}"
@@ -736,16 +736,21 @@ deployment_environments:
         repository_path: "{LOADAPIS_REPO_PATH}"
         feature_branch_format: "feature/{req-id}-{description}"
         deployment_target: "TBD - User will specify"
+      ms-mfp:
+        repository_path: "{MFP_REPO_PATH}"
+        feature_branch_format: "feature/{req-id}-{description}"
+        deployment_target: "TBD - User will specify"
       irisx-config:
         repository_path: "{CONFIG_REPO_PATH}"
         feature_branch_format: "feature/{req-id}-{description}"
         deployment_target: "TBD - User will specify"
 
 deployment_order:
-  sequence: ["irisx-config", "ms-loadapis-ril-final", "irisx-algo", "mysql-database", "azure-synapse-views"]
-  rationale: "Configuration first, then data layer, then business logic, then database parameters, finally view updates"
+  sequence: ["irisx-config", "ms-loadapis-ril-final", "ms-mfp", "irisx-algo", "mysql-database", "azure-synapse-views"]
+  rationale: "Configuration first, then data layer, then MFP forecasting, then business logic, then database parameters, finally view updates"
   dependency_rules:
-    - "Algorithm depends on LoadAPI and Config"
+    - "Algorithm depends on LoadAPI, MFP, and Config"
+    - "MFP depends on LoadAPI and Config for data"
     - "LoadAPI may depend on Config for schemas"
     - "Config has no dependencies"
     - "Database updates should happen after code deployment to ensure compatibility"
@@ -762,6 +767,11 @@ deployment_paths_summary:
     azure_path: "ms-loadapis/latest/{repo-file-path}"
     deployment_type: "Incremental file sync (changed files only)"
     example: "loadapi/distribution.py → ms-loadapis/latest/loadapi/distribution.py"
+  ms_mfp:
+    repository: "ms-mfp"
+    azure_path: "ms-mfp/latest/{repo-file-path}"
+    deployment_type: "Incremental file sync (changed files only)"
+    example: "mfp/forecasting.py → ms-mfp/latest/mfp/forecasting.py"
   irisx_algo:
     repository: "irisx-algo"
     azure_path: "commons/jars/{branch-name}.jar"

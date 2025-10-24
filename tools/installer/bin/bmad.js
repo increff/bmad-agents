@@ -671,6 +671,19 @@ async function promptInstallation() {
             answers.expansionPackAnswers[packId] = {};
             
             for (const question of config.installation_questions) {
+              // Check if question has conditional logic
+              if (question.condition) {
+                const [fieldName, requiredValue] = question.condition.split(':');
+                const selectedValue = answers.expansionPackAnswers[packId][fieldName];
+                
+                // Skip this question if condition is not met
+                if (selectedValue && !selectedValue.includes(requiredValue)) {
+                  continue;
+                } else if (!selectedValue) {
+                  continue;
+                }
+              }
+              
               const promptConfig = {
                 type: question.type || 'input',
                 name: question.name,
@@ -681,7 +694,21 @@ async function promptInstallation() {
                 promptConfig.default = question.default;
               }
               
-              if (question.validate === 'required') {
+              // Handle checkbox-specific validation
+              if (question.type === 'checkbox') {
+                if (question.choices) {
+                  promptConfig.choices = question.choices;
+                }
+                
+                if (question.validate === 'at-least-one') {
+                  promptConfig.validate = (selected) => {
+                    if (!selected || selected.length === 0) {
+                      return 'Please select at least one repository to configure';
+                    }
+                    return true;
+                  };
+                }
+              } else if (question.validate === 'required') {
                 promptConfig.validate = (input) => {
                   if (!input || !input.trim()) {
                     return 'This field is required';

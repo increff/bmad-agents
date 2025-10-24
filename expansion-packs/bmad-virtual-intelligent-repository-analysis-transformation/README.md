@@ -2,7 +2,7 @@
 
 ## Overview
 
-The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system features VIRAT - a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
+The BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION system features VIRAT - a sophisticated multi-agent system built on the BMAD framework that automates development workflows across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis` (Python), and `irisx-config` (Configuration/SQL).
 
 **Note:** This expansion pack has been recently reorganized for better maintainability. See [`docs/REORGANIZATION-SUMMARY.md`](docs/REORGANIZATION-SUMMARY.md) for details on the new structure.
 
@@ -68,27 +68,43 @@ VIRAT is now enhanced with Model Context Protocol (MCP) tools that provide super
 ### Repositories
 
 1. **irisx-algo** (Java/Spring Boot)
-   - Core business logic and algorithms
-   - Distribution, depletion, and allocation modules
-   - 25+ validation modules
+   - Core business logic and algorithms (1,113 Java files)
+   - 27 group modules coordinating 150+ individual modules
+   - 25 validation modules with business rule enforcement
+   - 324 row/file pairs (162 input + 162 output)
    - Abstract classes and shared components
+   - Multi-language support (English/Spanish localization)
 
-2. **ms-loadapis-ril-final** (Python)
-   - Data ingestion and load APIs
-   - 25+ distribution-specific load APIs
-   - Common utilities and constants
-   - Azure integration
+2. **ms-loadapis** (Python)
+   - Data ingestion and load APIs (118+ import mappings)
+   - 23 module directories with 177 files
+   - Denormalization patterns (6+ core patterns)
+   - Integration APIs (10 external system integrations)
+   - Azure integration and data processing
 
-3. **irisx-config** (Configuration/SQL)
-   - 100+ TSV input templates
-   - 200+ SQL view definitions
-   - Configuration files (JSON)
-   - Export definitions
+3. **ms-mfp** (Python) - Optional
+   - Monthly Forecast Planning system
+   - Forecasting algorithms and business logic
+   - Environment-specific MFP implementations
+   - Integration with main algorithm repository
+   - Branch: `release-pheonix` (Phoenix), `release-ril` (Reliance), `release` (Prod)
+
+4. **irisx-config** (Configuration/SQL)
+   - 320+ SQL view definitions with dependencies
+   - 108+ TSV input templates for data processing
+   - Configuration files (JSON, YAML) with environment management
+   - Export definitions and sync patterns
+   - Multi-environment support (Phoenix, Reliance, Prod)
 
 ### Data Flow
 
 ```
-Input Data → Load APIs (Python) → Database → Business Logic (Java) → Output Views (SQL) → Export
+Input Data → Load APIs (ms-loadapis) → Database → Business Logic (irisx-algo) → MFP Processing (ms-mfp) → Output Views (irisx-config) → Export
+```
+
+**Enhanced Data Flow with MFP:**
+```
+Input Data → Load APIs (Python) → Database → Algorithm Processing (Java) → MFP Forecasting (Python) → Config Views (SQL) → Export
 ```
 
 ## Directory Structure
@@ -104,7 +120,7 @@ This expansion pack follows a modular organization for better maintainability:
 ├── docs/                              # Documentation (guides, migrations, history)
 ├── tasks/                             # Executable workflows (9 files)
 ├── templates/                         # Document templates (10 files)
-├── checklists/                        # Validation checklists (3 files)
+├── checklists/                        # Validation checklists (5 files)
 ├── tools/                             # Utility scripts
 └── workflows/                         # Workflow definitions
 ```
@@ -124,11 +140,11 @@ This expansion pack follows a modular organization for better maintainability:
 
 VIRAT supports multiple environments with different base branches:
 
-| Environment | Algorithm Repo | LoadAPI Repo | Config Repo |
-|------------|----------------|--------------|-------------|
-| **prod** | `caas-release` | `release_optimised` | `caas-staging_fix` |
-| **reliance** | `master-ril` | `caas-ril-uploads` | `master-ril` |
-| **phoenix** | `master-adidas-reliance-prod` | `caas-phoenix-uploads` | `master-adidas-ril` |
+| Environment | Algorithm Repo | LoadAPI Repo | Config Repo | MFP Repo (Optional) |
+|------------|----------------|--------------|-------------|-------------------|
+| **prod** | `caas-release` | `release_optimised` | `caas-staging_fix` | `release` |
+| **reliance** | `master-ril` | `caas-ril-uploads` | `master-ril` | `release-ril` |
+| **phoenix** | `master-adidas-reliance-prod` | `caas-phoenix-uploads` | `master-adidas-ril` | `release-pheonix` |
 
 **How it works**: Add `Environment: reliance` (or prod/phoenix) to your requirement document header, and VIRAT automatically:
 - Detects the environment(s) (supports multiple: `reliance, phoenix`)
@@ -151,21 +167,21 @@ VIRAT supports multiple environments with different base branches:
 - **Role**: LoadAPI Architecture & Pattern Specialist
 - **Commands**: `*analyze-patterns`, `*create-loadapi`, `*validate-denormalization`, `*detect-changes`
 - **Responsibilities**: LoadAPI denormalization patterns, repository structure analysis, data transformation architecture
-- **Key Features**: 159 Python files analysis, 98+ import ID mappings, 4 denormalization patterns
+- **Key Features**: 177 Python files analysis, 118+ import ID mappings, 6+ denormalization patterns, 10 integration APIs
 
 ### Configuration Pattern Expert
 
 - **Role**: Configuration Repository & Pattern Specialist
 - **Commands**: `*analyze-config`, `*create-sql-views`, `*generate-templates`, `*validate-config`
 - **Responsibilities**: SQL view patterns, template generation, cross-repository configuration coordination
-- **Key Features**: 200+ SQL views, 100+ TSV templates, JSON configuration patterns
+- **Key Features**: 320+ SQL views with dependencies, 108+ TSV templates, JSON/YAML configuration patterns, multi-environment support
 
 ### Algorithm Pattern Expert
 
 - **Role**: Algorithm Repository & Pattern Specialist
 - **Commands**: `*analyze-modules`, `*create-module`, `*analyze-dependencies`, `*validate-algorithm`
 - **Responsibilities**: Java module patterns, validation frameworks, module dependency analysis
-- **Key Features**: 1,174 Java files, 30+ modules, 25+ group modules, cascading impact analysis
+- **Key Features**: 1,113 Java files, 27 group modules, 25 validation modules, 324 row/file pairs, multi-language support
 
 ### Repository Integration Subagent
 
@@ -283,7 +299,7 @@ VIRAT supports multiple environments with different base branches:
 - Analyzes existing code patterns across all three repositories
 - Follows established conventions with 100% adherence
 - Prevents hallucination by using real templates and patterns
-- Comprehensive pattern recognition with 159 Python files, 1,174 Java files, and 200+ SQL views
+- Comprehensive pattern recognition with 177 Python files, 1,113 Java files, and 320+ SQL views
 
 ### Multi-Repository Coordination
 
@@ -308,9 +324,9 @@ VIRAT supports multiple environments with different base branches:
 
 ### Expert Agent System
 
-- **LoadAPI Pattern Expert**: 159 Python files, 98+ import ID mappings, 4 denormalization patterns
-- **Configuration Pattern Expert**: 200+ SQL views, 100+ TSV templates, JSON configuration patterns
-- **Algorithm Pattern Expert**: 1,174 Java files, 30+ modules, 25+ group modules, cascading impact analysis
+- **LoadAPI Pattern Expert**: 177 Python files, 118+ import ID mappings, 6+ denormalization patterns, 10 integration APIs
+- **Configuration Pattern Expert**: 320+ SQL views, 108+ TSV templates, JSON/YAML configuration patterns, multi-environment support
+- **Algorithm Pattern Expert**: 1,113 Java files, 27 group modules, 25 validation modules, 324 row/file pairs, multi-language support
 - **Repository Integration Subagent**: Dynamic repository analysis and integration planning
 
 ### Requirement Intelligence
@@ -327,7 +343,7 @@ VIRAT supports multiple environments with different base branches:
 ```yaml
 repositories:
   irisx-algo: '{ALGO_REPO_PATH}'
-  ms-loadapis-ril-final: '{LOADAPIS_REPO_PATH}'
+  ms-loadapis: '{LOADAPIS_REPO_PATH}'
   irisx-config: '{CONFIG_REPO_PATH}'
 ```
 
@@ -341,7 +357,7 @@ repositories:
 - **BMAD Core**: Requires BMAD framework
 - **Git**: For repository operations
 - **Java 1.8+**: For irisx-algo repository
-- **Python 3.8+**: For ms-loadapis-ril-final repository
+- **Python 3.8+**: For ms-loadapis repository
 - **Azure**: For data processing and storage
 
 ## Error Handling
@@ -398,19 +414,19 @@ repositories:
 #### **Demo 1: LoadAPI Pattern Analysis**
 
 **Command**: `*loadapi-expert` → `*analyze-patterns`
-**What it does**: Analyzes 159 Python files, 98+ import ID mappings, and 4 denormalization patterns
+**What it does**: Analyzes 177 Python files, 118+ import ID mappings, 6+ denormalization patterns, and 10 integration APIs
 **Demo Value**: Shows comprehensive LoadAPI pattern recognition and data transformation
 
 #### **Demo 2: Configuration Pattern Analysis**
 
 **Command**: `*config-expert` → `*analyze-config`
-**What it does**: Analyzes 200+ SQL views, 100+ TSV templates, and JSON configuration patterns
+**What it does**: Analyzes 320+ SQL views, 108+ TSV templates, and JSON/YAML configuration patterns with multi-environment support
 **Demo Value**: Demonstrates configuration pattern recognition and template generation
 
 #### **Demo 3: Algorithm Module Analysis**
 
 **Command**: `*algorithm-expert` → `*analyze-modules`
-**What it does**: Analyzes 1,174 Java files, 30+ modules, and module dependencies
+**What it does**: Analyzes 1,113 Java files, 27 group modules, 25 validation modules, and 324 row/file pairs
 **Demo Value**: Shows algorithm pattern recognition and dependency analysis
 
 #### **Demo 4: Cross-Repository Integration**
@@ -426,7 +442,7 @@ repositories:
 - **BMAD Core**: Requires BMAD framework
 - **Git**: For repository operations
 - **Java 1.8+**: For irisx-algo repository
-- **Python 3.8+**: For ms-loadapis-ril-final repository
+- **Python 3.8+**: For ms-loadapis repository
 - **Azure**: For data processing and storage
 
 ### Installation Steps
@@ -453,7 +469,7 @@ repositories:
 ```yaml
 repositories:
   irisx-algo: '{ALGO_REPO_PATH}'
-  ms-loadapis-ril-final: '{LOADAPIS_REPO_PATH}'
+  ms-loadapis: '{LOADAPIS_REPO_PATH}'
   irisx-config: '{CONFIG_REPO_PATH}'
 ```
 
@@ -481,9 +497,9 @@ repositories:
 
 ### 📊 **Repository Statistics**
 
-- **LoadAPI Repository**: 159 Python files, 98+ import ID mappings, 4 denormalization patterns
-- **Configuration Repository**: 200+ SQL views, 100+ TSV templates, JSON configuration patterns
-- **Algorithm Repository**: 1,174 Java files, 30+ modules, 25+ group modules, cascading impact analysis
+- **LoadAPI Repository**: 177 Python files, 118+ import ID mappings, 6+ denormalization patterns, 10 integration APIs
+- **Configuration Repository**: 320+ SQL views, 108+ TSV templates, JSON configuration patterns
+- **Algorithm Repository**: 1,113 Java files, 27 group modules, 25 validation modules, 324 row/file pairs
 
 ### 🎯 **Key Achievements**
 

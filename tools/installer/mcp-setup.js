@@ -22,28 +22,31 @@ class MCPSetup {
    */
   async installMCPServers() {
     console.log(chalk.blue('🔧 Installing MCP Servers for VIRAT...'));
-    
+
     try {
       // Create MCP servers directory
       await this.createMCPServersDirectory();
-      
+
       // Install Java MCP Server
       await this.installJavaMCPServer();
-      
+
       // Install Python MCP Server
       await this.installPythonMCPServer();
-      
+
       // Install SQL MCP Servers
       await this.installSQLMCPServers();
-      
+
+      // Install MCP Excel Server (for regression testing)
+      await this.installMCPExcelServer();
+
       // Configure Cursor MCP settings
       await this.configureCursorMCP();
-      
+
       // Create setup verification script
       await this.createVerificationScript();
-      
+
       console.log(chalk.green('✅ All MCP servers installed and configured successfully!'));
-      
+
     } catch (error) {
       console.error(chalk.red('❌ MCP installation failed:'), error.message);
       throw error;
@@ -407,9 +410,9 @@ pathlib`;
    */
   async installSQLMCPServers() {
     console.log(chalk.yellow('🗄️  Installing SQL MCP Servers...'));
-    
+
     const sqlMcpDir = path.join(this.mcpServersDir, 'sql-mcp-servers');
-    
+
     // Create package.json for SQL MCP servers
     const packageJson = {
       name: "sql-mcp-servers",
@@ -429,16 +432,55 @@ pathlib`;
         "@notionhq/notion-mcp-server": "^1.9.0"
       }
     };
-    
+
     fs.writeFileSync(
       path.join(sqlMcpDir, 'package.json'),
       JSON.stringify(packageJson, null, 2)
     );
-    
+
     // Install dependencies
     execSync('npm install', { cwd: sqlMcpDir, stdio: 'inherit' });
-    
+
     console.log(chalk.green('✅ SQL MCP Servers installed'));
+  }
+
+  /**
+   * Install MCP Excel Server (for regression testing)
+   */
+  async installMCPExcelServer() {
+    console.log(chalk.yellow('📊 Installing MCP Excel Server for regression testing...'));
+
+    try {
+      // Check if uv is available
+      try {
+        execSync('uv --version', { stdio: 'pipe' });
+        console.log(chalk.green('✅ uv package manager detected'));
+
+        // Install MCP Excel Server using uv
+        console.log(chalk.yellow('📦 Installing mcp-excel-server via uv...'));
+        execSync('uv tool install mcp-excel-server', { stdio: 'inherit' });
+
+        console.log(chalk.green('✅ MCP Excel Server installed via uv'));
+
+      } catch (uvError) {
+        console.log(chalk.yellow('⚠️  uv not available, trying alternative installation methods...'));
+
+        // Fallback: try npm installation
+        try {
+          console.log(chalk.yellow('📦 Installing mcp-excel-server via npm...'));
+          execSync('npm install -g mcp-excel-server', { stdio: 'inherit' });
+          console.log(chalk.green('✅ MCP Excel Server installed via npm'));
+        } catch (npmError) {
+          console.log(chalk.yellow('⚠️  npm global install failed, MCP Excel Server will need manual installation'));
+          console.log(chalk.cyan('   Manual install: uv tool install mcp-excel-server'));
+          console.log(chalk.cyan('   Or: npm install -g mcp-excel-server'));
+        }
+      }
+
+    } catch (error) {
+      console.log(chalk.yellow('⚠️  MCP Excel Server installation encountered issues, but will continue'));
+      console.log(chalk.cyan('   The regression testing workflow includes fallback mechanisms'));
+    }
   }
 
 
@@ -447,38 +489,113 @@ pathlib`;
    */
   async configureCursorMCP() {
     console.log(chalk.yellow('⚙️  Configuring Cursor MCP settings...'));
-    
+
     // Ensure .cursor directory exists
     const cursorDir = path.join(process.env.HOME, '.cursor');
     if (!fs.existsSync(cursorDir)) {
       fs.mkdirSync(cursorDir, { recursive: true });
     }
-    
-    // Create or update mcp.json
-    const mcpConfig = {
+
+    // Read existing mcp.json if it exists, otherwise create empty config
+    let existingConfig = { mcpServers: {} };
+    if (fs.existsSync(this.mcpConfigPath)) {
+      try {
+        existingConfig = JSON.parse(fs.readFileSync(this.mcpConfigPath, 'utf-8'));
+        if (!existingConfig.mcpServers) {
+          existingConfig.mcpServers = {};
+        }
+      } catch (error) {
+        console.log(chalk.yellow('⚠️  Could not read existing mcp.json, creating new configuration'));
+      }
+    }
+
+    // Only update MCP servers that are being installed by this script
+    const newServers = {};
+
+    // Check for Java MCP server - prefer existing working installations
+    const installedJavaMcpPath = path.join(this.mcpServersDir, "java-mcp", "index.js");
+    const existingJavaMcpPath = path.join(process.env.HOME, "node-java-mcp", "index.js");
+
+    if (fs.existsSync(existingJavaMcpPath)) {
+      // Use existing working installation
+      newServers["java-mcp"] = {
+        command: "node",
+        args: [existingJavaMcpPath]
+      };
+    } else if (fs.existsSync(installedJavaMcpPath)) {
+      // Use newly installed server
+      newServers["java-mcp"] = {
+        command: "node",
+        args: [installedJavaMcpPath]
+      };
+    }
+
+    // Check for Python MCP server - prefer existing working installations
+    const installedPythonMcpPath = path.join(this.mcpServersDir, "python-mcp", "fast_python_mcp.py");
+    const installedPythonVenvPath = path.join(this.mcpServersDir, "python-mcp", "venv", "bin", "python");
+    const existingPythonMcpPath = path.join(process.env.HOME, "python-mcp", "fast_python_mcp.py");
+    const existingPythonVenvPath = path.join(process.env.HOME, "python-mcp", "venv", "bin", "python");
+
+    if (fs.existsSync(existingPythonMcpPath) && fs.existsSync(existingPythonVenvPath)) {
+      // Use existing working installation
+      newServers["python-mcp"] = {
+        command: existingPythonVenvPath,
+        args: [existingPythonMcpPath]
+      };
+    } else if (fs.existsSync(installedPythonMcpPath) && fs.existsSync(installedPythonVenvPath)) {
+      // Use newly installed server
+      newServers["python-mcp"] = {
+        command: installedPythonVenvPath,
+        args: [installedPythonMcpPath]
+      };
+    }
+
+    // Always include npx-based servers (they don't need local installation)
+    newServers["sqlite-mcp"] = {
+      command: "npx",
+      args: ["-y", "mcp-sqlite"]
+    };
+    newServers["sqlite-tools-mcp"] = {
+      command: "npx",
+      args: ["-y", "mcp-sqlite-tools"]
+    };
+
+    // Check if MCP Excel server is available
+    try {
+      // Try to check if uv is available and has mcp-excel-server
+      const { execSync } = require('child_process');
+      try {
+        execSync('uv tool list | grep -q mcp-excel-server', { stdio: 'pipe' });
+        newServers["mcp-excel-server"] = {
+          command: "uvx",
+          args: ["mcp-excel-server"]
+        };
+      } catch (uvError) {
+        try {
+          execSync('npm list -g mcp-excel-server', { stdio: 'pipe' });
+          newServers["mcp-excel-server"] = {
+            command: "npx",
+            args: ["-y", "mcp-excel-server"]
+          };
+        } catch (npmError) {
+          // MCP Excel server not available, skip
+        }
+      }
+    } catch (error) {
+      // Skip MCP Excel server configuration if we can't check availability
+    }
+
+    // Merge new servers with existing ones (preserve existing working configurations)
+    const finalConfig = {
       mcpServers: {
-        "java-mcp": {
-          command: "node",
-          args: [path.join(this.mcpServersDir, "java-mcp", "index.js")]
-        },
-        "python-mcp": {
-          command: path.join(this.mcpServersDir, "python-mcp", "venv", "bin", "python"),
-          args: [path.join(this.mcpServersDir, "python-mcp", "fast_python_mcp.py")]
-        },
-        "sqlite-mcp": {
-          command: "npx",
-          args: ["-y", "mcp-sqlite"]
-        },
-        "sqlite-tools-mcp": {
-          command: "npx",
-          args: ["-y", "mcp-sqlite-tools"]
-        },
+        ...existingConfig.mcpServers,
+        ...newServers
       }
     };
-    
-    fs.writeFileSync(this.mcpConfigPath, JSON.stringify(mcpConfig, null, 2));
-    
-    console.log(chalk.green('✅ Cursor MCP configuration updated'));
+
+    fs.writeFileSync(this.mcpConfigPath, JSON.stringify(finalConfig, null, 2));
+
+    console.log(chalk.green('✅ Cursor MCP configuration updated (preserved existing servers)'));
   }
 
   /**
@@ -521,6 +638,16 @@ else
     echo "❌ SQL MCP Servers not found"
 fi
 
+# Check MCP Excel Server
+if command -v mcp-excel-server &> /dev/null; then
+    echo "✅ MCP Excel Server installed"
+elif command -v uvx &> /dev/null && uv tool list | grep -q mcp-excel-server; then
+    echo "✅ MCP Excel Server installed via uv"
+else
+    echo "⚠️  MCP Excel Server not found (may need manual installation)"
+    echo "   Run: uv tool install mcp-excel-server"
+fi
+
 # Check Cursor MCP configuration
 if [ -f "$HOME/.cursor/mcp.json" ]; then
     echo "✅ Cursor MCP configuration exists"
@@ -543,6 +670,7 @@ echo "🎯 Next Steps:"
 echo "1. Restart Cursor to load MCP servers"
 echo "2. Test VIRAT with: *help"
 echo "3. Use MCP tools with: *mcp-deep-crawl"
+echo "4. Test regression testing with: /test-algorithm-outputs (requires MCP Excel Server)"
 `;
 
     const scriptPath = path.join(this.mcpServersDir, 'verify-mcp-installation.sh');

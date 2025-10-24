@@ -4,7 +4,7 @@
 
 | Environment | Status | Use Case |
 |-------------|--------|----------|
-| **prod** | ✅ Production | Live production environment |
+| **prod** | ✅ Prod | Live prod environment |
 | **reliance** | ✅ Client/Reliance | Reliance client environment |
 | **phoenix** | ✅ Client/Phoenix | Phoenix client environment |
 
@@ -55,20 +55,23 @@
 
 ## 📊 Environment Branch Mappings
 
-### Production (prod)
+### Prod (prod)
 - Algorithm: `caas-release`
 - LoadAPI: `release_optimised`
 - Config: `caas-staging_fix`
+- MFP: `release` (if ms-mfp configured)
 
 ### Reliance
 - Algorithm: `master-ril`
 - LoadAPI: `caas-ril-uploads`
 - Config: `master-ril`
+- MFP: `release-ril` (if ms-mfp configured)
 
 ### Phoenix
 - Algorithm: `master-adidas-reliance-prod`
 - LoadAPI: `caas-phoenix-uploads`
 - Config: `master-adidas-ril`
+- MFP: `release-pheonix` (if ms-mfp configured)
 
 ---
 
@@ -113,11 +116,11 @@ Add validation logic across all environments.
 
 ## 🎯 Common Scenarios
 
-### Scenario 1: Production-Only Hotfix
+### Scenario 1: Prod-Only Hotfix
 ```markdown
 **Environment**: prod
 ```
-Deploy urgent fix to production only.
+Deploy urgent fix to prod only.
 
 ### Scenario 2: Staged Rollout
 ```markdown
@@ -141,7 +144,7 @@ Deploy to prod and phoenix, skip reliance.
 ```markdown
 **Environment**: phoenix, reliance
 ```
-Deploy to both client environments, skip production.
+Deploy to both client environments, skip prod.
 
 ---
 

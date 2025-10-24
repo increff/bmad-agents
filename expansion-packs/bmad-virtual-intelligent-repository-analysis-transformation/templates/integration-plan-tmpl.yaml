@@ -134,16 +134,19 @@ integration_plan:
     environments:
       - environment:
           name: "development"
+          mfp_branch: "develop"  # ms-mfp branch for development environment
           deployment_steps: ["step1", "step2"]
           validation: ["validation1", "validation2"]
 
       - environment:
           name: "staging"
+          mfp_branch: "staging"  # ms-mfp branch for staging environment
           deployment_steps: ["step1", "step2"]
           validation: ["validation1", "validation2"]
 
       - environment:
-          name: "production"
+          name: "prod"
+          mfp_branch: "release"  # ms-mfp branch for prod environment
           deployment_steps: ["step1", "step2"]
           validation: ["validation1", "validation2"]
 

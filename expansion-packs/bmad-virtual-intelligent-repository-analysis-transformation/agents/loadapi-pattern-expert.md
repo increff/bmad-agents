@@ -108,25 +108,33 @@ dependencies:
     - loadapi-denormalization-analysis.md
     - loadapi-implementation-guide.md
     - loadapi-validation-checklist.md
+    - loadapi-integration-guide.md
+    - loadapi-business-rules.md
   templates:
     - loadapi-class-tmpl.py
     - loadapi-headers-tmpl.yaml
     - loadapi-registration-tmpl.py
+    - loadapi-integration-tmpl.py
+    - loadapi-business-logic-tmpl.py
   data:
     - loadapi-patterns.md
     - denormalization-matrix.md
     - repository-structure.md
     - objectmaps-reference.md
+    - integration-patterns.md
+    - business-rules-matrix.md
 ```
 
 ## LOADAPI PATTERN EXPERT KNOWLEDGE BASE
 
 ### Repository Statistics
 
-- **Total Python Files**: 159 files
-- **Module Directories**: 20+ modules
-- **Import ID Mappings**: 98+ mappings
-- **Denormalization Patterns**: 4 core patterns
+- **Total Python Files**: 177 files
+- **Module Directories**: 23 modules
+- **Import ID Mappings**: 118+ mappings
+- **Denormalization Patterns**: 6+ core patterns
+- **Integration APIs**: 10 external system integrations
+- **ObjectMaps Functions**: 15+ mapping utilities
 
 ### Core LoadAPI Architecture
 
@@ -149,15 +157,24 @@ USER UPLOAD (Denormalized) → VALIDATION → CONVERSION → DATABASE STORAGE (N
 
 **Module Organization**:
 
-- `distribution/` - Distribution-related LoadAPIs
-- `analysis/` - Analysis and reporting LoadAPIs
-- `inventorycreation/` - Inventory management LoadAPIs
-- `dynamicdiscounting/` - Discount management LoadAPIs
-- `integration/` - External system integration LoadAPIs
-- `master/` - Master data LoadAPIs
-- `otb/` - OTB (Open To Buy) LoadAPIs
-- `reordering/` - Reordering LoadAPIs
-- `transactional/` - Transactional LoadAPIs
+- `distribution/` - Distribution and allocation LoadAPIs (22 files)
+- `analysis/` - Analysis and reporting LoadAPIs (6 files)
+- `bi/` - Business Intelligence LoadAPIs (5 files)
+- `inventorycreation/` - Inventory management LoadAPIs (5 files)
+- `dynamicdiscounting/` - Dynamic discounting LoadAPIs (10 files)
+- `integration/` - External system integration APIs (10 files)
+- `master/` - Master data LoadAPIs (15 files)
+- `master_config/` - Master configuration LoadAPIs (3 files)
+- `otb/` - OTB (Open To Buy) LoadAPIs (14 files)
+- `otbStyleWiseBuy/` - Style-wise OTB LoadAPIs (7 files)
+- `reordering/` - Reordering LoadAPIs (4 files)
+- `transactional/` - Transactional data LoadAPIs (10 files)
+- `noos/` - Never Out of Stock LoadAPIs (2 files)
+- `od/` - On Demand LoadAPIs (4 files)
+- `ag/` - Attribute Grouping LoadAPIs (1 file)
+- `iss/` - Intelligent Size Selection LoadAPIs (1 file)
+- `planogramcreation/` - Planogram creation LoadAPIs (1 file)
+- `stylewisetosizewise/` - Style to size conversion LoadAPIs (3 files)
 
 **File Structure Pattern**:
 
@@ -271,9 +288,50 @@ Examples:
 | **Denormalized Field**  | **Normalized Field** | **ObjectMaps Function**            | **Conversion Pattern**                 |
 | ----------------------- | -------------------- | ---------------------------------- | -------------------------------------- |
 | `(channel, store_code)` | `store_id`           | `get_store_to_store_id_map()`      | `store_map.get((channel, store_code))` |
+| `(channel, store_cluster)` | `cluster_id`      | `get_channel_cluster_set()`        | `cluster_map.get((channel, cluster))`  |
 | `ean`                   | `sku_id`             | `get_sku_to_sku_id_map()`          | `sku_id_map.get(ean)`                  |
 | `style_code`            | `style_id`           | `get_style_code_to_style_id_map()` | `style_map.get(style_code)`            |
 | `warehouse`             | `warehouse_id`       | `get_wh_to_wh_id_map()`            | `wh_map.get(warehouse)`                |
+| `cat, subcat`           | `category_id`        | `get_cat_subcat_map()`             | `cat_map.get((cat, subcat))`           |
+| `style, parent_style`   | `parent_style_id`    | `get_style_parent_map()`           | `parent_map.get((style, parent))`      |
+
+### Advanced Denormalization Patterns
+
+**Multi-Level Normalization**:
+- Style → Style attributes, seasons, categories
+- Store → Store clusters, regions, areas
+- SKU → Style mapping, size mapping, MRP
+
+**Business Rule Integration**:
+- Discount rules with ROS, DOH, Health, Sell-through combinations
+- OTB calculations with multiple override levels
+- Dynamic pricing with benchmarking and guardrails
+
+### Advanced LoadAPI Features
+
+**Schema Validation**:
+- Pandera schema integration for complex data validation
+- Multi-language support with LocalizationUtil
+- Azure SQL and file system integration
+- Advanced error handling with detailed messages
+
+**Integration Patterns**:
+- External system integration APIs (10 implementations)
+- Transactional data processing with update/insert logic
+- Multi-file directory processing
+- File versioning and backup strategies
+
+**Business Logic Patterns**:
+- Complex validation with business rules (e.g., discount rule combinations)
+- Multi-level data normalization (Style → Attributes, Seasons, Categories)
+- Dynamic field mapping and conversion
+- Cross-reference validation between modules
+
+**Performance Optimizations**:
+- Batch processing for large files
+- Connection pooling and resource management
+- File upload validation and versioning
+- Background processing support
 
 ### Implementation Checklist
 
@@ -310,60 +368,115 @@ Examples:
 **Distribution Module** (22 files):
 
 - Store + SKU Patterns: `StoreSkuDepthOverrideLoadApi.py`, `StoreStyleDepthOverrideLoadApi.py`
-- Style Patterns: `StyleDepthOverrideLoadApi.py`, `StylePackSizeLoadApi.py`
-- Story Patterns: `StoryStyleListLoadApi.py`, `StoryCatCombinationsLoadApi.py`
+- Style Patterns: `StyleDepthOverrideLoadApi.py`, `StylePackSizeLoadApi.py`, `StyleReservePercLoadApi.py`
+- Story Patterns: `StoryStyleListLoadApi.py`, `StoryCatCombinationsLoadApi.py`, `DistStoryStyleListLoadApi.py`
+- Planogram: `WhPlanogramLoadApi.py`, `PlanogramIncrementApi.py`
+- Store Management: `DistributionStoreLoadApi.py`, `IstStoreLoadApi.py`
 
 **Analysis Module** (6 files):
 
 - Style Analysis: `BrandGradingLoadApi.py`, `DepthSuggestionCoverDaysLoadApi.py`
-- IST Analysis: `SuggestedIstLoadApi.py`, `ImplementedIstLoadApi.py`
+- IST Analysis: `SuggestedIstLoadApi.py`, `ImplementedIstLoadApi.py`, `PreStockLoadApi.py`
+- Discount Analysis: `DiscAnalysisInputLoadApi.py`
 
-**Master Module** (18 files):
+**BI Module** (5 files):
 
-- Style Master: `StyleLoadApi.py`, `StyleMrpLoadApi.py`
-- Store Master: `StoreLoadApi.py`, `NewStoreLoadApi.py`
-- SKU Master: `SkuAttribsLoadApi.py`, `SizeSetQtyLoadApi.py`
+- Style Tagging: `BiStyleTaggingLoadApi.py`
+- Store Targets: `StoreTargetsLoadApi.py`
+- Size Sets: `SizeSetLoadApi.py`
+- Retail Calendar: `RetailWeekLoadApi.py`
+- Buy Planning: `BiBuyQuantityLoadApi.py`
 
-**Dynamic Discounting Module** (13 files):
+**Master Module** (15 files):
+
+- Style Master: `StyleLoadApi.py`, `StyleMrpLoadApi.py`, `StyleParentMapLoadApi.py`
+- Store Master: `StoreLoadApi.py`, `NewStoreLoadApi.py`, `WarehouseLoadApi.py`
+- SKU Master: `SkuAttribsLoadApi.py`, `SizeSetQtyLoadApi.py`, `SizeMappingLoadApi.py`
+- Configuration: `PriceBucketLoadApi.py`, `PlanogramLoadApi.py`, `AopLoadApi.py`
+
+**Dynamic Discounting Module** (10 files):
 
 - Style Grouping: `StyleGroupLoadApi.py`, `StyleLevelGuardRailsLoadApi.py`
-- Store Grouping: `StoreGroupStyleDiscountLoadApi.py`
+- Store Grouping: `StoreGroupStyleDiscountLoadApi.py`, `DDStoreLoadApi.py`
 - Discount Rules: `DiscountRulesLoadApi.py`, `SellThroughBenchmarksLoadApi.py`
+- Override Management: `DDStyleOverrideLoadApi.py`, `DiscountIncrementLoadApi.py`
+
+**Integration Module** (10 files):
+
+- Transactional: `SalesIntegrationApi.py`, `InventoryIntegrationApi.py`, `WhStockIntegrationApi.py`
+- Orders: `OpenOrdersIntegrationApi.py`, `DispatchIntegrationApi.py`, `ReturnsIntegrationApi.py`
+- Reference: `GitIntegrationApi.py`, `StoreUpdateIntegrationApi.py`, `SizeMappingIntegrationApi.py`
+
+**OTB Module** (14 files):
+
+- Core OTB: `OtbValueLoadApi.py`, `OtbPlmLoadApi.py`, `OtbStrOverrideLoadApi.py`
+- Depletion: `WhInwardsLoadApi.py`, `StoreInwardsLoadApi.py`, `LeadTimeLoadApi.py`
+- Planning: `OtbInseasonPlanoLoadApi.py`, `OtbDepthRangeLoadApi.py`, `MinDisplayOptionsLoadApi.py`
+
+**Transactional Module** (10 files):
+
+- Stock: `WhStockLoadApi.py`, `EndDateStockLoadApi.py`, `GoodsInTransitLoadApi.py`
+- Sales: `SalesLoadApi.py`, `NetSalesLoadApi.py`, `KeyframeLoadApi.py`
+- Inventory: `OpenOrdersLoadApi.py`, `IstInTransitLoadApi.py`
 
 #### **Implementation Examples**
 
-**Example 1: Store SKU ROS Override**
+**Example 1: Store SKU Depth Override**
 
 ```
-Requirement: "Add Store SKU Level ROS Override"
+Requirement: "Add Store SKU Level Depth Override"
 → Module: distribution/
 → Pattern: Store + SKU denormalization
-→ Files: StoreSkuRosOverrideLoadApi.py + 3 registration files
-→ Headers: ["channel", "store_code", "ean", "ros_override"] → ["id", "store", "sku", "ros_override"]
+→ Files: StoreSkuDepthOverrideLoadApi.py + 3 registration files
+→ Headers: ["channel", "store_code", "ean", "depth"] → ["id", "store", "sku", "depth"]
 → ObjectMaps: get_store_to_store_id_map(), get_sku_to_sku_id_map()
-→ Import ID: import_dist_input_store_sku_ros_override
+→ Import ID: import_dist_input_store_sku_depth_override
 ```
 
 **Example 2: Style Brand Grading**
 
 ```
-Requirement: "Add Style Brand Grading"
+Requirement: "Add Style Brand Grading Analysis"
 → Module: analysis/
-→ Pattern: Style denormalization
+→ Pattern: Style denormalization with validation
 → Files: BrandGradingLoadApi.py + 3 registration files
 → Headers: ["style_code", "brand_grading"] → ["id", "style", "brand_grading"]
 → ObjectMaps: get_style_code_to_style_id_map()
-→ Import ID: import_analysis_input_brand_grading
+→ Import ID: import_gap_input_brand_grading
 ```
 
-**Example 3: Inventory Creation Store**
+**Example 3: OTB Value Planning**
 
 ```
-Requirement: "Add Inventory Creation Store Management"
-→ Module: inventorycreation/
-→ Pattern: Store denormalization
-→ Files: InvCreationStoreLoadApi.py + 3 registration files
-→ Headers: ["channel", "store_code", "enabled"] → ["store", "flag"]
-→ ObjectMaps: get_store_to_store_id_map()
-→ Import ID: import_inventorycreation_input_inv_creation_store
+Requirement: "Add OTB Value Input for Planning"
+→ Module: otb/
+→ Pattern: Multi-dimensional OTB with business rules
+→ Files: OtbValueLoadApi.py + 3 registration files
+→ Headers: ["style_code", "otb_value", "season"] → ["id", "style", "otb_value", "season"]
+→ ObjectMaps: get_style_code_to_style_id_map()
+→ Import ID: import_otb_input_otb_value
+```
+
+**Example 4: Integration Sales Data**
+
+```
+Requirement: "Add Sales Integration from External System"
+→ Module: integration/
+→ Pattern: Transactional integration with denormalization
+→ Files: SalesIntegrationApi.py + 3 registration files
+→ Headers: ["channel", "store_code", "sku", "day", "quantity", "revenue"] → ["store", "sku", "day", "qty", "revenue"]
+→ ObjectMaps: get_store_to_store_id_map(), get_sku_to_sku_id_map()
+→ Import ID: integration_sales
+```
+
+**Example 5: Dynamic Discount Rules**
+
+```
+Requirement: "Add Dynamic Discount Rules Engine"
+→ Module: dynamicdiscounting/
+→ Pattern: Complex business rules with multiple dimensions
+→ Files: DiscountRulesLoadApi.py + 3 registration files
+→ Headers: ["ros", "doh_ageing", "health", "action", "max_discount_factor"] → ["id", "ros", "doh_ageing", "health", "action", "max_discount_factor"]
+→ Business Rules: ROS × Health × Sell-through × DOH combinations
+→ Import ID: import_disc_input_discount_rules
 ```

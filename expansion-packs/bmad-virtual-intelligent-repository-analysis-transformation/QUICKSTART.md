@@ -36,6 +36,7 @@ npx bmad-method install
 ```
 
 #### 3. Installation Prompts
+
 **Project Directory:**
 ```
 ? Enter the full path to your project directory: /Users/yourname/projects/irisx-workspace
@@ -56,18 +57,51 @@ npx bmad-method install
   ☐ Other IDEs...
 ```
 
-**Repository Paths (CRITICAL):**
+**Repository Selection Menu (NEW - FLEXIBLE SELECTION):**
 ```
 📋 VIRAT Repository Intelligence Configuration
 
+? Select repositories to configure (use space to select, enter to continue):
+  ☑ irisx-algo (Java/Spring Boot) - Core business logic & algorithms
+  ☑ irisx-config (Configuration/SQL) - TSV templates & SQL views
+  ☑ ms-loadapis-ril-final (Python) - Data loading & API services
+  ☐ ms-mfp (Python) - Monthly Forecast Planning
+  ☐ irisx-master (Repository) - Master data and configurations
+
+# Use Space to toggle selections, Enter to proceed
+# Minimum: Select at least one repository
+# Maximum: Select all five repositories
+```
+
+**Dynamic Repository Path Prompts (Based on Your Selections):**
+
+For each repository you selected, you'll be prompted for its path:
+
+```
 ? Enter the local path to your Algorithm repository (irisx-algo): 
   /Users/yourname/projects/irisx-algo
 
 ? Enter the local path to your Config repository (irisx-config):
   /Users/yourname/projects/irisx-config
 
-? Enter the local path to your LoadAPIs repository (ms-loadapis-ril-final):
-  /Users/yourname/projects/ms-loadapis-ril-final
+? Enter the local path to your LoadAPIs repository (ms-loadapis):
+  /Users/yourname/projects/ms-loadapis
+
+? Enter the local path to your MFP repository (ms-mfp):
+  /Users/yourname/projects/ms-mfp
+
+? Enter the local path to your Master repository (irisx-master):
+  /Users/yourname/projects/irisx-master
+```
+*(Only appears if you selected this repository)*
+
+**Notion Integration (Optional):**
+```
+? Enter your Notion API Key (Integration Token) - optional, press Enter to skip:
+  # Leave blank to skip or enter your Notion API key
+
+? Enter your Notion Database ID (for requirements) - optional, press Enter to skip:
+  # Leave blank to skip or enter your Notion database ID
 ```
 
 #### 4. Verify Installation

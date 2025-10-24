@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Execute the complete development workflow for implementing a requirement across three interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), and `irisx-config` (Configuration/SQL).
+Execute the complete development workflow for implementing a requirement across multiple interconnected repositories: `irisx-algo` (Java/Spring Boot), `ms-loadapis-ril-final` (Python), `ms-mfp` (Python), and `irisx-config` (Configuration/SQL). Supports both standard requirements and specialized WSSI workflows (WSSI-MFP for Phoenix, WSSI-OTB for Reliance).
 
 ## Task Instructions
 
@@ -15,14 +15,19 @@ Execute the complete development workflow for implementing a requirement across 
 **Prerequisites:**
 
 - Requirement document must be provided
-- All three repositories must be accessible
+- All configured repositories must be accessible (irisx-algo, ms-loadapis-ril-final, ms-mfp, irisx-config)
 - BMAD core agents must be available (@bmad-core/agents/analyst.md, @bmad-core/agents/dev.md, @bmad-core/agents/qa.md)
+- For WSSI workflows: Environment-specific templates and configurations must be available
 
 **Step 1: Load Requirement Document**
 
 1. Read the requirement document provided by the user
 2. Parse requirement ID, title, description, and technical requirements
-3. Identify the type of change required (new column, new input, formula change, new module, etc.)
+3. Identify the type of change required (new column, new input, formula change, new module, WSSI workflow, etc.)
+4. **WSSI Workflow Detection**: Check if requirement involves WSSI workflows:
+   - WSSI-MFP workflow for Phoenix environment
+   - WSSI-OTB workflow for Reliance environment
+   - Standard requirement for other cases
 
 **Step 1.5: Module Identification and Pattern Analysis**
 
@@ -242,6 +247,54 @@ Execute the complete development workflow for implementing a requirement across 
 - Configuration files updated consistently
 - Documentation updated with complete implementation details
 - Implementation completed within 2-hour target
+
+## WSSI Workflow Implementation
+
+### WSSI-MFP Workflow (Phoenix Environment)
+
+**When to Use:**
+- Requirement involves WSSI to MFP workflow implementation
+- Environment is Phoenix
+- Need to coordinate LoadAPIs → WSSI → MFP data flow
+
+**Implementation Steps:**
+1. **Load WSSI-MFP Task**: Load `wssi-mfp-workflow.md` task
+2. **Generate Template**: Generate `wssi-mfp-workflow-tmpl.yaml` template
+3. **Environment Setup**: Configure Phoenix environment with correct base branches
+4. **LoadAPIs Processing**: Process LoadAPIs data with Phoenix-specific rules
+5. **WSSI Standardization**: Standardize WSSI data for MFP compatibility
+6. **MFP Implementation**: Generate MFP views and snapshots
+7. **Cross-Repository Integration**: Integrate all four repositories
+8. **Phoenix Compliance**: Ensure Phoenix environment compliance
+
+### WSSI-OTB Workflow (Reliance Environment)
+
+**When to Use:**
+- Requirement involves WSSI snapshot lifecycle to OTB workflow
+- Environment is Reliance
+- Need to coordinate LoadAPIs → WSSI → OTB data flow
+
+**Implementation Steps:**
+1. **Load WSSI-OTB Task**: Load `wssi-otb-workflow.md` task
+2. **Generate Template**: Generate `wssi-otb-workflow-tmpl.yaml` template
+3. **Environment Setup**: Configure Reliance environment with correct base branches
+4. **LoadAPIs Processing**: Process LoadAPIs data with Reliance-specific rules
+5. **WSSI Snapshot Lifecycle**: Implement snapshot lifecycle management
+6. **OTB Implementation**: Generate OTB codes and budget validity
+7. **Pipeline Configuration**: Configure Azure integration and audit
+8. **Reliance Compliance**: Ensure Reliance environment compliance
+
+### WSSI Workflow Commands
+
+**WSSI-MFP Workflow:**
+```
+*wssi-mfp-workflow requirement-123.md
+```
+
+**WSSI-OTB Workflow:**
+```
+*wssi-otb-workflow requirement-123.md
+```
 
 ## Error Handling
 

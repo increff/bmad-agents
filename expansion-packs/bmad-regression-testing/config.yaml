@@ -21,6 +21,19 @@ html_report:
   embed_data: true  # Create self-contained HTML file
   theme: "default"  # Options: default, dark, light
 
+# MCP Excel Server Configuration for accelerated TSV/Excel parsing
+mcp_excel_server:
+  enabled: true
+  command: "uvx"
+  args: ["mcp-excel-server"]
+  env:
+    PYTHONPATH: "/usr/local/bin/python3"  # Adjust path as needed for your system
+  supported_formats: [".xlsx", ".xls", ".csv", ".tsv", ".json"]
+  performance_mode: true  # Enable performance optimizations for large files
+  cache_enabled: true  # Cache parsed data for repeated analysis
+  max_file_size_mb: 500  # Maximum file size to process (MB)
+  parallel_processing: true  # Process multiple files in parallel
+
 # Workflow Configuration
 workflow:
   default_scope: "all"  # Default scope for /test-algorithm-outputs

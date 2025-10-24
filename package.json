@@ -73,10 +73,12 @@
   },
   "dependencies": {
     "@kayvan/markdown-tree-parser": "^1.6.1",
+    "@notionhq/client": "^5.3.0",
     "bmad-method": "^4.44.1",
     "chalk": "^4.1.2",
     "commander": "^14.0.0",
     "comment-json": "^4.2.5",
+    "dotenv": "^17.2.3",
     "fs-extra": "^11.3.1",
     "glob": "^11.0.3",
     "ignore": "^7.0.5",

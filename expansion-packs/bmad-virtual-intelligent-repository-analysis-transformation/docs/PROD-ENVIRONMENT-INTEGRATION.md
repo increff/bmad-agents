@@ -168,8 +168,8 @@ Examples:
 
 ## Use Cases
 
-### Use Case 1: Production-Only Deployment
-Deploy only to production (prod):
+### Use Case 1: Prod-Only Deployment
+Deploy only to prod (prod):
 ```markdown
 **Environment**: prod
 ```
@@ -259,7 +259,7 @@ To test the prod environment multi-environment support:
 **Requirement ID**: TEST-PROD-001
 
 ## Description
-Test deployment to production environment.
+Test deployment to prod environment.
 ```
 
 Run: `*implement test-prod-deployment.md`

@@ -125,17 +125,20 @@ environments:
         path: "/staging/irisx-config"
         branch: "caas-release"
 
-  production:
+  prod:
     repositories:
       irisx-algo:
         path: "/prod/irisx-algo"
         branch: "caas-release"
       ms-loadapis-ril-final:
         path: "/prod/ms-loadapis-ril-final"
-        branch: "caas-release"
+        branch: "release_optimised"
+      ms-mfp:
+        path: "/prod/ms-mfp"
+        branch: "release"
       irisx-config:
         path: "/prod/irisx-config"
-        branch: "caas-release"
+        branch: "caas-staging_fix"
 
 ## User Preferences Template
 ---

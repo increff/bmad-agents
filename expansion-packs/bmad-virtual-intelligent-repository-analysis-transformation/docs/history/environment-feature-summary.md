@@ -13,7 +13,7 @@ VIRAT Agent has been enhanced to support multiple environments (prod, reliance, 
 ```yaml
 environments:
   prod:
-    name: "Production"
+    name: "Prod"
     base_branches:
       algorithm: "caas-release"
       loadapi: "release_optimised"

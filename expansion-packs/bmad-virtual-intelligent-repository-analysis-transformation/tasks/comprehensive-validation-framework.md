@@ -424,9 +424,11 @@ def test_ros_override_calculation():
 - [ ] Test classes created for new data classes
 - [ ] Test classes created for static methods
 - [ ] Test classes created for new file classes
-- [ ] Test classes created for LoadAPI methods
-- [ ] All tests execute successfully
-- [ ] Test coverage documented
+  - [ ] Test classes created for LoadAPI methods
+  - [ ] Test classes created for MFP methods (if ms-mfp configured)
+  - [ ] MFP forecasting algorithms tested (if ms-mfp configured)
+  - [ ] All tests execute successfully
+  - [ ] Test coverage documented
 - [ ] Test results included in final documentation
 - [ ] Pattern-based test generation working
 - [ ] Automated test execution functional

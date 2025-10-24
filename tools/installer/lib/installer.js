@@ -27,19 +27,21 @@ class Installer {
    * Determine if MCP servers should be installed
    */
   shouldInstallMCP(config) {
-    // Install MCP if VIRAT expansion pack is being installed
+    // Install MCP if VIRAT or regression testing expansion packs are being installed
     if (config.expansionPacks && config.expansionPacks.length > 0) {
-      return config.expansionPacks.some(pack => 
+      return config.expansionPacks.some(pack =>
         pack.includes('virtual-intelligent-repository-analysis-transformation') ||
-        pack.includes('virat')
+        pack.includes('virat') ||
+        pack.includes('bmad-regression-testing') ||
+        pack.includes('regression-testing')
       );
     }
-    
+
     // Install MCP for full installations (includes all expansion packs)
     if (config.installType === 'full') {
       return true;
     }
-    
+
     return false;
   }
 
@@ -467,9 +469,23 @@ class Installer {
       await fileManager.createManifest(installDir, config, files);
     }
 
-    // Install MCP servers if VIRAT is being installed
+    // Install MCP servers if VIRAT or regression testing is being installed
     if (this.shouldInstallMCP(config)) {
-      spinner.text = 'Installing MCP servers for VIRAT...';
+      const expansionPackNames = [];
+      if (config.expansionPacks?.some(pack =>
+        pack.includes('virtual-intelligent-repository-analysis-transformation') ||
+        pack.includes('virat')
+      )) {
+        expansionPackNames.push('VIRAT');
+      }
+      if (config.expansionPacks?.some(pack =>
+        pack.includes('bmad-regression-testing') ||
+        pack.includes('regression-testing')
+      )) {
+        expansionPackNames.push('Regression Testing');
+      }
+
+      spinner.text = `Installing MCP servers for ${expansionPackNames.join(' and ')}...`;
       try {
         const mcpSetup = new MCPSetup(installDir);
         await mcpSetup.installMCPServers();

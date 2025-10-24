@@ -55,7 +55,7 @@
 
 - [ ] Development environment has been deployed
 - [ ] Staging environment has been deployed
-- [ ] Production environment has been deployed
+- [ ] Prod environment has been deployed
 - [ ] Health checks have been performed
 - [ ] Monitoring has been verified
 - [ ] Documentation has been updated
