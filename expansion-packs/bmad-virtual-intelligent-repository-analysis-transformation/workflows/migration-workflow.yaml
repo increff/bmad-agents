@@ -1,0 +1,244 @@
+# BMAD Migration Workflow
+# Intelligent cross-branch commit migration with pattern adaptation
+
+workflow:
+  id: migration
+  name: BMAD Cross-Branch Migration Workflow
+  description: "Systematically migrate commits from source branch to target branch with intelligent pattern adaptation and full validation"
+  type: brownfield
+  project_types:
+    - cross-branch-migration
+    - feature-backport
+    - branch-synchronization
+    - multi-environment-alignment
+
+  phases:
+    - phase: migration_setup
+      agent: virat
+      steps:
+        - step: validate_migration_parameters
+          action: validate source branch, target branch, and repository parameters
+          creates: validated migration configuration
+          notes: "Verify both branches exist and repository is accessible"
+        
+        - step: fetch_branch_data
+          action: fetch latest commits and data from both branches
+          creates: branch metadata and commit history
+          notes: "Ensure branches are up-to-date before analysis"
+        
+        - step: identify_commits_to_migrate
+          action: generate diff between source and target branches
+          creates: list of commits not in target branch
+          notes: "Identify all commits that need to be migrated"
+        
+        - step: categorize_commits
+          action: categorize commits by type and business logic
+          creates: categorized commit list with metadata
+          notes: "Feature additions, bug fixes, configuration updates, etc."
+        
+        - step: create_migration_report
+          action: generate comprehensive migration report
+          creates: migration-analysis.md with detailed breakdown
+          notes: "Document all commits, files affected, and risk assessment"
+
+    - phase: migration_analysis
+      agent: virat
+      steps:
+        - step: analyze_source_patterns
+          action: analyze patterns and structure in source branch
+          creates: source pattern analysis document
+          notes: "Understand implementation patterns used in source branch"
+        
+        - step: analyze_target_patterns
+          agent: architect
+          action: crawl and analyze target branch patterns
+          creates: target pattern analysis document
+          notes: "Understand how target branch structures its code"
+        
+        - step: extract_business_logic
+          action: for each commit, extract business logic and requirements
+          creates: business-logic-analysis.md
+          notes: "Understand what each commit is trying to accomplish"
+        
+        - step: map_patterns
+          action: create mapping between source and target patterns
+          creates: pattern-adaptation-mapping.md
+          notes: "Document how source patterns should be adapted to target"
+        
+        - step: identify_adaptations
+          action: identify necessary adaptations for target branch
+          creates: adaptation-strategy.md
+          notes: "Document branch-specific customizations needed"
+        
+        - step: validate_against_rules
+          action: validate migration plan against all 44 implementation rules
+          creates: rules-validation-report.md
+          notes: "Ensure migration follows all core implementation rules"
+
+    - phase: migration_planning
+      agent: virat
+      steps:
+        - step: create_implementation_plan
+          action: create detailed step-by-step migration plan
+          creates: migration-implementation-plan.md
+          notes: "Plan for each commit and its implementation in target"
+        
+        - step: identify_dependencies
+          action: identify dependencies between commits
+          creates: commit-dependency-graph.md
+          notes: "Determine commit order and dependencies"
+        
+        - step: plan_testing
+          action: plan testing strategy for each commit
+          creates: testing-strategy.md
+          notes: "Define how each change will be validated"
+        
+        - step: identify_risks
+          action: identify and document migration risks
+          creates: risk-assessment.md
+          notes: "Document potential issues and mitigation strategies"
+
+    - phase: feature_branch_management
+      steps:
+        - step: create_migration_branch
+          agent: virat
+          action: create feature branch for migration
+          creates: migration feature branch
+          notes: "Branch name: migration/{source-branch}-to-{target-branch}-{commit-count}-changes"
+
+    - phase: migration_execution
+      agent: dev-agent
+      steps:
+        - step: prepare_target_environment
+          action: switch to target branch and prepare for changes
+          creates: ready-to-implement target environment
+          notes: "Ensure target branch is clean and up-to-date"
+        
+        - step: implement_commits
+          action: implement each commit in target branch following target patterns
+          creates: migrated code changes
+          notes: "For each commit: understand → adapt → implement → validate → commit"
+        
+        - step: implement_first_commit
+          action: implement first commit in migration set
+          creates: first migrated change
+          notes: "Understand source change, adapt to target patterns, implement, validate"
+        
+        - step: validate_first_commit
+          action: validate first commit implementation
+          creates: validation report for first commit
+          notes: "Ensure pattern compliance and correct business logic"
+        
+        - step: implement_remaining_commits
+          action: systematically implement remaining commits
+          creates: all migrated changes
+          notes: "Repeat process for each subsequent commit"
+        
+        - step: cross_repository_sync
+          action: if applicable, synchronize changes across repositories
+          creates: synchronized repository state
+          notes: "Ensure consistency across multiple repositories"
+
+    - phase: migration_validation
+      agent: qa-agent
+      steps:
+        - step: pattern_compliance_check
+          action: verify all changes follow target branch patterns
+          creates: pattern-compliance-report.md
+          notes: "Ensure no pattern violations or deviations"
+        
+        - step: functional_testing
+          action: test each implemented feature in target context
+          creates: functional-test-results.md
+          notes: "Verify business logic works correctly"
+        
+        - step: integration_testing
+          action: test integration with target branch codebase
+          creates: integration-test-results.md
+          notes: "Verify no breaking changes to existing functionality"
+        
+        - step: migration_integrity_check
+          action: verify completeness and integrity of migration
+          creates: migration-integrity-report.md
+          notes: "Confirm all commits properly migrated"
+        
+        - step: comprehensive_validation
+          action: perform comprehensive quality validation
+          creates: quality-validation-report.md
+          notes: "Final validation before merge"
+
+    - phase: migration_documentation
+      agent: virat
+      steps:
+        - step: document_migration_summary
+          action: create detailed migration summary
+          creates: migration-summary.md
+          notes: "Document source, target, commits migrated, adaptations made"
+        
+        - step: document_manual_decisions
+          action: document any manual decisions or deviations
+          creates: migration-decisions.md
+          notes: "Explain why certain adaptations were necessary"
+        
+        - step: update_branch_documentation
+          action: update target branch documentation with changes
+          creates: updated documentation
+          notes: "Document changes, new features, bug fixes, migration notes"
+        
+        - step: create_migration_report_final
+          action: create comprehensive final migration report
+          creates: MIGRATION_REPORT.md
+          notes: "Complete report of migration process and results"
+
+    - phase: migration_finalization
+      steps:
+        - step: review_feature_branch
+          agent: virat
+          action: review all commits in feature branch
+          creates: migration review report
+          notes: "Final review before merge"
+        
+        - step: merge_to_target
+          agent: virat
+          action: merge feature branch to target branch
+          creates: merged target branch with migrated changes
+          notes: "Merge with clear commit message referencing source branch"
+        
+        - step: delete_feature_branch
+          agent: virat
+          action: delete feature branch after successful merge
+          creates: cleanup
+          notes: "Clean up feature branch"
+        
+        - step: push_changes
+          agent: virat
+          action: push merged changes to origin
+          creates: pushed changes on remote
+          notes: "Ensure changes are backed up on origin"
+
+  success_criteria:
+    - All identified commits successfully migrated to target branch
+    - Business logic correctly implemented in target patterns
+    - All validations passing in target branch context
+    - No breaking changes to existing target branch functionality
+    - Complete documentation of migration process
+    - Target branch patterns fully respected
+    - Cross-repository consistency maintained (if applicable)
+    - All tests passing post-merge
+    - Feature branch successfully merged and cleaned up
+
+  error_handling:
+    - Commit conflicts: Resolve intelligently based on target branch patterns
+    - Pattern mismatch: Adapt changes to target branch conventions
+    - Missing dependencies: Identify and handle appropriately
+    - Validation failures: Stop and request manual review before continuing
+    - Pattern violations: Escalate for guidance on adaptation
+    - Test failures: Address before proceeding to next commit
+
+  notes:
+    - This workflow implements systematic cross-branch migration
+    - All changes are adapted to target branch patterns and conventions
+    - Complete traceability of migration process is maintained
+    - Multi-layer validation ensures quality and correctness
+    - Atomic commits ensure each change is testable and reversible
+    - Comprehensive documentation supports future maintenance

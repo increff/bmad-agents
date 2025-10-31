@@ -1,147 +1,129 @@
-# BMAD VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION Extension Pack Configuration
 name: bmad-virtual-intelligent-repository-analysis-transformation
 version: 1.0.0
 short-title: VIRAT Repository Intelligence
-description: "VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION for multi-repository development workflows"
-author: "BMAD Team"
-license: "MIT"
-
-# Installation Questions
+description: >-
+  VIRTUAL INTELLIGENT Repository ANALYSIS AND TRANSFORMATION for
+  multi-repository development workflows
+author: BMAD Team
+license: MIT
 installation_questions:
-  - name: "selectedRepositories"
-    type: "checkbox"
-    message: "Select repositories to configure (use space to select, enter to continue):"
+  - name: selectedRepositories
+    type: checkbox
+    message: 'Select repositories to configure (use space to select, enter to continue):'
     choices:
-      - name: "irisx-algo (Java/Spring Boot) - Core business logic & algorithms"
-        value: "irisx-algo"
+      - name: irisx-algo (Java/Spring Boot) - Core business logic & algorithms
+        value: irisx-algo
         checked: false
-      - name: "irisx-config (Configuration/SQL) - TSV templates & SQL views"
-        value: "irisx-config"
+      - name: irisx-config (Configuration/SQL) - TSV templates & SQL views
+        value: irisx-config
         checked: false
-      - name: "ms-loadapis (Python) - Data loading & API services"
-        value: "ms-loadapis"
+      - name: ms-loadapis (Python) - Data loading & API services
+        value: ms-loadapis
         checked: false
-      - name: "ms-mfp (Python) - Monthly Forecast Planning"
-        value: "ms-mfp"
+      - name: ms-mfp (Python) - Monthly Forecast Planning
+        value: ms-mfp
         checked: false
-      - name: "irisx-master (Repository) - Master data and configurations"
-        value: "irisx-master"
+      - name: irisx-master (Repository) - Master data and configurations
+        value: irisx-master
         checked: false
-    validate: "at-least-one"
-  
-  # Conditional questions - only asked if respective repository is selected
-  - name: "algoRepoPath"
-    type: "input"
-    message: "Enter the local path to your Algorithm repository (irisx-algo):"
-    default: "../irisx-algo"
-    validate: "required"
-    condition: "selectedRepositories:irisx-algo"
-    
-  - name: "configRepoPath"
-    type: "input"
-    message: "Enter the local path to your Config repository (irisx-config):"
-    default: "../irisx-config"
-    validate: "required"
-    condition: "selectedRepositories:irisx-config"
-    
-  - name: "loadapisRepoPath"
-    type: "input"
-    message: "Enter the local path to your LoadAPIs repository (ms-loadapis):"
-    default: "../ms-loadapis"
-    validate: "required"
-    condition: "selectedRepositories:ms-loadapis"
-    
-  - name: "mfpRepoPath"
-    type: "input"
-    message: "Enter the local path to your MFP repository (ms-mfp):"
-    default: "../ms-mfp"
-    validate: "required"
-    condition: "selectedRepositories:ms-mfp"
-
-  - name: "masterRepoPath"
-    type: "input"
-    message: "Enter the local path to your Master repository (irisx-master):"
-    default: "../irisx-master"
-    validate: "required"
-    condition: "selectedRepositories:irisx-master"
-
-  - name: "notionApiKey"
-    type: "password"
-    message: "Enter your Notion API Key (Integration Token) - optional, press Enter to skip:"
-    default: ""
-    validate: "optional"
-    env_var: "NOTION_API_KEY"
-  
-  - name: "notionDatabaseId"
-    type: "input"
-    message: "Enter your Notion Database ID (for requirements) - optional, press Enter to skip:"
-    default: ""
-    validate: "optional"
-    env_var: "NOTION_DATABASE_ID"
-
-# Repository paths for the interconnected repositories
-# These will be configured during installation via the questions above
+    validate: at-least-one
+  - name: algoRepoPath
+    type: input
+    message: 'Enter the local path to your Algorithm repository (irisx-algo):'
+    default: ../irisx-algo
+    validate: required
+    condition: selectedRepositories:irisx-algo
+  - name: configRepoPath
+    type: input
+    message: 'Enter the local path to your Config repository (irisx-config):'
+    default: ../irisx-config
+    validate: required
+    condition: selectedRepositories:irisx-config
+  - name: loadapisRepoPath
+    type: input
+    message: 'Enter the local path to your LoadAPIs repository (ms-loadapis):'
+    default: ../ms-loadapis
+    validate: required
+    condition: selectedRepositories:ms-loadapis
+  - name: mfpRepoPath
+    type: input
+    message: 'Enter the local path to your MFP repository (ms-mfp):'
+    default: ../ms-mfp
+    validate: required
+    condition: selectedRepositories:ms-mfp
+  - name: masterRepoPath
+    type: input
+    message: 'Enter the local path to your Master repository (irisx-master):'
+    default: ../irisx-master
+    validate: required
+    condition: selectedRepositories:irisx-master
+  - name: notionApiKey
+    type: password
+    message: >-
+      Enter your Notion API Key (Integration Token) - optional, press Enter to
+      skip:
+    default: ''
+    validate: optional
+    env_var: NOTION_API_KEY
+  - name: notionDatabaseId
+    type: input
+    message: >-
+      Enter your Notion Database ID (for requirements) - optional, press Enter
+      to skip:
+    default: ''
+    validate: optional
+    env_var: NOTION_DATABASE_ID
 repositories:
-  irisx-algo: "{ALGO_REPO_PATH}"
-  ms-loadapis-ril-final: "{LOADAPIS_REPO_PATH}"
-  irisx-config: "{CONFIG_REPO_PATH}"
-  ms-mfp: "{MFP_REPO_PATH}"
-  irisx-master: "{MASTER_REPO_PATH}"
-
-# Environment-specific base branch configurations
-# VIRAT will automatically detect environment(s) from requirement document
-# Supports multiple environments (comma-separated): processes each sequentially
+  irisx-algo: '{ALGO_REPO_PATH}'
+  ms-loadapis-ril-final: '{LOADAPIS_REPO_PATH}'
+  irisx-config: '{CONFIG_REPO_PATH}'
+  ms-mfp: '{MFP_REPO_PATH}'
+  irisx-master: '{MASTER_REPO_PATH}'
 environments:
   prod:
-    name: "Prod"
+    name: Prod
     base_branches:
-      algorithm: "caas-release"
-      loadapi: "release_optimised"
-      config: "caas-staging_fix"
-      mfp: "release"
-
+      algorithm: caas-release
+      loadapi: release_optimised
+      config: caas-staging_fix
+      mfp: release
   reliance:
-    name: "Reliance"
+    name: Reliance
     base_branches:
-      algorithm: "master-ril"
-      loadapi: "caas-ril-uploads"
-      config: "master-ril"
-      mfp: "release-ril"
-
+      algorithm: master-ril
+      loadapi: caas-ril-uploads
+      config: master-ril
+      mfp: release-ril
   phoenix:
-    name: "Phoenix"
+    name: Phoenix
     base_branches:
-      algorithm: "master-adidas-reliance-prod"
-      loadapi: "caas-phoenix-uploads"
-      config: "master-adidas-ril"
-      mfp: "release-pheonix"
-
-# Target completion time in hours
+      algorithm: master-adidas-reliance-prod
+      loadapi: caas-phoenix-uploads
+      config: master-adidas-ril
+      mfp: release-pheonix
 target_completion_time: 2
-
-# Notion Integration Configuration (Optional)
 notion:
-  enabled: "{NOTION_API_KEY_EXISTS}"  # Auto-enabled if NOTION_API_KEY is set
-  api_version: "2022-06-28"
-  base_url: "https://api.notion.com/v1"
-  database_id: "{NOTION_DATABASE_ID}"
-  api_key: "{NOTION_API_KEY}"
+  enabled: true
+  api_version: '2022-06-28'
+  base_url: https://api.notion.com/v1
+  database_id: test_database_id
+  api_key: test_api_key_12345
   field_mappings:
-    requirement_id: "No ID"  # Column name in Notion DB (e.g., REQ-994)
-    requesting_clients: "Requesting Client"  # Column name for requesting clients
-    content_section: "Below Comments"  # Extract from page content below Comments
-    push_target_section: "Below Comments"  # Push documentation to same location
+    requirement_id: No ID
+    requesting_clients: Requesting Client
+    content_section: Below Comments
+    push_target_section: Below Comments
   documentation_patterns:
-    - "*.md"
-    - "*-ANALYSIS.md"
-    - "*-IMPLEMENTATION.md"
-    - "*-PLAN.md"
-    - "CHANGELOG.md"
-
-# Success metrics
+    - '*.md'
+    - '*-ANALYSIS.md'
+    - '*-IMPLEMENTATION.md'
+    - '*-PLAN.md'
+    - CHANGELOG.md
+  env_file: >-
+    /Users/aryatupkary/bmad-agents/expansion-packs/bmad-virtual-intelligent-repository-analysis-transformation/.env
 success_metrics:
-  development_velocity: "2 hours per requirement"
-  accuracy: "95%+ success rate"
-  coverage: "80% of typical business requirements"
-  quality: "Maintain existing code quality standards"
-  notion_integration: "Seamless extraction and push-back to Notion"
+  development_velocity: 2 hours per requirement
+  accuracy: 95%+ success rate
+  coverage: 80% of typical business requirements
+  quality: Maintain existing code quality standards
+  notion_integration: Seamless extraction and push-back to Notion

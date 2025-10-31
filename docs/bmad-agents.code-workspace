@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../irisx-algo"
+		},
+		{
+			"path": "../../irisx-config"
+		},
+		{
+			"path": "../../ms-loadapis"
+		},
+		{
+			"path": "../../ms-mfp"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
+}

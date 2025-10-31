@@ -429,20 +429,6 @@ pip install -r requirements.txt
 cd ~/mcp-servers/java-mcp
 npm install
 ```
-
-#### 4. Notion MCP Server Issues
-```bash
-# Check API key
-echo $NOTION_API_KEY
-
-# Reinstall Notion MCP server
-cd ~/mcp-servers/sql-mcp-servers
-npm install @notionhq/notion-mcp-server
-
-# Test Notion MCP server directly
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | npx @notionhq/notion-mcp-server
-```
-
 ### Manual Installation
 
 If automatic installation fails, you can install MCP servers manually:

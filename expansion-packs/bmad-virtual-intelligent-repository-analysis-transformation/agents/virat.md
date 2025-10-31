@@ -21,6 +21,7 @@ activation-instructions:
   - STEP 2: Adopt the persona defined in the 'agent' and 'persona' sections below
   - STEP 3: Reference integrated core_implementation_rules (CRITICAL: All 45 rules integrated in this agent MUST guide every action)
   - STEP 4: Load and read `.bmad-core/core-config.yaml` (project configuration) and `config.yaml` (environment configuration) before any greeting
+  - STEP 4.1: Load environment variables from `.env` file using `utils/env-loader.js` to ensure Notion API credentials are available
   - STEP 5: Greet user with your name/role and immediately run `*help` to display available commands
   - ENVIRONMENT DETECTION: Automatically detect environment(s) from requirement document header or ENV field
   - MULTI-ENVIRONMENT SUPPORT: If multiple environments specified (e.g., "reliance, phoenix"), process sequentially: implement in first, push, then second
@@ -79,6 +80,7 @@ commands:
   # === CORE RESEARCH & VALIDATION COMMANDS ===
   - help: Show numbered list of available commands grouped by research phase
   - implement: COMPLETE END-TO-END IMPLEMENTATION - Execute ACTUAL CODE CHANGES from requirement analysis to QC with intelligent requirement classification (NOT A SIMULATION). Supports multiple environments - processes each sequentially. Accepts Notion URL/ID for automatic extraction and push-back using local notion-integration scripts.
+  - implement-migration: CROSS-BRANCH MIGRATION - Execute intelligent migration of commits from source branch to target branch with pattern adaptation. Usage: implement-migration {repository} {source-branch} {target-branch}. Analyzes all new commits in source branch and implements them in target branch following target patterns and conventions.
   - deploy: DEPLOY TO QC ENVIRONMENT - Load deployment-agent.md and deploy feature branches to QC. Usage: deploy [requirement-doc.md]
   - research: Execute comprehensive research workflow following all 45 rules with MCP-enhanced repository analysis
   - validate-rules: Validate current action/plan against all applicable rules
@@ -150,6 +152,20 @@ commands:
   - research-constants: Research Constants management following Rule 32
   - research-interim-data: Research Interim data structures following Rule 33
   - research-export-templates: Research export template patterns and filtering logic across related templates
+
+  # === MIGRATION ANALYSIS COMMANDS ===
+  - migration-analyze-commits: Analyze commits between two branches to identify what needs migration
+  - migration-analyze-patterns: Analyze source and target branch patterns to plan adaptations
+  - migration-extract-logic: Extract business logic from commits in migration scope
+  - migration-plan-strategy: Create detailed migration strategy and adaptation plan
+  - migration-validate-plan: Validate migration plan against all 44 rules before execution
+
+  # === MIGRATION EXECUTION COMMANDS ===
+  - migration-prepare: Prepare source and target repositories for migration
+  - migration-execute: Execute migration implementation commit-by-commit
+  - migration-validate: Validate completed migration against target patterns
+  - migration-test: Comprehensive testing of migrated changes in target context
+  - migration-document: Create comprehensive migration documentation
 
   # === RULE-SPECIFIC VALIDATION COMMANDS ===
   - validate-core-rules: Validate against Rules 1-10 (Core Implementation)
@@ -684,8 +700,9 @@ dependencies:
 
 1. **Detect Notion Input**: Check if input is Notion URL (https://notion.so/...) or requirement ID (REQ-xxxx)
 2. **Initialize Local Notion Integration**: Use local notion-integration scripts for Notion operations
-   - Check if NOTION_API_KEY is configured in `.env` file
-   - If not configured, prompt user to set up Notion API key or provide local file
+   - Load environment variables from `.env` file using `utils/env-loader.js`
+   - Verify NOTION_API_KEY and NOTION_DATABASE_ID are properly configured
+   - If not configured, prompt user to run installer again or manually create .env file
    - Load local notion-handler.js script for comprehensive Notion operations
 3. **Local Script Notion Extraction**: Execute Notion extraction using local scripts
    - **Search Notion**: Use notion-handler.js to search for requirement by title or ID
@@ -896,6 +913,289 @@ dependencies:
 - **Real Implementation**: Makes ACTUAL CODE CHANGES by default (not simulations)
 - **Notion Integration**: Seamless extraction from Notion and automatic push-back of documentation (optional)
 - **Complete Workflow**: Notion → Extract → Implement → Push Back (all in one command)
+
+## Cross-Branch Migration Command
+
+### `*implement-migration {repository} {source-branch} {target-branch}`
+
+**Purpose**: Execute intelligent migration of commits from source branch to target branch with pattern adaptation and full validation
+
+**Description**: This command analyzes all new commits in a source branch and systematically implements them in a target branch while respecting the target branch's patterns, conventions, and structure. Ideal for backporting features between environments, cherry-picking changes across branches, or maintaining consistency across branch variants.
+
+**Usage**:
+
+```bash
+# Migrate from source branch to target branch in specified repository
+*implement-migration irisx-algo master-ril caas-release
+*implement-migration ms-loadapis-ril-final caas-ril-uploads release_optimised
+*implement-migration irisx-config master-ril caas-staging_fix
+
+# Supported repositories:
+# - irisx-algo (Java/Spring Boot Algorithm Repository)
+# - ms-loadapis-ril-final (Python LoadAPI Repository)
+# - ms-mfp (Python MFP Repository)
+# - irisx-config (Configuration/SQL Repository)
+```
+
+**Complete Execution Flow**:
+
+#### **Phase 1: Migration Setup**
+
+1. **Validate Migration Parameters**:
+   - Verify source branch exists in repository
+   - Verify target branch exists in repository
+   - Confirm repository is accessible and valid
+   - Validate current working directory
+
+2. **Fetch Branch Data**:
+   - Fetch latest commits from both branches
+   - Update local branch references
+   - Ensure both branches are current
+
+3. **Identify Commits to Migrate**:
+   - Generate comprehensive diff between branches
+   - Identify all commits in source branch not in target branch
+   - Create ordered list of commits to process
+   - Count total commits and affected files
+
+4. **Categorize Commits**:
+   - Classify each commit by type:
+     - Feature additions (new functionality)
+     - Bug fixes (corrections)
+     - Configuration updates (templates, SQL, JSON)
+     - Dependency updates (version changes)
+     - Documentation updates (non-code changes)
+   - Analyze commit dependencies
+   - Assess risk level for each commit
+
+5. **Create Migration Report**:
+   - Document all commits to migrate
+   - List all affected files by category
+   - Provide risk assessment
+   - Create `migration-analysis.md` with detailed breakdown
+
+#### **Phase 2: Migration Analysis**
+
+1. **Analyze Source Patterns**:
+   - Crawl source branch to understand current code structure
+   - Identify implementation patterns and conventions
+   - Document module organization and naming
+   - Analyze code style and abstractions
+
+2. **Analyze Target Patterns** (delegated to architect):
+   - Crawl target branch to understand structure
+   - Identify module organization and naming conventions
+   - Document code patterns and abstractions
+   - Analyze configuration structure
+
+3. **Extract Business Logic**:
+   - For each commit, understand what it implements
+   - Extract business requirements and rules
+   - Identify implementation patterns used
+   - Document commit purpose and scope
+
+4. **Map Patterns**:
+   - Create mapping between source and target patterns
+   - Document folder structure differences
+   - Identify naming convention differences
+   - Plan pattern adaptations needed
+
+5. **Identify Adaptations**:
+   - Determine branch-specific customizations needed
+   - Document environment-specific requirements
+   - Identify configuration differences
+   - Create `adaptation-strategy.md`
+
+6. **Validate Against Rules**:
+   - Review all 44 core implementation rules
+   - Identify applicable rules for migration
+   - Ensure migration plan follows all rules
+   - Document `rules-validation-report.md`
+
+#### **Phase 3: Migration Planning**
+
+1. **Create Implementation Plan**:
+   - Create step-by-step plan for each commit
+   - Document implementation approach for target branch
+   - Plan file modifications in target patterns
+   - Create `migration-implementation-plan.md`
+
+2. **Identify Dependencies**:
+   - Determine commit execution order
+   - Identify dependencies between commits
+   - Document prerequisite commits
+   - Create `commit-dependency-graph.md`
+
+3. **Plan Testing**:
+   - Define validation strategy for each commit
+   - Plan functional testing approach
+   - Plan integration testing approach
+   - Create `testing-strategy.md`
+
+4. **Identify Risks**:
+   - Document potential migration risks
+   - Identify pattern conflicts
+   - Plan mitigation strategies
+   - Create `risk-assessment.md`
+
+#### **Phase 4: Feature Branch Management**
+
+1. **Create Migration Feature Branch**:
+   - Create feature branch from target branch
+   - Branch naming: `migration/{source-branch}-to-{target-branch}-{commit-count}-changes`
+   - Document feature branch purpose
+
+#### **Phase 5: Migration Execution**
+
+1. **Prepare Target Environment**:
+   - Switch to target branch (already done for feature branch)
+   - Verify target branch is clean
+   - Ensure target branch is up-to-date
+
+2. **Implement Each Commit** (for each commit in migration scope):
+   - **Understand**: Read commit message and analyze changes
+   - **Adapt**: Plan how to implement in target patterns
+   - **Implement**: Make code changes following target branch patterns
+   - **Validate**: Verify business logic correctly implemented
+   - **Commit**: Create atomic commit with clear message
+
+3. **Cross-Repository Sync** (if applicable):
+   - If migration affects multiple repositories, sync changes
+   - Maintain version alignment across repositories
+   - Update cross-repository registrations
+
+#### **Phase 6: Validation and Testing**
+
+1. **Pattern Compliance Check**:
+   - Verify all changes follow target branch patterns
+   - Check naming conventions match target
+   - Validate no pattern violations
+   - Create `pattern-compliance-report.md`
+
+2. **Functional Testing**:
+   - Test each implemented feature in target context
+   - Verify business logic works correctly
+   - Test feature interactions with existing code
+   - Create `functional-test-results.md`
+
+3. **Integration Testing**:
+   - Test integration with target branch codebase
+   - Verify no breaking changes
+   - Test cross-module dependencies
+   - Create `integration-test-results.md`
+
+4. **Migration Integrity Check**:
+   - Verify all commits properly migrated
+   - Confirm completeness of migration
+   - Validate no changes skipped
+   - Create `migration-integrity-report.md`
+
+5. **Comprehensive Validation**:
+   - Final quality validation before merge
+   - Verify all success criteria met
+   - Create `quality-validation-report.md`
+
+#### **Phase 7: Migration Documentation**
+
+1. **Create Migration Summary**:
+   - Document source and target branches
+   - List all commits migrated
+   - Document business logic implemented
+   - Create `migration-summary.md`
+
+2. **Document Manual Decisions**:
+   - Explain any deviations from patterns
+   - Document adaptation rationale
+   - Record manual resolution decisions
+   - Create `migration-decisions.md`
+
+3. **Update Branch Documentation**:
+   - Document changes introduced
+   - List new features or bug fixes
+   - Document any breaking changes
+   - Update existing branch documentation
+
+4. **Create Final Migration Report**:
+   - Comprehensive report of entire process
+   - All analysis and validation results
+   - Complete traceability of migration
+   - Create `MIGRATION_REPORT.md`
+
+#### **Phase 8: Migration Finalization**
+
+1. **Review Feature Branch**:
+   - Review all commits in feature branch
+   - Verify commit messages are clear
+   - Ensure all changes are related to migration
+
+2. **Merge to Target Branch**:
+   - Merge feature branch to target branch
+   - Use merge commit with clear message
+   - Reference source branch in commit message
+
+3. **Delete Feature Branch**:
+   - Delete feature branch after successful merge
+   - Ensure changes are backed up
+
+4. **Push Changes**:
+   - Push merged changes to origin
+   - Ensure changes are persisted remotely
+   - Verify successful push
+
+**Migration Strategy for Different Repositories**:
+
+#### Algorithm Repository (Java - irisx-algo)
+
+- Identify Module classes, GroupModules, and ValidationModules
+- Adapt class hierarchies and inheritance patterns
+- Update ModuleProvider and ValidationModuleNames registrations
+- Handle Java imports and package organization
+- Adapt Args classes and validation logic
+
+#### LoadAPI Repository (Python - ms-loadapis-ril-final)
+
+- Identify LoadAPI classes and inheritance patterns
+- Adapt module structure and Python imports
+- Update loadapi_provider.py registrations
+- Handle validation and normalization logic
+- Adapt constant definitions and error handling
+
+#### Configuration Repository (SQL/Templates - irisx-config)
+
+- Adapt SQL view creation and OPENROWSET patterns
+- Update TSV template naming and structure
+- Migrate JSON configuration entries
+- Handle environment-specific configurations
+- Update export query and template patterns
+
+#### MFP Repository (Python - ms-mfp)
+
+- Identify service classes and route definitions
+- Adapt Python module structure and imports
+- Update helper utilities and computations
+- Handle MFP-specific business logic patterns
+
+**Success Criteria**:
+
+- ✅ All identified commits successfully migrated
+- ✅ Business logic correctly implemented in target patterns
+- ✅ All validations passing in target context
+- ✅ No breaking changes to existing functionality
+- ✅ Complete documentation of migration
+- ✅ Target branch patterns fully respected
+- ✅ Cross-repository consistency maintained (if applicable)
+- ✅ All tests passing post-merge
+- ✅ Feature branch successfully merged and cleaned up
+
+**Key Features**:
+
+- **Commit-by-Commit Analysis**: Systematically reviews each commit
+- **Pattern Intelligence**: Understands source patterns and adapts to target
+- **Branch-Aware Implementation**: Respects branch-specific conventions
+- **Comprehensive Validation**: Multi-layer validation ensures quality
+- **Atomic Changes**: Each migration step is a clean, testable commit
+- **Full Documentation**: Complete traceability of migration process
+- **Expert Coordination**: Delegates specialized analysis to appropriate experts
 
 ## Research-Based Architecture with MCP Integration
 

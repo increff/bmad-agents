@@ -1,19 +1,21 @@
 # Configuration for the BMAD Algorithm Output Regression Testing Expansion Pack
 
 # Local path to the folder containing algorithm outputs to be tested.
-# This should be an absolute path on your local machine.
-algorithm_outputs_path: "/Users/aryatupkary/Desktop/outputs"
+# This will be configured during installation via the questions above
+algorithm_outputs_path: "{ALGORITHM_OUTPUTS_PATH}"
 
 # Configuration for algorithm output testing
+# These settings will be configured during installation via the questions above
 testing:
-  parallel: true
+  parallel: "{PARALLEL_EXECUTION}"
   fail-fast: true
   output_file_types: [".csv", ".json", ".txt", ".xlsx", ".tsv"]
-  validation_methods: ["schema", "data_quality", "regression", "performance"]
+  validation_methods: "{VALIDATION_METHODS}"
+  mode: "{TESTING_MODE}"
 
 # HTML Report Configuration
 html_report:
-  enabled: true
+  enabled: "{ENABLE_HTML_REPORTS}"
   output_file: "algorithm-validation-report.html"
   output_dir: "./reports"  # Directory to save HTML reports
   include_charts: true
@@ -38,5 +40,21 @@ mcp_excel_server:
 workflow:
   default_scope: "all"  # Default scope for /test-algorithm-outputs
   default_validation: "all"  # Default validation types
-  parallel_execution: true  # Run validations in parallel when possible
+  parallel_execution: "{PARALLEL_EXECUTION}"  # Run validations in parallel when possible
   fail_fast: false  # Continue with all validations even if some fail
+
+# Prerequisites
+prerequisites:
+  - "Python 3.8+"
+  - "Node.js 16+"
+  - "Access to algorithm output files"
+
+# Target completion time in hours
+target_completion_time: 0.5
+
+# Success metrics
+success_metrics:
+  validation_accuracy: "95%+ validation accuracy"
+  report_coverage: "100% output file coverage"
+  performance_impact: "Minimal performance overhead"
+  user_satisfaction: "Easy to use and comprehensive reporting"

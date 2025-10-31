@@ -86,8 +86,9 @@ module.exports = [
 
   // ESLint config file should not be checked for publish-related Node rules
   {
-    files: ['eslint.config.mjs'],
+    files: ['eslint.config.js'],
     rules: {
+      'n/no-unpublished-require': 'off',
       'n/no-unpublished-import': 'off',
     },
   },

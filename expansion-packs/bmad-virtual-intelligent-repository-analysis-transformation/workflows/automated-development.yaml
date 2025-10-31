@@ -17,10 +17,15 @@ workflow:
       agent: virat
       condition: "input is Notion URL or requirement ID"
       steps:
+        - step: load_virat_environment
+          action: load environment variables from .env file using env-loader.js
+          script: "utils/env-loader.js load"
+          creates: loaded environment configuration
+          notes: "Load NOTION_API_KEY and NOTION_DATABASE_ID from project .env file"
         - step: validate_notion_environment
           action: validate Notion API credentials and database access
           creates: validated Notion connection
-          notes: "Check NOTION_API_KEY and NOTION_DATABASE_ID environment variables"
+          notes: "Verify loaded environment variables are valid"
         - step: parse_notion_identifier
           action: parse Notion URL or requirement ID to extract page identifier
           creates: parsed page identifier

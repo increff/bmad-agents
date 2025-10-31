@@ -1315,6 +1315,21 @@ class Installer {
                   if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
                   if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
                   if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+
+                  // Regression testing specific replacements
+                  if (answers.algorithmOutputsPath) replacements['{ALGORITHM_OUTPUTS_PATH}'] = answers.algorithmOutputsPath;
+                  if (answers.testingMode) replacements['{TESTING_MODE}'] = answers.testingMode;
+                  if (answers.enableHtmlReports !== undefined) replacements['{ENABLE_HTML_REPORTS}'] = answers.enableHtmlReports ? 'true' : 'false';
+                  if (answers.parallelExecution !== undefined) replacements['{PARALLEL_EXECUTION}'] = answers.parallelExecution ? 'true' : 'false';
+
+                  // Set validation methods based on testing mode
+                  let validationMethods = '["schema", "data_quality", "regression", "performance"]';
+                  if (answers.testingMode === 'quick') {
+                    validationMethods = '["schema", "data_quality"]';
+                  } else if (answers.testingMode === 'performance') {
+                    validationMethods = '["performance"]';
+                  }
+                  replacements['{VALIDATION_METHODS}'] = validationMethods;
                 }
                 
                 success = await fileManager.copyFileWithReplacements(sourcePath, destinationPath, replacements);
@@ -1343,8 +1358,23 @@ class Installer {
             if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
             if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
             if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+
+            // Regression testing specific replacements
+            if (answers.algorithmOutputsPath) replacements['{ALGORITHM_OUTPUTS_PATH}'] = answers.algorithmOutputsPath;
+            if (answers.testingMode) replacements['{TESTING_MODE}'] = answers.testingMode;
+            if (answers.enableHtmlReports !== undefined) replacements['{ENABLE_HTML_REPORTS}'] = answers.enableHtmlReports ? 'true' : 'false';
+            if (answers.parallelExecution !== undefined) replacements['{PARALLEL_EXECUTION}'] = answers.parallelExecution ? 'true' : 'false';
+
+            // Set validation methods based on testing mode
+            let validationMethods = '["schema", "data_quality", "regression", "performance"]';
+            if (answers.testingMode === 'quick') {
+              validationMethods = '["schema", "data_quality"]';
+            } else if (answers.testingMode === 'performance') {
+              validationMethods = '["performance"]';
+            }
+            replacements['{VALIDATION_METHODS}'] = validationMethods;
           }
-          
+
           if (await fileManager.copyFileWithReplacements(configPath, configDestinationPath, replacements)) {
             installedFiles.push(path.join(`.${packId}`, 'config.yaml'));
           }
@@ -1364,8 +1394,23 @@ class Installer {
             if (answers.algoRepoPath) replacements['{ALGO_REPO_PATH}'] = answers.algoRepoPath;
             if (answers.configRepoPath) replacements['{CONFIG_REPO_PATH}'] = answers.configRepoPath;
             if (answers.loadapisRepoPath) replacements['{LOADAPIS_REPO_PATH}'] = answers.loadapisRepoPath;
+
+            // Regression testing specific replacements
+            if (answers.algorithmOutputsPath) replacements['{ALGORITHM_OUTPUTS_PATH}'] = answers.algorithmOutputsPath;
+            if (answers.testingMode) replacements['{TESTING_MODE}'] = answers.testingMode;
+            if (answers.enableHtmlReports !== undefined) replacements['{ENABLE_HTML_REPORTS}'] = answers.enableHtmlReports ? 'true' : 'false';
+            if (answers.parallelExecution !== undefined) replacements['{PARALLEL_EXECUTION}'] = answers.parallelExecution ? 'true' : 'false';
+
+            // Set validation methods based on testing mode
+            let validationMethods = '["schema", "data_quality", "regression", "performance"]';
+            if (answers.testingMode === 'quick') {
+              validationMethods = '["schema", "data_quality"]';
+            } else if (answers.testingMode === 'performance') {
+              validationMethods = '["performance"]';
+            }
+            replacements['{VALIDATION_METHODS}'] = validationMethods;
           }
-          
+
           if (await fileManager.copyFileWithReplacements(readmePath, readmeDestinationPath, replacements)) {
             installedFiles.push(path.join(`.${packId}`, 'README.md'));
           }
@@ -1452,6 +1497,20 @@ class Installer {
         }
       }
 
+      // Special handling for VIRAT Notion API key
+      if (packId === 'bmad-virtual-intelligent-repository-analysis-transformation') {
+        const notionApiKey = answers.notionApiKey;
+        if (notionApiKey && notionApiKey.trim() !== '') {
+          envVars.NOTION_API_KEY = notionApiKey;
+          console.log(chalk.blue('🔑 Notion API key provided - will create .env file'));
+        }
+        
+        const notionDatabaseId = answers.notionDatabaseId;
+        if (notionDatabaseId && notionDatabaseId.trim() !== '') {
+          envVars.NOTION_DATABASE_ID = notionDatabaseId;
+        }
+      }
+
       if (Object.keys(envVars).length === 0) {
         return; // No env vars to write
       }
@@ -1483,32 +1542,60 @@ class Installer {
       // Merge new env vars with existing ones (new ones take precedence)
       const mergedEnvVars = { ...existingEnvVars, ...envVars };
 
-      // Build .env content
-      let envContent = `# Environment variables for ${pack.name}\n`;
-      envContent += `# Generated by BMAD installer on ${new Date().toISOString()}\n\n`;
-
-      // Add section header for this expansion pack
-      envContent += `# ${pack.name} Configuration\n`;
-      for (const [key, value] of Object.entries(envVars)) {
-        envContent += `${key}=${value}\n`;
-      }
-
-      // Add existing vars that aren't from this pack
-      const thisPackVarNames = new Set(Object.keys(envVars));
-      const otherVars = Object.entries(mergedEnvVars).filter(
-        ([key]) => !thisPackVarNames.has(key)
-      );
+      // Build .env content with enhanced formatting for VIRAT
+      let envContent = '';
       
-      if (otherVars.length > 0) {
-        envContent += `\n# Other Configuration\n`;
-        for (const [key, value] of otherVars) {
+      if (packId === 'bmad-virtual-intelligent-repository-analysis-transformation') {
+        envContent = `# VIRAT Environment Configuration
+# Generated by BMAD installer on ${new Date().toISOString()}
+# This file contains sensitive API credentials - DO NOT COMMIT TO VERSION CONTROL
+
+# Notion Integration Configuration
+NOTION_API_KEY=${envVars.NOTION_API_KEY || ''}
+NOTION_DATABASE_ID=${envVars.NOTION_DATABASE_ID || ''}
+
+# Optional Notion Configuration
+NOTION_VIEW_ID=
+NOTION_API_VERSION=2022-06-28
+
+# VIRAT Configuration
+VIRAT_ENV_FILE=${envPath}
+VIRAT_CONFIG_FILE=${path.join(installDir, '.bmad-virtual-intelligent-repository-analysis-transformation', 'config.yaml')}
+`;
+      } else {
+        envContent = `# Environment variables for ${pack.name}\n`;
+        envContent += `# Generated by BMAD installer on ${new Date().toISOString()}\n\n`;
+
+        // Add section header for this expansion pack
+        envContent += `# ${pack.name} Configuration\n`;
+        for (const [key, value] of Object.entries(envVars)) {
           envContent += `${key}=${value}\n`;
+        }
+
+        // Add existing vars that aren't from this pack
+        const thisPackVarNames = new Set(Object.keys(envVars));
+        const otherVars = Object.entries(mergedEnvVars).filter(
+          ([key]) => !thisPackVarNames.has(key)
+        );
+        
+        if (otherVars.length > 0) {
+          envContent += `\n# Other Configuration\n`;
+          for (const [key, value] of otherVars) {
+            envContent += `${key}=${value}\n`;
+          }
         }
       }
 
       // Write .env file
       await fs.writeFile(envPath, envContent, 'utf8');
-      console.log(chalk.green(`✓ Created .env file with ${Object.keys(envVars).length} environment variable(s)`));
+      
+      if (packId === 'bmad-virtual-intelligent-repository-analysis-transformation') {
+        console.log(chalk.green(`✓ Created VIRAT .env file with Notion API configuration`));
+        console.log(chalk.dim(`   Location: ${envPath}`));
+        console.log(chalk.dim(`   Contains: NOTION_API_KEY, NOTION_DATABASE_ID`));
+      } else {
+        console.log(chalk.green(`✓ Created .env file with ${Object.keys(envVars).length} environment variable(s)`));
+      }
       
     } catch (error) {
       console.warn(chalk.yellow(`Warning: Could not create .env file: ${error.message}`));
